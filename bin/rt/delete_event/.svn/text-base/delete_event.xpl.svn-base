@@ -1,0 +1,589 @@
+##############################################################################
+# Author: Glenn Thompson (GT) 2007
+#         ALASKA EARTHQUAKE INFORMATION CENTER
+#
+# Modifications:
+#       2007-10-01: Written
+#
+# Purpose:
+#
+#      A tool for the new summary database - a centralised way of deleting an event
+#	from all systems. 
+##############################################################################
+
+use Datascope;
+use orb;
+require "getopts.pl" ;
+
+use strict;
+use warnings;
+our $PROG_NAME;
+($PROG_NAME = $0) =~ s(.*/)();  # PROG_NAME becomes $0 minus any path
+
+# Set default parameter file
+our $pf = "pf/$PROG_NAME.pf";
+if ($pf =~ /\.pl/) {
+	$pf =~ s/\.pl//; 
+}
+
+# End of  GT Antelope Perl header
+##############################################################################
+
+ 
+# Usage - command line options and arguments
+our $opt_e = 0;
+our $opt_q = 0;
+our $opt_s = 0;
+our $opt_t = 0;
+our $opt_r = 0;
+our $opt_a = 0;
+our $opt_d = 0;
+our $opt_p;
+
+if ( ! &Getopts('adeqrstp:') || $#ARGV < 1 ) {
+    print STDERR <<"EOU" ;
+
+    	Usage: $PROG_NAME [-adeqrst] [-p parameter_file] database evid [evtime]
+
+                -t      	test mode (nothing is deleted)
+		-p		parameter file, default is $pf
+
+		-a		add ignorerow database table for all (QDDS, dbrecenteqs, ...?)*
+		-d		remove from database
+		-e		remove event from the EOC system 
+		-q		add ignorerow database table for QDDS (not needed if -a is set)*
+		-r		add ignorerow database table for dbrecenteqs (not needed if -a is set)
+		-s		remove event from the ShakeMap system
+  
+                database   	database which contains the event
+                evid		the event id corresponding to the event in the database
+                evtime  	if event time (epoch format) corresponding to the event in the database
+
+	* Note: if parameter use_ignore_table != 1, legacy mode is invoked, and old QDDS interface is used to try to remove an event
+
+	Examples:
+		(1) When an analyst deletes an event using dbevents_aeic, $PROG_NAME is called in the following way:
+	
+			$PROG_NAME -aes -p /usr/local/aeic/4.9/data/pf/$PROG_NAME.pf /iwrun/sum/run/db/dbsum/dbsum evid evtime
+
+			This will do several things:
+			(i)   attempt to add an ignore row to the ignorerow table for *all* systems (QDDS, dbrecenteqs, ...?) for this evid
+			(ii)  attempt to send a delete message to the EOC system to remove the event based on evtime (evid wont match)
+			(iii) attempt to cancel a ShakeMap for this evid
+			(iv)  a message will be emailed to all duty staff
+
+		(2) To run it in test mode, $PROG_NAME can be called fromm the command line in the following way:
+
+			$PROG_NAME -adeqrst -p /usr/local/aeic/4.9/data/pf/$PROG_NAME.pf /iwrun/sum/run/db/dbsum/dbsum evid evtime
+
+			In this mode, all delete commands will be echoed, but will not be executed
+
+		(3) When run by watch_for_deletes on an EOC client, $PROG_NAME is called like this:
+
+			$PROG_NAME -d -p pf/delete_event_mac.pf db/eocdb/eocdb evid
+
+			In this case, the intent is to remove event evid from the database. 
+
+	PARAMETER FILE: 
+
+		To add an ignore row to the ignore database: 
+		- use_ignore_table must be set to 1.
+		- create_ignore_row must specify the path to the create_ignore_row script.
+
+		To delete from QDDS using the old Antelope-QDDS interface:
+		- use_ignore_table must be omitted, or set to 0.
+		- qdds_delete_script must be set 
+
+		To delete from the EOC system:
+		- the eoc_server_send parameter must be set to the correct path
+		- eoc_mode must be set to time or evid
+
+		To delete from the ShakeMap system:
+		- the shakemap_delete_script parameter must be set to the path of the cancellation script
+
+		To send an email notifying staff of this event delete
+		- notify_by_email needs to be set to the correct email 
+
+
+EOU
+    exit 1 ;
+}
+
+# This program doesn't need a parameter file if just being used with -d option (or no options)
+# But if a parameter file is specified, it must exist, or there is a mistake
+if ($opt_p) {
+	$pf = $opt_p;
+	die("Cannot find $pf\n") unless (-e $pf);
+}
+
+# End of GT usage header
+
+###############################################################################
+
+# Main program begins here
+our $use_ignore_table = -1;
+
+# Database
+my $database = $ARGV[0];
+
+# Check if evid exists
+my $evid = $ARGV[1];
+die("evid $evid does not exist in $database\n") if ((&db_evid_exists($database, $evid) == 0) && $#ARGV==1);
+
+# Event time
+my $evtime = -1;
+if ($#ARGV > 1) {
+	$evtime = $ARGV[2];
+	# Check for consistency between evid & evtime
+	my $newevid = &evtime2evid($database, $evtime);
+	if ($newevid ne $evid) { # The script will be called automatically rather than interactively, so the following comments were added 2008/01/31
+#		print "evid $evid and evtime $evtime do not correspond to the same event in $database - evtime matches with evid $newevid instead\n"; 
+		print "Do you wish to proceed with evid $newevid (y/n)?";
+#		my $answer = <STDIN>;
+#		chomp($answer);
+#		die("Aborted\n") if ($answer ne "y");
+		$evid = $newevid;
+	}
+		
+}
+else
+{  # find evtime
+	$evtime = &evid2evtime($database, $evid); # returns "" if nothing found
+	die("could not find evtime for evid $evid in $database\n") if ($evtime eq "");	
+}
+
+# Test mode or delete mode?
+if ($opt_t) {
+	print "TEST MODE\n";
+}
+else 
+{	
+	print "DELETE MODE\n";
+}
+
+my $timestr = epoch2str($evtime,"%G %T");
+print "$PROG_NAME\nEvent id = $evid, time is $timestr\n";
+
+my $authname = $ENV{USER};
+my $jdate = yearday($evtime);
+
+our @status = qw(no yes);
+
+my ($rd) = 0;
+my ($re) = 0;
+my ($rq) = 0;
+my ($rs) = 0;
+my ($ra) = 0;
+my ($rr) = 0;
+my ($ro) = 0;
+my ($rx) = 0;
+
+our $run_mode = 1 - $opt_t;
+
+# These options cannot occur if there is no parameter file from which to get parameters
+if (-e $pf) {
+
+	# Delete from EOC system
+	$re = &delete_from_eoc( $database, $evid, $evtime ) if $opt_e;
+	
+	# Delete from ShakeMap system
+	$rs = &delete_from_shakemap( $database, $evid, $evtime ) if $opt_s;
+	
+	# Add event to ignore database
+	$use_ignore_table = pfget($pf, "use_ignore_table");
+
+	if ($use_ignore_table == 1) {
+		my ($database_ignore) = pfget($pf, "ignoredb");
+		print "ignoredb is $database_ignore\n";
+# GTHO 2008/02/04
+# Mitch has an error in his ignore database logic, and says to always use all, never just qdds or dbrec
+# So replacing this line
+#		if ($opt_a) {
+# with this...
+		if ($opt_a || $opt_q || $opt_r) {
+			$ra = &add_ignore_row( $database_ignore, $evid, $jdate, $authname, "all");
+		}
+# and commenting out all these
+#		else
+#		{
+#			$rq = &add_ignore_row( $database_ignore, $evid, $jdate, $authname, "qdds") if $opt_q;
+#			$rr = &add_ignore_row( $database_ignore, $evid, $jdate, $authname, "dbrec") if $opt_r;
+#		}
+# GTHO 2008/02/04		
+
+		# Refresh xml file for ignore db
+		my $web_ignore_xml = "/Seis/web/dlstat2xmldir/events/ignore_events.xml";
+		my $ignore_xml = "/home/ftp/pub/pipeline/ignore_events.xml";
+		&run("db2xml -d ignore_quakes -r event /iwrun/sum/run/dbsum/ignore/ignoredb.ignorerow event_id evid timestamp 'strtime(lddate)' > $ignore_xml", 1);
+		&run("/bin/cp $ignore_xml $web_ignore_xml", 1);
+		$rx = (-M $ignore_xml < 0.1);
+	
+		
+	}
+        # else
+	#{
+		$ro = &delete_from_qddsold( $database, $evid, $evtime) if ($opt_q || $opt_a);
+	#}
+}
+else
+{	
+	print "No parameter file defined - no deletes from downstream systems are possible\n";
+}
+
+
+# Delete from database
+# Don't need a parameter file for this
+# Do it last though, so if anything goes wrong above, event still can be found to delete
+$rd = &delete_from_database( $database, $evid, $evtime ) if $opt_d;
+
+
+# Notify staff of deleted event by email
+&notify_dutystaff_of_deletes($database, $evid, $evtime, $rd, $re, $rq, $rs, $ra, $rr, $ro, $rx);
+1;	
+
+################################################################################
+
+sub evid2evtime {
+	my ($database, $evid) = @_;
+
+	print "\n** evid2evtime **\n";
+	
+
+	my $evtime = "";
+	if (-e $database) {
+		$evtime = &run("dbsubset $database.origin 'evid==$evid' | dbjoin - $database.event | dbsubset - 'orid==prefor' | dbselect - time", 1);
+	}
+	else
+	{
+		die("$database not found\n");
+	}
+
+	return $evtime;
+}
+
+################################################################################
+
+sub db_evid_exists {
+	my ($database, $evid) = @_;
+
+	print "\n** db_evid_exists **\n";
+	
+
+
+	my $evid_exists = 0;
+	if (-e $database) {
+		my $numrecs = &run("dbsubset $database.origin 'evid==$evid' | dbquery - dbRECORD_COUNT", 1);
+		$evid_exists = 1 if ($numrecs > 0);
+	}
+	else
+	{
+		die("$database not found\n");
+	}
+	return $evid_exists;
+}
+
+####################################################################################
+
+sub evtime2evid {
+	my ($database, $evtime) = @_;
+
+	print "\n** evtime2evid **\n";
+	
+	my $evid = -1;
+	my @evids;
+	if (-e $database) {
+		my $starttime = $evtime -1;
+		my $endtime = $evtime +1;
+		@evids = &run("dbjoin $database.origin event | dbsubset - 'time==$evtime  && prefor==orid' | dbselect - evid", 1);
+print "$evid\n";
+		
+		if ($#evids == -1 ) {
+			@evids = &run("dbsubset $database.origin 'time > $starttime && time < $endtime' | dbselect - evid", 1);
+			if ($#evids > -1) {
+				print "no matching event - but nearest evids are @evids\n";
+			}
+			else
+			{
+				print "no matching events\n";
+			}
+			$evid = -1;
+		}
+		else
+		{
+			$evid = $evids[0];
+		}
+	}
+	else
+	{
+		die("$database not found\n");
+	}
+	print "evid = $evid\n";
+	return $evid;
+}
+
+################################################################################
+
+sub run {               # run system cmds safely
+     my ( $cmd, $ok ) = @_ ;
+     my $mode;
+     if ($ok == 0) {
+	$mode = "Testing:";
+     }
+     else
+     {
+	$mode = "Running:";
+     }
+     print "$mode\n$cmd\n";
+     my $value = "";
+     $value = `$cmd` if $ok;
+     chomp($value);
+     $value =~ s/\s*//g;
+
+     if ($?) {
+         print STDERR "$cmd error $? \n" ;
+     # GTHO 20080205
+     # Change caused by error 44032 when calling Mitch's program - I don't want delete_event to bomb because of this
+     # unknown error
+     #    exit(1);
+     # GTHO 20080205 end
+     }
+
+     return $value;
+}
+
+################################################################################
+
+sub delete_from_database {
+
+	my ($database, $evid, $evtime) = @_;
+	our $run_mode;
+
+
+	my $deleted = 0;
+
+	print "\n** delete_from_database **\n";
+
+	if (-e $database) {
+
+		# Build up the string
+		my $execstring = "dbsubset $database.origin 'evid==$evid' | dbjoin - $database.event";
+		
+		# Add tables to execstring
+		my $table;
+		foreach $table qw( assoc arrival netmag stamag) {
+			my $dt = $database . "." . $table;
+			if (-e "$dt") {
+				$execstring .= " $dt ";
+			}
+		}
+
+		# Add delete command to execstring
+		$execstring .= " | dbdelete -m -";
+
+		# Execute execstring
+		&run("$execstring", $run_mode);
+		$deleted = 1;
+	}
+	else
+	{
+		die("$database not found\n");
+	}
+	
+	return $deleted;
+
+};
+
+
+######################
+
+sub delete_from_eoc {
+
+	my ($database, $evid, $evtime) = @_;
+	our $run_mode;
+
+	print "\n** delete_from_eoc **\n";
+
+	# Put a delete message into eoc_server_send directory for transfer to iMacs
+	my $eoc_server_send = pfget($pf, "eoc_server_send");
+
+	# mode
+	my $eoc_mode 	     = pfget($pf, "eoc_mode"); #time or evid
+
+	# identifier
+	my $event_identifier = $evid;
+	if ($eoc_mode eq "time") {
+		$event_identifier = $evtime;
+	}
+
+	# send delete messageloop over all destination directories
+	if ($eoc_server_send ne "") {
+		if (-e "$eoc_server_send/delete") {
+			my $delfile = "$eoc_server_send/delete/$event_identifier.del";
+			&run("touch $delfile", $run_mode);
+		}
+	}
+	
+	# At other end, orbxfer needs to pick these up, and run this program to delete these by evtime
+	# from the EOC client database
+
+	return 1;
+
+}
+
+######################
+
+sub delete_from_shakemap {
+
+	my ($database, $evid, $evtime) = @_;
+	our $run_mode;
+
+	print "\n** delete_from_shakemap **\n";
+
+	my $shakemap_exists;
+	my $removed = 0;
+	my $sm_delete_script = pfget( $pf, "shakemap_delete_script" );
+
+	# Cancel ShakeMap (following command returns "" if no such evid)
+	$removed = &run("$sm_delete_script -event $evid", $run_mode);
+	($removed eq "") ? $removed = 0 : $removed = 1; 
+
+	return $removed;
+
+}
+
+######################
+
+sub delete_from_qddsold {
+
+	my ($database, $evid, $evtime) = @_;
+	our $run_mode;
+
+
+	print "\n** delete_from_qdds **\n";
+
+
+	my $deleted = 0;
+
+	my $qdate = epoch2str($evtime, "%G");
+	$qdate =~ s/-/\//g;
+
+	my $qdds_delete_script = pfget( $pf, "qdds_delete_script" );
+	if (-x "$qdds_delete_script") {
+		&run("$qdds_delete_script $qdate $evid", $run_mode);
+		$deleted = 1;
+	}
+	else
+	{
+		printf "$qdds_delete_script not found\n";
+	}
+	return $deleted;
+
+}
+######################
+sub add_ignore_row {
+	my ($database, $evid, $jdate, $auth, $whoig ) = @_;
+
+	our $run_mode;
+
+	print "\n** add_ignore_row $whoig **\n";
+	
+	my $deleted = 0;
+
+	my $create_ignore_row = pfget( $pf, "create_ignore_row" );
+	if (-x "$create_ignore_row") {
+		&run("$create_ignore_row -db $database -evid $evid -jdate $jdate -whoig $whoig -auth $auth", $run_mode);
+		$deleted = 1;
+	}
+	else
+	{
+		printf "$create_ignore_row not found\n";	
+
+	}
+	#print "D = $deleted\n";
+	return $deleted;
+
+}
+
+#######################
+
+sub notify_dutystaff_of_deletes {
+
+	print "\n** notify_dutystaff_of_deletes **\n";
+	our $run_mode;
+	our $use_ignore_table;
+	our $pf;
+
+	use Env;
+	my $user=$ENV{USER};
+	$user = `hostname` if ($user eq "");
+
+	my $timenow = epoch2str(now(), "%G %H:%M");
+
+
+	my ($database, $evid, $evtime, $fd, $fe, $fq, $fs, $fa, $fr, $fo, $fx) = @_;
+	my ($lon) = &run("dbsubset $database.origin 'evid==$evid' | dbjoin - $database.event | dbsubset - 'orid==prefor' | dbselect - lon", 1);
+	my ($lat) = &run("dbsubset $database.origin 'evid==$evid' | dbjoin - $database.event | dbsubset - 'orid==prefor' | dbselect - lat", 1);
+
+	my ($depth) = &run("dbsubset $database.origin 'evid==$evid' | dbjoin - $database.event | dbsubset - 'orid==prefor' | dbselect - depth ", 1);
+	my ($nass) = &run("dbsubset $database.origin 'evid==$evid' | dbjoin - $database.event | dbsubset - 'orid==prefor' | dbselect -  nass ", 1);
+	my ( $ml) = &run("dbsubset $database.origin 'evid==$evid' | dbjoin - $database.event | dbsubset - 'orid==prefor' | dbselect - ml", 1);
+
+
+	my $time = epoch2str($evtime, "%G %T");
+	my $email_list;
+
+	if ($run_mode && (-e $pf)) {
+		$email_list = pfget($pf, "notify_by_email");
+	}
+	else
+	{
+		$email_list = "glenn\@giseis.alaska.edu";
+	} 
+
+	my $subject = "\"Deleted event $evid / $time\"";
+	$subject = "\"**** TEST MESSAGE ONLY (Deleted event $evid / $time) PLEASE IGNORE ****\"" if ($run_mode == 0);
+
+	my $msg="The program $PROG_NAME was called by $user at $timenow to delete the event:\n";
+	$msg .= "\tevid                 = $evid\n"; 
+	$msg .=	"\tevent time           = $time\n"; 
+	$msg .= "\tlongitude            = $lon\n";
+	$msg .= "\tlatitude             = $lat\n";
+	$msg .= "\tdepth                = $depth\n";
+	$msg .= "\tml                   = $ml\n";
+	$msg .= "\t#associated arrivals = $nass\n";
+
+	$msg .= "\tin the database $database\n";
+
+	$msg .=	"\nfrom the following:\n";
+	$msg .=	"\tdatabase                                     -\t$status[$fd]\n" if $opt_d; 
+	$msg .=	"\tEOC system                                   -\t$status[$fe]\n" if $opt_e;
+	$msg .= "\tShakeMap system                              -\t$status[$fs]\n" if $opt_s;
+
+	if ($use_ignore_table == 1) {
+# GTHO 20080205
+# change caused by Mitch's program only working if called with "all"
+#		$msg .=	"\tQDDS - by adding an ignore row               -\t$status[$fq]\n" if ($opt_q && !$opt_a);
+#		$msg .=	"\tQDDS and Recenteqs - by adding an ignore row -\t$status[$fa]\n" if $opt_a;
+#		$msg .=	"\tRecenteqs - by adding an ignore row          -\t$status[$fr]\n" if ($opt_r && !$opt_a);
+		$msg .=	"\tQDDS and Recenteqs - by adding an ignore row -\t$status[$fa]\n" if ($opt_a || $opt_q || $opt_r);
+		$msg .= "\tignoredb xml file updated                    -\t$status[$fx]\n"; 
+# GTHO 20080205 end
+
+	} 
+	else
+	{
+		$msg .= "\tQDDS - using the old Antelope-QDDS interface -\t$status[$fo]\n" if ($opt_a || $opt_q);
+	}
+
+	$msg .= "\nThe \"yes\" or \"no\" responses indicate whether $PROG_NAME thinks it succeeded\n";
+
+	$msg .= "\n* Please check to make sure these deletes worked *\n" if ($opt_s || $opt_q || $opt_e || $opt_a || $opt_r );
+
+	$msg .= "\n**** THIS IS A TEST MESSAGE - NOTHING HAS BEEN DELETED - PLEASE IGNORE ****\n" if ($run_mode == 0);
+
+
+	&run("echo \"$msg\" | rtmail -s $subject $email_list", 1);
+	
+}
+ 
+

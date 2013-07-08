@@ -1,0 +1,176 @@
+.TH DBEVENTS 1 2002/07/08 "BRTT Antelope 4.5" "User Commands"
+.SH NAME
+aeic_dbevents - Display seismic events and waveforms, AEIC version
+.SH SYNOPSIS
+.nf
+\fBaeic_dbevents \fP\fIdbname\fP
+.fi
+.SH DESCRIPTION
+\fBaeic_dbevents\fP displays events from the Datascope database \fIdbname\fP
+in near real time on user defined maps. Waveforms may also be displayed;
+the user interactively selects events to
+display.  Waveforms are automatically ordered by distance,
+time aligned to the first predicted P-arrival and filtered.
+.LP
+\fBaeic_dbevents\fP
+polls the input database to see if the event or origin tables have
+been modified since the last update and automatically updates
+the display to reflect the current state of the database.
+.SH "PARAMETER FILE"
+Program parameters are specified in the
+\fBaeic_dbevents\fP parameter file, aeic_dbevents.pf.
+A brief description of each parameter follows.
+.IP maxmapwidth
+The maximum width of the map in pixels.
+.IP maxmapheight
+The maximum height of the map in pixels.
+Maps of greater dimensions are scrolled into
+a maxmapwidth by maxmapheight viewport.
+.IP dbpickgeom
+The initial geometry of the dbpick(1) waveform
+display window (in <width>x<height>+<x>+<x> format).
+.IP dbpicktypeingeom
+The initial geometry of the dbpick command typein
+window (in <width>x<height>+<x>+<x> format).
+.IP scsift
+The station-channel dbpick-style regular expression
+sifter for displaying waveform channels
+.IP channels
+The number of waveform channels to show (before scrolling).
+.IP twin
+The waveform display time window (in seconds).
+.IP filter
+The waveform display filter index.
+.IP textwidth
+The width of the event text display (in characters).
+.IP startdbpick
+A boolean that indicates if the waveform display
+is to be automatically enabled at startup.
+.IP automap
+A boolean that indicates if the map should
+automatically page according to the location
+of the selected event.
+.IP legendon
+A boolean that indicates if the map legend
+should be displayed.
+.IP external_catalog_authors
+An associative array that describes the "known"
+database author names of externally associated
+origins and their associated
+single letter codes for display in the text
+display.
+.IP local_catalog_authors
+An associative array that describes the "known"
+database author names of origins determined
+by local analysts and their associated
+single letter codes for display in the text
+display.
+.IP update_intervals
+A table of update intervals that
+is used in the Maps->Map_Update pulldown
+menu to define the allowable update intervals.
+Each interval can be of form <number><unit>,
+where <number> is a number and <unit> is one
+of "s", for seconds, "m", for minutes, "h",
+for hours, or "d" for days (e.g. 5m for five
+minutes).
+.IP update_interval
+One of the update_intervals values that is
+used to set the initial update interval.
+.IP symbol_colors
+A table that describes the age vs. color
+relation for plotting event symbols.
+Each table entry contains an age (in the same format
+as the update intervals) followed by two color
+values, the first for unselected events and the
+second for the selected event. The age of the
+last entry is ignored and assumed to be infinity.
+.IP maps
+An associative array that defines the map pages
+that can be displayed. Each map consists of
+a name and an associative array that defines
+the map parameters for each map.
+.LP
+Maps are defined by external image files along with
+the parameters for each map. Currently, \fBaeic_dbevents\fP
+supports Mercator and Equal-Distance projections.
+The supported map image file formats are those
+that are supported by the Tk image->photo
+widget (GIF and PPM). The map parameters common
+to all projections are as follows.
+.IP file
+The file name of the map image file.
+.IP format
+The map image file format ("gif" or "ppm").
+.IP proj
+The map projection ("merc" or "edp").
+.IP palette
+The internal tk color palette in the format <r>/<g>/<b>,
+where <r> is the number of red values, <g> is the
+number of green values and <b> is the number of
+blue values. Tk8.0 reads the map as a 24-bit true-color
+image and projects the image into the
+color space defined by palette. This keeps the maps
+from hogging the available color allocations for
+8-bit devices.
+.IP latminbb
+A minimum latitude value for defining a map bounding box.
+.IP latmaxbb
+A maximum latitude value for defining a map bounding box.
+.IP lonminbb
+A minimum longitude value for defining a map bounding box.
+.IP lonmaxbb
+A maximum longitude value for defining a map bounding box.
+.IP priority
+A priority value that is used in conjunction with the
+bounding box that defines which map to display when the
+automap option is enabled. The selected event is first
+compared against each of the map bounding boxes. If
+more than one map bounds the event, then the map with the
+highest priority wins.
+.IP symsiz
+The event symbol size (in pixels).
+.LP
+The projection dependent map parameters define the
+transformation between map pixels and physical
+latitude and longitude, so that the vents can be
+accurately plotted over the map images. Following
+are the map projection parameters for Equal-Distance
+projection (edp) maps.
+.IP latc
+The reference latitude in degrees that defines the
+zero distance point.
+.IP lonc
+The reference longitude in degrees that defines the
+zero distance point.
+.IP xdelmin
+The X (east-west) distance from the reference in degrees
+at the left edge of the map.
+.IP xdelmax
+The X (east-west) distance from the reference in degrees
+at the right edge of the map.
+.IP ydelmin
+The Y (north-south) distance from the reference in degrees
+at the top edge of the map.
+.IP ydelmax
+The Y (north-south) distance from the reference in degrees
+at the bottom edge of the map.
+.LP
+Following are the map projection parameters for Mercator
+projection (merc) maps.
+.IP latmin
+The latitude in degrees at the bottom edge of the map.
+.IP latmax
+The latitude in degrees at the top edge of the map.
+.IP lonmin
+The longitude in degrees at the left edge of the map.
+.IP lonmax
+The longitude in degrees at the right edge of the map.
+.SH BUGS AND CAVEATS
+The underlying pixmap routines support 8-bit, 24-bit, and 32-bit
+color only.
+.SH AUTHOR
+Danny Harvey, AEIC version by Josh Stachnik
+.br
+Boulder Real Time Technologies, Inc.
+

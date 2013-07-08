@@ -1,0 +1,315 @@
+##############################################################################
+# Author: Glenn Thompson (GT) 2007
+#         ALASKA EARTHQUAKE INFORMATION CENTER
+#
+# Modifications:
+#       2007-09-17: Written
+#
+# Purpose:
+#
+#       Parse a ShakeMap archive html file and produces the columns evid, dateStr, time, lat, lon, mag and description
+# 	Calls "cat_url", which downloads and echoes the content of the ShakeMap archive file
+##############################################################################
+
+use Datascope;
+use orb;
+require "getopts.pl" ;
+
+use strict;
+use warnings;
+our $PROG_NAME;
+($PROG_NAME = $0) =~ s(.*/)();  # PROG_NAME becomes $0 minus any path
+
+# End of  GT Antelope Perl header
+##############################################################################
+
+our $pf = "pf/$PROG_NAME.pf";
+$pf =~ s/\.pl//; 
+
+# Usage - command line options and arguments
+our $opt_p; 
+if ( ! &Getopts('p:') || $#ARGV < 0 ) {
+    print STDERR <<"EOU" ;
+
+    Usage: $PROG_NAME [-p parameter_file] YEAR [evid [evtime [ShakeMapDir]]]
+
+                -p      	parameter file path (if omitted, $pf is used)
+
+                YEAR	   	4-digit year of event origin (needed because ShakeMap makes 1 archive.html file per year)
+                evid		the event id to find a Shakemap for - if omitted, a list of all events in YEAR is displayed
+                evtime  	if evid is not found, match this event time instead (in case databases have different ids)
+		ShakeMapDir	the output directory for the ShakeMap gif files (downloaded and converted from Jpeg format because tcl (dbevents) cannot display Jpg)
+
+	$PROG_NAME logs onto the ShakeMap website, downloads a ShakeMap jpg file for the evid in question, and saves it as a gif file using Alchemy. If evid is not found, evtime will be matched (if given). 	
+
+EOU
+    exit 1 ;
+}
+
+# Year from command line
+my $YEAR = $ARGV[0];
+
+# Use parameter file from command line option if given
+$pf = $opt_p if (defined($opt_p));
+
+# Use ShakeMapDir from command line if given, otherwise load from parameter file
+my $ShakeMapDir;
+if ($#ARGV > 2) {
+	$ShakeMapDir = $ARGV[3];
+}
+else
+{
+	$ShakeMapDir = pfget($pf, "shakemapdir");
+}
+
+# Load other variables from parameter file
+our $cat_url = pfget($pf, "cat_url");
+our $shakemap_url = pfget($pf, "shakemap_url");
+my $HTMLTMP = pfget($pf, "html_tmpfile");
+our $prompt = pfget($pf, "prompt");
+our $user = pfget($pf, "user");
+our $pass = pfget($pf, "pass");
+
+# Call cat_url to echo the ShakeMap archive file to a temporary file
+my $URL = "$shakemap_url/archive/$YEAR".".html";
+
+if (($user ne "" ) || ($pass ne "") || ($prompt ne "")) { # log on
+	&run("$cat_url $URL \"$prompt\" $user $pass > $HTMLTMP");
+}
+else
+{ # no need to log on
+	&run("$cat_url $URL  > $HTMLTMP");
+}
+
+# Did it succeed?
+die("Failed to create $HTMLTMP") unless (-e $HTMLTMP);
+
+# NOW PARSE THE TEMPORARY FILE
+open(FIN,"$HTMLTMP") or die("$!: could not open");
+
+our (@evid, @desc, @dateStr, @time, @lat, @lon, @mag);
+
+my $line;
+my $status = 0;
+my $column = 0;
+my $tmp;
+my $push = 0;
+
+while ($line = <FIN>) {
+	if ($line =~ /<tr>/) {
+		$status = 1;
+		$column = 0;
+		$push = 0;
+		#print "On\n";
+		next;
+	}		
+	if ($line =~ /<\/tr>/) {
+		$status = 0;
+		next;
+	} 
+	if ($status == 1) {
+		if ($line =~ /<td.*<\/td>/) {
+			$column++;
+			($tmp = $&) =~ s/<td.*\">//;
+			$tmp =~ s/<td>//;
+			$tmp =~ s/<b>//;
+			$tmp =~ s/<\/b>//;
+
+			
+			$tmp =~ s/<\/.*>//;
+
+			if ($column == 1) {
+				#if ($tmp > 0) {
+ 				if ($tmp =~ /^-?\d/) {
+					$push = 1;
+					push @evid, $tmp 
+
+				}
+			}
+			if ($push == 1) {
+				push @desc, $tmp if ($column == 2);
+				push @dateStr, $tmp if ($column == 3);
+				push @time, $tmp if ($column == 4);
+				push @lat, $tmp if ($column == 5);
+				push @lon, $tmp if ($column == 6);
+				push @mag, $tmp if ($column == 7);
+			}
+		}
+	}
+} 
+close(FIN);
+system("rm $HTMLTMP");
+
+# Call other procedures
+if ($#ARGV > 1) {
+	&fuzzyFindTime($ARGV[1],$ARGV[2], $ShakeMapDir) unless(&findEvid($ARGV[1], $ShakeMapDir));
+}
+if ($#ARGV == 1) {
+	&findEvid($ARGV[1],$ShakeMapDir);
+}
+if ($#ARGV == 0) {
+	&printAll();
+}
+
+
+################################################# DEFINE SUBROUTINES ############################################
+
+sub printAll {
+	#print "> printAll\n";
+
+	# print out all values
+	my $eventid;
+	print "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n";
+	print "<events>\n";
+	foreach $eventid (@evid) {
+		my $d = shift(@dateStr);
+		my $t = shift(@time);
+		my $e = datestr2epoch($d,$t);
+		my $estr = epoch2str($e, "%G %T");
+		$estr = substr($estr, 0, length($estr)-4);
+
+		printf "<event id=\"%07d\" time=\"%s\" latitude=\"%s\" longitude=\"%s\" magnitude=\"%s\" label=\"%s\" />\n",$eventid, $estr, shift(@lat), shift(@lon), shift(@mag), substr(shift(@desc),0,40);
+	}
+	print "</events>";
+}
+
+
+sub findEvid {
+	print "> findEvid\n";
+	my ($inEvid,$ShakeMapDir) =  @_;
+	my($i, $match_idx, $found);
+	for ($i = 0; $i < $#evid; $i++) {
+		printf "Trying to match requested evid $inEvid against shakemap evid %d",$evid[$i];
+		if ($evid[$i] == $inEvid) {
+			$match_idx = $i;    # save the index
+			last;
+			print " - match\n";
+		}
+		else
+		{
+			print " - no match\n";
+		}
+	}
+
+	if (defined $match_idx) {
+		## found in $array[$match_idx]
+		printf "%d\t%s\t%s\t%s\t%s\t%s\t%s\n", $inEvid, $dateStr[$match_idx], $time[$match_idx], $lat[$match_idx], $lon[$match_idx], $mag[$match_idx], substr($desc[$match_idx],0,40);
+		#print datestr2epoch($dateStr[$match_idx], $time[$match_idx]);
+		$found = 1;
+		
+		# copy jpg file to $ShakeMapDir/$inEvid
+#print "shakemapdir $ShakeMapDir\n";
+		&copyJpg("$ShakeMapDir/$inEvid.jpg",$inEvid) if ($ShakeMapDir ne "");
+	} else {
+		## unfound
+		printf "Not found\n";
+		$found = 0;
+	}
+
+	return $found;
+ 
+}
+
+sub fuzzyFindTime {
+	print "> fuzzyFindTime\n";
+
+	my ($inEvid,$inTime,$ShakeMapDir) = @_;
+	my ($inTimeStr) = epoch2str($inTime, "%G %T");
+	my ($t,$d,$e);
+	my $mindiff = 99999999; # minimum difference so far
+	my $matchdiff = 60; # 1 minute needed to declare a match
+	my $diff;
+	my $c;
+	my $idx = -1;
+
+	for ($c=0;$c<=$#time;$c++) {
+		$t = $time[$c];
+		$d = $dateStr[$c];
+		$d = substr($d,0,6) . "," . substr($d,6,5);
+
+		$e = datestr2epoch($d,$t);
+		my $estr = epoch2str($e, "%G %T");
+	#	print "epoch e = $estr\n";
+		$diff = abs($inTime - $e);
+printf "trying to match requested time $inTimeStr against shakemap time $estr - difference is %.0f seconds",$diff;
+		if ($diff < $mindiff) {
+			$mindiff = $diff;
+			if ($mindiff < $matchdiff) {
+				$idx = $c;
+				print " - match\n";
+				last;
+			}
+			else
+			{
+				print "- no match\n";
+			}
+		}
+		else
+		{
+			print " - no match possible\n";
+			last;
+		}
+	}
+	if ($idx > -1) {
+
+		printf "%s\t%s\t%s\t%s\t%s\t%s\t%s\n", $evid[$idx], $dateStr[$idx], $time[$idx], $lat[$idx], $lon[$idx], $mag[$idx], substr($desc[$idx],0,40);
+		
+		# copy jpg file to $ShakeMapDir/$inEvid
+		&copyJpg("$ShakeMapDir/$inEvid.jpg",$evid[$idx]) if ($ShakeMapDir ne "");
+
+	}
+	else
+	{
+		print "Could not find time $inTime or evid $inEvid\n";
+	}
+}
+
+sub datestr2epoch {
+	my ($d, $t) = @_;
+	my $epoch; 
+
+	if ($t =~ s/AKDT//) { # Daylight (savings) time
+
+#	print "trying str2epoch(\"$d $t\")\n";
+		$epoch = str2epoch("$d $t") + 8 * 60 * 60;
+	} 
+	else
+	{
+
+		$t =~ s/AKST//;
+
+#	print "trying str2epoch(\"$d $t\")\n";
+		$epoch = str2epoch("$d $t") + 9 * 60 * 60;
+	}
+	return $epoch;
+}	
+
+sub copyJpg {
+	print "> copyJpg\n";
+
+	my ($newJpg,$evid) = @_;
+	our $cat_url;
+	our $shakemap_url;
+	our $prompt;
+	our $user;
+	our $pass;
+	my $URL2 = "$shakemap_url/$evid/download/intensity.jpg";
+	if (($user ne "" ) || ($pass ne "") || ($prompt ne "")) {
+		&run("$cat_url $URL2 \"$prompt\" $user $pass > $newJpg");
+	}
+	else
+	{
+		&run("$cat_url $URL2 > $newJpg");
+	}
+	my $newGif = $newJpg;
+	$newGif =~ s/jpg/gif/;
+	print "Output file will be $newGif\n";
+	&run("convert $newJpg $newGif");
+	&run("rm $newJpg");
+}
+
+sub run {
+	my $cmd = $_[0];
+	#print "$cmd\n";
+	system("$cmd");
+} 

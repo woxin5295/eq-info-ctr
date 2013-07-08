@@ -1,0 +1,65 @@
+.TH DBTMWFEXTRACTOR 1 "$Date: 2008-07-25 00:02:32 $"
+.SH NAME
+dbtmwfextractor \- dbtmwfextractor monitors an database with tm tables and creates wfdisc table containing alarmed stations   
+.SH SYNOPSIS
+dbtmwfextractor -dbtm dbtm -dbinwf dbinwf -dboutwf dboutwf
+     [-datatype type] [-match match] [-pretime seconds] 
+     [-extracttime seconds] [-mintime seconds] [-posttime seconds] 
+     [ -sleeptime seconds ] [-onerun] [ -debug ] 
+.LP
+where:
+.LP
+     -dbtm, db containing tm table 
+.LP
+     -dbinwf, db containing rawdata
+.LP
+     -dboutwf, db containing extracted tm alarms 
+.LP
+     -datatype type, data type to write out data 
+        default is sd 
+        May need to specified flag 
+        multiply_calib_in_sac_output 
+        in trdefaults.pf, if using SAC sc datatype
+.LP
+     -match match, regular expression of channels 
+        to match, default chan=~/([BH]N.*)/ 
+.LP
+     -sleeptime, interval in seconds 
+        between tm table modification, 
+        default 30 seconds 
+.LP
+     -pretime, pre-detection time at which the 
+        start extraction 
+        start = thresholdtime - pretime, 
+        default 20 seconds 
+.LP
+     -extracttime, amount of data to extract in seconds 
+        if no off alarm_state set 
+        default 300 seconds 
+.LP
+     -mintime, minimum amount of time to extract in seconds 
+        default 120 seconds 
+.LP
+     -posttime, length of time to include after 
+        threshold is no longer exceeded. 
+        default 20 seconds 
+.LP
+     -onerun, only one tm table loop 
+.LP
+     -debug, turn on debugging 
+.LP
+.SH DESCRIPTION
+dbtmwfextractor \-
+.LP 
+dbtmwfextractor monitors an database with tm tables and creates wfdisc table containing alarmed stations   
+.SH OPTIONS
+
+.ft CW
+.RS .2i
+.RE
+.ft R
+.nf
+.fi
+.SH "BUGS AND CAVEATS"
+.SH AUTHOR
+Mitch Robinson Fri Jan 18 09:45:25 AKST 2008.

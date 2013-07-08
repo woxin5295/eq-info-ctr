@@ -1,0 +1,67 @@
+
+
+VDL README  July 18, 1996  Last Modified Aug 23, 1999
+
+VDL is the "Virtual Data Logger".  Basically it is all the code needed to send data
+to the NEIC via a VSAT or TCP/IP socket except for the functions to acquire data to
+process.  VDL is based on the NSN "FRONT" and "PASS" programs and fully implements
+the NSN triggers, compression, and data management.   It is designed to user very
+generic C code and to force all of the system/site dependent code to be in the
+user supplied routines.
+
+This software is provided free by the NSN, however, its support by the NSN is limited
+to bug fixes periodically and new features sporadically added.  
+
+For more information look at the comments at the beginning of the PASS.C and 
+VDL.C routines.
+
+TAR files :
+vdl.tar.Z	compress source code and SCRIPTS and PARMS directories.
+vdlida.tar.Z compressed source for a IDA/NRTS library
+vdldatasock.tar.Z compressed source for running a vdl from a data sock (VDLUCB).
+
+ 
+Changes /Updates
+
+18 Jul 1996		First public released version.
+15 Dec 1998		Updated version to deal with triggered data, more sources of data
+				better control via command line proceedures, support for parameter
+				files for multiple stations per invokation. 
+
+				VDLUCB gets data through a UCB based DATASOCK/COMSERV.  See 
+				documentation in comments of routine FEEDME.C. You need to 
+				vdldatasock.tar.Z which contains the library for accessing datasock.
+
+				VDLASL gets data from the LISS server at ASL (see makefile.asl and 
+				FEEDME_SEED.C).
+
+				VDL for earthworm gets its data directly from ADSEND (see 
+				makefile.solew and FEED_VDL_EW.C).
+
+				VDLIDA gets data from NRTS at the IDA network center (see VDLIDATAP.C
+				and makefile.idahub).  You need the vdlida.tar.Z to get the 
+				idatap-1.2.2 library used to access the NRTS.
+
+				VDLRCV is a test version that runs VDL from a NSN RCV client.  So,
+				NSN sends data to RCV which goes to VDL which goes back to the
+				NSN (hopefully under and assumed name).  See FEEDME_RCV.C and 
+				the primary makefile.
+
+				VDLMOM is often used to watch over multiple VDLs.  It is controlled
+				by the vdlmom.setup which contains the command lines needed to 	
+				invoke one or more VDL children.  The children are define by 
+				command lines in the vdlmom.setup in the directory at the time 
+				VDLMOM is invoked.  
+
+				At some sites the "chkvdlmom" script is started in cron to 
+				periodically check that VDLMOM is running and to notify 
+				Dave Ketchum by mail if it dies.  This routine might use genralized
+				scripts in the SCRIPTS area or site specific ones.  The PARMS
+				subdirectory contains the site specific files (normally params files
+				for multistation VDLs).
+
+				PSVDL* contain quick ps commands to look at a VDL processes.
+
+Dave Ketchum
+ketchum@usgs.gov
+(303) 273-8479

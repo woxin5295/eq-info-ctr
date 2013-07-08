@@ -1,0 +1,23 @@
+# Update Ignore row?
+use_ignore_table	1
+ignoredb	/iwrun/sum/db/dbsum/dbsumignore	
+create_ignore_row /usr/local/aeic/5.2-64/bin/create_ignore_row
+
+# Old Antelope-QDDS interface parameters
+# This is used if update_ignorerow_enabled is not set to 1
+qdds_delete_script	/usr/local/bin/QDDS/DELETE_QDDS_EVENTID
+
+# EOC system parameters
+# The path to send delete messages to so they get transfered to the iMacs using orbxfer2/orb2orb
+eoc_server_send		/net/inverse/export/inverse/fema/run_eocserver/send
+# Use time mode if evids on iMacs don't match the summary database
+eoc_mode		time
+
+# ShakeMap system parameters
+shakemap_delete_script 	/net/bedrock/export/bedrock1/ShakeMap/bin/cancel
+
+# emails
+notify_by_email	duty@giseis.alaska.edu
+
+
+pf_revision_time 1195261896

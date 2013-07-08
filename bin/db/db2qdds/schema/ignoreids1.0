@@ -1,0 +1,59 @@
+Schema ignoreids1.0
+	Description ( "This Database contains rejected evid and orids " )
+	Detail {
+		This database is used to keep track of evid and
+		orids that need to be removed from active databases.
+		This database can be monitored by external submission
+		clients such as QDDS. QDDS client would send delete
+		CUBE row request. 	 
+		}
+		Timedate lddate
+		;
+
+Attribute srcdb
+	String (120)
+	Format ( "%-120s" )
+	Null ( "-" )
+	Description ( "Path to source database" )
+	Detail {
+		Path to source database
+	}
+	;
+
+Attribute dstdb
+	String (120)
+	Format ( "%-120s" )
+	Null ( "-" )
+	Description ( "Path to destination database" )
+	Detail {
+		Path to destination database	
+	}
+	;
+
+Relation igevids 
+	Fields ( evid jdate lddate )
+	Primary ( evid jdate )
+	Description ( "Do not submit evid contained in this table " )
+	Detail {
+		Do not submit evid contained in this table
+	}
+	;
+
+Relation igorids 
+	Fields ( orid jdate lddate )
+	Primary ( orid jdate )
+	Description ( "Do not submit orid contained in this table " )
+	Detail {
+		Do not submit evid contained in this table
+	}
+	;
+
+Relation moddb 
+	Fields ( srcdb dstdb lddate )
+	Primary ( srcdb )
+	Description ( " List of databases that need to have events or origins removed " )
+	Detail {
+		List of databases that need to have events or origins removed	
+	}
+	;
+

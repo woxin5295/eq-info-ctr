@@ -1,0 +1,21 @@
+.\" $Name: not supported by cvs2svn $ $Date: 2002-02-07 01:56:35 $
+.TH PDECODE2CSS 1 "$Date: 2002-02-07 01:56:35 $"
+.SH NAME
+pdecode2css \- helper script for conversion of pde-format files to css
+.SH SYNOPSIS
+.nf
+\fBpdecode2css \fP\fItag\fP \fIvalue\fP
+.fi
+.SH DESCRIPTION
+\fBpdecode2css\fP is a helper script that appears in the dbconvert parameter
+file for converting from the pde schema (USGS_pde1.0) to the css3.0
+schema. Pdecode2css is not intended to be run directly under usual
+circumstances. \fItag\fP may be "hypoquality", "atectonic", or "depthquality".
+Value is the entry of the field in the PDE ehdf file. The script returns
+the closest CSS equivalent.
+.SH "SEE ALSO"
+.nf
+dbconvert(1)
+.fi
+.SH AUTHOR
+Dan Quinlan, tweaked and renamed by Kent Lindquist

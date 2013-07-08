@@ -1,0 +1,6 @@
+cd /home/neic/vdl
+vdlmom
+Mail -s "page ketchum" pagemail@nsn4.cr.usgs.gov </home/neic/vdl/vdl.mail
+Mail -s "page net\$alarm1" pagemail@nsn4.cr.usgs.gov </home/neic/vdl/vdl.mail
+Mail -s "Gldfs::vdlmom down" ketchum@gldfs.cr.usgs.gov </home/neic/vdl/vdl.mail
+echo "Mail sent to GLDFS."

@@ -1,0 +1,80 @@
+.TH BEAMPAT 1 "$Date: 2002-02-07 01:56:27 $"
+.SH NAME
+beampat \- compute beam pattern for arrays
+.SH SYNOPSIS
+.nf
+\fBbeampat \fP
+.fi
+.SH DESCRIPTION
+This program computes and plots the beam pattern for a seismic array.
+The program prompts for input, which can be entered in batch mode if
+desired (see below). The input items are:
+
+database name for site table (and affiliation table if needed)
+
+array name to look up in affiliation table. If this is "none", the
+entire site table is assumed to contain one array.
+
+number of points to use for FK plot in X and Y direction
+
+minimum and maximum slowness in X direction, seconds/km
+
+minimum and maximum slowness in Y direction, seconds/km
+
+frequency in Hz at which to compute the beam pattern
+
+contour type (log or lin)
+
+minimum gain contour, gain contour increment, and number of contours
+
+plot type (portrait or landscape)
+
+contour type (lines, colors, or both)
+.SH EXAMPLE
+.ft CW
+.in 2c
+.nf
+
+%\fB cat in\fP
+/Seis/databases/stations/master_stations
+BM
+201 201
+-0.4 0.4
+-0.4 0.4
+3
+log
+-1.0 0.05 20
+landscape
+colors
+%\fB \fP
+%\fB beampat < in\fP
+ enter db name:
+ enter affiliation-table sifting string
+ ("none" uses whole site table):
+ enter npx and npy:
+ enter min and max px:
+ enter min and max py:
+ enter frequency in Hz:
+ enter contour type (log, lin):
+ nsite=  5
+ rrxrry&rc=    3.4027000000000    3.5048000000000  0.
+ rrxrry&rc=    4.9336000000000    1.1721000000000  0.
+ rrxrry&rc=  0.  0.  0.
+ rrxrry&rc=    2.0795000000000  -0.12150000000000  0.
+ rrxrry&rc=    1.1268000000000    1.0788000000000  0.
+ minimum and maximum gains =    -2.41103  0.
+ enter min, increment, and number of gain contours:
+ enter plot type (portrait, landscape):
+ enter contour type (lines, colors, both):
+   -0.246680    5.18028   -1.02183    4.40513    3.40270    3.50480
+   -0.246680    5.18028   -1.02183    4.40513    4.93360    1.17210
+   -0.246680    5.18028   -1.02183    4.40513  0.  0.
+   -0.246680    5.18028   -1.02183    4.40513    2.07950  -0.121500
+   -0.246680    5.18028   -1.02183    4.40513    1.12680    1.07880
+
+.fi
+.in
+.ft R
+.SH AUTHOR
+Danny Harvey; this version tweaked by Kent Lindquist
+.\" $Id: beampat.1,v 1.2 2002-02-07 01:56:27 kent Exp $

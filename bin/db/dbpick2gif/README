@@ -1,0 +1,27 @@
+Run dbpick2gif with no arguments for the below output.
+	This script is was created to create screen dumps of pipeline calibration information. 
+USAGE -
+  dbpick2gif db staexp chanexp starttime duration giffilename geometry [-mg]
+  db - database
+  staexp - station expression
+  chanexp - channnel expression
+  starttime - starttime
+  duration -  durattion in seconds
+  giffilename -  output gif filename
+  geometry -  X11 window geometry 
+  -mg  - output data in milli-Gs +/- 30mg
+       - default is output data in cnts
+example - 
+  dbpick2gif /iwrun/op/db/archive/archive '(PS01\|PS02)' '(BHN\|HN.)' "02/25/2010 07:00:00" 90 dbpick2gif.gif 789x304 -mg
+
+.dbpickrc needs to have filter12 entries, if using the -mg option 
+   .001-100 BP is just used to zero center the data 
+     dbpick.filter12.label:          .001-100 BP 
+     dbpick.filter12.tpad:           1.0 
+     dbpick.filter12.lcoFreq:        0.01 
+     dbpick.filter12.lcoOrder:       5 
+     dbpick.filter12.ucoFreq:        100.0 
+     dbpick.filter12.ucoOrder:       5 
+
+One pipeline station example -
+	dbpick2gif /iwrun/op/db/archive/archive_2010_02_23 'PS01' '(BHN|HN.)' "Tue Feb 3 23:16:46 GMT 2010" 65 /home/mitch/dbplotpicks_test/PS01.gif 789x304 -mg

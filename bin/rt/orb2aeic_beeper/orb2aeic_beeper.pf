@@ -1,0 +1,7 @@
+source_name /pf/aeic_beeper
+kermit_path /usr/local/bin/kermit
+pager_company_modem_number 9-451-6166 
+line	/dev/term/a
+modem	hayes
+speed 1200
+pager_number 496-3588

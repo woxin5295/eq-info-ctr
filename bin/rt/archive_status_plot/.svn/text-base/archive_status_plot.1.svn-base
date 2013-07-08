@@ -1,0 +1,42 @@
+.TH ARCHIVE_STATUS_PLOT 1 "$Date: 2002-02-07 01:56:40 $"
+.SH NAME
+archive_status_plot \- Make coverage plots of continuous database
+.SH SYNOPSIS
+.nf
+\fBarchive_status_plot \fP
+.fi
+.SH DESCRIPTION
+\fBarchive_status_plot\fP makes coverage plots of the data in a database
+of continuous waveform data.
+.SH PARAMETER FILE
+.ft CW
+.in 2c
+.nf
+
+.ne 16
+
+Dbname /iwrun/op/db/archive/archive
+
+Plots &Arr{
+[A-B].*:.* /usr/local/Mosaic/Input/kent/archive_statusAB.gif
+[C-D].*:.* /usr/local/Mosaic/Input/kent/archive_statusCD.gif
+[E-H].*:.* /usr/local/Mosaic/Input/kent/archive_statusEH.gif
+[I-J].*:.* /usr/local/Mosaic/Input/kent/archive_statusIJ.gif
+[K-L].*:.* /usr/local/Mosaic/Input/kent/archive_statusKL.gif
+[M-N].*:.* /usr/local/Mosaic/Input/kent/archive_statusMN.gif
+[O-P].*:.* /usr/local/Mosaic/Input/kent/archive_statusOP.gif
+[Q-R].*:.* /usr/local/Mosaic/Input/kent/archive_statusQR.gif
+[S-T].*:.* /usr/local/Mosaic/Input/kent/archive_statusST.gif
+[U-Z].*:.* /usr/local/Mosaic/Input/kent/archive_statusUZ.gif
+}
+
+.fi
+.in
+.ft R
+.SH "SEE ALSO"
+.nf
+aeic_dbplotcov(1)
+.fi
+.SH AUTHOR
+Kent Lindquist
+.\" $Id: archive_status_plot.1,v 1.3 2002-02-07 01:56:40 kent Exp $

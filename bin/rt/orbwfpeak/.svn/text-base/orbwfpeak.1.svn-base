@@ -1,0 +1,441 @@
+.TH ORBWFRMS 1 "01/13/2004"
+.SH NAME
+orbwfpeak \- compute continuous peak measurements on filtered ORB waveforms
+.SH SYNOPSIS
+.nf
+orbwfpeak [-start {pktid|time|OLDEST}] [-select sexpr]
+          [-reject rexpr] [-end tend_time] [-pf pfname]
+          [-S statefile] [-v|-vv] dbname orbin [orbout]
+.fi
+.SH DESCRIPTION
+\fBorbwfpeak\fP is a program that continuously reads ORB waveform packets,
+filters selected channels with a set of filters and for each channel-filter
+computes a peak sample value of the data. The peak values 
+are output as \fIwfmeas\fP ORB database packets. 
+.SH OPTIONS
+.IP "-start {pktid|time|OLDEST}"
+Where to position the ORB read pointer for the input
+ORB waveform packets. If a \fIpktid\fP is given, then
+the ORB read pointer is positioned to that \fIpktid\fP. 
+If a valid Antelope time string is given (see epoch(1)),
+then the ORB read pointer is positioned to the first packet
+with a time stamp after the specified time. If \fBOLDEST\fP
+is given, then the read pointer is positioned to the oldest
+ORB packet in the buffer. If this option is not specified,
+then the read pointer is positioned to the next available
+most recent packet.
+.IP "-select sexpr"
+This is a regular UNIX expression that is used as a select
+key (see orbselect(3)) for reading input waveform packets from the input
+ORB. If this option is not specified,
+then all packet srcnames from the input ORB will be processed.
+.IP "-reject rexpr"
+This is a regular UNIX expression that is used as a reject
+key (see orbreject(3)) for reading input waveform packets from the input
+ORB. If this option is not specified,
+then no packet srcnames from the input ORB will be rejected.
+.IP "-end tend_time"
+This is an end time for terminating the input waveform packet
+processing. This should be specified as a valid Antelope time
+string (see epoch(1)). The first valid waveform packet read
+from the input ORB with a start time greater than or equal to
+this value will cause the program to exit. If this option is not
+specified, then the program will run indefinitely.
+.IP "-pf pfname"
+Name of program parameter file. This argument is optional
+and if not specified defaults to \fBorbwfpeak\fP. Note that
+the actual parameter file is named \fIpfname\fP.pf.
+.IP "-S statefile"
+If the -S option is specified, \fBorbwfpeak\fP attempts to save
+a state time into
+the \fIstatefile\fP file whenever it quits due to
+a  signal, such as CTRL-C from standard input. When it is restarted, (if the -S option is
+specified), \fBorbwfpeak\fP attempts  to  read  this  file  and
+reposition the input ORB read ponter, so that there are
+no gaps in the processing. However, generally there will be duplicate
+output \fIwfmeas\fP database packets when the program is stopped
+and restarted using this option.
+.IP "-v"
+Verbose output flag.
+.IP "-vv"
+Really verbose output flag.
+.IP "dbname"
+This is the name of a CSS3.0 (or extension) database that is used
+to 1) translate SEED net-sta-chan-loc into CSS3.0 sta-chan codes
+(see foreign(3)) and 2) get \fIcalib\fP and \fIsegtype\fP for
+processing (used with the \fIcalib_from_db\fP parameter defined
+below). This argument is required.
+.IP "orbin"
+This is the name of the input ORB that contains the waveform packets
+to be processed.
+This argument is required.
+.IP "orbout"
+The \fIwfmeas\fP database packets are copied to the ORB with this name.
+If this argument is not specified, then no output ORB packets will
+be written (you will be able to see the results on standard output
+by specifying -vv).
+.SH "PROGRAM PARAMETER FILE"
+The \fBorbwfpeak\fP parameter file contains all of the information
+necessary for specifying channels and filters for peak processing.
+Following is an example \fBorbwfpeak\fP parameter file.
+.nf
+
+#  
+#  orbwfpeak parameter file used to specify channels to process
+#  and channel-dependent processing parameters
+#
+
+#  Following are global default parameters:
+
+calib_from_db	yes	# calib values from database?
+maxpkts		10	# maximum number of packets in time-ordered queue
+
+bands &Tbl{		# These are the processing frequency bands
+			# for each channel
+	&Arr{
+		filter	BW 0.01 5 0.1 5	# filter specification
+		fc	0.05		# center frequency
+		fpad	200.0		# filter transient pad
+		twin	600.0		# averaging window
+		dtpeak	60.0		# averaging window output time increment
+		tmin	300.0		# minimum contiguous data for ave
+	}
+	&Arr{
+		filter	BW 0.1 5 0.3 5	# filter specification
+		fc	0.2		# center frequency
+		fpad	120.0		# filter transient pad
+		twin	240.0		# averaging window
+		dtpeak	60.0		# averaging window output time increment
+		tmin	120.0		# minimum contiguous data for ave
+	}
+	&Arr{
+		filter	BW 0.3 5 0.8 5	# filter specification
+		fc	0.55		# center frequency
+		fpad	60.0		# filter transient pad
+		twin	120.0		# averaging window
+		dtpeak	60.0		# averaging window output time increment
+		tmin	90.0		# minimum contiguous data for ave
+	}
+	&Arr{
+		filter	BW 0.8 5 3.0 5	# filter specification
+		fc	1.9		# center frequency
+		fpad	10.0		# filter transient pad
+		twin	120.0		# averaging window
+		dtpeak	60.0		# averaging window output time increment
+		tmin	60.0		# minimum contiguous data for ave
+	}
+	&Arr{
+		filter	BW 3.0 5 10.0 5	# filter specification
+		fc	6.5		# center frequency
+		fpad	10.0		# filter transient pad
+		twin	120.0		# averaging window
+		dtpeak	60.0		# averaging window output time increment
+		tmin	60.0		# minimum contiguous data for ave
+	}
+	&Arr{
+		filter	BW 10.0 5 0.0 0	# filter specification
+		fc	10.0		# center frequency
+		fpad	1.0		# filter transient pad
+		twin	120.0		# averaging window
+		dtpeak	60.0		# averaging window output time increment
+		tmin	60.0		# minimum contiguous data for ave
+	}
+}
+
+#  Following are channel processing parameter templates:
+
+templates &Arr{
+	templ1 &Arr{		# template number 1
+		maxpkts	20	# maximum number of packets in time-ordered queue
+	}
+}
+
+#  Following is a list of channels for processing:
+
+channels &Tbl{
+#	netstachanloc		template
+	.*_HHZ			templ1
+}
+
+#  Following is a list of channels to reject for processing:
+
+channels_reject &Tbl{
+	AZ_HWB_.*
+	AZ_BVDA2_.*
+}
+.fi
+.LP
+The first part of the parameter file consists of a set of default values that
+will be used as defaults by all of the subsequent template definitions.
+Next is a set of template definitions that are used to define the processing
+filter bands and peak parameters. The last part is a table defining
+the channels to process, and their corresponding processing parameter templates, along with a
+table of channels to not process.
+.LP
+Parameters from the default section of the parameter file are as follows:
+.IP \fIcalib_from_db\fP
+If this is set to \fByes\fP, then the data \fIcalib\fP and \fIsegtype\fP are
+taken from the database specified by \fIdbname\fP (\fIcalib\fP from the \fIcalibration\fP
+table and \fIsegtype\fP from the \fIrsptype\fP field of \fIsensor\fP->\fIinstrument\fP).
+If this is set to \fBno\fP, then the \fIcalib\fP and \fIsegtype\fP are taken from
+the input waveform ORB packets.
+.IP \fImaxpkts\fP
+This is the maximum number of ORB waveform packet-channels that will be
+held in each of the pktchannelpipe(3) buffers. This provides a means for properly
+dealing with out-of-time-order data packets.
+.IP \fIbands\fP
+This is a table of filter bands and peak parameters for processing.
+Each entry in the table is an unnamed associative array with the
+parameters for a single filter band. The filter band parameters
+are as follows.
+.RS 0.5i
+.IP \fIfilter\fP
+This is a filter specification string for this band. See trfilter(3)
+for a definition of the filter specification strings.
+.IP \fIfc\fP
+This is a center frequency in hz that is used as a convenience
+parameter in the output \fIwfmeas\fP database ORB packets. This
+makes it easy to display the results in amplitude vs. frequency
+plots.
+.IP \fIfpad\fP
+This is a filter transient time pad in seconds. Filtering is started
+on waveform data \fIfpad\fP seconds prior to any peak 
+windows so that the filter transients have an opportunity to
+become attenuated.
+.IP \fItwin\fP
+This is the peak window time duration in seconds.
+.IP \fIdtpeak\fP
+This is the peak window increment in seconds.
+Successive peak measurements are made with time windows that
+slide by \fIdtpeak\fP seconds.
+.IP \fItmin\fP
+This is minimum duration of data in seconds that will be processed in
+a single peak measurement. This is used at the edges of waveform
+segments and in cases where there are data gaps.
+.RE
+.LP
+A set of parameter templates are specified in the \fItemplates\fP
+associative. Each entry in this array is keyed with the template
+name and can contain any of the global default parameters. There
+is also a template with name \fIdefault\fP that is created automatically
+from the global default parameters. This \fIdefault\fP template can be
+used in the \fIchannels\fP array. New template parameters are first
+copied from the global default parameters and then any parameters
+specified in the template definition override the global default for
+that template.
+.LP
+The final section consists of the \fIchannels\fP table and the \fIchannels_reject\fP
+table. Each entry in the \fIchannels\fP table consists of a regular UNIX
+expression that is matched against the input SEED net_sta_chan[_loc] code
+for each channel along with a whitespace separated template name for specifying
+the processing parameters for the channels that match the expression. Channels
+are processed, subject to the \fIchannels_reject\fP table, if they match one
+of the expressions in the \fIchannels\fP table. If a channel matches more that
+one expression, then the channel parameters are taken from the first match.
+Channels are rejected for processing if they match any of the regular expressions
+in the \fIchannels_reject\fP table (see tblgrep(3) for more detail on regular
+expression searches in tables).
+.SH "SOURCE CODE EXAMPLE"
+The source code for this program is open and can be found in the $ANTELOPE/example/c/rtproc
+directory. This source code is intended to provide a comprehensive example
+template for designing custom real-time waveform processing software that makes
+use of the Antelope toolbox. This is not a simple program and it probably will
+only be useful to advanced Antelope programmers who are experienced in the C language.
+The source code consists of about 1500 lines. It is heavily commented; probably 1/3
+to 1/2 of the source code is comment statements.
+\fBorbwfpeak\fP makes use of a number of Antelope tools in order to provide the
+full set of functions necessary to make the program robust, efficient and generally
+"production" ready:
+.IP "\fBparameter files\fP"
+The Antelope parameter file is one of the fundamental building blocks for Antelope
+and \fBorbwfpeak\fP uses the parse_param(3) function, as well as the lower-level 
+pfread(3) and pfget(3) routines. The parameter file parsing in \fBorbwfpeak\fP is
+fairly complex using nested tables and arrays and substitution of parameters from
+global default values to processing templates to specific channels (most of
+this is implemented at the application level so it is in the \fBorbwfpeak\fP
+source code). However, this type of parameter file structure seems to be the
+most useful for operators who may find themselves processing thousands of channels
+in one sitting and who do not want to have to spell out each parameter for each channel
+resulting in a parameter file that is huge in size, difficult to maintain and easy
+to screw up. We have found the marriage of compact parameter files with dynamic
+channel processing (see \fBdynamic channel processing\fP below) to be a powerful and succinct
+method for managing complex processing parameter spaces. This is accomplished
+through the use of regular UNIX expressions that logically link sets of channels
+with common processing parameters.
+.IP "\fBstatefile and initialization processing\fP"
+Most real-time waveform processing applications require a number of
+options for 1) sub-setting out the input ORB waveform packets at the \fBorbserver\fP,
+2) setting the initial input ORB read pointer according to state information left
+from a previous execution in a "state" file, or 3) setting the initial input
+ORB read pointer according to a command line packet id or a time. The input ORB
+packet sub-setting is accomplished with orbselect(3) and orbreject(3). Initialization
+of the input ORB read pointer is accomplished with orbafter(3) and orbseek(3).
+.IP
+An often critical requirement for any robust real-time waveform application
+is the ability to be stopped and restarted in a manner so that there are no
+time gaps in the processing across the stop/restart. A really nice additional attribute
+is that the processing perfectly "abuts" across the stop/restart, meaning that
+there are no gaps in the processing and that there are no repeated output objects
+when the program is restarted. And, of course, we want all of this to be automatic
+so that an operator is not required to fiddle with command line arguments or parameter
+files during a stop/restart cycle. We normally accomplish this through the use
+of the Antelope "statefile" tool (exhume(3), resurrect(3), bury(3)). State information
+is read and parsed from an external ASCII file by resurrect(3). The application
+program then uses this state information to properly initialize the ORB read pointers
+(or whatever else needs initialization). The state information is written by the
+application program to the external file at appropriate times with bury(3). 
+.IP
+One
+problem with this approach for a real-time application, like \fBorbwfpeak\fP, is that often such applications
+will run indefinitely and are only stopped with a signal, like SIGINT (CTRL-C on
+standard input). This means that a signal handler needs to be installed so that
+the state processing can be accomplished before the program dies. One of the really
+cool things that the Antelope statefile tool does is to automatically set up such signal
+handlers, with exhume(3), and provide the application programmer with simple interfaces
+for reacting properly to asynchronous signals. Because of arcane differences between
+various UNIX flavors (eg. SOLARIS and Linux), direct system calls to implement signal
+handlers in application programs becomes confusing and ugly. The Antelope statefile
+tool provides an elegant and simple wrapping that hides all of the ugliness from the
+application program and we make use of this in \fBorbwfpeak\fP.
+.IP
+Finally, before leaving the statefile stuff, we should mention the strategy used
+in the \fBorbwfpeak\fP statefile processing. We have taken a very simple and
+conservative approach. All we do is try to determine an earliest time of processing
+based upon a time that is well before any of the processing windows that are
+in play at a particular point during the processing. What this means is that we will not have any processing
+gaps across stop/restart cycles, but we will reprocess data after a restart that
+was processed from the previous execution and produce output objects after a restart
+(in our case \fIwfmeas\fP database ORB packets) that are identical (or nearly
+identical) to some from the previous execution. We could fix the abutting problem
+by saving separate state info for each channel-band, but, since each channel-band is
+potentially time asynchronous with other channel-bands, this would greatly complicate
+the state file and associated processing which we decided not to do here. The only down side is that
+we will see repeated database rows in the output ORB, but this can be handled properly
+with \fBorb2dbt\fP.
+.IP "\fBdynamic channel processing\fP"
+We have designed \fBorbwfpeak\fP to make maximum use of dynamic memory allocations
+as new channels of data appear in the input ORB packet stream. This starts with
+the use of tblgrep(3) in the parameter file \fIchannels\fP and \fIchannels_reject\fP
+tables to match incoming SEED net_sta_chan[_loc] channel codes against a
+set of regular expressions to determine if the channel needs to be processed.
+If the channel does need to be processed, then a set of structures and buffers
+are allocated on-the-spot to accommodate the new channel processing. Extensive
+use of the Antelope stock tools tbl(3) and arr(3) is made to house and reference the
+newly allocated channel structures. This dynamic channel processing is also supported by
+the Antelope pktchannelpipe tool (see \fBpktchannelpipe - time-ordered processing\fP below).
+.IP
+The ubiquitous use of dynamic memory by \fBorbwfpeak\fP, and by most other Antelope
+real-time processing programs, is the real secret to giving the software maximum scalability.
+Programs like this contain almost no static allocations and therefore occupy minimum
+memory space when started. Therefore, the same exact program
+can run on both credit card sized PDAs, with small memory resources, and huge server 
+class machines, with enormous memory resources, and service
+applications in both domains equally well. We don't need to recompile (only for different
+hardware architectures or OS) or set buffer sizes in a parameter somewhere; the memory
+adapts itself automatically at runtime. Of course, dynamic memory management is a sharp
+knife and an unskilled cook can easily lose some fingers. However, fastidious
+attention to detail and a clear understanding of dynamic memory management in the C
+programming environment can produce some spectacular results.
+.IP "\fBpktchannelpipe - time-ordered processing\fP"
+One of the  thorny real-world problems with all real-time waveform data is
+that it is not always time-ordered and time-contiguous across successive
+packets. Any serious real-time waveform processing program will have to deal
+with this issue in a reasonable manner. Associated with this problem is the
+problem of time-varying data sample rates and related metadata, such as \fIcalib\fP,
+that occur occasionally with certain data.
+.IP
+Generally, there are three classes of time ordering/contiguity in real-time waveform data:
+.RS 0.5i
+.IP 1.
+\fIData sources that produce nominally time-ordered and contiguous data.\fP These
+data sources will usually produce packets that are already time-ordered and contiguous.
+However, even for well-behaved data sources, there will be occasional time tears that
+produce either data gaps or data overlaps due, for instance, to GPS outages/reconnects or datalogger reboots.
+.IP 2.
+\fIData sources that produce "approximately" time-ordered and contiguous data.\fP Some
+dataloggers try to produce time-ordered and contiguous data but often the data stream will
+contain packets that are out of time order by a small number of packets. This usually
+happens due to a lost transmission/retransmission cycle. In this case the packets were
+originally time-ordered and contiguous within the datalogger but got scrambled in their
+order on transmission. Data in this class also suffer from the occasional time tears
+found in class 1.
+.IP 3.
+\fIData sources that produce egregiously out-of-time-order data, usually on purpose.\fP
+The only real example we can think of for this one is the CTBTO modified LIFO order
+data streams. In this transmission scheme the data is purposely time-scrambled after a
+long outage so that really old data is intermixed with most recent data. This class
+of data almost defies any sane attempts at real-time processing, aside from just
+dropping the old data and just using the recent data (or vice versa). As with class 2
+there will always be the same time tears found in class 1.
+.RE
+.IP
+The Antelope pktchannelpipe tool (pktchannelpipe_new(3), pktchannelpipe_push(3),
+pktchannelpipe_flush(3)) was designed to deal with classes 1 and 2 and this tool
+is used by \fBorbwfpeak\fP. The pktchannelpipe tool basically constructs a set
+of time-ordered packet channels (PktChannel structures as defined in Pkt.h) and then
+pops eachPktChannel structure off of each of the queues whenever either 1) it looks
+like there are time-ordered and contiguous packet channels or 2) the maximum queue
+size is exceeded. Note that the quantum of ORB waveform packet data is a packet
+channel and not a complete ORB packet. The reason for this is that a single ORB
+packet may contain an unlimited number of time asynchronous waveform channels.
+Therefore each channel must be processed in its own separate time-ordered queue.
+The channels for processing, along with the maximum queue sizes, are set with 
+pktchannelpipe_new(3) which uses regular UNIX expressions to implement dynamic
+channel processing.
+A complete ORB waveform packet is processed by the pktchannel tool with
+pktchannelpipe_push(3) which 1) unstuffs the complete ORB packet into a set
+of packet channels, 2) compares each packet channel against the channels
+regular expressions set in pktchannelpipe_new(3) to see if it needs to be processed,
+3) sets up a new processing queue if necessary, 4) puts each packet channel into
+its time-ordered queue and 5) pops off any packet channels if they look time-ordered
+and contiguous or if the maximum queue size is exceeded (in which case the oldest
+packet is popped off). When a packet channel is popped off of the queue it is returned
+to the application program through a user-defined callback procedure. Also returned
+is a code telling the application programmer if the packet channel is contiguous
+with the previous packet channel,
+or is a duplicate of the previous packet channel, or time overlaps the previous
+packet channel, or there is a time gap relative to the previous packet channel,
+or is early relative to the previous packet channel.
+.IP
+The \fBorbwfpeak\fP strategy for processing non-contiguous data is fairly
+simple. If data is contiguous, then it is appended to floating point buffers
+for each channel-band, and these floating buffers are further processed
+for filtering and peak measuring. If data is non-contiguous, then the existing
+floating buffers are flushed out (i.e. any buffers waiting for extra samples to
+fill out peak windows are immediately processed) and 
+re-initialized (i.e. set to zero length) before the new non-contiguous data is copied in.
+.IP "\fBpktchannelcalib - metadata and SEED to CSS name determination\fP"
+Another thorny and typical real-world problem is that most waveform data packets
+are missing the metadata info, such as \fIcalib\fP. In theory this is not supposed
+to happen. But in the real-world it is rare when these values are properly filled
+out in the ORB waveform packets. For programs like \fBorbwfpeak\fP, \fIcalib\fP
+is essential in order to make useful peak calculations. The Antelope pktchannelcalib
+tool is used by \fBorbwfpeak\fP as an alternative for getting the \fIcalib\fP info
+out of the waveform packet channels. The Antelope pktchannelcalib tool,
+consists of pktchannelcalib_new(3) and pktchannelcalib_get(3) and these
+routines will look up a number
+of metadata parameters from a Datascope database. In addition, it will translate
+SEED net sta chan [loc] codes into CSS sta chan codes using the foreign keys database
+tables (see foreign(3)). The pktchannelcalib tool is meant to operate with real-time
+ORB packets which can come at the rate of 100s per second. If the database tables
+and their required views were computed and accessed directly for each ORB packet channel,
+it would result in a severe performance penalty since the access rates would be so high.
+Instead the pktchannelcalib tool caches the metadata parameters after a database access
+and only re-accesses the data from the database if 1) the data time is out of range with
+the cached views or 2) it appears that the underlying database table files have been
+modified since that last access.
+.IP "\fBfiltering with trfilter and peak waveform processing\fP"
+With all of the previous "boilerplate" accomplished we finally get to the point where \fBorbwfpeak\fP
+can actually compute and output the peak values. However, first we need to filter the raw
+data after it is appended to the floating point buffers. We filter each packet channel as
+it is received using the trfilter_pkt procedure in the Antelope trfilter tool (see trfilter(3)).
+This allows us to specify the filter parameters using the standard Antelope filter strings,
+as described in trfilter(3). After filtering the data we can then do the peak averages and
+output the values as \fIwfmeas\fP ORB database packets.
+.SH "BUGS AND CAVEATS"
+.SH "SEE ALSO"
+.SH AUTHOR
+Danny Harvey
+Modified by Josh Stachnik (UAF)
+.br
+Boulder Real Time Technologies, Inc.

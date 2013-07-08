@@ -1,0 +1,64 @@
+master_site_database /Seis/databases/stations/master_stations
+
+analysis_control_database /Seis/processing/tracking_database/aeic_analysis
+
+analyzed_events_database /Seis/processing/analyzed/%Y_%m/analyzed_%Y_%m_%d
+
+segmented_waveform_database /Seis/seg/%Y/%Y_%m
+
+primary_system op
+
+processing_systems &Arr{
+
+	op &Arr{
+		system_name		Operation
+		host			earlybird
+		site_database	 	/iwrun/op/params/Stations/worm
+		archive_database 	/iwrun/op/db/archive/archive_%Y/archive_%Y_%m_%d
+		archive_database_prelim /Seis/denali/archive/archive_%Y_%m_%d
+		quakes_database		/iwrun/op/db/seg/Quakes_%Y_%m_%d
+		quakes_database_prelim	/Seis/processing/prelim/%Y_%m_prelim/Quakes_%Y_%m_%d
+	}
+
+	mig &Arr{
+		system_name		Migration
+		host			energy
+		site_database		/iwrun/mig/params/Stations/worm
+		archive_database	/iwrun/mig/db/archive/archive_%Y_%m_%d
+		quakes_database		/iwrun/mig/db/seg/Quakes_%Y_%m_%d
+	}
+
+	bak &Arr{
+		system_name 		Backup
+		host			ice
+		site_database 		/iwrun/bak/params/Stations/worm
+		archive_database	/iwrun/bak/db/archive/archive_%Y_%m_%d
+		archive_database_prelim /Seis/denali/archive/archive_%Y_%m_%d
+		quakes_database		/iwrun/bak/db/seg/Quakes_%Y_%m_%d
+		quakes_database_prelim	/Seis/processing/prelim/%Y_%m_prelim/Quakes_%Y_%m_%d
+	}
+}
+
+rtexec_run_dirs &Arr{
+	energy		/iwrun/mig/run
+	earlybird	/iwrun/op/run
+	ice		/iwrun/bak/run
+	fk		/home/bbanddat/run
+	beam		/iwrun/acq/run
+	marvin		/home/uafarr/run
+	megathrust	/home/beeper/run
+	strike		/export/mitch/run
+	ugle		/Seis/ugle1/run
+}
+
+catalogs &Arr{
+	aeic		/Seis/catalogs/aeic/%Y_%m/aeic_%Y_%m
+	avo		
+	cmt		/Seis/catalogs/cmt/hrvcmt
+	iceworm		/Seis/catalogs/iceworm/%Y_%m/iceworm_%Y_%m
+	pde		/Seis/catalogs/pde/pde_%Y
+	pgc		
+	qed		
+	reb		/Seis/catalogs/reb/%Y_%m/reb_%Y_%m
+	releases	/Seis/catalogs/releases/releases_%Y_%m
+}

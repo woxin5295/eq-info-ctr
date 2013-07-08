@@ -1,0 +1,29 @@
+.\" %W% $Date: 2002-02-07 01:56:34 $
+.TH SUBMIT_CNSS 1 "$Date: 2002-02-07 01:56:34 $"
+.SH NAME
+submit_cnss \- submit cnss-format file of hypocenters to the CNSS
+.SH SYNOPSIS
+.nf
+\fBsubmit_cnss \fP\fIYYYYMM\fP \fIcnss_file\fP
+.fi
+.SH DESCRIPTION
+\fBsubmit_cnss\fP is the Alaskan installation of Doug Neuhauser's script send.cnss.csh,
+which takes a pre-constructed file called "\fIcnss_file\fP" of hypocenters in
+the CNSS unified single-line format and submits said file to the CNSS
+(Council of the National Seismic System). The script actually supports zero- and
+one-argument runs, but only the specified two-argument form works for the
+Alaskan version. \fIYYYYMM\fP is the year and month of the file to be submitted.
+.LP
+\fBsubmit_cnss\fP uses rsh or rcp to submit the catalog, which requires a .rhosts
+entry at quake.geo.berkeley.edu. Currently the allowed accounts
+are kent@nordic.giseis.alaska.edu, roger@nordic.giseis.alaska.edu, and
+catalog@megathrust.giseis.alaska.edu.  Changes are currently made by
+Doug Neuhauser, doug@seismo.berkeley.edu.
+.SH EXAMPLE
+%\fB submit_cnss 199702 cnssfile_9702\fP
+.SH "SEE ALSO"
+.nf
+db2cnss(1)
+.fi
+.SH AUTHOR
+Doug Neuhauser (man page by K. Lindquist...)

@@ -1,0 +1,39 @@
+sta_defaults &Arr{
+	serialno 999
+	sensitivity	20  # V/g
+	fullscale	20	# V
+	sensortype	32 # 32=Episensor 11=FBA 4g - 16=FBA 0.1g, S13=41
+	lat	34.5
+	lon	45.6
+	elev 1.0234
+}
+sta_params	&Arr{
+	CHM &Arr{
+		serialno 111
+		sensitivity	20  # V/g
+		fullscale	20	# V
+		sensortype	32 # 32=Episensor
+		lat	42.9986
+		lon	74.7513
+		elev 0.665 
+	}
+	CONA &Arr{
+		serialno 222
+		sensitivity	20  # V/g
+		fullscale	20	# V
+		sensortype	32 # 32=Episensor
+		lat	34.5
+		lon	45.6
+		elev 1.0234
+	}
+}
+view   &Tbl{
+#   verbose 
+#    dbopen sensor
+#    dbjoin sitechan  
+#    dbjoin site
+#    dbjoin -o instrument   
+#    dbleftjoin wfdisc sta chan time::endtime
+	dbopen wfdisc
+}
+

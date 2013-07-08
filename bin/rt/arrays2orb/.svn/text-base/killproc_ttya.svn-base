@@ -1,0 +1,9 @@
+#! /usr/bin/tcsh -f
+set count = "7"
+while ( $count != 0 )
+  @ count = $count - 1	
+  foreach pids ( `/usr/bin/ps -ef -o pid,args | /usr/bin/grep read_ttya | /usr/bin/grep -v grep | /usr/bin/grep -v sh |/usr/bin/awk '{print $1}'` )
+    /bin/kill -9 $pids >& /dev/null
+  end
+  sleep 1
+end

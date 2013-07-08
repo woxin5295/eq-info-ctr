@@ -1,0 +1,53 @@
+.TH DLCMD_WRAPPER 1 "$Date: 2008-09-16 21:41:02 $"
+.SH NAME
+dlcmd_wrapper \- dlcmd_wrapper is a wrapper for the antelope dlcmd command. 
+The wrapper looks for Pump Station calibration commands. It turns on the matrix 
+test bit when it detects a Pump Station calibration. It verifies that the
+test bit is on and submits the calibration command. It then sleeps until the
+calibration completes and turns off the matrix test bit. The dlcmd wrapper 
+must show up in the search path prior than the antelope dlcmd. 
+
+	 
+	  
+.SH SYNOPSIS
+dlcmd [-noblock] [-noreply] [-prm] [-waittime waittime] [-timeout timeout] [-replytarget replytarget] [-delayhangup delayhangup] orbcmd targets dltypes dlnames cmd [cmdarg1 [cmdarg2 [...]]]
+
+.LP
+.LP
+.nf
+man dlcmd for argument specifications
+.fi
+.ft CW
+.RS .2i
+.RE
+.ft R
+.nf
+.fi
+.fi
+.SS "Example Parameter File /iwrun/acq/run/pf/dlcmd_wrapper.pf "
+.nf
+
+orbfbks aeicpipe:6510 	# orb to monitor	
+
+# mysql fairbanks information 
+mysql_hosts_fbks localhost
+mysql_user_fbks pipe
+mysql_pass_fbks ++++++++++
+mysql_database_fbks pipeline
+
+# mysql Anchorage OCC information 
+mysql_hosts_occ localhost
+mysql_user_occ pipe
+mysql_pass_occ ++++++++++
+mysql_database_occ pipeline
+
+# bit alive options
+MinKeepTestOn 120 # minimun amount of time to keep test bit on
+TestOnCushion 60  # Amount of time to cushion test bit
+
+# debugging settings
+debug 0 # debugging print statments off
+.fi
+
+.SH AUTHOR
+Mitch Robinson Tue Sep 16 08:52:24 AKDT 2008.

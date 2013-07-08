@@ -1,0 +1,111 @@
+# This is a sample file with ideas for a new orbplalarm.pf parameter file
+
+# if wfmeas_subset is blank, all wfmeas rows for the station are used. 
+# Note that only some measurements 
+# if detection_subset is blank, all detections (all channels, all filter bands) 
+# for the station are used. 
+# Note that proper interpretation of the threshold will require 
+# internal use of the units_convert(3) function, as well as splitting 
+# of the low/medium/high filter spec rows. 
+
+
+# report all stations current alarm status to log 
+# file every report_interval seconds. Set to 0 for
+# no reporting.
+report_interval 120.0
+
+alarm_templates &Arr{
+	accel_sensitive &Arr{
+		detection_subset
+		wfmeas_subset	meastype == "peaka"
+		low		0.02	g
+		medium		0.03	g
+		high		0.04	g
+	}
+	accel_high &Arr{
+		detection_subset
+		wfmeas_subset	meastype == "peaka"
+		low		0.2	g
+		medium		0.3	g
+		high		0.4	g
+	}
+	accel_SAW &Arr{
+		detection_subset filter == "BW 1.0 4 5.0 4"
+		wfmeas_subset 	meastype == "peaka"
+		low		0.15 	g
+		medium		0.25	g
+		high		0.35 	g
+	}
+}
+#	PAX	accel_high
+#	CHUM	accel_high
+#	COLD	accel_sensitive
+#	KTH	accel_sensitive
+#	TRF	accel_sensitive
+#	PMR	accel_sensitive
+
+alarm_stations &Arr{
+	SWD	&Arr{
+			use_detection	1
+			detection_subset filter == "BW 1.0 4 0 0"
+			wfmeas_subset 	meastype == "peak"
+			units 	gravity
+			thresholds &Tbl{
+			low		0.15 	
+			medium		0.25
+			high		0.35
+			}
+		}
+	DOT	&Arr{
+			detection_subset filter == "BW 1.0 4 0 0"
+			wfmeas_subset 	meastype == "peak"
+			units 	gravity
+			thresholds &Tbl{
+			low		0.15 	
+			medium		0.25
+			high		0.35
+			}
+		}
+	PAX	&Arr{
+			detection_subset filter == "BW 1.0 4 0 0"
+			wfmeas_subset 	meastype == "peak"
+			units 	gravity
+			thresholds &Tbl{
+			low		0.15 	
+			medium		0.25
+			high		0.35
+			}
+		}
+	DIV	&Arr{
+			detection_subset filter == "BW 1.0 4 0 0"
+			wfmeas_subset 	meastype == "peak"
+			units 	gravity
+			thresholds &Tbl{
+			low		0.00000015 	
+			medium		0.00000025
+			high		0.0000035
+			}
+		}
+	PPLA	&Arr{
+			detection_subset filter == "BW 1.0 4 0 0"
+			wfmeas_subset 	meastype == "peak"
+			units 	gravity
+			thresholds &Tbl{
+			low		0.00000015 	
+			medium		0.00000025
+			high		0.0000035
+			}
+		}
+	SAW	&Arr{
+			detection_subset filter == "BW 1.0 4 0 0"
+			wfmeas_subset 	meastype == "peak"
+			units 	gravity
+			thresholds &Tbl{
+			low		0.00000015 	
+			medium		0.00000025
+			high		0.0000035
+			}
+		}
+}
+
+pf_revision_time 1046974037

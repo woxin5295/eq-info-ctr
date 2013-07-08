@@ -1,0 +1,59 @@
+
+default_network	AK
+default_datalogger_sn	# fill in if you don't require serial number in database
+default_sensor_sn	# fill in if you don't require serial number in database
+
+response_dir	./Response
+stage_dir	./Response/stage
+
+# following are the directories (under $ANTELOPE/data unless they are
+# an absolute path) where dbbuild finds the database of sensors and
+# dataloggers
+##### Following 4 lines commented out by GT 20080721, because the aliases they point to do not exist
+# instead, just copy all the Antelope instrument parameter files to /usr/local/aeic/5.2-64/data/instruments,
+# add any new AEIC ones there
+# and then refer to those directories here
+#########
+#SensorDir	/Seis/databases/dbbuild/data/instruments/sensors
+#DataloggerDir	/Seis/databases/dbbuild/data/instruments/dataloggers
+#TemplateDir	/Seis/databases/dbbuild/data/instruments/templates
+#PreampDir	/Seis/databases/dbbuild/data/instruments/preamps
+SensorDir	/usr/local/aeic/5.2-64/data/instruments/sensors
+DataloggerDir	/usr/local/aeic/5.2-64/data/instruments/dataloggers
+TemplateDir	/usr/local/aeic/5.2-64/data/instruments/templates
+PreampDir	/usr/local/aeic/5.2-64/data/instruments/preamps
+ResponsesDir	/usr/local/aeic/5.2-64/data/responses
+
+
+# Typically under either $ANTELOPE/local/data or $ANTELOPE/data
+# Changed by GT 20080721
+#SerialNumberDir	/Seis/databases/dbbuild/data/instruments/sn  # pf-basename-root/serial-number.pf
+SerialNumberDir	/usr/local/aeic/5.2-64/data/instruments/sn  # pf-basename-root/serial-number.pf
+
+
+alternate_Name	&Arr{
+#BH	BI
+}
+
+alternate_loc	&Arr{
+#""	xx
+}
+
+editors &Tbl{
+$XEDITOR
+xvile
+elvis
+xemacs
+}
+
+possible_streams &Literal{
+    my $ref = $Configuration->datalogger->possible_samprates ; 
+    return @$ref ;
+}
+
+specify_filters &Literal{
+    my $ref = $Configuration->datalogger->possible_streams ; 
+    return (1, %$ref) ; 
+}
+
+pf_revision_time 1130431271

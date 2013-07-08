@@ -1,0 +1,22 @@
+DAYdbs	/Seis/processing/analyzed
+PRINTER_LIST	lex840bw
+PRINTER_MAPS	lexaeic
+WEEKLYDB	./weeklydb
+end_date	2012_09_30
+# 20121005: G. Thompson added DATA and DATADIR to Makefile to make install this template
+#highlight_template	/usr/local/aeic/5.2-64/data/templates/weekly_highlights_template.html
+highlight_template	/usr/local/aeic/5.2-64/data/templates/weekly_highlights_template.txt
+#listing_template	/usr/local/aeic/5.2-64/data/templates/weekly_list_template.html
+min_mag	3.5
+pf_revision_time	1343950555
+start_date	2012_09_24
+# 20121005: G. Thompson added convert and cupsfilter in the MacOSX version
+# convert is to convert ps to gif
+# cupsfilter is to convert html to pdf
+#sed	/usr/bin/sed
+convert     /Applications/ImageMagick-6.6.3/bin/convert
+cupsfilter  /usr/sbin/cupsfilter
+# 20121005: G. Thompson added these to simplify update_web() and allow safe testing through setting
+# baswebdir_out to a different path than basewebdir_in (normally they are the same)
+basewebdir_in	/usr/local/Mosaic/Seis
+basewebdir_out	/usr/local/Mosaic/Seis

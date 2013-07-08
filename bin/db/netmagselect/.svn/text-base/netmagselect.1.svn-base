@@ -1,0 +1,53 @@
+.TH NETMAGSELECT 1 "$Date: 2010-09-22 00:54:01 $"
+.SH NAME
+netmagselect \- Select magnitude from netmag table for ShakeMap run
+.SH SYNOPSIS
+.nf
+\fBnetmagselect \-db \fIdb\fP\ \-ev \fIevid\fP\ \-pr \fIprefor\fP\ \[ -defmag \fImag\fP\ -p \fIparameter_file\fP\] 
+.fi
+.SH DESCRIPTION
+\fBnetmagselect\fP selects magnitude value from netmag table for ShakeMap run based on priority list defined in \fBnetmagselect.pf\fP parameter file. 
+
+.SH OPTIONS
+-db \fIdb\fP input database with origin, event, and netmag tables; this argument is required
+
+-pr \fIprefor\fP preferred origin; this argument is required
+
+-ev \fIevid\fP of the event for which ShakeMap run will be done; this argument is required
+
+-defmag \fImag\fP defining magnitude; this argument is optional
+
+-p \fIparameter_file\fP parameter file; this argument is optional
+
+SH PARAMETER FILE
+The parameter file for \fBnetmagselect\fP is called netmagselect.pf. 
+.ft CW
+.in 2c
+.nf
+
+.ne 7
+# netmagselect parameter file
+#
+# authors lower in list have higher priority
+authpref        &Tbl{
+USGS:AK         ml      # Ml from USGS
+USGS:ak ml
+orbmlVmg        mlV     # Ml automatic from AEIC
+aeic_dbml       ml      # Ml reviewed from AEIC
+orbmbmig        mb      # mb automatic from AEIC
+USGS:US         mb      # mb reviewed from USGS
+aeicmwa         mw      # Mw automatic from AEIC
+orbmwp          mwp     # Mwp automatic from AEIC
+USGS:US         mw      # Mw reviewed from USGS, global (nsta=null always), 
+                        # in case they mis-label Alaskan event as global
+aeicmwr         mw      # Mw reviewed from AEIC
+USGS:AK         mw      # Mw reviewed from USGS (nsta=null always)
+}
+
+.ne 6
+Mitch Robinson
+Geophysical Institute
+University of Alaska, Fairbanks
+September 2010
+.fi
+.\" $Id: netmagselect.1,v 1.1 2010-09-22 00:54:01 mitch Exp $

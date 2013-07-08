@@ -1,0 +1,24 @@
+
+I had to fix a few things in stuff_iw_tracebuf.c, hence 
+"mystuff_iw_tracebuf.c". I've used iceworm packets for convenience. Dan and
+I talked about the desirability of having a "generic raw" format for 
+orbpackets, which would be some kind of direct mapping from the "Generic
+unstuffed orb packets." This would be similar to Dan's ORBDBUG packets,
+I guess, though he suggested I not use those. Perhaps now he's fixed
+what he needed to in those debug routines. Still, a generic raw format
+seems to be a useful thing. 
+
+CTFrame2orbpkts.c:
+	freepkt and freepktchan may deserve to go into
+	some widely available library, unless
+	they already exist somewhere...
+
+CTFrame2orbpkts expects the CTFrame to start at the beginning of the header shown in 
+Detail A of the CT-Frame Data Format figure (figure 21)
+get_next_block returns a CTFrame plus the preceding two
+idle-bits, which in our case should probably be used to recognize the 
+frame, rather than using length as we did.
+
+get_next_block risks the occurence of a five-byte string in the data, i.e.
+the two idle bits plus the address, control, siteid triplet. As above--should have
+used the idle bits to decide on block length and parsing

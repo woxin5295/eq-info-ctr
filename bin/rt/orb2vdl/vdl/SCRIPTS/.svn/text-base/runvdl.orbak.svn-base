@@ -1,0 +1,1 @@
+vdlorb -v SCRIPTS/parms.vdlak -orbname nordic.giseis.alaska.edu:12345 -orbchan "AK_DIV.*|AK_FIB.*|AK_MCK.*|AK_RC01.*|AK_TNA.*|AK_UNV.*" -cph 1 -n 18 -s 56 -f 40 -F 40. -host nsn3.cr.usgs.gov -i vpeak &

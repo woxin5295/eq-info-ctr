@@ -1,0 +1,20 @@
+orbfbks aeicpipe:6510 	# orb to monitor	
+
+# mysql fairbanks information 
+mysql_hosts_fbks localhost
+mysql_user_fbks pipe
+mysql_pass_fbks ++++++++++
+mysql_database_fbks pipeline
+
+# mysql Anchorage OCC information 
+mysql_hosts_occ localhost
+mysql_user_occ pipe
+mysql_pass_occ ++++++++++
+mysql_database_occ pipeline
+
+# bit alive options
+MinKeepTestOn 120 # minimun amount of time to keep test bit on
+TestOnCushion 60  # Amount of time to cushion test bit
+
+# debugging settings
+debug 0 # debugging print statments off

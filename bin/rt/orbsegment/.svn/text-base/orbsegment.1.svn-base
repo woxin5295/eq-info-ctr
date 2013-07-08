@@ -1,0 +1,90 @@
+.TH ORBSEGMENT 1 2007/11/08 "Glenn Thompson, AEIC" "User Commands"
+.SH NAME
+.nf
+orbsegment - segment waveform data corresponding to arrivals found in /pf/orb2dbt packets
+.fi
+.SH SYNOPSIS
+.nf
+orbsegment [-l logfile] [-p pf] orbpf orbseg
+.fi
+.SH DESCRIPTION
+\fBorbsegment\fP segments waveform data based on stations and arrival times 
+specified in arrivals array in /pf/orb2dbt packet on orbpf. A list of candidate
+orbservers can be tried for the waveform data, to boost the chances of success.
+This list of orbservers is specified in the parameter file.
+
+orb2orb is invoked to attempt to copy the data from candidate waveform orbserver
+to orbseg, the output orbserver. orb2orb appears to wait forever if it cannot find
+the waveform data requested. Since orb2orb has no timeout option, it is called
+as a background process, and orbsegment sleeps for time_to_wait seconds. When it 
+wakes it checks with pgrep to see if orb2orb is still running. If it is, it assumes 
+that the orb2orb process has hung waiting for data, and kills it with the pkill
+command. It then moves on to try another candidate waveform orbserver.
+
+Because pkill will kill all processes matching the string given, pkill orb2orb
+would kill all orb2orb processes running on that machine. So a local copy of
+orb2orb is made, called orb2orbcopy, and this is the program invoked to copy
+the waveform data. pkill orb2orbcopy can then be run without fear of killing
+other processes not connected with orbsegment.
+
+However, if waveform data is requested for multiple stations/channels, but is only
+found for a subset of those stations/channels, orb2orb(copy) terminates normally.
+For this reason, two modes of operation have developed: 
+
+mode 0 
+	Waveform subsetting is relative to earliest arrival 
+	time in arrivals array. In this mode, all stations are subset 
+	based on this time, thus making only one orb2orb connection
+	necessary. However, often waveform data is only successfully copied
+	for a subset of the stations/channels requested. 
+
+mode 1 
+	Waveform subsetting is relative to the arrival time of
+	each station specified in arrivals array. In this mode, an orb2orb
+	connection is made for each station/channel, making it slower, but the
+	chances of copying waveform data for all the stations/channels requested
+	is far higher. 
+	
+As a fallback, if mode 0 completely fails to copy any waveform data after trying all
+candidate waveform orbservers, orbsegment automatically switches to mode 1. Nevertheless,
+mode 1 will almost always be more robust than mode 0. 
+
+Waveforms are segmented 'pretime' seconds before arrival time 
+and 'posttime' seconds after arrival time for 'chansift' channels.
+Mode, pretime, posttime, and chansift are all specified in parameter file. 
+
+.SH OPTIONS
+.IP "-l logfile"
+Specifies the path of the logfile to be used. If omitted, defaults to logs/orbsegment.
+.IP "-p pf"
+Specifies the path of the parameter file to be used. If omitted, defaults to pf/orbsegment.pf.
+.SH "PARAMETER FILE"
+.IP mode
+0 or 1
+0 - request waveform data for all stations/channels at once (faster)
+1 - request waveform data for each station/channel in turn (more robust)
+.IP pretime
+Waveforms are segmented 'pretime' seconds before arrival time.
+.IP posttime
+Waveforms are segmented 'posttime' seconds after arrival time.
+.IP chansift
+Pattern specifying the channels to seek waveform data for, e.g:
+chansift	[BSE]H[ZNE].*
+.IP time_to_wait
+Number of seconds to wait for orb2orbcopy to complete.
+.IP orb2orbcopy
+Path to local copy of orb2orb.
+.IP wforb
+List of candidate waveform orbservers, e.g.:
+wforb &Tbl { # list of waveform orbs to use
+energy:6510
+ice:6510
+earlybird:6510
+}	
+.SH BUGS AND CAVEATS
+* orbsegment has not yet been tested
+.SH AUTHOR
+Glenn Thompson
+.br
+Alaska Earthquake Information Center
+

@@ -1,0 +1,37 @@
+vdlasl -S TATO -SL 00 -t 1 -n 15 -s 56 -f 20 -l 0 -c 1 -i tato -k 0 -host nsn4.cr.usgs.gov -lhost tato.iu.liss.org -port 4000
+vdlasl -S GUMO -SL 00 -t 1 -n 15 -s 57 -f 20 -l 0 -c 1 -i gumo -k 0 -host nsn4.cr.usgs.gov -lhost gumo.iu.liss.org -port 4000
+vdlasl -S KONO -SL 00 -t 1 -n 15 -s 58 -f 20 -l 0 -c 1 -i kono -k 0 -host nsn4.cr.usgs.gov -lhost kono.iu.liss.org -port 4000
+vdlasl -S SNZO -SL 00 -t 1 -n 15 -s 59 -f 20 -l 0 -c 1 -i snzo -k 0 -host nsn4.cr.usgs.gov -lhost snzo.iu.liss.org -port 4000
+vdlasl -S MA2 -SL 00 -t 1 -n 15 -s 60 -f 20 -l 0 -c 1 -i ma2 -k 0 -host nsn4.cr.usgs.gov -lhost ma2.iu.liss.org -port 4000
+vdlasl -S PET -SL 00 -t 1 -n 15 -s 61 -f 20 -l 0 -c 1 -i pet -k 0 -host nsn4.cr.usgs.gov -lhost pet.iu.liss.org -port 4000
+vdlasl -S YAK -SL 00 -t 1 -n 15 -s 62 -f 20 -l 0 -c 1 -i yak -k 0 -host nsn4.cr.usgs.gov -lhost yak.iu.liss.org -port 4000 
+vdlasl -S YSS -SL 00 -t 1 -n 15 -s 63 -f 20 -l 0 -c 1 -i yss -k 0 -host nsn4.cr.usgs.gov -lhost yss.iu.liss.org -port 4000
+vdlasl -S INCN -SL 00 -t 1 -n 15 -s 64 -f 20 -l 0 -c 1 -i incn -k 0 -host nsn4.cr.usgs.gov -lhost incn.iu.liss.org -port 4000
+vdlasl -S TUC -SL 00 -t 1 -n 15 -s 65 -f 20 -l 0 -c 1 -i tuc -k 0 -host nsn4.cr.usgs.gov -lhost tuc.iu.liss.org -port 4000
+vdlasl -S CTAO -SL 00 -t 1 -n 15 -s 66 -f 20 -l 0 -c 1 -i ctao -k 0 -host nsn4.cr.usgs.gov -lhost ctao.iu.liss.org -port 4000
+vdlasl -S TIXI -SL 00 -T 1 -t 1 -n 15 -s 67 -f 20 -l 0 -c 0 -i tixi -k 0 -host nsn4.cr.usgs.gov -lhost tixi.iu.liss.org -port 4000
+vdlasl -S PAYG -SL 00 -t 1 -n 15 -s 68 -f 20 -l 0 -c 1 -i payg -k 0 -host nsn4.cr.usgs.gov -lhost payg.iu.liss.org -port 4000
+vdlasl -S ANMO -SL 10 -t 1 -n 15 -s 71 -f 40 -l 0 -c 1 -i anmo -k 0 -host nsn4.cr.usgs.gov -lhost anmo.iu.liss.org -port 4000
+vdlasl -S GNI -SL 00 -t 1 -n 15 -s 72 -f 20 -l 0 -c 1 -i gni -k 0 -host nsn3.cr.usgs.gov -lhost gni.iu.liss.org -port 4000
+vdlasl -S COLA -SL 00 -t 1 -n 15 -s 73 -f 20 -l 0 -c 1 -i cola -k 0 -host nsn4.cr.usgs.gov -lhost cola.iu.liss.org -port 4000
+vdlasl -S HIA -SL 00 -t 1 -n 15 -s 74 -f 20 -l 0 -c 1 -i hia -k 0 -host nsn3.cr.usgs.gov -lhost hia.ic.liss.org -port 4000
+vdlasl -S LVC -t 1 -n 15 -s 75 -f 20 -l 0 -c 1 -i lvc -k 0 -host nsn5.cr.usgs.gov -lhost lvc.iu.liss.org -port 4000
+vdlasl -S KIP -SL 00 -t 1 -n 15 -s 76 -f 20 -l 0 -c 1 -i kip -k 0 -host nsn5.cr.usgs.gov -lhost kip.iu.liss.org -port 4000
+vdlasl -S BJT -SL 00 -t 1 -n 15 -s 77 -f 20 -l 0 -c 1 -i bjt -k 0 -host nsn5.cr.usgs.gov -lhost bjt.ic.liss.org -port 4000 
+vdlasl -S ULN -SL 00 -t 1 -n 15 -s 78 -f 20 -l 0 -c 1 -i unl -k 0 -host nsn5.cr.usgs.gov -lhost uln.iu.liss.org -port 4000
+vdlasl -S BDFB -SL 00 -t 1 -n 15 -s 40 -f 20 -l 0 -c 1 -i bdfb -k 0 -host nsn4.cr.usgs.gov -lhost bdfb.gt.liss.org -port 4000
+vdlasl -S BGCA -SL 00 -t 1 -n 15 -s 41 -f 20 -l 0 -c 1 -i bgca -k 0 -host nsn4.cr.usgs.gov -lhost bgca.gt.liss.org -port 4000
+vdlasl -S BOSA -SL 00 -t 1 -n 15 -s 42 -f 20 -l 0 -c 1 -i bosa -k 0 -host nsn4.cr.usgs.gov -lhost bosa.gt.liss.org -port 4000
+vdlasl -S CPUP -SL 00 -t 1 -n 15 -s 43 -f 20 -l 0 -c 1 -i cpup -k 0 -host nsn4.cr.usgs.gov -lhost cpup.gt.liss.org -port 4000
+vdlasl -S DBIC -SL 00 -t 1 -n 15 -s 44 -f 20 -l 0 -c 1 -i dbic -k 0 -host nsn4.cr.usgs.gov -lhost dbic.gt.liss.org -port 4000
+vdlasl -S LBTB -SL 00 -t 1 -n 15 -s 45 -f 20 -l 0 -c 1 -i lbtb -k 0 -host nsn4.cr.usgs.gov -lhost lbtb.gt.liss.org -port 4000
+vdlasl -S LPAZ -SL 00 -t 1 -n 15 -s 46 -f 20 -l 0 -c 1 -i lpaz -k 0 -host nsn4.cr.usgs.gov -lhost lpaz.gt.liss.org -port 4000
+vdlasl -S PLCA -SL 00 -t 1 -n 15 -s 47 -f 20 -l 0 -c 1 -i plca -k 0 -host nsn4.cr.usgs.gov -lhost plca.gt.liss.org -port 4000
+vdlasl -S VNDA -SL 00 -t 1 -n 15 -s 48 -f 20 -l 0 -c 1 -i vnda -k 0 -host nsn4.cr.usgs.gov -lhost vnda.gt.liss.org -port 4000
+vdlasl -S SBA -SL 00 -t 1 -n 15 -s 49 -f 40 -l 0 -c 1 -i sba -k 0 -host nsn5.cr.usgs.gov -lhost sba.iu.liss.org -port 4000
+vdlasl -S SPA -SL 00 -t 1 -n 15 -s 79 -f 20 -l 0 -c 1 -i spa -k 0 -host nsn3.cr.usgs.gov -lhost spa.iu.liss.org -port 4000
+vdlasl -S KBS -SL 00 -t 1 -n 15 -s 80 -f 20 -l 0 -c 1 -i kbs -k 0 -host nsn3.cr.usgs.gov -lhost kbs.iu.liss.org -port 4000
+vdlasl -S RCBR -SL 00 -t 1 -n 15 -s 81 -f 20 -l 0 -c 1 -i rcbr -k 0 -host nsn3.cr.usgs.gov -lhost rcbr.iu.liss.org -port 4000
+vdlasl -S ADK -SL 00 -t 1 -n 15 -s 82 -f 20 -l 0 -c 1 -i adk -k 0 -host nsn5.cr.usgs.gov -lhost adk.iu.liss.org -port 4000
+vdlasl -S POHA -SL 00 -t 1 -n 15 -s 83 -f 20 -l 0 -c 1 -i poha -k 0 -host nsn3.cr.usgs.gov -lhost poha.iu.liss.org -port 4000
+

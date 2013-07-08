@@ -1,0 +1,26 @@
+.TH DBRECENTEQS_AEIC_4.6 1 2007/11/12 "Glenn Thompson, AEIC" "User Commands"
+.SH NAME
+.nf
+rename_webmaps - rename webmaps generated with dbrecenteqs4 from $evid.gif to $evtime.gif, and post them to the EOC orbserver.fi
+.SH SYNOPSIS
+.nf
+rename_webmaps inputdir webmapdir xferdir
+.fi
+.SH DESCRIPTION
+\fBrename_webmaps\fP is used to send webmap gifs, created with dbrecenteqs, to the iMacs for the EOC project. The problem is that an event in the event database on an iMac will have a different to the same event in the summary database at AEIC. Therefore, a copy of the webmap has to be made using the event time (down to 1 thousandth of a second) as part of the filename, rather than event id. This webmap file is posted to a directory watched by orbxfer2 on the EOC orbserver, from where it gets transfered as a special packet. It is then pulled off the orb by orbxfer2 on the iMac, and made available for plotting with dbevents_aeic.
+.PP
+Another solution would be just to run dbrecenteqs locally. However, dbrecenteqs requires the installation of many third-party softwares, and so is far from ideal.
+.SH "COMMAND LINE ARGUMENTS"
+.IP inputdir
+The directory under which dbrecenteqs makes its evid directories.
+.IP webmapdir
+The directory (not necessarily on a web server) where renamed gifs and touch files will be stored (they are automatically deleted after a few days).
+.IP xferdir
+The directory to put another copy of the renamed webmap gifs for orb2orb transfer (using the orbxfer2 program). 
+.SH EXAMPLE
+rename_webmaps /usr/local/mosaic/Seis/recenteqs_sub/quakes /usr/local/Mosaic/Input/glenn/aeic/webmaps /net/inverse/export/inverse/fema/run/xfer2mac/webmaps
+.SH AUTHOR
+Glenn Thompson
+.br
+Alaska Earthquake Information Center
+

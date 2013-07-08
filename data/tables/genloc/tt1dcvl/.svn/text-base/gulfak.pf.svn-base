@@ -1,0 +1,110 @@
+velocity_model_name gulfak
+phases &Arr{
+P  &Arr{
+	travel_time_calculator general
+	TTmodel gulfak
+	TTmethod tt1dcvl tt1dcvl u1dcvl
+	time_distance_weight_function &Tbl{
+	0.0	1.0
+	1.5	1.0
+	5.0	0.1
+	10.0	0.0
+	360.0	0.0
+	}
+	ux_distance_weight_function &Tbl{
+        0.0     1.0
+        10.0    1.0
+        90.0    0.7
+        92.0    0.0
+        360.0   0.0
+        }
+        uy_distance_weight_function &Tbl{
+        0.0     1.0
+        10.0     1.0
+        90.0    0.7
+        92.0    0.0
+        360.0   0.0
+        }
+	default_time_uncertainty 0.2
+	default_slowness_uncertainty 0.01
+        dt_bound_factor 0.01
+        du_bound_factor 0.035
+	time_station_corrections &Tbl{
+	EAF .19
+	FIB 1.23
+	GOU .22
+	ILI .44
+	ILM .44
+	ILN .44
+	NIN 1.47
+	NKA 2.16
+	NNL 1.47 
+	PWA .7
+	RDT .36
+	SKL .1
+	SLK .1
+	SPU .39
+	SSN .67
+	SST .67
+	}
+	ux_station_corrections &Tbl{
+        }
+        uy_station_corrections &Tbl{
+        }
+}
+# Vs = Vp / sqrt(3) = Vp / 1.7321 = 0.5774*Vp
+S  &Arr{
+	travel_time_calculator general
+	TTmodel gulfak
+	TTmethod tt1dcvl tt1dcvl u1dcvl
+	time_distance_weight_function &Tbl{
+	0.0	1.0
+	1.5	1.0
+	5.0	0.1
+	10.0	0.0
+	360.0	0.0
+	}
+	ux_distance_weight_function &Tbl{
+        0.0     1.0
+        10.0     1.0
+        90.0    0.7
+        92.0    0.0
+        360.0   0.0
+        }
+        uy_distance_weight_function &Tbl{
+        0.0     1.0
+        10.0     1.0
+        90.0    0.7
+        92.0    0.0
+        360.0   0.0
+        }
+	default_time_uncertainty 0.5
+	default_slowness_uncertainty 0.005
+        dt_bound_factor 0.01
+        du_bound_factor 0.035
+	time_station_corrections &Tbl{
+	EAF .33
+	FIB 2.19
+	GOU .39
+	ILI .78
+	ILM .78
+	ILN .78
+	NIN 2.59
+	NKA 3.82
+	NNL 2.59 
+	PWA 1.25
+	RDT .64
+	SKL .18
+	SLK .18
+	SPU .69
+	SSN 1.19
+	SST 1.19
+	}
+	ux_station_corrections &Tbl{
+        }
+        uy_station_corrections &Tbl{
+        }
+}
+}
+
+# $Id: gulfak.pf,v 1.4 2006-04-06 00:10:45 natasha Exp $ 

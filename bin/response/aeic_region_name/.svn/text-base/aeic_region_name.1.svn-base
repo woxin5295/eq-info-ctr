@@ -1,0 +1,35 @@
+.\" $Name: not supported by cvs2svn $ $Date: 2002-02-07 01:56:37 $
+.TH AEIC_REGION_NAME 1 "$Date: 2002-02-07 01:56:37 $"
+.SH NAME
+aeic_region_name \- name a region of Alaska based on lat and lon
+.SH SYNOPSIS
+.nf
+\fBaeic_region_name \fP\fIlat\fP \fIlon\fP
+.fi
+.SH DESCRIPTION
+\fBaeic_region_name\fP returns a string describing the region of Alaska containing
+the specified \fIlat\fP and \fIlon\fP. \fIlat\fP must be between 48 and 75 North. Lon must
+be between 170 E and 130 W, with "West" specified by a negative longitude value.
+
+Several abbreviations are used. For example, a leading "it" means "in the".
+A trailing "roa" means "region of Alaska."
+
+Coordinates outside the specified region cause \fBaeic_region_name\fP to quietly
+return nothing.
+
+.SH EXAMPLE
+.ft CW
+.in 2c
+.nf
+
+%\fB aeic_region_name 60 -150\fP
+it Kenai Peninsula roa
+%\fB \fP
+
+.fi
+.in
+.ft R
+.SH DIAGNOSTICS
+Usage: \fBaeic_region_name\fP \fIlat\fP \fIlon\fP
+.SH AUTHOR
+Wrapper by Kent Lindquist around subroutines from John Lahr

@@ -1,0 +1,1 @@
+vdl -v parms.vdl -n 18 -s 122 -f 50 -j 100 -t 1 -i vpe -k 0 -host nsn3.cr.usgs.gov -e vdl_ew.d

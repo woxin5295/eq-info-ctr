@@ -1,0 +1,165 @@
+#defines preference order of magnitude displayed (decreasing preference)
+magnitude_preference_order &Tbl{
+	ml
+	ms
+	mb
+}
+maxmapwidth	800		# maximum width of map (in pixels)
+maxmapheight	800		# maximum height of map (in pixels)
+dbpickgeom	680x300-0-0 	# geometry of main dbpick display window
+dbpicktypeingeom	100x20-0-0	# geometry of dbpick typein window
+scsift		*:BHZ		# default dbpick station-channel sifter
+channels	33		# default number of dbpick channels to display
+twin		180		# default dbpick display time window
+filter		0		# default dbpick filter index
+textwidth	50		# width of text display (in characters)
+geometry	+0+0		# placement geometry of main window
+waittorestart	10		# seconds to wait when restarting dbpick
+soundpath	/usr/local/aeic/5.2-64/data/sounds	# where sound files exist
+soundfile	rooster.au	# play this sound first before EQ info
+#audioplayer	audioplay	# command used to play sounds
+audioplayer	afplay	# command used to play sounds
+audiovol	100	# volume control	
+mag_thresh	0		# only play sound for M>magthresh
+mysrn		1		# local seismic region number (SRN)
+usemysrn_mag	0		# 0 = report all events above magthresh
+				# 1 = only report events w/i mysrn and above magthresh
+qdds_mail_list	mitch@giseis.alaska.edu,duty@giseis.alaska.edu   # send email to this list when QDDS event deleted
+webmapsdb	/iwrun/bak/db/webquakes/quakes	#database that contains webmap table as 
+						# made by dbrecenteqs, must have same 
+						# evids as database feeding dbevents
+xvgeometry	350x350+10+625	# size and position of xv image window that displays webmap
+
+placedb		/Seis/databases/places/cities	# database of places
+neardist	200		# max distance away to show places (km)
+nplacemax	5		# max number of places to display in list
+
+startdbpick	1		# 1 = start dbpick at program startup
+				# 0 = do not start dbpick at program startup
+automap		1		# 1 = automatically select map
+				# 0 = do not automatically select map
+legendon	0		# 1 = display map legend
+				# 0 = do not display map legend
+alerton		1		# 1 = audible alert on
+				# 0 = do not play audible alert for new ev
+repeaton	0		# 1 = repeat audible alert until manual stop
+				# 0 = do not repeat eq alert
+qddson		1		# 1 = Allow user to delete events from QDDS
+				# 0 = Don not allow user to delete events from QDDS
+autodetailmap	0		# 1 = auto popup small detail map upon startup and new event
+				# 0 = no auto popup
+
+
+external_catalog_authors &Arr{	# A table describing authors and letter codes
+				# for external associated origins
+	QED	Q		# QED origins
+	PDE	P		# PDE origins
+	REB	R		# REB origins
+}
+
+local_catalog_authors &Arr{	# A table describing authors and letter codes
+				# for locally generated origins
+	UC:danny	d
+}
+
+
+update_intervals &Tbl{	# database update intervals menu
+	1s
+	5s
+	10s
+	1m
+	10m
+	30m
+	1h
+}
+
+update_interval	10s	# default database update interval
+
+symbol_colors &Tbl{	# event symbol color vs age definitions
+			# age   unselected_color   selected_color
+	1h	red \#ffa0a0
+	1d	orange orange
+	3d	yellow yellow
+	7d	white white
+	0	\#808080 \#d0d0d0
+}
+
+# plot and update specific stations based on some value as 
+# determined by waveform measurements
+monitor_stations	0	# 1 = plot and update select_stations
+				# 0 = do not plot 
+meas_table		wfrms2	# database table from which to get 
+				# measurements; likely wfrms,wfrms2,wfmeas,wfmgme
+meas_type		peak	# meas_table field to use
+
+station_colors &Tbl{	# station colors based on some value
+	1.0	red \#ffa0a0
+	0.5	orange orange
+	0.25	yellow yellow
+	0.1	\#00d000 green
+	0	blue \#a0a0ff
+}
+
+select_stations &Tbl{ # list of stations to monitor 
+	COLD
+	PAX
+	BMR
+	THY
+	DIV
+}
+# end of monitor station stuff
+
+maps &Arr{		# map definitions
+all_alaska &Arr{
+	file /usr/local/aeic/4.9/data/maps/images/alaska_topo_big.gif
+	format gif
+	proj    edp
+	latc    61
+	lonc    -151
+	xdelmin -18
+	xdelmax 18
+	ydelmin -9
+	ydelmax 9
+	symsize 7
+	priority 6
+	latminbb 52
+	latmaxbb 70
+	lonminbb -169
+	lonmaxbb -133
+}
+
+alaska_topo &Arr{
+        file /opt/antelope/4.9/data/maps/images/alaska_topo.gif
+        format gif
+        proj edp
+        latc 65
+        lonc -148
+        xdelmin -19.0045
+        xdelmax 11.03
+        ydelmin -16.0956
+        ydelmax 10.5077
+        symsize 7
+        latminbb 50.000
+        latmaxbb 80.953
+        lonminbb -179.999
+        lonmaxbb -131.104
+        priority 2
+}
+
+	global_merc &Arr{					# This is a typical mercator projection map (merc)
+		file ANTELOPE/data/maps/images/global.gif		# map filename
+		format gif					# map format
+		proj merc					# map projection
+		palette 4/4/4					# color palette allocations red/green/blue
+		latmin -78.0					# latitude at bottom edge
+		latmax 78.0					# latitude at top edge
+		lonmin -180.0					# longitude at left edge
+		lonmax 180.0					# longitude at right edge
+		symsize	8					# event symbol size (in pixels)
+		latminbb -90.0					# approximate minimum latitude (for determining bounding region)
+		latmaxbb 90.0					# approximate maximum latitude (for determining bounding region)
+		lonminbb -180.0					# approximate minimum longitude (for determining bounding region)
+		lonmaxbb 180.0					# approximate maximum longitude (for determining bounding region)
+		priority 0					# display priority
+	}
+}

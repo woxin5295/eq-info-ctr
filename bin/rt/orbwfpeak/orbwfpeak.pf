@@ -1,0 +1,96 @@
+#  
+#  orbwfpeak parameter file used to specify channels to process
+#  and channel-dependent processing parameters
+#
+
+#  Following are global default parameters:
+
+calib_from_db	yes	# calib values from database?
+maxpkts		10	# maximum number of packets in time-ordered queue
+
+bands &Tbl{		# These are the processing frequency bands
+			# for each channel
+	&Arr{
+		filter	BW 0.01 5 0.1 5	# filter specification
+		fc	0.05		# center frequency
+		fpad	200.0		# filter transient pad
+		twin	600.0		# averaging window
+		dtpeak	60.0		# averaging window output time increment
+		tmin	300.0		# minimum contiguous data for ave
+	}
+	&Arr{
+		filter	BW 0.1 5 0.3 5	# filter specification
+		fc	0.2		# center frequency
+		fpad	120.0		# filter transient pad
+		twin	240.0		# averaging window
+		dtpeak	60.0		# averaging window output time increment
+		tmin	120.0		# minimum contiguous data for ave
+	}
+	&Arr{
+		filter	BW 0.3 5 0.8 5	# filter specification
+		fc	0.55		# center frequency
+		fpad	60.0		# filter transient pad
+		twin	120.0		# averaging window
+		dtpeak	60.0		# averaging window output time increment
+		tmin	90.0		# minimum contiguous data for ave
+	}
+	&Arr{
+		filter	BW 0.8 5 3.0 5	# filter specification
+		fc	1.9		# center frequency
+		fpad	10.0		# filter transient pad
+		twin	120.0		# averaging window
+		dtpeak	60.0		# averaging window output time increment
+		tmin	60.0		# minimum contiguous data for ave
+	}
+	&Arr{
+		filter	BW 3.0 5 10.0 5	# filter specification
+		fc	6.5		# center frequency
+		fpad	10.0		# filter transient pad
+		twin	120.0		# averaging window
+		dtpeak	60.0		# averaging window output time increment
+		tmin	60.0		# minimum contiguous data for ave
+	}
+	&Arr{
+		filter	BW 10.0 5 0.0 0	# filter specification
+		fc	10.0		# center frequency
+		fpad	1.0		# filter transient pad
+		twin	120.0		# averaging window
+		dtpeak	60.0		# averaging window output time increment
+		tmin	60.0		# minimum contiguous data for ave
+	}
+}
+
+#  Following are channel processing parameter templates:
+
+templates &Arr{
+	templ1 &Arr{		# template number 1
+		maxpkts	20	# maximum number of packets in time-ordered queue
+		bands &Tbl{
+		        &Arr{
+       		         filter  BW 0.5 5 0 0   # filter specification
+       		         fc      1.0            # center frequency
+       		         fpad    2.0            # filter transient pad
+       		         twin    4.0           # averaging window
+       		         dtpeak   1.0            # averaging window output time increment
+       		         tmin    2.0            # minimum contiguous data for ave
+       			 }
+		}
+
+	}
+}
+
+#  Following is a list of channels for processing:
+
+channels &Tbl{
+#	netstachanloc		template
+	AK_PPLA_HNZ			templ1
+}
+
+#  Following is a list of channels to reject for processing:
+
+channels_reject &Tbl{
+	.*_80.*
+	.*_FA.*
+}
+
+pf_revision_time 1046974037

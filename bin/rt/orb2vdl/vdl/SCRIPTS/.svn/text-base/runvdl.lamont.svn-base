@@ -1,0 +1,1 @@
+nohup csh /dyna/data4/ketchum/vdl/cshvdl >/dyna/data4/ketchum/vdl/vdl.log &

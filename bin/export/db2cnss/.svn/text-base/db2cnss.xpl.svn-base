@@ -1,0 +1,277 @@
+#
+# db2cnss
+# 
+# Convert a css3.0 catalog of hypocenters to CNSS Unified Single Line Catalog Format
+#
+# Kent Lindquist
+# Geophysical Institute
+# University of Alaska
+# December, 1996
+
+use Datascope;
+
+$Source = "AK";		# Source of hypocentral information
+
+if( $#ARGV != 1 ) {
+	die( "Usage: $0 dbname outfile\n" );
+} else {
+	$dbname = $ARGV[0];
+	$outfile = $ARGV[1];
+}
+
+@db = dbopen( $dbname, "r" );
+
+if( ! -f "$dbname.origin" ) {
+	die( "No origin table present in $dbname\n" );
+}
+
+if( -f "$dbname.event" ) {
+	@dbor = dblookup( @db, "", "origin", "", "" );
+	@dbevent = dblookup( @db, "", "event", "", "" );         
+	@dbor = dbjoin( @dbor, @dbevent );
+	@dbor = dbsubset( @dbor, "orid == prefor" );
+} else	{
+	@dbor= dblookup( @dbor, "", "origin", "", "" );
+}
+
+if( -f "$dbname.netmag" ) {
+	#@db = dblookup( @db, "", "origin", "", "" );
+	@dbnetmag = dblookup( @db, "", "netmag", "", "" );         
+	@dbnetmag = dbjoin( @dbor, @dbnetmag );
+	@dbnetmag = dbsort( @dbnetmag, "orid" );
+}
+
+if( -f "$dbname.origerr" ) {
+	@dborigerr = dblookup( @db, "", "origerr", "", "" );
+	$nrecords = dbquery( @dborigerr, "dbRECORD_COUNT" );
+	for( $dborigerr[3] = 0; $dborigerr[3] < $nrecords; $dborigerr[3]++ ) {
+		($orid, $sdobs, $smajax, $sdepth, $stime ) = dbgetv( @dborigerr,
+		"orid", "sdobs", "smajax", "sdepth", "stime" );
+		$Origerr{$orid}++;
+		$Sdobs{$orid} = $sdobs;
+		$Smajax{$orid} = $smajax;
+		$Sdepth{$orid} = $sdepth;
+		$Stime{$orid} = $stime;
+	}
+}
+
+$nrecords = dbquery( @dbnetmag, "dbRECORD_COUNT" );
+
+if( $nrecords == 0 ) {
+	die( "No applicable records in $dbname\n" );
+}
+
+open( F, ">$outfile" );
+
+print F "\$fmt cnss-catalog-ver-1.0\n";
+@mags = ();
+@mag_types = ();
+@mag_sources = ();
+$old_orid=0;
+for( $dbnetmag[3] = 0; $dbnetmag[3] < $nrecords; $dbnetmag[3]++ ) {
+#	($orid, $lat, $lon, $time, $depth, $ndef, $ml, $mb, $ms, $lddate, $magtype, $magnitude) = dbgetv( @db, 
+#	"orid", "lat", "lon", "time", "depth", "ndef", "ml", "mb", "ms", "lddate", "magtype", "magnitude" );
+	($orid, $lat, $lon, $time, $depth, $ndef, $ml, $mb, $ms, $lddate, $magtype, $magnitude, $etype, $auth) = dbgetv( @dbnetmag, 
+	"orid", "lat", "lon", "time", "depth", "ndef", "ml", "mb", "ms", "lddate", "magtype", "magnitude", "etype", "netmag.auth");
+	#@dbmags = dbsubset(@dbnetmag, "orid==".$orid);
+	#$nmagrecords = dbquery( @dbmags, "dbRECORD_COUNT" );
+	#@mags = ();
+	#or ($dbmags[3]=0; $dbmags[3]<$nmagrecords; $dbmags[3]++) {
+	#	($magtype, $magnitude) = dbgetv (@dbmags, "magtype", "magnitude");
+#		@mags = (@mags, $magtype, $magnitude );		
+#	}
+	#@mags = (@mags, $magtype, $magnitude);
+	#printf "mmm: ".$magnitude." ".$magtype."\n";
+	if ($orid!=$old_orid){
+		translate_fields();
+	
+		print_fields();
+		@mags = ( );
+		@mag_types = ();
+		@mag_sources = ();
+	} else { 
+	}
+	# append new magnitude to the list
+		@mags = (@mags, $magnitude);
+		@mag_types = (@mag_types, $magtype);
+		@mag_sources = (@mag_sources, $auth);
+	$old_orid = $orid;
+}
+translate_fields();
+print_mag_fields();
+print F "\$end\n";
+
+sub translate_fields {
+	$cnss_timestr = epoch_to_cnss_timestr( $time );
+	$cnss_lat = ( $lat == -999. ) ? "         " : sprintf( "%9.5f", $lat );
+	$cnss_lon = ( $lon == -999. ) ? "          " : sprintf( "%10.5f", $lon );
+	$cnss_depth = ( $depth == -999. ) ? "        " : sprintf( "%8.4f", $depth );
+	$cnss_loctype = "H ";	# Hypocenter
+	$cnss_hypsource = sprintf( "%-3.3s", $Source ); #Source of hypocentral information
+	$cnss_ndef = ( $ndef == -1 ) ? "    " : sprintf( "%4d", $ndef );
+	$cnss_azgap = "   ";
+	$cnss_nearest = "          ";
+	if( $Origerr{$orid} ) {
+		$cnss_RMSresid = ( $Sdobs{$orid} == -1. ) ? "       " :
+						sprintf( "%7.4f", $Sdobs{$orid} );
+		$cnss_origtimeerr = ( $Stime{$orid} == -1. ) ? "       " :
+						sprintf( "%7.4f", $Stime{$orid} );
+		$cnss_horizerr = ( $Smajax{$orid} == -1. ) ? "       " :
+						sprintf( "%7.4f", $Smajax{$orid} );
+		$cnss_deptherr = ( $Sdepth{$orid} == -1. ) ? "       " :
+						sprintf( "%7.4f", $Sdepth{$orid} );
+	} else {
+		$cnss_RMSresid = "       ";
+		$cnss_origtimeerr = "       ";
+		$cnss_horizerr = "       ";
+		$cnss_deptherr = "       ";
+	}
+	
+	if ($etype eq "a" || $etype eq "b"){  
+		$cnss_auxremark = "L ";	
+	}
+	elsif ($etype eq "" || $etype eq "-"){
+		$cnss_auxremark = "R ";	# Regional Earthquake
+	}
+	else{ 
+		$cnss_auxremark = $etype." ";
+	}
+
+	$cnss_ldtime =
+		epoch_to_cnss_date( ( $lddate == -9999999999.999 ) ? time : $lddate ); 
+	$cnss_idno = "            ";
+	#( $cnss_mag, $cnss_magtype ) = choose_cnss_mag();
+	
+	#@mags_list = choose_cnss_mag();
+	#print @mags_list;
+	
+	# list with order of preference of magnitudes
+	@mags_order = ("mw Hrvd", "mw AEIC", "mb Hrvd", "mb PDE", "ml aeic_dbml", "ms Hrvd", "ms PDE");
+	local $j;
+	local $k;
+	$pref_mag=-1;
+	# find the preferred magnitude
+	for ($j=0; $j<scalar(@mags_order); $j++){
+		for ($k = 0; $k < scalar(@mags); $k++){
+			
+			if ($mag_types[$k]." ".$mag_sources[$k] eq $mags_order[$j]){
+				
+				$pref_mag=$k;  # preferred magnitude
+				last;
+			}
+		}
+		if($pref_mag!=-1){last;}
+	}
+	# prepare lists with magnitude information
+	@cnss_mags=();
+	@cnss_magtypes=();
+	@cnss_magsources=();
+	for ($j=0; $j<scalar(@mags); $j++){
+		push( @cnss_mags, sprintf( "%5.2f", $mags[$j] ) );
+		push( @cnss_magtypes, substr($mag_types[$j],1,1)." " );
+		if ($mag_sources[$j] eq "PDE"){
+			$cnss_magsource = "GO"; # Source of magnitude information 
+		}
+		elsif($mag_sources[$j] eq "Hrvd"){
+			$cnss_magsource = "HVD"; # Source of magnitude information
+		}
+		else { 
+			$cnss_magsource = "AK"; # Source of magnitude information
+		}
+		push(@cnss_magsources, $cnss_magsource);
+	}
+}
+
+sub print_mag_fields { #
+	local $j;
+	for ($j=0; $j<scalar(@cnss_mags); $j++){
+		$val = $cnss_mags[$j];
+		$type = $cnss_magtypes[$j];
+		$cnss_magsource = $cnss_magsources[$j];
+		if($j == $pref_mag){
+			print F "\$magP";
+		}
+		else {
+			print F "\$mag ";
+		}
+		print F $val;
+		print F $type;
+		print F $cnss_magsource;
+		print F "\n";
+	}
+}
+
+sub print_fields {
+if($orid!=$old_orid){
+	if($old_orid!=0){
+		#magnitudes
+		print_mag_fields();		
+		print F "\$end\n";
+	}
+	print F "\$beg\n";
+	print F "\$loc ";
+	print F $cnss_timestr;
+	print F $cnss_lat;
+	print F $cnss_lon;
+	print F $cnss_depth;
+	print F $cnss_loctype;
+	print F $cnss_hypsource;
+	print F $cnss_ndef;
+	print F $cnss_azgap;
+	print F $cnss_nearest;
+	print F $cnss_RMSresid;
+	print F $cnss_origtimeerr;;
+	print F $cnss_horizerr;
+	print F $cnss_deptherr;
+	print F $cnss_auxremark;
+	print F $cnss_ldtime;
+	print F $cnss_idno;
+	print F "\n";
+}
+}
+
+sub choose_cnss_mag {
+	local @list=();
+	push( @list, sprintf( "%5.2f", $magnitude ) );
+	push( @list, substr($magtype,1,1)." " );
+	#print "list: ".$list[0]." ".$list[1]."\n";
+	return @list;
+}
+sub choose_cnss_mags {
+	local( @list );
+	local $j;
+	for ($j=0; $j<scalar(@mags)/2; $j++) {
+		push( @list, sprintf( "%5.2f", $mags[2*$j+1] ) );
+		push( @list, substr($mags[2*$j],1,1)." " );
+		
+	}
+	return @list;
+}
+
+sub epoch_to_cnss_date {
+	local( $epoch ) = pop( @_ );
+
+	local( $temp, $mo, $dy, $yr );
+
+	$temp = strdate( $epoch );
+	$temp =~ tr@(\s+|/)@ @;
+	$temp =~ s@^\s+@@;
+
+	($mo, $dy, $yr) = split( /\s+/, $temp );
+
+	return sprintf( "%4d%02d%02d", $yr, $mo, $dy );
+}
+
+sub epoch_to_cnss_timestr {
+	local( $epoch ) = pop( @_ );
+
+	local( $temp, $mo, $dy, $yr, $hr, $min, $sec );
+
+	$temp = strtime( $epoch );
+	$temp =~ tr@(\s+|/|:)@ @;
+	$temp =~ s@^\s+@@;
+
+	($mo, $dy, $yr, $hr, $min, $sec) = split( /\s+/, $temp );
+	
+	return sprintf( "%4d%02d%02d%02d%02d%07.4f", $yr, $mo, $dy, $hr, $min, $sec );
+}

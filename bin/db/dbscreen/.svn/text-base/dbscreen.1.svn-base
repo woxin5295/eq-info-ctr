@@ -1,0 +1,134 @@
+'\" e
+.\" @(#)dbscreen.1      1.1 04/19/95
+.EQ
+delim $$
+.EN
+.TH DBSCREEN 1 "$Date: 2002-02-07 01:56:28 $"
+.SH NAME
+dbscreen \- screen arrivals for events with multiple detections
+.SH SYNOPSIS
+.nf
+\fBdbscreen \fP[ -v] \fIdatabase\fP
+.fi
+.SH DESCRIPTION
+\fBDbscreen\fP attempts to winnow out bad p detections from an arrival
+file by requiring that detections occur on multiple stations.
+It does not check the iphase field of arrivals, assuming that all
+arrivals are potential p arrivals.  It looks for groups of arrivals
+for which the time between the first arrival and later arrivals is less
+than a computed maximum time difference between the two stations.
+This maximum time difference may be computed with an average velocity
+specified in the parameter file, or by using ttimes.  The distance
+between stations is obtained from the site table.  Two additional
+fudge factors enter into the calculation, an additive time constant
+and a multiplicative factor, both specified in the parameter file.
+.LP
+The updated arrival table is written to stdout.
+.LP
+\fBDbscreen\fP starts out assuming that the arrival file is sorted
+by time.  If this proves not to be the case, it will use sort to
+sort the file, and then restart.
+.SH OPTIONS
+.IP -v
+.br
+verbosely displays the elimination process.  Chiefly of interest for
+debugging.
+.SH FILES
+This program needs the site and arrival table, and a parameter file.
+.SH PARAMETERS
+.IP "Minimum_associated"
+.br
+minimum number of stations with arrivals
+.IP "Average_velocity
+.br
+average velocity used to calculate maximum time difference between stations;
+set to ttimes to use ttimes for calculation instead.
+.IP Earth_radius
+radius of earth in same system of units as average velocity
+.IP "epsilon_t"
+.br
+time to add to calculated maximum arrival time
+.IP "fudge_factor"
+.br
+multiplicative factor for time criterion -- the actual criterion is
+.ft CW
+.in 2c
+.nf
+
+( delta_t + epsilon_t ) * fudge_factor
+
+.fi
+.in
+.ft R
+where delta_t is calculated with ttimes or the specified average velocity.
+.SH RETURN VALUES
+.ft CW
+.in 2c
+.nf
+
+moser% (\fBdbscreen\fP -v short > new.arrival ) >& \fBdbscreen\fP.out
+moser% cat \fBdbscreen\fP.out
+EKS CHM 18.67       # These are the calculated maximum travel times
+USP CHM  8.27       # between stations
+USP EKS 18.98
+BGK CHM 12.68
+BGK EKS  8.41
+    .
+    .
+    .
+AAK AML 18.35
+AAK KZA 18.61
+AAK TKM 15.45
+AAK KBK  8.48
+Maximum time is 32.4
+Reading arrival table.
+Looking through arrivals
+Arrival USP(4162) : AAK(1) = -6.2  ok  2 Kept
+Oops -- arrivals must be sorted by time. Start over.
+Sorting current short.arrival..
+Reading arrival table.
+# The next line shows station, arid, delta t, and the decision
+# to keep arids 1 and 4162:
+Arrival AAK(1) : USP(4162) = 6.2  ok  2 Kept
+Arrival USP(4162) :  1
+Arrival KBK(3545) : USP(4163) = 2.0  ok  2 Kept
+Arrival USP(4163) :  1
+Arrival CHM(475) :  1
+Arrival CHM(476) :  1
+Arrival KBK(3546) : CHM(477) = 19.1  1
+Arrival CHM(477) :  1
+Arrival KBK(3547) :  1
+Arrival AAK(2) :  1
+Arrival AAK(3) : KBK(3548) = 4.6  ok USP(4164) = 6.2  ok CHM(478) = 15.7  3 Kept
+Arrival AAK(4) : KBK(3548) = 3.9  ok USP(4164) = 5.5  ok CHM(478) = 15.0  3 Kept
+    .
+    .
+    .
+moser% head new.arrival
+AAK      706161691.05000        1  1992139       -1       -1 BHZ      P        - -1.000   -1.00   -1.00   -1.00   -1.00   -1.00  -1.000       -1.0   -1.00 -999.00 - -        6.63 - dbp:danq:93223        -1 08/10/93
+USP      706161697.30000     4162  1992139       -1       -1 BHZ      P        - -1.000   -1.00   -1.00   -1.00   -1.00   -1.00  -1.000       -1.0   -1.00 -999.00 - -        3.91 - dbp:danq:93223        -1 08/11/93
+KBK      706161732.50000     3545  1992139       -1       -1 BHZ      P        - -1.000   -1.00   -1.00   -1.00   -1.00   -1.00  -1.000       -1.0   -1.00 -999.00 - -        2.49 - dbp:danq:93223        -1 08/11/93
+USP      706161734.45000     4163  1992139       -1       -1 BHZ      P        - -1.000   -1.00   -1.00   -1.00   -1.00   -1.00  -1.000       -1.0   -1.00 -999.00 - -        5.66 - dbp:danq:93223        -1 08/11/93
+AAK      706162363.45001        3  1992139       -1       -1 BHZ      -        - -1.000   -1.00   -1.00   -1.00   -1.00   -1.00  -1.000       -1.0   -1.00 -999.00 - -        4.17 - detar:rogerh          -1 08/10/93
+AAK      706162364.15002        4  1992139       -1       -1 BHZ      P        - -1.000   -1.00   -1.00   -1.00   -1.00   -1.00  -1.000       -1.0   -1.00 -999.00 - -        2.87 - dbp:danq:93223        -1 08/10/93
+KBK      706162368.04999     3548  1992139       -1       -1 BHZ      P        - -1.000   -1.00   -1.00   -1.00   -1.00   -1.00  -1.000       -1.0   -1.00 -999.00 - -        3.82 - dbp:danq:93223        -1 08/11/93
+USP      706162369.70001     4164  1992139       -1       -1 BHZ      P        - -1.000   -1.00   -1.00   -1.00   -1.00   -1.00  -1.000       -1.0   -1.00 -999.00 - -        3.30 - dbp:danq:93223        -1 08/11/93
+AAK      706162766.75000        6  1992139       -1       -1 BHZ      -        - -1.000   -1.00   -1.00   -1.00   -1.00   -1.00  -1.000       -1.0   -1.00 -999.00 - -        4.44 - detar:rogerh          -1 08/10/93
+KBK      706162770.84998     3549  1992139       -1       -1 BHZ      -        - -1.000   -1.00   -1.00   -1.00   -1.00   -1.00  -1.000       -1.0   -1.00 -999.00 - -        2.50 - detar:rogerh          -1 08/11/93
+
+.fi
+.in
+.ft R
+.SH "SEE ALSO"
+.nf
+ttimes(1)
+sort(1)
+.fi
+.SH "BUGS AND CAVEATS"
+This algorithm will probably work well only for a set of fairly close stations.
+Also, the entire group of arrivals is not tested for self consistency; rather
+all the arrivals in the group are tested for consistency with the
+first arrival.
+.SH AUTHOR
+Daniel Quinlan
+

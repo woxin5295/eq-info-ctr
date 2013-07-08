@@ -1,0 +1,106 @@
+      subroutine pltsym (ain, az, cx, cy, ussiz, extname, pi, rad,
+     &      rmax, ussym)
+c
+c    plot either first motion symbol with station name next to symbol, 
+c    or stress axes symbol (p & t) 
+c    first motion symbols are as follows:
+c      filled:   compression
+c      open:     dilatation
+c      square:   wt > 0
+c      triangle: station excluded by angle on incidence, by observed or jeffreys
+c        weight, or by distance (wt < 0)
+c     
+c
+      real              ain      ! angle of incidence of symbol
+      real              az       ! azimuth of symbol
+      real              cx       ! x position of circle center
+      real              cy       ! y position of circle center
+      character*12      extname  ! string to be plotted to right of symbol
+      real              pi       ! pi
+      real              rad      ! pi/180
+      real              rmax     ! radius of circle
+      character*1       sym      ! plot symbol 
+      character*6       svfont   ! original font
+      real              wt       ! weight assigned to pick quality in program fpfit
+      real              ainr     ! ain in radians
+      real              ang      ! plot angle of symbol
+      real              azr      ! az in radians
+      real              con      ! rmax * sqrt(2.0)
+      logical           first    ! flag first time into routine
+      real              r        ! distance from cx, cy to plot position
+      real              ussiz    ! height of symbol to plot
+      real              ussym    ! symbol type to plot
+      real              x        ! x position of symbol
+      real              y        ! y position of symbol
+c
+      parameter (ang = 0.0)
+c       
+c 	write(95,*) '---> called pltsym with:'
+c     	write(95,*) 'ain, az, cx, cy, ussiz, extname, pi, 
+c     &rad, rmax, ussym ='
+c	write(95,*) ain, az, cx, cy, ussiz, extname, pi,
+c     &rad, rmax, ussym
+c
+      azr = az*rad
+      ainr = ain*rad
+c
+c upgoing rays        
+c
+      if (ain .gt. 90.) then
+        ainr = pi - ainr
+        azr = pi + azr
+      endif
+      con = rmax*sqrt(2.0)
+      r = con*sin(ainr*0.5)
+      x = r*sin(azr) + cx
+      y = r*cos(azr) + cy
+c
+c stress axis symbol for best solution
+c
+      if (ussym .eq. 1.) then
+!        call getfon (svfont)
+!        call setfon ('romtrp')
+!        call centxt (x, y-ussiz/2., ussiz, 'P', ang, 1)
+	call symbol(x-ussiz/3.6,y-ussiz/3.8,ussiz,'P',ang,1)
+!	call symbol(x,y-ussiz/2.+.01,ussiz,'P',ang,1)
+!	call symbol(x+.01,y-ussiz/2.,ussiz,'P',ang,1)
+!	call symbol(x,y-ussiz/2.-.01,ussiz,'P',ang,1)
+!	call symbol(x-.01,y-ussiz/2.,ussiz,'P',ang,1)
+!        call setfon (svfont)
+      else if (ussym .eq. 2.) then
+!        call getfon (svfont)
+!        call setfon ('romtrp')
+!        call centxt (x, y-ussiz/2., ussiz, 'T', ang, 1)
+	call symbol(x-ussiz/3.6,y-ussiz/3.8,ussiz,'T',ang,1)
+!	call symbol(x,y-ussiz/2.+.01,ussiz,'T',ang,1)
+!	call symbol(x+.01,y-ussiz/2.,ussiz,'T',ang,1)
+!	call symbol(x,y-ussiz/2.-.01,ussiz,'T',ang,1)
+!	call symbol(x-.01,y-ussiz/2.,ussiz,'T',ang,1)
+!        call setfon (svfont)
+c
+c stress axis symbol for alternate solution
+      else if (ussym .eq. 1.1) then
+        call symb ( 32.090, ussiz, x, y, 0., 0., 0.)
+      else if (ussym .eq. 2.1) then
+        call symb ( 32.270, ussiz, x, y, 0., 0., 0.)
+c
+c first motion symbol
+c
+      else
+        call symb ( ussym, ussiz, x, y, 0., 0., 0.)
+c
+c plot station extname
+c
+        if (extname(1:4) .ne. ' ') then
+          call left(extname)
+!          call text (x + ussiz/2., y - ussiz/4., ussiz/2.,
+!     &    extname, 0., lentru(extname))
+          call symbol (x + ussiz/2., y - ussiz/4., ussiz/2.,
+     &    %ref(extname), 0., lentru(extname))
+        endif
+      endif
+c
+c	write(95,*) '---> returned from pltsym'
+c
+      return
+      end

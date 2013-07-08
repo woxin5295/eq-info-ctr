@@ -1,0 +1,24 @@
+center 60.13:-151.07
+range 3
+istaplt 0
+istnam 0
+ipdeplt 0
+ipdepth 0
+iporid 0
+icities 1
+ipipe 1
+iblue 0
+ipmag 0
+idcirc 1
+ititl 1
+iflt 1
+ipumps 0
+icol 1
+itran 0
+ilegnd  0
+title Location of Earthquake
+label_files  &Tbl{
+}
+boilerplate_files  &Tbl{
+circle_descr
+}

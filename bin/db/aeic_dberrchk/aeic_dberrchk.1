@@ -1,0 +1,103 @@
+.\" @(#)dberrchk.1  1.1 07/29/99
+.TH DBERRCHK "$Date: 2009-10-28 17:09:45 $"
+.SH NAME
+dberrchk \- reviews an event database for a series of possible errors
+and reports them to the user.
+.SH SYNOPSIS
+dberrchk dbin
+.LP
+where:
+.LP
+dbin = input database
+.SH DESCRIPTION
+dberrchk is intended to assist the AEIC analyst
+in preparing a daily, weekly or monthly event database
+by reviewing all solutions and reporting on possible errors.
+
+dberrchk is similar to catalog, however it is intended
+to run on a Antelope Datascope database rather than pickfiles.
+dberrchk assumes that the input database (dbin) includes at least
+one earthquake. dberrchk will check all events for
+a number of possible errors and produce a report to the window from
+which it was called and to an output file.
+
+The report dberrchk produces includes:
+A breif summary line that indicates the orid, location algorithm, 
+model and analyst.
+The report includes: Origin time, location, geographic region, 
+standard error of the P and S picks, and a quality assesment of the 
+earthquake location (A, B, C, D).
+dberrchk warns if standard error of the P and S picks is larger
+than 1.0, if seismic gap is greater than 180, and if location error is too large (smajax>=20 or sdepth>=30). dberrchk also
+warns the user if a deep event is located outside of the WBZ (north 
+of 64N or west of 150W or east of 145W or in the Gulf).
+It reports if the number of P picks is less than 10 or S picks is 
+less than 3. It lists stations with large travel time residuals. It 
+checks for magnitude range and reports if it is larger than 1.5. It 
+lists stations with magnitude residuals greater than 0.75. This is 
+intended to assist the analyst in locating problematic stations that 
+may bias the magnitude. 
+
+Use dbchecker for suggestions for additional stations to pick that 
+may reduce the seismic gap and improve the location quality.
+
+dberrchk automatically fixes the assoc table if the delta and esaz
+fields are missing. dberrchk also warns the user if the event is a 
+possible duplicate and if no magnitude was calculated.
+
+.SH OPTIONS
+.IP "dbin"
+The input database name. This argument is required.
+.SH FILES
+The error report is output to the file dberrchk.err. dberrchk will
+report on each event in dbin. An example is shown below.
+
+
+
+*** event errors for database: ./weeklydb
+
+
+------------------------------------------------------------------------------------------------
+Origin Time                    lat.    lon.      depth(km)   mb   Ml   SDOBS  qual  georegion
+------------------------------------------------------------------------------------------------
+
+*** DBCHECKER Report for record: 2, orid: 3 using dbgenloc:northa by UAF:natasha
+2002 04 19 (109) 00:45:11.537    63.099  -150.504   102.0   	  2.5   0.77  B  -  CENTRAL ALASKA 
+    Large magnitude range: 1.990
+      Large magnitude residual at station: MLY : 0.910
+      Large magnitude residual at station: CKN : -0.850
+      Large magnitude residual at station: SDG : -0.940
+      Large magnitude residual at station: SAW : -1.080
+        Large P-time residual: 1.250 at station PMS, at distance 211.9 km
+
+*** DBCHECKER Report for record: 12, orid: 13 using dbgenloc:northa by UAF:natasha
+    Possible duplicate event
+2002 04 19 (109) 08:52:15.597    66.009  -143.632    10.0G  	  2.0   1.03  D  -  ALASKA 
+    Large station gap: 243.92
+    Number of P arrivals is less than 10: only 5 picks
+    Large SDOBS: 1.03
+        Large S-time residual: 1.924 at station FYU, at distance  94.6 km
+        Large S-time residual: 1.033 at station PPD, at distance 102.0 km
+
+
+
+
+.SH ENVIRONMENT
+dberrchk expects the ANTELOPE environment variable to be set correctly.
+.SH EXAMPLE
+tele% dberrchk mydb
+.fi
+.ft CW
+.RS .2i
+.RE
+.ft R
+.SH RETURN VALUES
+.SH LIBRARY
+.SH DIAGNOSTICS
+.SH "SEE ALSO"
+dbchecker, dbchecker_tool
+.nf
+.fi
+.SH "BUGS AND CAVEATS"
+.SH AUTHOR
+Dan McNamara.  Additional checks added by N. Ratchkovksi 04/2002.

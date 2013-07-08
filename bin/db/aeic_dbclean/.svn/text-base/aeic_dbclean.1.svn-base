@@ -1,0 +1,187 @@
+.TH AEIC_DBCLEAN 1 "$Date: 2002-02-07 01:56:25 $"
+.SH NAME
+aeic_dbclean \- clean up daily processing databases
+.SH SYNOPSIS
+.nf
+\fBaeic_dbclean \fP\\[-v\\] \fIdbname\fP
+.fi
+.SH DESCRIPTION
+\fBaeic_dbclean\fP performs a number of tidying tasks on a database
+of daily processing results at the AEIC. These tasks include
+running dbfixids, eliminating apparently outdated rows such
+as non-prefor origins and unassociated arrivals. Running in verbose
+mode will list the full spectrum of tests [see the example below].
+\fBaeic_dbclean\fP begins with a dbcheck(1) to verify healthy record
+length, and will exit if the dbcheck fails.
+.SH OPTIONS
+-v      verbose
+.SH EXAMPLE
+.ft CW
+.in 2c
+.nf
+
+.ne 14
+%\fB aeic_dbclean -v process_2000_01_10\fP
+
+Checking for appropriate record length:
+---------------------------------------
+checking process_2000_01_10.arrival ..
+checking process_2000_01_10.assoc ..
+checking process_2000_01_10.event ..
+checking process_2000_01_10.lastid ..
+checking process_2000_01_10.netmag ..
+checking process_2000_01_10.origerr ..
+checking process_2000_01_10.origin ..
+checking process_2000_01_10.stamag ..
+checking process_2000_01_10.wfmeas ..
+
+.ne 9
+Deleting iphase == del from arrival table:
+------------------------------------------
+dbsubset result has 36 records
+Marking records for table arrival
+
+          7   8  16  28  39  40  41  43  44  45  82  91  93  97  99 100 101 103 117 118
+        122 123 124 125 131 133 144 191 258 273 285 307 346 368 373 392
+ 36 records deleted from table arrival
+
+.ne 11
+Crunching null rows:
+--------------------
+Crunched 14 records from netmag.
+
+Removing non-preferred origins:
+-------------------------------
+Beginning with process_2000_01_10.event
+   joining to table origin with keys:
+        evid
+    result has 13 records
+
+.ne 6
+dbsubset result has 1 records
+Marking records for table origin
+
+         12
+ 1 records deleted from table origin
+
+.ne 7
+Removing unnecessary origerr rows:
+----------------------------------
+Joining process_2000_01_10.origerr to origin with keys:
+        orid
+    1 records did not join.
+Marking records for table origerr
+
+.ne 10
+         12
+ 1 records deleted from table origerr
+
+Removing assoc rows with no hypocenters:
+----------------------------------------
+Joining process_2000_01_10.assoc to origin with keys:
+        orid
+    1 records did not join.
+Marking records for table assoc
+
+.ne 10
+        393
+ 1 records deleted from table assoc
+
+Removing unassociated arrivals:
+-------------------------------
+Joining process_2000_01_10.arrival to assoc with keys:
+        arid
+    18 records did not join.
+Marking records for table arrival
+
+.ne 10
+         19  76 154 173 175 176 179 204 208 223 232 256 296 303 307 311 353 354
+ 18 records deleted from table arrival
+
+Removing unassociated netmag entries:
+-------------------------------------
+Joining process_2000_01_10.netmag to origin with keys:
+        orid
+    1 records did not join.
+Marking records for table netmag
+
+.ne 11
+         12
+ 1 records deleted from table netmag
+
+Removing unassociated stamag entries:
+-------------------------------------
+Joining process_2000_01_10.stamag to netmag with keys:
+        magid
+    0 records did not join.
+dbdelete: Can't read input view
+dbdelete *fatal*: Error reading view from stdin
+
+.ne 7
+Removing wfmeas entries with no corresponding arrivalsl:
+--------------------------------------------------------
+Joining process_2000_01_10.wfmeas to arrival with keys:
+        arid
+    51 records did not join.
+Marking records for table wfmeas
+
+.ne 8
+          0   1   2   3   4   5   6   7   8   9  10  11  12  13  14  15  16  17  18  19
+         20  21  22  23  24  25  26  27  28  29  30  31  32  33  34  35  36  37  38  39
+         40  41  82 172 183 208 213 223 225 230 239
+ 51 records deleted from table wfmeas
+
+Removing duplicate wfmeas entries:
+----------------------------------
+
+.ne 6
+Sorting origin table by time:
+-----------------------------
+
+Fixing orids:
+-------------
+
+.ne 6
+Sorting event table by prefor:
+------------------------------
+
+Fixing magids:
+--------------
+
+.ne 6
+Sorting stamag table by magid:
+------------------------------
+
+Sorting origerr table by orid:
+------------------------------
+
+.ne 6
+Sorting arrival table by time:
+------------------------------
+
+Fixing arids:
+-------------
+
+Sorting assoc table by orid and arid:
+-------------------------------------
+
+Synching chanids where possible:
+--------------------------------
+dbfixchanids: No sensor tuples.
+%\fB \fP
+
+.fi
+.in
+.ft R
+.SH "SEE ALSO"
+.nf
+dbcheck(1), dbfixids(1), dbdelete(1)
+.fi
+.SH AUTHOR
+.nf
+Kent Lindquist
+Geophysical Institute
+Fairbanks, Alaska
+February, 2000
+.fi
+.\" $Id: aeic_dbclean.1,v 1.2 2002-02-07 01:56:25 kent Exp $

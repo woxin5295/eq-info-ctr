@@ -1,0 +1,109 @@
+trial_mechs	/usr/local/aeic/5.2-64/data/fpfit_lahr/ptm10.dat
+composite 		no	# yes - composite run
+unique_revesals		no	# If Yes, this program option will add to the .ray file a list of those 
+				# nearby solutions that have unique patterns of station reversals.  
+				# if desired, just these solutions  may be plotted with fpplot.  
+				# This option only considers up to the first 80 stations.
+trialsol_confreg 	no	# If Yes, a list of the number of each of the trial solutions 
+				# within the confidence region will be generated.
+secondary_increment	1.	# The resolution of the distribution of p and t axes depends upon 
+				# the increment used in the secondary grid search.  The default 
+				# increment is 1 degree, but it could be increased to speed up the 
+				# program.  If the increment is set greater than 9 degrees, no 
+				# secondary search is done.
+fm_author       aeic # fill for author field in fplane table
+max_distance  	800.   	# maximum epicentral distance in km
+min_magnitude 	0.     	# minimum magnitude 
+min_obs 	10     	# minimum number of observations
+max_obs 	1000  	# maximum number of observations per event (should be less than 10000)
+max_events 	2000  	# maximum number of events for which fault plane solutions will be computed
+max_pres 	3.0   	# maximum abs value of permitted p-residual in secs
+quality_weight  0       # use observation weights based on deltim parameter ((0-omit, 1-use), needs qual_weight table)
+snr_weight  	0       # use observation weights based on signal-to-noise ratio (0-omit, 1-use)
+			# either quality_weight or snr_weight should be used or none
+ampl_weight 	0    	# flag controlling ampitude weighting (0-omit, 1-use) (not currently implemented)
+iprint 		0     	# print output control. If IPRNT=1 a listing of the misfit function for 
+			# each test solution in the fine search is generated
+depth_relmin 	.05    	# depth of search for relative minima in misfit. Relative minima 
+			# with F<Fmin+DFITC are considered.
+min_ain 	180.   	# minimum angle of incidence
+max_ain 	181.   	# maximum angle of incidence
+fine_search 	-99.   	# fit increment for fine search display of p & t axes.
+plus_err_rate	.5 	# weight for + or - (not clear ups or downs) should be between 
+			# 0 (not used) and 1 (treated the same as clear ups and downs)
+
+nstrinc_fine  	23   	# number of fault strike increments for fine search
+strinc_fine 	4.  	# fault strike increment in degrees for fine search
+ndipinc_fine 	23  	# number of fault dip increments for fine search
+dipinc_fine 	4.  	# fault dip increment in degrees for fine search
+nrkinc_fine 	46  	# number of fault rake increments for fine search
+rkinc_fine 	4. 	# fault rake increment in degrees for fine search
+
+
+
+dist_weight   &Tbl{		# distance weighting of observations (distance in degrees and weight)
+	2 1.
+	3 .75
+	4. .5
+	8. .25
+}
+
+qual_weight   &Tbl{		# quality weighting of observations based on deltim (deltim in sec and weight)
+	0.1  1.
+	0.5  .75
+	1.0  .5
+	2.0  .25
+}
+
+reversed_stations &Tbl{		# list of reversed stations
+	ACH
+	ANON
+	AUSE
+	AUH
+	AUP
+	BGM
+#	BWN
+	CUT
+	CYK
+#	DDM
+	DFR
+#	DHY
+#	FOSS
+	GSTD
+#	HAG 10/17/2007
+#	HDA
+#	HIN
+#	HOM
+	NKA
+	IVS
+	IVE
+	KAPH
+	KCG
+#	KIRH
+	MNAT
+	MSOM
+	NCT
+	OPT
+	PV6
+	RDT
+#	SCM
+	SDG
+	SSLS
+#	SYI
+#	TGL
+	VOGL
+	WACK
+	WESS
+	WRG
+	XLV
+#	YAH
+}
+
+ignore_stations &Tbl{		# list of stations to ignore
+#	PWA
+#	SAW
+}
+
+
+
+pf_revision_time 1192736460

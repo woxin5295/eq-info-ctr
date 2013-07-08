@@ -1,0 +1,249 @@
+#!/bin/sh
+# This comment extends to the next line for tcl \
+exec $ANTELOPE/bin/awish -f $0 $*
+
+package require Datascope
+package require Tclx
+
+#
+# dbchecker_tool
+#
+# D. McNamara 
+# Geophysical Institute
+# University of Alaska, Fairbanks
+# Sept, 1999
+#
+
+set auto_path [linsert $auto_path 0 $env(ANTELOPE)/data/tcl/library]
+
+proc init_globals {} {
+        global argc argv argv0
+
+        global progname
+        set progname [exec basename $argv0]
+
+	global locflag
+	set locflag -i
+
+	if { $argc > 1 } {
+                echo "Usage: $progname \[-l\]"
+                exit 1
+	}
+
+
+	if {$argc == 1} {
+		set locflag [lindex $argv 0]
+
+		if {[string match -l $locflag] == 0} {
+			echo "Usage: $progname \[-l\]"
+			exit 1
+		}
+
+	}
+
+	global State
+
+	if {[string match "-l" $locflag] == 1} {
+		set State(dbname) [send dbloc_buttons {set Database}]
+	}
+
+
+
+}
+
+
+proc MyLblEntry {w args} {
+    frame $w
+    label $w.l
+    entry $w.e
+    pack $w.l -side left
+    pack $w.e -side left -fill x
+    while { ! [lempty $args] } {
+        set option [lvarpop args]
+        switch -- $option {
+            -label      { set value [lvarpop args] ; $w.l config -text $value }
+            -textvariable       { set value [lvarpop args] ; global $value; $w.e config -textvariable $value }
+            -width      { set value [lvarpop args] ; $w.e config -width $value }        }
+    }
+    return $w
+}    
+
+proc CommandCheckoff {w args} {
+        frame $w
+        button $w.b
+        checkbutton $w.cb -command "$w.b config -state normal"
+        pack $w.cb -side left
+        pack $w.b -side left -fill x -expand 1
+        while { ! [lempty $args] } {
+                set option [lvarpop args]
+                switch -- $option {
+                -label  { set value [lvarpop args] ; $w.b config -text $value
+}
+                -variable {
+                        set value [lvarpop args]
+                        global $value
+                        $w.cb config -variable $value
+                }
+                -background { set value [lvarpop args] ; $w.b config -background $value }
+                -command {
+                        set value [lvarpop args]
+                        $w.b config -command \
+                             "$w.cb select; $w.b config -state disabled; $value"
+                        }
+                }
+        }
+        return $w
+}        
+
+proc run_dbe {} {
+
+        global State locflag
+	
+	if {[string match "-l" $locflag] == 1} {
+                set State(dbname) [send dbloc_buttons {set Database}]
+        }
+
+        exec dbe $State(dbname) &
+
+}
+
+proc run_dbchecker {} {
+
+	global State locflag
+
+	if {[string match "-l" $locflag] == 1} {
+                set State(dbname) [send dbloc_buttons {set Trial}]
+        	set State(orid) [send dbloc_buttons {arrivals get Orid}]
+        }
+
+
+	echo "\n\nRunning aeic_dbchecker on database: $State(dbname), orid: $State(orid).\n\n"
+
+	catch "exec aeic_dbchecker $State(dbname) $State(orid) > dbchecker.out"
+	
+	exec xedit dbchecker.out &
+
+
+}
+
+proc run_dberrchk {} {
+
+	global State locflag
+
+	if {[string match "-l" $locflag] == 1} {
+                set State(dbname) [send dbloc_buttons {set Database}]
+        }
+
+	echo "\n\nRunning aeic_dberrchk on database: $State(dbname).\n\n"
+
+	catch "exec aeic_dberrchk $State(dbname)"
+
+}
+
+	proc view_errorcheck {} {
+
+        exec xedit dberrchk.err &
+#       exec enscript -r dberrchk.err
+
+}
+
+#proc neic_event {} {
+#
+#	global State locflag
+#
+#	if {[string match "-l" $locflag] == 1} {
+#               set State(dbname) [send dbloc_buttons {set Database}]
+#        }
+#
+#	exec neic2db $State(dbname) &
+#
+#}
+
+proc view_dbmlresult {} {
+
+        exec xedit aeic_dbml.magnitude &
+
+}
+
+#proc check_release {} {
+#
+#	exec netscape http://www.aeic.alaska.edu/cgi-bin/release_info.pl &
+#
+#}
+
+proc init_windows {} {
+
+        global State
+
+	frame .input
+        pack .input -fill x
+
+        MyLblEntry .input.dbname -label "DataBase"\
+                            -textvariable State(dbname) \
+                            -width 35
+        MyLblEntry .input.orid -label "orid"\
+                            -textvariable State(orid) \
+                            -width 6
+
+        pack .input.dbname -side left -fill x
+        pack .input.orid -side left -fill x
+
+	CommandCheckoff .run_dbe -background pink \
+                          -label "Review database with dbe" \
+                          -variable run_dbe \
+                          -command run_dbe
+        pack .run_dbe -side top -fill x
+
+	CommandCheckoff .run_dbchecker -background yellow \
+                          -label "run event error checker" \
+                          -variable run_dbchecker \
+                          -command run_dbchecker
+        pack .run_dbchecker -side top -fill x
+
+
+	CommandCheckoff .run_dberrchk -background orange \
+                          -label "run complete database error checker" \
+                          -variable run_dberrchk \
+                          -command run_dberrchk
+        pack .run_dberrchk -side top -fill x
+
+	CommandCheckoff .view_errorcheck -background grey \
+                          -label "View database error report" \
+                          -variable view_errorcheck \
+                          -command view_errorcheck
+        pack .view_errorcheck -side top -fill x
+
+#	CommandCheckoff .neic_event -background tan \
+#                          -label "Add NEIC email solution to database" \
+#                          -variable neic_event \
+#                          -command neic_event
+#        pack .neic_event -side top -fill x
+
+
+#	CommandCheckoff .check_release -background magenta \
+#                          -label "Check for AEIC Releases" \
+#                          -variable check_release \
+#                          -command check_release
+#        pack .check_release -side top -fill x
+
+	CommandCheckoff .view_dbmlresult -background lightblue \
+                          -label "View magnitude results" \
+                          -variable view_dbmlresult \
+                          -command view_dbmlresult
+        pack .view_dbmlresult -side top -fill x
+
+	button .quit -bg red -fg yellow -text Quit -command "destroy ."
+        pack .quit -side top -fill x
+
+
+}
+ 
+ 
+ 
+ 
+ 
+init_globals
+ 
+init_windows
+
+

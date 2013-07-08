@@ -1,0 +1,5 @@
+vdlucb -n 15 -s 96 -f 20 -l 0 -i cmb -S CMB -H athos.geo.berkeley.edu -P 5011 -C BHZ,BHN,BHE,LHZ,LHN,LHE -p bk2vdl -host nsn5.cr.usgs.gov -port 2003 -t 1 -k 0
+vdlucb -n 15 -s 98 -f 20 -l 0 -i sao -S SAO -H bdsn.geo.berkeley.edu -P 5012 -C BHZ,BHN,BHE,LHZ,LHN,LHE -p bk2vdl -host nsn5.cr.usgs.gov -port 2003 -t 1 -k 0
+vdlucb -n 15 -s 97 -f 20 -l 0 -i wdc -S WDC -H athos.geo.berkeley.edu -P 5013 -C BHZ,BHN,BHE,LHZ,LHN,LHE -p bk2vdl -host nsn5.cr.usgs.gov -port 2003 -t 1 -k 0
+vdlucb -n 15 -s 99 -f 20 -l 0 -i hops -S HOPS -H athos.geo.berkeley.edu -P 5014 -C BHZ,BHN,BHE,LHZ,LHN,LHE -p bk2vdl -host nsn5.cr.usgs.gov -port 2003 -t 1 -k 0
+vdlucb -n 15 -s 95 -f 20 -l 0 -i ybh -S YBH -H athos.geo.berkeley.edu -P 5015 -C BHZ,BHN,BHE,LHZ,LHN,LHE -p bk2vdl -host nsn5.cr.usgs.gov -port 2003 -t 1 -k 0

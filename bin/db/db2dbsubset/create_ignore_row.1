@@ -1,0 +1,47 @@
+.TH CREATE_IGNORE_ROW 1 "$Date: 2007-10-31 21:27:16 $"
+.SH NAME
+create_ignore_row \- Adds, removes, and updates the ignorerow database table contained in the ignore1.0 schema. 
+    
+.SH SYNOPSIS
+create_ignore_row {-db db -evid evid -jdate jdate[-whoig whoig] [-add add] [-auth auth] [-minjdate jdate] | -db db -add add -minjdate minjdate } 
+.LP
+.LP
+create_ignore_row is used to update the ignorerow table.  
+.nf
+db- database name 
+evid- event id 
+whoig- who ignores this id, default all 
+jdate- jdate of evid 
+add- add=1 add new row, add=0 remove row and dbmark, default 1 
+     add=3 do not add row but process minjdate option 
+.fi
+.ft CW
+.RS .2i
+.RE
+.ft R
+.nf
+.fi
+.SS "Example Table Manipulations"
+.nf
+Descriptor file
+	Datascope Database Descriptor File
+        schema css3.0:ignore1.0
+        dbpath /iwrun/sum/run/dbsum/{dbsum}:/iwrun/sum/run/dbmaster/{master_stations}
+        dblocks local
+
+Create new row -
+	create_ignore_row -db dbsumignore -evid 10941 -jdate 2007303 -whoig qdds -add 1 -minjdate 200730
+
+Modify author of previous created row
+	create_ignore_row -db dbsumignore -evid 10941 -jdate 2007303 -auth natasha -whoig qdds -add 1 -minjdate 200730
+
+Remove previous created row -
+	create_ignore_row -db dbsumignore -evid 10941 -jdate 2007303 -auth natasha -whoig qdds -add 0 -minjdate 200730
+
+Remove all rows with minjdate less than 2007303 -
+	create_ignore_row -db dbsumignore -add 3 -minjdate 2007303
+
+.fi
+
+.SH AUTHOR
+Mitch Robinson Mon Oct  8 09:54:32 AKDT 2007.

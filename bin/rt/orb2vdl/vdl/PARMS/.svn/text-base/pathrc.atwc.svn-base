@@ -1,0 +1,4 @@
+
+#         set up search path
+
+set path = (. ~ ~/bin /usr/sbin /usr/local /usr/local/bin /opt/SUNWspro/bin /usr/ucb /usr/bin /bin  /usr/ccs/bin $EW_HOME/quanterra/bin)

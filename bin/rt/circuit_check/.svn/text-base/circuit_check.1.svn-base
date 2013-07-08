@@ -1,0 +1,25 @@
+.TH CIRCUIT_CHECK 1 "$Date: 2003-01-01 01:46:35 $"
+.SH NAME
+circuit_check \- launch orbmonrtd for a given subnetwork
+.SH SYNOPSIS
+.nf
+\fBcircuit_check \fP
+.fi
+.SH DESCRIPTION
+\fBcircuit_check\fP allows the user to launch orbmonrtd for data on the orb, using
+stations selected from one of the networks specified in the site database.
+The orb name and site database name are taken from the aeic_rtsys parameter file
+for the primary system
+.SH PARAMETER FILE
+aeic_rtsys.pf
+.SH "SEE ALSO"
+.nf
+orbserver(1), orbmonrtd(1)
+.fi
+.SH AUTHOR
+.nf
+Original by Guy Tytgat. Reimplemented by Kent Lindquist
+U. of Alaska
+Geophysical Institute
+.fi
+.\" $Id: circuit_check.1,v 1.5 2003-01-01 01:46:35 kent Exp $

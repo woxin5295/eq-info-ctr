@@ -1,0 +1,40 @@
+.TH IMG2XYT 1 "$Date: 2001-02-06 01:29:05 $"
+.SH NAME
+img2xyt \- program to extract a sub array from an integer*2 Mercator grid
+.SH SYNOPSIS
+.nf
+img2xyt
+.fi
+.SH DESCRIPTION
+img2xyt extracts a sub array from an integer*2 Mercator grid
+.SH OPTIONS
+.SH FILES
+.SH ENVIRONMENT
+.SH PARAMETER FILE
+.SH EXAMPLE
+.nf
+hotspot% img2xyt 
+ enter direct-access input filename: topo_8.2.img
+ enter bounds for output grid: 
+ south, north, west, east :40,88,140,260
+
+ enter (0) for every grid point and
+ enter (1) for only measured depths:0
+ enter output filename: alaska.xyt
+ # of records for output file  6685200
+hotspot% 
+.fi
+.ft CW
+.RS .2i
+.RE
+.ft R
+.SH RETURN VALUES
+.SH LIBRARY
+.SH DIAGNOSTICS
+.SH "SEE ALSO"
+.nf
+.fi
+.SH "BUGS AND CAVEATS"
+.SH AUTHOR
+This code was downloaded from topex.ucsd.edu anonymous ftp
+pub/global_topo_2min/src_img_sun

@@ -1,0 +1,10 @@
+echo "Source .earthworm"
+source /home/earthworm/run/params/ew_sol_sparc.cmd
+
+# set up the earthworm environment
+alias   cdp  'cd $EW_HOME/run/params'
+alias   cdg  'cd $EW_HOME/run/log'
+alias   cds  'cd $EW_HOME/$EW_VERSION/src'
+alias   cdb  'cd $EW_HOME/$EW_VERSION/bin'
+alias   cdi  'cd $EW_HOME/$EW_VERSION/include'
+alias   cdl  'cd $EW_HOME/$EW_VERSION/lib'

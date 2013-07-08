@@ -1,0 +1,1 @@
+nohup csh /home/neic/vdl/cshvdl >/home/neic/vdl/vdl.log &

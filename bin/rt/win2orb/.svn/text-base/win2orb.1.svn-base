@@ -1,0 +1,59 @@
+.TH WIN2ORB 1 "$Date: 2000-09-28 05:09:42 $"
+.SH NAME
+win2orb \- Acquire Japanese WIN-format data onto an orb
+.SH SYNOPSIS
+.nf
+win2orb \[-v\] \[-V\] \[-p pfname\] \[-u port\] orbname
+.fi
+.SH DESCRIPTION
+The win2orb program acquires data in Japanese WIN format, converting 
+the packets to orb packets and placing them on the specified orb. 
+
+WIN packets are read from a UDP port. 
+.SH OPTIONS
+.nf
+-p pffile allows a parameter-file to be specified (default is win2orb.pf)
+-u port Specify UDP port number from which to accept WIN packets
+-v verbose
+-V really verbose
+.fi
+.SH FILES
+.SH ENVIRONMENT
+The SITE_DB environment variable is required, specifying the pathname to 
+an iceworm1.3 site database. This database must contain the win table, 
+which translates WIN station-codes into sta/chan/net. The database must
+also contain a calibration table with entries for the stations to be 
+reformatted. The database may optionally contain a timecorr table, in which 
+case the specified communication delays will be applied to adjust packet start times. 
+.SH PARAMETER FILE
+The win2orb.pf parameter file specifies the assignment of the segtype
+specification to the packets. Also, the timecorr boolean specifies whether 
+to apply time corrections from the timecorr table of the iceworm1.3 schema.
+.nf
+alaskaseis% pfecho win2orb
+segtype V
+timecorr 1
+alaskaseis%
+.fi
+.SH EXAMPLE
+.ft CW
+.RS .2i
+.RE
+.ft R
+.SH RETURN VALUES
+.SH LIBRARY
+.SH DIAGNOSTICS
+.SH "SEE ALSO"
+.nf
+orbserver(1), libwin(3)
+.fi
+.SH "BUGS AND CAVEATS"
+Right now the only input-format supported is the UDP-packet mechanism. However, 
+the specification of the UDP port is left as an option to support possible future 
+enhancement of win2orb to connect directly to the Japanese shared-memory system. 
+
+The win2orb program currently ignores byte-swapping issues. Sun byte-order (the 
+standard for WIN format) is assumed.
+.SH AUTHOR
+Kent Lindquist
+.\" $Id: win2orb.1,v 1.1 2000-09-28 05:09:42 kent Exp $

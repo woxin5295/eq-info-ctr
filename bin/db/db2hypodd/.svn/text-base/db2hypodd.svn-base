@@ -1,0 +1,112 @@
+: # use perl
+eval 'exec $ANTELOPE/bin/perl -S $0 "$@"'
+if 0;
+
+use lib "$ENV{ANTELOPE}/data/perl" ;
+use Datascope;
+require "getopts.pl";
+
+# db2hypoDD
+# 
+# natalia Ratchkovski
+# Geophysical Institute
+# University of Alaska
+# February, 2003
+
+
+sub get_magstr {
+	my( $mb, $ml ) = @_;
+	my( $mag_str );
+
+	SWITCH: {
+		$ml != -999 && do {
+				$mag_str = sprintf( "%4.1f", $ml );
+				last SWITCH;
+			};
+		$mb != -999 && do {
+				$mag_str = sprintf( "%4.1f", $mb );
+				last SWITCH;
+			};
+		$mag_str = "0.0";
+	}
+
+	return $mag_str;
+}
+
+
+
+$Usage = "Usage: $0 dbname\n";
+
+if( ! &Getopts('vtm') || $#ARGV != 0 ) {
+	die( "$Usage" );
+} else {
+	$dbname = pop( @ARGV );
+	if( $opt_t && $opt_m ) {
+		printf STDERR 	
+			"-t and -m incompatible. Defaulting to produce text and maps.\n";
+		$opt_t = $opt_m = 0;
+	}
+}
+
+@db = dbopen( $dbname, "r" );
+@dbo = dbprocess( @db, "dbopen origin",
+		      "dbsort time" );
+
+$nrecs = dbquery( @dbo, "dbRECORD_COUNT" );
+if( $nrecs < 1 ) {
+	die( "db2hypoDD: No events to process\n" );
+}
+
+@dbassoc = dbprocess( @db, "dbopen assoc");
+
+@dbtemp = dbjoin( @dbo, @dbassoc, "-outer" );
+
+@dbarr = dbprocess( @db, "dbopen arrival");
+
+@dbwork = dbjoin( @dbtemp, @dbarr, "-outer" );
+
+#dbclose ( @dbtemp );
+#dbclose ( @dbarr );
+#dbclose ( @dbassoc );
+ 
+open( LIST, ">phase.pha" );
+
+for( $dbo[3] = 0; $dbo[3] < $nrecs; $dbo[3]++ ) {
+
+	( $lat, $lon, $depth, $time, $orid, $mb, $ml ) =
+	dbgetv( @dbo, "lat", "lon", "depth", "time", "orid", "mb", "ml" );
+	
+	$time_str = epoch2str( $time, "%Y %m %e %H %M %S.%s" );
+	$mag_str = get_magstr( $mb, $ml );
+
+		printf STDOUT "# %27s %8.3f %8.3f %6.2f %6s 0.0 0.0 0.0 %8d\n",
+			$time_str, $lat, $lon, $depth, $mag_str, $orid;
+		printf LIST "# %27s %8.3f %8.3f %6.2f %6s 0.0 0.0 0.0 %8d\n",
+			$time_str, $lat, $lon, $depth, $mag_str, $orid;
+
+	@dbev = dbprocess( @dbwork, "dbsubset orid == $orid" );
+
+		$narrs = dbquery( @dbev, "dbRECORD_COUNT" );
+		if( $narrs <= 0 ) {
+			printf STDERR "No records for orid $orid, skipping\n";
+			dbclose( @dbev );
+			next;
+		}
+	
+		for( $dbev[3] = 0; $dbev[3] < $narrs; $dbev[3]++ ) {
+			( $stat, $ttime, $error, $phase ) = 
+			dbgetv( @dbev, "arrival.sta", "arrival.time", "deltim", "iphase" );
+
+#		printf STDOUT " %s %8.3f %8.3f %6s\n",
+#			$stat, $ttime-$time, $error, $phase;
+		printf LIST " %s %8.3f %8.3f %6s\n",
+			$stat, $ttime-$time, $error, $phase;
+			
+		}
+		dbfree( @dbev );
+
+}
+
+close( LIST );
+
+

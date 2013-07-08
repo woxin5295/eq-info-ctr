@@ -1,0 +1,52 @@
+set verify
+echo "source .aliases"
+#         aliases for all shells.  This should contain only the commands 
+#		alias that would be desired everywhere
+#
+# The notation "\!*" is replaced by the command's arguments.
+# alias cd	'chdir \!*; set prompt="<`dirs`>% "'
+alias ls        'ls -F'
+alias pwd	'echo $cwd'
+alias pd     'echo $cwd'
+alias chd    'cd \!*'
+#         Plot and print aliases
+#         VMS command aliases
+alias quake     'finger quake@gldfs.cr.usgs.gov'
+alias dir       'ls -F'
+alias ty        'more'
+alias app	'cat'
+alias cop	'cp'
+alias copy	'cp'
+alias ren	'mv'
+alias rena	'mv'
+alias del	'rm'
+alias help      'man'
+alias for	'f77'
+alias lo        'logout'
+# alias cdrom	'/usr/demo/CDROM/cdplayer &'
+
+alias view      'cp .cshrcsv .cshrc; source .cshrc; sunview -f 130   0 195 -b 255 255 255 -B; cp .cshrcop .cshrc; source .cshrc'
+# Quick SunView compiling
+alias ccsv	'cc \!* -lsuntool -lsunwindow -lpixrect'
+alias ccsvg	'cc \!* -g -lsuntool -lsunwindow -lpixrect'
+
+#          skip remaining setup if not an interactive shell
+if ($?USER == 0 || $?prompt == 0) exit 0
+
+#          settings  for interactive shells
+
+#          set some useful variables
+set history=24
+set ignoreeof
+set savehist=24
+
+#         other aliases
+alias hi        'history \!* | head -23'
+alias mo         'more'
+alias cwd	'cd $oldir'
+alias ndef	'set oldir=`pwd`'
+# Quick pushd/popd 
+# ~ is shorthand for pushd $HOME
+alias -         popd
+alias +         pushd
+alias ~         pushd ~

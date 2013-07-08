@@ -1,0 +1,26 @@
+BIN=		dbfpplot
+cflags=		-g
+fflags= 	-g
+ldflags= 	# flags to linker/loader
+
+#ldlibs  = $(DBLIBS) $(TRLIBS) $(STOCKLIBS) $(F77LIBS) -lgrx -lds -lscv2 -ldbl2 -lgen -lplotpslib -ltoolsf -lX11 -lvaxlib
+ldlibs  = $(DBLIBS) $(TRLIBS) $(STOCKLIBS) $(F77LIBS) -lgrx -lds -lscv2 -ldbl2 -lplotpslib -ltoolsf -L/usr/X11/lib -lX11 -lvaxlib
+#ldlibs  = $(DBLIBS) $(TRLIBS) $(STOCKLIBS) $(F77LIBS) -lgrx -lds -lscv2 -ldbl2 -lgen -ltoolsf -lX11 -lvaxlib
+include $(AEICMAKE)  	 
+
+#LIB	= 	-l4014 -lV77
+
+OBJS	= dbfpplot.o arbsymb.o get3.o ptnear2.o shrflt1.o \
+	flippl.o getflt.o rdeq2.o strnet.o \
+	getpol.o rdeq3.o tandp.o \
+	compl.o fpinp.o gettab.o rdiff.o tmgen.o \
+	csort.o fpout.o pexcf1.o readeq.o \
+	ctop.o plotpl.o refrmt.o transp.o \
+	pltlin.o search2.o strnt1.o \
+	defsym.o fsearch2.o pltsym.o search3.o gensymb.o symb.o \
+	nfilok.o pltarr.o rdrsym.o pltt.o dashit.o plotvx.o \
+	gettab2.o tpplot2.o aintodp.o tpplot1.o
+
+$(BIN): $(OBJS)
+	$(FC) $(FFLAGS) -o $@ $(OBJS) $(LDFLAGS) $(LDLIBS) 
+

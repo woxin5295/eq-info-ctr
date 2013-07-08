@@ -1,0 +1,3 @@
+echo "Source .comserv"
+alias cdd 'cd /home/earthworm/quanterra/data'
+alias cde 'cd /home/earthworm/quanterra/etc'

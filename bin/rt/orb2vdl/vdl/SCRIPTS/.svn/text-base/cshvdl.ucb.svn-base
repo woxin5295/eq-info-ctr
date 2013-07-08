@@ -1,0 +1,5 @@
+cd /home/u2/vdl/vdl
+vdlmom
+Mail -s "page ketchum" pagemail@nsn4.cr.usgs.gov </home/u2/vdl/vdl/vdl.mail
+Mail -s "page net\$alarm1" pagemail@nsn4.cr.usgs.gov </home/u2/vdl/vdl/vdl.mail
+Mail -s "UCB VDLMOM down" ketchum@usgs.gov </home/u2/vdl/vdl/vdl.mail

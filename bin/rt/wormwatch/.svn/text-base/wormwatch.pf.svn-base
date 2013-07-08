@@ -1,0 +1,53 @@
+image_name cloudfree_AVHRR
+
+cloudfree_AVHRR &Arr{
+image_file		/usr/local/aeic/4.4/data/maps/images/cloudfree_AVHRR.gif
+image_width_pixels	2000
+image_height_pixels	2000
+proj_center_lat		64
+proj_center_lon		-160
+proj_center_x		1000
+proj_center_y		1000
+pix_per_deg		111
+}
+
+blueandgold_w_bath &Arr{
+image_file              /usr/local/aeic/4.4/data/maps/images/blueandgold_w_bath.gif
+image_width_pixels      4000
+image_height_pixels     4000
+proj_center_lat         64
+proj_center_lon         -160
+proj_center_x           2000
+proj_center_y           2000
+pix_per_deg             111
+}
+
+blueandgold_alaska &Arr{
+image_file              /usr/local/aeic/4.4/data/maps/images/blueandgold_alaska.gif
+image_width_pixels      4000
+image_height_pixels     4000
+proj_center_lat         64
+proj_center_lon         -160
+proj_center_x           2000
+proj_center_y           2000
+pix_per_deg             111
+}
+
+iliamna_dem &Arr{
+image_file  /usr/local/aeic/4.4/data/maps/images/guy_iliamna.gif
+image_height_pixels 533
+image_width_pixels  514
+pix_per_deg 1269
+proj_center_lat     60.04
+proj_center_lon     -153.08
+proj_center_x       257
+proj_center_y       266
+}
+
+canvas_width 500
+canvas_height 300
+palette 3/3/3
+waveform_sourcecode IU_COLA_BHZ
+waveform_label Real-time seismic data from station COLA, College, Alaska
+# alert_sound /home/kent/sounds/sonar.au
+# alert_sound beep

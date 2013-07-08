@@ -1,0 +1,23 @@
+# Sample makefile for nrts_tap based client
+
+CC     = cc 
+INCDIR = idatap-1.2.2/include
+LIBDIR = idatap-1.2.2
+OPTMIZ = -O 
+INCS   = -I$(INCDIR)
+#CFLAGS = $(OPTMIZ) $(INCS) -L$(LIBDIR) -D$(OSNAME) -D$(OSTYPE) -DDEBUG_PRINT
+CFLAGS = $(OPTMIZ) $(INCS) -L$(LIBDIR)
+SOCKLIBS = -lsocket -lnsl
+
+BINARIES = vdl.o vdltrg.o vdlput.o vdlqsub.o ifft512.o ifft1024.o ifft256.o \
+	fftlib.o cmprs.o vdlfilt.o filt5.o filtheli.o filt2.o filt10.o datetime.o\
+	vdltcp_nopass.o vdlidatap.o idatap-1.2.2/libidatap.a
+
+include SCRIPTS/makefile.modules
+
+#*
+#*   VDLIDATAP
+#*
+vdlidatap: $(BINARIES)
+	
+	$(CC) $(CFLAGS)  $(BINARIES) -o vdlidatap -lm $(SOCKLIBS)

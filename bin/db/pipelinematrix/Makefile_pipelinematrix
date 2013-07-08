@@ -1,0 +1,14 @@
+BIN= pipelinematrix 
+
+MAN1= pipelinematrix.1
+
+cflags= -L/usr/local/mysql/lib/mysql -R/usr/local/mysql/lib/mysql -I/usr/local/mysql/include/mysql
+ldlibs=	 -L/usr/local/mysql/lib/mysql -R/usr/local/mysql/lib/mysql -I/usr/local/mysql/include/mysql -lmysqlclient $(TRLIBS)  -lorb -lxtra -lPkt $(SVR4LIBS)
+include $(AEICMAKE)  	
+			
+DIRS=			
+			
+OBJS= pipelinematrix.o
+
+$(BIN) : $(OBJS)
+	$(CC) $(CFLAGS) -o pipelinematrix $(OBJS)  $(LDFLAGS) $(LDLIBS)

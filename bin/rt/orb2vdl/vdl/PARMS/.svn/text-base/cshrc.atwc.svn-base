@@ -1,0 +1,99 @@
+############################################################
+#                                                          #
+#  .cshrc file                                             #
+#                                                          #
+#  initial setups for both interactive and noninteractive  #
+#  C-Shells                                                #
+#                                                          #
+############################################################
+# Some of this is Cshrc from Release 3.5 Manual
+set verify
+# If you are running a script don't source .cshrc for speed.
+#  Prompt is set if we are interactive.
+#  Term is set if we have a tty attached (needed for at).
+echo "Source .cshrc"
+if (! $?prompt) exit 0
+if (! $?term) exit 0
+#         cd path
+set cdpath = (.. ~)
+
+#         set this for all shells
+set noclobber
+set hostname   = `hostname`
+#
+#	Source the . files
+#
+foreach rcfile (~/.earthworm ~/.platform ~/.envrc ~/.pathrc ~/.aliases ~/.comserv ~/.localaliases)
+	if(-e $rcfile) source $rcfile
+end
+
+# This sets things up so that if you are running SunView
+#  the hostname and directory stack are in the window stripe.
+# If you aren't running SunView then it places the current
+#  directory and hostname in the prompt.
+alias suntools	'suntools -S -f 130 0 195 -b 255 255 242 -B 8bit_color_only'
+
+#         aliases for all shells
+alias view      'cp .cshrcsv .cshrc; source .cshrc; sunview -f 130   0 195 -b 255 255 255 -B; cp .cshrcop .cshrc; source .cshrc'
+
+#          skip remaining setup if not an interactive shell
+if ($?USER == 0 || $?prompt == 0) exit 0
+
+#          settings  for interactive shells
+
+#          set some useful variables
+set history=24
+set ignoreeof
+set savehist=24
+
+#         other aliases
+# Quick pushd/popd 
+
+alias ked	'textedit -Et 4 -Ww 80 -Wh 26  \!* &' 
+set tty        = `tty`
+set console    = '<<CONSOLE>>'
+set promptchar = ">"
+set prompt     = "${hostname}$promptchar "
+set lastdir    = $cwd
+# command string to set the frame header
+    alias hdr    'echo -n "]l\!*\"'
+# command string to set the icon label
+    alias ihdr   'echo -n "]L\!*\"'
+# dynamically set the image on the icon
+    alias icon   'echo -n "]I\!*\"'
+if (($TERM != "sun" && $?WINDOW_PARENT == 0) || $TERM == "4014") goto getout
+# set bar actually does the work
+    alias setbar 'hdr "${hostname}\> `dirs`"; ihdr $cwd:t'
+# Blank the screen if both the keyboard and the mouse are idle
+# for 10 minutes.
+#    screenblank
+# For rlogin -- if the host name of the window isn't the hostname
+#  for the machine then put the hostname in the icon label instead
+#  of the directory.  Note that the default hostname is hardcoded 
+#  so this fails if you run SunView on multiple machines.
+#   if (${hostname} != plaid)\
+#      alias setbar 'hdr "${hostname}: `dirs`"; ihdr ${hostname}'
+# HACK ALERT.  If the window is on ttyp0 assume it is the console and
+#  flag it as such.  This assumes (1) that you start your console window
+#  first in your .suntools file, (2) that nothing else is taking up ttyp0
+#  when you start the window system, and (3) that nothing else unusual is
+#  going on.  There is, unfortunately, no way to find out if a given window
+#  is a console short of looking in it, so we have to guess.
+     if (${tty} == "/dev/ttyp0" && ${hostname} == RayB)\
+         alias setbar 'hdr "${console} $cwd"'
+#     if (${tty} == "/dev/ttyp0") echo -n "]Lconsole\"
+
+# All of the above just set things up.  These aliases do the work.
+# . resets the window stripe if it needs it.
+# cd, pushd, and popd are the only commands that change the working
+#  directory and directory stack, so intercept them and make sure things
+#  get updated.  Finally, run set bar to initialize things for the first time.
+alias .     'dirs;setbar; jobs'
+alias cd    'set lastdir = $cwd; chdir \!* ; setbar'
+alias popd  'set lastdir = $cwd; popd \!* ; setbar'
+alias pushd 'set lastdir = $cwd; pushd \!* ; setbar' 
+alias c-    'set x=$cwd; cd $lastdir; setbar; set lastdir=$x'
+if (${tty} == "/dev/console") exit 0
+setbar
+getout:
+    exit 0

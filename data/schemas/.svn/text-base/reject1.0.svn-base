@@ -1,0 +1,22 @@
+Schema reject1.0
+	Description ( "expansion schema to reject phases" )
+	;
+
+Relation reject
+	Fields ( arid )
+	Primary ( arid )
+	Description ( "table of phases to reject" )
+	Detail {
+		This table lists phases to reject from processing
+	}
+	;
+
+Relation accept
+	Fields ( arid )
+	Primary ( arid )
+	Description ( "table of phases to accept" )
+	Detail {
+		This table lists phases to accept from processing
+	}
+	;
+

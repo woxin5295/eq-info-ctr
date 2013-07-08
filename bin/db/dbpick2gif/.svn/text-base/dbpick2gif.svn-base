@@ -1,0 +1,69 @@
+#! /usr/bin/tcsh  
+
+if ($#argv < 8) then
+	echo USAGE -
+	echo "  dbpick2gif db staexp chanexp starttime duration giffilename geometry [-mg]"
+	echo "  db - database"
+	echo "  staexp - station expression"
+	echo "  chanexp - channnel expression"
+	echo "  starttime - starttime"
+	echo "  duration -  durattion in seconds"
+	echo "  giffilename -  output gif filename"
+	echo "  geometry -  X11 window geometry "
+	echo "  -mg  - output data in milli-Gs +/- 30mg"
+	echo "       - default is output data in cnts"
+	echo "example - "
+	echo "  dbpick2gif /iwrun/op/db/archive/archive '(PS01\|PS02)' '(BHN\|HN.)' "\"02/25/2010 07:00:00\" 90 dbpick2gif.gif 789x304 "-mg"
+
+	echo ""
+	echo ".dbpickrc needs to have filter12 entries, if using the -mg option "
+	echo "   .001-100 BP is just used to zero center the data " 
+	echo "     dbpick.filter12.label:          .001-100 BP "
+        echo "     dbpick.filter12.tpad:           1.0 "
+    	echo "     dbpick.filter12.lcoFreq:        0.01 "
+    	echo "     dbpick.filter12.lcoOrder:       5 "
+    	echo "     dbpick.filter12.ucoFreq:        100.0 "
+    	echo "     dbpick.filter12.ucoOrder:       5 "
+	exit 
+endif
+#set db = "/iwrun/op/db/archive/archive"
+set fg = "DarkViolet" # foreground color
+set bg = "LightYellow1" # background color
+set fgtm = "DarkRed" # timemark_foreground
+set db = $argv[1]
+set winfile = "/tmp/$$_dbpick2gif.id"
+set staexpr = $argv[2] 
+set chanexpr =  $argv[3] 
+set starttime = "$argv[4]" 
+set duration = $argv[5] 
+set giffilename = $argv[6]
+set subexp = "${staexpr}:${chanexpr}"
+set geometry = $argv[7] 
+set mg = "0"
+if ($#argv == 8) then
+
+	if ( "$argv[8]" == "-mg" ) then
+		set mg = "1"
+	endif
+endif	
+
+if ( $mg == "1" ) then
+	echo "dbpick -fgtm $fgtm -fg $fg -bg $bg -nostarttalk -geom $geometry -sc "\'$subexp\'" -winfile $winfile -ts "\"$starttime\" -tw $duration $db
+	dbpick -fgtm $fgtm -fg $fg -bg $bg -nostarttalk -geom $geometry -nostarttalk -sc $subexp -winfile $winfile -ts "$starttime" -tw $duration $db << START_END
+mg on
+filter 12
+exec getgif_winfile_id $winfile $giffilename 
+quit
+START_END
+else
+	dbpick -fgtm $fgtm -fg $fg -bg $bg -nostarttalk -geom $geometry -sc $subexp -winfile $winfile -ts "$starttime" -tw $duration $db << START_END
+y
+cts on
+exec getgif_winfile_id $winfile $giffilename
+quit
+START_END
+endif 
+
+if ( -f $winfile ) then
+	/bin/rm $winfile
+endif 

@@ -1,0 +1,12 @@
+This script will create pick files from the NEIC
+  earthquake locations currently in your mail file.
+ 
+Usage:
+      email2pick.script
+ 
+After running the script, the new pickfiles will be located
+  in a directory below your home directory named pde_pickfiles
+ 
+/var/spool/mail/mcnamara
+ Creating /home/mcnamara/pde_pickfiles/990927230299p
+ Creating /home/mcnamara/pde_pickfiles/990927080599p

@@ -1,0 +1,206 @@
+.TH ORBTM 1 "$Date: 2008-05-29 00:16:24 $"
+.SH NAME
+orbtm \- inspect waveform on ORB for thresholds
+.SH SYNOPSIS
+.nf
+\fBorbtm \fP[-start {\fIpktid\fP|\fItime\fP|\fIOLDEST\fP}] [-select \fIsexpr\fP]
+                [-reject \fIrexpr\fP] [-end \fItend_time\fP] [-pf \fIpfname\fP]
+                [-S \fIstatefile\fP] [-v|-vv] \fIdbname\fP \fIorbin\fP
+                [\fIorbout\fP]
+.fi
+.SH DESCRIPTION
+\fBorbtm\fP is a program that continuously reads ORB waveform packets,
+filters selected channels with a set of filters and for each channel-filter
+watches for threshold exceedence. If a predefined alert level is exceeded the status is
+output as \fItm\fP ORB database packets.
+
+.SH OPTIONS
+.IP "-start {pktid|time|OLDEST}"
+Where to position the ORB read pointer for the input
+ORB waveform packets. If a \fIpktid\fP is given, then
+the ORB read pointer is positioned to that \fIpktid\fP.
+If a valid Antelope \fItime\fP string is given (see epoch(1)),
+then the ORB read pointer is positioned to the first packet
+with a \fItime\fP stamp after the specified \fItime\fP. If \fIOLDEST\fP
+is given, then the read pointer is positioned to the oldest
+ORB packet in the buffer. If this option is not specified,
+then the read pointer is positioned to the next available
+most recent packet.
+.IP "-select sexpr"
+This is a regular UNIX expression that is used as a select
+key (see orbselect(3)) for reading input waveform packets from the input
+ORB. If this option is not specified,
+then all packet srcnames from the input ORB will be processed.
+.IP "-reject rexpr"
+This is a regular UNIX expression that is used as a reject
+key (see orbreject(3)) for reading input waveform packets from the input
+ORB. If this option is not specified,
+then no packet srcnames from the input ORB will be rejected.
+.IP "-end tend_time"
+This is an end \fItime\fP for terminating the input waveform packet
+processing. This should be specified as a valid Antelope \fItime\fP
+string (see epoch(1)). The first valid waveform packet read
+from the input ORB with a start \fItime\fP greater than or equal to
+this value will cause the program to exit. If this option is not
+specified, then the program will run indefinitely.
+.IP "-pf pfname"
+Name of program parameter file. This argument is optional
+and if not specified defaults to \fBorbtm\fP. Note that
+the actual parameter file is named \fIpfname\fP.pf.
+.IP "-S statefile"
+If the -S option is specified, \fBorbtm\fP attempts to save
+a state \fItime\fP into
+the \fIstatefile\fP file whenever it quits due to
+a  signal, such as CTRL-C from standard input. When it is restarted, (if the -S option is
+specified), \fBorbtm\fP attempts  to  read  this  file  and
+reposition the input ORB read ponter, so that there are
+no gaps in the processing. However, generally there will be duplicate
+output \fItm\fP database packets when the program is stopped
+and restarted using this option.
+.IP "-v"
+Verbose output flag.
+.IP "-vv"
+Really verbose output flag.
+.IP "-vvv"
+Debugging output flag. 
+.IP "dbname"
+This is the name of a CSS3.0 (or extension) database that is used
+to 1) translate SEED net-sta-chan-loc into CSS3.0 sta-chan codes
+(see foreign(3)) and 2) get \fIcalib\fP and \fIsegtype\fP for
+processing (used with the \fIcalib_from_db\fP parameter defined
+below). This argument is required.
+.IP "orbin"
+This is the name of the input ORB that contains the waveform packets
+to be processed.
+This argument is required.
+.IP "orbout"
+The \fItm\fP database packets are copied to the ORB with this name.
+If this argument is not specified, then no output ORB packets will
+be written (you will be able to see the results on standard output
+by specifying -vv).
+.SH "PROGRAM PARAMETER FILE"
+The \fBorbtm\fP parameter file contains all of the information
+necessary for specifying channels and filters for rms processing.
+Following is an example \fBorbtm\fP parameter file.
+.in 2c
+.ft CW
+.nf
+
+.ne 5
+
+#
+#  orbtm parameter file used to specify channels to process
+#  and channel-dependent processing parameters
+#
+
+.ne 12
+#  Following are global default parameters:
+
+calib_from_db   yes     # calib values from database?
+
+bands &Tbl{             # These are the processing frequency bands
+                        # for each channel
+        &Arr{
+                filter  BW 0.01 5 0.1 5 # filter specification
+                fc      0.05            # center frequency
+                fpad    200.0           # filter transient pad
+        }
+}
+
+.ne 7
+#  Following are channel processing parameter templates:
+
+templates &Arr{
+        templ1 &Arr{            # template number 1
+                maxpkts 20      # maximum number of packets in time-ordered queue
+        }
+}
+
+.ne 6
+#  Following is a list of channels for processing:
+
+channels &Tbl{
+#       netstachanloc           template
+        .*_HHZ                  templ1
+}
+
+#  Following is a list of channels to reject for processing:
+
+channels_reject &Tbl{
+        AZ_HWB_.*
+        AZ_BVDA2_.*
+}
+
+.fi
+.ft R
+.in
+.LP
+The first part of the parameter file consists of a set of default values that
+will be used as defaults by all of the subsequent template definitions.
+Next is a set of template definitions that are used to define the processing
+filter bands and rms averaging parameters. The last part is a table defining
+the channels to process, and their corresponding processing parameter templates, along with a
+table of channels to not process.
+.LP
+Parameters from the default section of the parameter file are as follows:
+.IP \fIcalib_from_db\fP
+If this is set to \fByes\fP, then the data \fIcalib\fP and \fIsegtype\fP are
+taken from the database specified by \fIdbname\fP (\fIcalib\fP from the \fIcalibration\fP
+table and \fIsegtype\fP from the \fIrsptype\fP field of \fIsensor\fP->\fIinstrument\fP).
+If this is set to \fBno\fP, then the \fIcalib\fP and \fIsegtype\fP are taken from
+the input waveform ORB packets.
+Reading the calibration values from a database appears to be more convenient, but has the dravback thatprocessing is reset
+every time the database changes. To achieve seamless processing, calib_from_db has to be disabled andf proper vlues have to be set fo data acquisition. This e.g is achieved by putting valies in the paramter file for q3302orb.
+.IP \fIbands\fP
+This is a table of filter bands and rms parameters for processing.
+Each entry in the table is an unnamed associative array with the
+parameters for a single filter band. The filter band parameters
+are as follows.
+.IP \fIfilter\fP
+.in 2c
+.ft CW
+.nf
+
+This is a filter specification string for this band. See trfilter(3)
+for a definition of the filter specification strings.
+
+.fi
+.ft R
+.in
+.IP \fIfc\fP
+This is a center frequency in hz that is used as a convenience
+parameter in the output \fIwfrms\fP database ORB packets. This
+makes it easy to display the results in amplitude vs. frequency
+plots.
+.IP \fIfpad\fP
+This is a filter transient time pad in seconds. Filtering is started
+on waveform data \fIfpad\fP seconds prior to any tm inspection
+so that the filter transients have an opportunity to
+become attenuated.
+.LP
+A set of parameter templates are specified in the \fItemplates\fP
+associative array. Each entry in this array is keyed with the template
+name and can contain any of the global default parameters. There
+is also a template with name \fIdefault\fP that is created automatically
+from the global default parameters. This \fIdefault\fP template can be
+used in the \fIchannels\fP array. New template parameters are first
+copied from the global default parameters and then any parameters
+specified in the template definition override the global default for
+that template.
+.LP
+The final section consists of the \fIchannels\fP table and the \fIchannels_reject\fP
+table. Each entry in the \fIchannels\fP table consists of a regular UNIX
+expression that is matched against the input SEED net_sta_chan[_loc] code
+for each channel along with a whitespace separated template name for specifying
+the processing parameters for the channels that match the expression. Channels
+are processed, subject to the \fIchannels_reject\fP table, if they match one
+of the expressions in the \fIchannels\fP table. If a channel matches more that
+one expression, then the channel parameters are taken from the first match.
+Channels are rejected for processing if they match any of the regular expressions
+in the \fIchannels_reject\fP table (see tblgrep(3) for more detail on regular
+expression searches in tables).
+.SH AUTHOR
+Nikolaus Horn, Nikolaus.Horn@zamg.ac.at
+.br
+ZAMG / Vienna, Austria
+Based on the orbwfrms example by Danny Harvey

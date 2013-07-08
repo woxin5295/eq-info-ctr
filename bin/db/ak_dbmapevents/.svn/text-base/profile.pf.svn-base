@@ -1,0 +1,10 @@
+width 50
+depth 200
+angle 90
+scale 2
+vert_exag 1
+title PDE Earthquakes for 1993
+prof_coord  &Tbl{
+60.6026 -154.558 59.1537 -150.207
+63.8688 -152.462 61.0132 -145.503
+}

@@ -1,0 +1,260 @@
+#
+# Icetools
+#
+# Access tools for Iceworm output
+#
+# Kent Lindquist
+# Geophysical Institute
+# University of Alaska, Fairbanks
+# October, 1996
+
+set auto_path [linsert $auto_path 0 $env(ANTELOPE)/data/tcl/library]
+
+proc Quit {} {
+	global PSpid
+	if {$PSpid > 0} {catch {exec kill $PSpid}}
+
+	destroy .
+}
+
+proc Restart {} {
+	global argv0
+	eval {
+		set geom [wm geometry .];
+		regsub {[0-9]+x[0-9]+([+-][0-9]+[+-][0-9]+)} $geom {\1} geom
+		exec $argv0 -geometry $geom >& /dev/null &
+		destroy .
+	}
+}
+
+proc have_current_version {} {
+	global Program MySum
+
+	if { $MySum != [get_my_checksum] } {
+
+		set result [tk_dialog .stale "Out of Date" \
+		"This copy of $Program is out of date" "" 2 \
+		"So what" Quit Restart]
+		switch $result {
+			0 { return 0 }
+			1 Quit
+			2 Restart
+		}
+	} else {
+		return 1
+	}
+}
+
+proc about {} {
+	global Program Font 
+
+	if { [have_current_version] } {
+		set current_msg "current"
+	} else {
+		set current_msg "out of date"
+	}
+
+	set w .about
+
+	if { [winfo exists $w] } {
+		wm deiconify $w
+		raise $w
+		return
+	}
+					 
+	toplevel $w
+	wm title $w "About $Program"
+
+	label $w.info -font $Font \
+	-text "\
+\
+$Program is a prototype interface to Iceworm processing results. \n\
+Doing this in a manner that allows many copies to run at once (say one on \n\
+each seismologist's desk) will require some design work--therefore not \n\
+everything will show up in this utility at once. Expect changes, especially \n\
+at the beginning..... \
+By the way, your copy of icetools is $current_msg.\
+\
+"
+	pack $w.info -side top -fill x
+
+	button $w.dismiss -text "Dismiss" -font $Font -command "destroy $w"
+	pack $w.dismiss -side top -fill x
+}
+
+proc get_my_checksum {} {
+	global argv0 env
+	set mypath [exec tcsh -fc "$env(ANTELOPE)/bin/abspath `which $argv0`;exit 0"]
+	set mysum [lindex [exec /usr/bin/sum $mypath] 0] 
+	return $mysum
+}
+
+proc get_segdb_name {} {
+	global Source_system
+
+	pfgetarr myarr %aeic_rtsys#processing_systems#$Source_system
+	set IcewormSegDbdir [exec dirname $myarr(quakes_database)]
+	get_database_name css_report $IcewormSegDbdir
+}
+
+proc get_contdb_name {} {
+	global Source_system
+
+	pfgetarr myarr %aeic_rtsys#processing_systems#$Source_system
+	set dbname [epoch2str [str2epoch now] $myarr(archive_database)]
+}
+
+proc get_orb_name { module } {
+	global Source_system
+	pfgetarr myarr %aeic_rtsys#processing_systems#$Source_system
+	pfgetarr rtexec_run %aeic_rtsys#rtexec_run_dirs
+	set IcewormParams $rtexec_run($myarr(host))/pf
+
+	set orbname [exec grep Orb $IcewormParams/$module.d]
+
+	regsub {Orb +"([A-Za-z0-9_-]+)".*} \
+				$orbname {\1} orbname
+	
+	return $orbname
+} 
+
+proc get_database_name { module dir } {
+	global Source_system MaxNDbs chosen_db
+	pfgetarr myarr %aeic_rtsys#processing_systems#$Source_system
+	pfgetarr rtexec_run %aeic_rtsys#rtexec_run_dirs
+	set IcewormParams $rtexec_run($myarr(host))/pf
+
+	set dbroot [exec grep Database $IcewormParams/$module.d] 
+	regsub {Database +"([A-Za-z0-9_-]+)".*} $dbroot {\1} dbroot
+	set listing [glob $dir/$dbroot\_????_??_??]
+	foreach filename $listing {
+		regsub "$dir/$dbroot\_" $filename {} number
+		lappend numbers $number
+	}
+	set numbers [lsort -decreasing $numbers]
+	set numbers [lreplace $numbers $MaxNDbs end]
+	foreach number $numbers {
+		lappend databases "$dir/$dbroot\_$number"
+	}
+	set maxwidth 20
+	foreach db $databases {
+		set maxwidth [max $maxwidth [clength $db]]	
+	}
+	set maxwidth [expr $maxwidth + 10]
+	set chosen_db [lindex $databases 0]
+	toplevel .choose
+	listbox .choose.l -width $maxwidth -selectmode single
+	foreach db $databases {
+		.choose.l insert end $db
+	}
+	.choose.l selection set 0
+	pack .choose.l -side top -fill x
+	button .choose.ch -text Choose -command { 
+		set index [.choose.l curselection]
+		set chosen_db [.choose.l get $index]
+		destroy .choose
+	}
+	pack .choose.ch -side top -fill x
+	button .choose.dis -text Dismiss -command { 
+		set chosen_db ""
+		destroy .choose
+	}
+	pack .choose.dis -side top -fill x
+
+	tkwait variable chosen_db
+
+	return $chosen_db
+}
+
+proc Dbe_events {} {
+	set db [get_segdb_name]
+	if {$db != "" } {exec dbe $db &}
+	return
+}
+
+proc Smartpick_continuous {} {
+	set db [get_contdb_name]
+	if {$db != "" } {exec smartpick_classic -nowait $db &}
+	return
+}
+
+proc Wormwatch_segmented {} {
+	set db [get_segdb_name]
+	if {$db != "" } {exec wormwatch $db &}
+	return
+}
+
+proc Wormwatch_orb {} {
+	set orbname [get_orb_name css_report]
+	if {$orbname != "" } {exec wormwatch $orbname &}
+	return
+}
+
+proc init_globals {} {
+	global Program
+	set Program icetools
+	
+	global MySum
+	set MySum [get_my_checksum]
+
+	global Font
+	set Font -*-lucidatypewriter-bold-r-normal-*-*-120-*-*-*-*-*-*
+
+	global IMDisplay
+	set IMDisplay /home/kent/bin/display
+
+	global Primary_system Source_system
+	set Primary_system [pfget aeic_rtsys primary_system]
+	set Source_system $Primary_system
+
+	global MaxNDbs
+	set MaxNDbs 10
+
+	global PSpid
+	set PSpid 0
+
+}
+
+proc init_window {} {
+	global Program Font Source_system
+
+	button .abt -text "About $Program" -font $Font -command about
+	pack .abt -side top -fill x
+
+	frame .sys 
+	label .sys.l -text "System:"
+	pack .sys.l -side left
+	pfgetarr processing_systems %aeic_rtsys#processing_systems
+	set systems [array names processing_systems]
+	foreach system $systems {
+		pfgetarr myarr %aeic_rtsys#processing_systems#$system
+		radiobutton .sys.$system -text $myarr(system_name) \
+		-value $system -variable Source_system
+		pack .sys.$system -side left
+	}
+	pack .sys -fill x
+	
+	button .dbe -text "Spreadsheet of event database" -bg beige \
+		-command Dbe_events
+	pack .dbe -side top -fill x
+
+	button .spickc -text "Waveforms for continuous database" -bg chartreuse \
+		-command Smartpick_continuous
+	pack .spickc -side top -fill x
+
+	button .wrmwtch -text "Wormwatch event database" -bg orange \
+		-command Wormwatch_segmented
+	pack .wrmwtch -side top -fill x
+
+	button .wrmwtch_orb -text "Wormwatch orbserver" \
+		-bg yellow \
+		-command Wormwatch_orb
+	pack .wrmwtch_orb -side top -fill x
+
+	button .quit -text Quit -fg white -bg red -command Quit
+	pack .quit -side top -fill x
+}
+
+init_globals
+init_window
+

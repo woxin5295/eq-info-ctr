@@ -1,0 +1,31 @@
+Schema ignoreids1.0
+	Description ( "This Schema allows events to be ignored" )
+	Detail {
+		This Schema is used to remove event rows after database 
+		joins are performed. 
+		}
+		Timedate lddate
+		;
+
+Attribute whoig
+	String (20)
+	Format ( "%-20s" )
+	Null ( "-" )
+	Detail {
+		Output databases should ignore  evid
+		all - all output  databases
+		qdds - qdds output databases 
+		dbrecenteqs - dbrecenteqs output databses
+		etc. 
+	}
+	;
+
+Relation ignorerow 
+	Fields ( evid whoig jdate auth lddate )
+	Primary ( evid whoig jdate )
+	Description ( "table used to remove rows after database joins" )
+	Detail {
+		This table is used to remove rows after database 
+		joins are performed. 
+	}
+	;

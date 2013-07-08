@@ -1,0 +1,42 @@
+.\" $Name: not supported by cvs2svn $ $Date: 2002-02-07 01:56:40 $
+.TH AEIC_ORBORIGINTRIGGER 1 "$Date: 2002-02-07 01:56:40 $"
+.SH NAME
+aeic_orborigintrigger \- trigger events based on origin rows on ORB
+.SH SYNOPSIS
+.nf
+\fBaeic_orborigintrigger \fP\\[-v\\] \\[-p \fIpffile\fP\\] \fIorbin\fP \fIorbout\fP
+.fi
+.SH DESCRIPTION
+\fBaeic_orborigintrigger\fP watches an ORB for database rows of type /db/origin. Upon
+receipt of such a row it dynamically reads its parameter file for orbpftrigger(1)
+style command strings. For each such command string, \fBaeic_orborigintrigger\fP builds
+a parameter file containing the command string and the vital statistics of the
+earthquake. This parameter file is put on the output orb with the source name
+specified in the \fBaeic_orborigintrigger\fP parameter file.
+.SH OPTIONS
+-v verbose
+
+-p \fIpffile\fP Specify parameter file other than the default, which is \fBaeic_orborigintrigger\fP.pf
+.SH PARAMETER FILE
+.ft CW
+.in 2c
+.nf
+
+pf_srcname orbpftrigger
+commands &Tbl{
+aeic_ah_excerpt %lat% %lon% %depth% %time%
+echo %lat * 2 - depth%
+}
+
+.fi
+.in
+.ft R
+.SH "SEE ALSO"
+.nf
+orbpftrigger(1), orbserver(1)
+.fi
+.SH AUTHOR
+.nf
+Kent Lindquist
+Geophysical Institute
+U. of Alaska

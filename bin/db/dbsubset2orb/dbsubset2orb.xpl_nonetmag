@@ -1,0 +1,412 @@
+##############################################################################
+# Author: Glenn Thompson (GT) 2007
+#         ALASKA EARTHQUAKE INFORMATION CENTER
+#
+# Modifications:
+#       2007-11-08: Added header
+#
+# Purpose:
+#
+#       See man page
+#
+# To do:
+#	* Optionally include netmag, stamag and origerr tables in packets
+#       * Optionally replay an old database at a specified rate (-r, where r=1 is real-time, r=100 is 100 times real-time, r=0 means ignore this option)
+#	* Optionally add a parameter to restart from the beginning (DONE: 20080207 - just put -l 0)
+#	* Optionally allow origins without magnitudes (DONE: 20080207 - just put -a)
+##############################################################################
+
+use Datascope;
+use orb;
+require "getopts.pl" ;
+
+use strict;
+use warnings;
+our $PROG_NAME;
+($PROG_NAME = $0) =~ s(.*/)();  # PROG_NAME becomes $0 minus any path
+
+# Usage - command line options and arguments
+our ($opt_a, $opt_d, $opt_i, $opt_l, $opt_m, $opt_n, $opt_r, $opt_s, $opt_t, $opt_v); 
+if ( ! &Getopts('ad:il:m:n:r:s:t:v') || $#ARGV < 2 ) {
+    print STDERR <<"EOU" ;
+
+    Usage: $PROG_NAME [-a] [-d days] [-i] [-l last_lddate] [-m magnitude_threshold] [-n number_of_associations_threshold] [-r rate] [-s sleep] [-t time_to_wait_for_magnitude] [-v] database last_lddate_file orb [orb2 [orb3 ...]]
+
+    Also see manpage.		
+
+EOU
+    exit 1 ;
+}
+
+
+# End of  GT Antelope Perl header
+##############################################################################
+
+#use File::Copy;
+use File::stat;
+use English;
+
+# cannot handle full path names to orb2dbt.pf file
+# so outfile MUST be orb2dbt.pf 
+
+my $database = shift @ARGV;  # database name
+my $ldfile  = shift @ARGV; # last_lddate file
+my @orb = @ARGV;
+
+# minimum magnitude needed
+my $minmag = $opt_m ? $opt_m : 0.0 ;
+
+# number of associated arrivals needed
+my $minnass = $opt_n ? $opt_n : 4 ;
+
+# rate - if non-zero it invokes replay mode which is designed to replay an old database at r times the real-time rate
+my $rate = $opt_r ? $opt_r : 0;
+
+# update time in seconds
+my $sleep = $opt_s ? $opt_s : 10 ; # how long to wait between checks
+
+# time to wait in seconds for a magnitude to arrive
+my $timetowait = $opt_t ? $opt_t : 60;
+
+our @dbtables = ("arrival", "assoc", "event", "origin") ;
+push @dbtables, qw(netmag stamag origerr) if ($opt_i);
+
+my $epochnow = str2epoch("now");
+my $timestrnow = strydtime( $epochnow ); # epochtime now
+print STDERR "\n###########  $PROG_NAME $timestrnow ##############\n\n";
+
+foreach my $dbtable (@dbtables){
+	if ( ! -e "$database.$dbtable" ) {
+		die("No $dbtable table present for $database !\n");
+	}
+}
+
+my @db      = dbopen ( $database, "r" ) ;
+my @dbor    = dblookup (@db, "", "origin", "", "" ) ;
+my $or_file = dbquery (@dbor,"dbTABLE_FILENAME"); # filename of origin table
+my $nstart  = dbquery ( @dbor, "dbRECORD_COUNT") ; # number of records in table at program initiation
+my $new_lddate;
+my $last_lddate;
+
+# process most recent modified row of $opt_d not specified 
+
+if ($opt_l >= 0) {
+	$last_lddate = $opt_l;
+	&write_lastlddate($last_lddate,$ldfile);
+}
+elsif($opt_d >= 0) {
+	my $secsperday = 60 * 60 * 24;
+	$last_lddate = now() - ($opt_d * $secsperday);
+	&write_lastlddate($last_lddate,$ldfile);
+} else {
+	if (-e $ldfile) {
+		open(FIN,$ldfile);
+		$last_lddate = <FIN>;
+		close(FIN);
+    	} 
+	else 
+	{	
+		# Just go to end of database - same as -d 0
+		$last_lddate = now();
+		&write_lastlddate($last_lddate,$ldfile);
+    	} 		
+} 
+dbclose(@db);
+
+printf STDERR "\n\nStarting with last_lddate = %s ($last_lddate)\n",strtime($last_lddate) ; 
+print STDERR "database $database starting with $nstart origin records\n" ; 
+my $inode_start      = stat("$or_file");
+
+# force first run at startup after sleeping
+my $mtime_start      = 0 ;
+my $max_records_to_process = 9999; # first time through only, this is a large number, thereafter it is 10
+my $oldest_origin_in_minutes = 60;
+
+
+my $first_origin = 1;
+
+# Sit and wait for new origin db rows
+for (;;) {
+	sleep $sleep if ( $mtime_start != 0 );
+	my $inode = stat("$or_file");
+	my $mtime = $inode->mtime ; # when was origin table last modified?
+	if ($mtime > $mtime_start) {
+		print STDERR "\n\n *************************** \n$or_file has changed\n";
+	    	@db = dbopen($database, "r");
+	    	@dbor = dblookup(@db, "", "origin", "", "");
+	    	my $nnew = dbquery (@dbor, "dbRECORD_COUNT");
+
+		print STDERR "database $database now has $nnew origin records\n" ;
+
+
+		# start a new log file every time the database gets cut down
+		if ($nnew < $nstart) {
+			print STDERR "Looks like database has been tailed - starting a new log file\n";
+			system("mv logs/$PROG_NAME logs/$PROG_NAME.old");
+			$nstart = $nnew;
+			print STDERR "Database tailed so starting new log file\n";
+			print STDERR "\n\nStarting last_lddate at $last_lddate, opt_l arg is $opt_d \n" ; 
+			print STDERR "database $database starting with $nstart origin records\n" ; 
+		}	 
+
+		my $start_record = ($nnew - $max_records_to_process);
+		$start_record = 0 if ($start_record < 0);
+		printf STDERR "\n*** Starting at record %d ***\n", $start_record;
+
+            	for ( $dbor[3] = $start_record ; $dbor[3] < $nnew ; $dbor[3]++ ) { # Just check the last 10 records each time
+			printf STDERR "\n\nThis is record %d of %d\n", $dbor[3], $nnew;
+ 
+			$dbor[3] = 0 if $dbor[3]<0; # make sure it doesn't go negative if less than 10 records in database
+			$max_records_to_process = 10 if ($max_records_to_process > 10);
+            		my $new_lddate = dbgetv(@dbor, "lddate") ;
+	      		my $mb = dbgetv(@dbor, "mb");
+	      		my $ml = dbgetv(@dbor, "ml");
+	      		my $nass = dbgetv(@dbor, "nass");
+	      		my $orid = dbgetv(@dbor, "orid");
+	      		my $evid = dbgetv(@dbor, "evid");
+	      		my $auth = dbgetv(@dbor, "auth");
+			my $otime = dbgetv(@dbor, "time");
+			my $newrec = $dbor[3] ;
+
+
+              		if ( $new_lddate > $last_lddate )  {
+
+				# replay mode
+				if ($rate > 0) {
+					my $time_to_sleep = ($new_lddate - $last_lddate) / $rate;
+					printf STDERR "Replay: sleep for %.0f seconds\n", $time_to_sleep; 
+					sleep( $time_to_sleep) if ($first_origin == 0);
+				}
+				$first_origin = 0;
+
+				# Time criteria met
+				my $timenow = str2epoch("now");
+
+	      			print STDERR "\nNew origin $orid detected for event $evid\n";
+				printf STDERR "Origin time: %s\n",strtime($otime);
+	      			print STDERR "Author: $auth, Nass: $nass, mb: $mb, ml: $ml\n";		 		
+	        		printf STDERR "Time now: %s,  new_lddate = %s, last_lddate = %s  ...\n",strtime( $timenow ), strtime($new_lddate), strtime($last_lddate);
+
+	      			# GTHO: Check if origin has at least minimum number of arrivals
+	      			if ($nass >= $minnass) {
+					print STDERR "Minimum nass criteria met\n";
+
+					# GTHO: If no magnitude data yet, wait if event time is within last hour
+					my $origin_age_in_minutes = ($timenow - $otime) / 60;
+					if ($origin_age_in_minutes < $oldest_origin_in_minutes) {
+
+						my $seconds = 0;
+						my $retry_secs = 5;
+						while ($ml == -999.00 && $mb == -999.00 && $seconds < $timetowait) {
+							printf STDERR "Origin has no magnitude data: will wait up to another %d seconds\n",$timetowait - $seconds;
+							sleep($retry_secs); $seconds +=$retry_secs; # wait X seconds between rechecks
+	
+							# then close, reopen and reread database (because the copy of the database each time is static - magnitude data never update as program sees a snapshot, not a dynamically changing database
+							dbclose(@db);
+							@db = dbopen($database, "r");
+		    					@dbor = dblookup(@db, "", "origin", "", "");
+		    					my $nnow = dbquery (@dbor, "dbRECORD_COUNT");
+							unless ($nnow < $nnew) { # check if database tailed in the last sleep and skip this block if it was
+										 # should just jump to checking next record from old database, which will skip again if there are no magnitudes
+										 # but this is OK because last_lddate file wont be updated
+										 # note that if $nnow = $nnew, or $nnow > $nnew, we just assume that at worst new records have been added, 
+										 # and those will be picked up next time the modification time is checked.
+	
+								$dbor[3] = $newrec;
+								$mb = dbgetv(@dbor, "mb");
+			      					$ml = dbgetv(@dbor, "ml");
+								if ($ml > -999.00 || $mb > -999.00) {	
+									print STDERR "Revised ml = $ml, mb = $mb after $seconds seconds\n" ;
+								}
+							}
+						}
+					}
+
+					
+					# Check the minimum magnitude has been met
+					if (($opt_a) ||  ($ml >= $minmag || $mb >= $minmag)) {
+
+
+						print STDERR "Magnitude criteria met\n";
+						# Check that origin time criteria met
+						if (($origin_age_in_minutes < $oldest_origin_in_minutes) || ($rate > 0) ) {
+							printf STDERR "Origin age is %5.1f minutes\n",$origin_age_in_minutes;
+							print STDERR "Sending record $newrec / orid $orid ...\n" ;
+
+							# First send the origin, event, assoc, netmag and arrival tables
+							# 20071214: added $pfout to return variables, so we can output packets
+							my ($pfout,$packet) = run_event($newrec, @dbor) ;
+							my $t = now();
+							#print STDERR "$packet\n" if $opt_v;
+							my $orbname;
+
+							# 20071214: output packets if bigger than a certain magnitude
+							#if ($ml > 4.0 || $mb > 4.0) {
+							#	open(FSAVE,">pforb2dbt_$ml");
+							#	print FSAVE $pfout;
+							#	close(FSAVE);
+							#}
+
+							# write to multiple orbs (at least one)
+							foreach $orbname (@orb) {
+								my $orbptr = orbopen("$orbname", "w");
+								if ( $orbptr < 0 ) { 
+								   die ( "Can't open $orbname\n" ) ; 
+								}	
+								my $nby = length($packet);
+								my $pktid;
+								$pktid = orbputx($orbptr, "/pf/orb2dbt", $t, $packet, $nby);
+								print STDERR "packet $pktid written to $orbname with $nby bytes\n";
+								orbclose($orbptr);
+							}
+		
+							# Only want to update last_lddate file each time a new record is sent
+							&write_lastlddate($new_lddate,$ldfile);
+	   						$last_lddate = $new_lddate;
+ 	
+						}
+						else
+						{
+							print STDERR "Record $newrec / origin $orid - time was too old\n"; 
+						} # end of if origin age
+
+					}
+					else
+					{
+						print STDERR "Record $newrec / origin $orid did not reach the magnitude threshold (or had none defined)\n"; 
+					} # end of if ml
+	    			}
+				else
+				{
+					printf STDERR "Failed minimum nass criteria\n";	
+	      			} # end of if nass > minnass
+
+
+			} # end of new_ldate > last_lddate
+				
+	    	} # end of for $dbor
+
+	    	dbclose(@db);
+	    	$mtime_start = $mtime;
+	    	print STDERR ".";
+
+	}
+	else
+	{
+		printf STDERR "$or_file has not changed\n";
+	}
+
+}
+
+sub run {
+	my $cmd = $_[0];
+	print STDERR "$cmd\n";
+	system($cmd);
+}
+
+sub run_event {
+    my ($myrec, @db2) = @_ ;
+    my @dborigin = dblookup(@db2, "", "origin", "", "");
+    $dborigin[3] = $myrec ;
+    my $subor = dbgetv(@dborigin, "orid") ;
+    my $orsub = qq(orid==$subor) ;
+    print STDERR "$orsub\n" if $opt_v;
+    my @dbproc;
+    if ($opt_i) {
+   	@dbproc = dbprocess(@db2, "dbopen origin",
+			"dbsubset $orsub", 
+			"dbjoin event", 
+			"dbjoin assoc", 
+			"dbjoin arrival",
+			"dbjoin netmag",
+			"dbjoin origerr",
+			"dbjoin stamag");
+    } 
+    else
+    {
+    	@dbproc = dbprocess(@db2, "dbopen origin",
+			"dbsubset $orsub", 
+			"dbjoin event", 
+			"dbjoin assoc", 
+			"dbjoin arrival") ;
+    }		
+
+    my $ncrap = dbquery(@dbproc, "dbRECORD_COUNT") ;
+    print STDERR " $ncrap records in dbproc\n" if $opt_v;
+
+    my $pfout = "";
+    foreach my $tbl (@dbtables) {
+      
+      my @dbsep = dbseparate(@dbproc, "$tbl");
+      if ($tbl eq "arrival") {
+	$pfout .= "arrivals  &Literal{\n" ;
+	@dbsep = dbsort(@dbsep, "sta", "iphase");
+      } elsif ($tbl eq "assoc") {
+	$pfout .= "assocs  &Literal{\n" ;
+	@dbsep = dbsort(@dbsep, "sta", "phase");
+      } elsif ($tbl eq "event" ) {
+	$pfout .= "event  &Literal{\n";
+      } elsif ($tbl eq "origin") {
+	$pfout .= "origin  &Literal{\n";
+      } elsif ($tbl eq "netmag") {
+	$pfout .= "netmag  &Literal{\n";
+      } elsif ($tbl eq "stamag") {
+	$pfout .= "stamag  &Literal{\n";
+      } elsif ($tbl eq "origerr") {
+	$pfout .= "origerr  &Literal{\n";
+      }
+      my $num_sep = dbquery(@dbsep, "dbRECORD_COUNT");
+      my @sep_fields = dbquery(@dbsep, "dbTABLE_FIELDS");
+      my $nfields =  $#sep_fields;
+      print STDERR "$tbl TABLE with $num_sep records and $nfields Fields\n" if $opt_v;
+      for ($dbsep[3] = 0; $dbsep[3] < $num_sep; $dbsep[3]++) {
+        my $row = "";
+        foreach  my $fld (@sep_fields) {
+          my @dbfld = dblookup(@dbsep, "", "", "$fld", "");
+          my $fmt = dbquery(@dbfld, "dbFIELD_FORMAT");
+          my $nul = dbquery(@dbfld, "dbNULL");
+          my $fldval = dbgetv(@dbfld, "$fld");
+          # must have space after fmt string for orb2dbt to read pf file
+          $row .= sprintf("$fmt ", $fldval);
+        }
+	chop $row ;
+        $pfout .= "$row\n";
+      }
+      $pfout .= "}\n";
+    }
+
+    
+    
+
+    my $packet = s2pfpkt($pfout);
+
+# 20071214: added $pfout to return variables, so we can output packets
+
+    return ($pfout,$packet) ;
+}
+
+
+# This is the trick to get a string into packet format (see rtorbcmd)
+sub s2pfpkt { 
+    my ( $s ) = @_ ; 
+    my $packet = chr(0) ;
+    $packet .= chr(1) ;
+    $packet .= $s ;
+    $packet .= chr(0) ;
+    return $packet ;
+}
+
+sub write_lastlddate {
+	($last_lddate,$ldfile) = @_;
+ 	if (open(FOUT,">$ldfile")) { 
+		print FOUT $last_lddate;
+    		print STDERR "Writing $last_lddate to $ldfile\n";
+    		close FOUT;
+    	}
+    	else
+ 	{
+		print STDERR "Could not write to $ldfile";
+    	}
+
+}
+

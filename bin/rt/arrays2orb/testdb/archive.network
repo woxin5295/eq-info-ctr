@@ -1,0 +1,65 @@
+ALPA     ALPA Array                                                                       ar   -                     -1   902361094.20661
+BC       Beaver Creek Array                                                               ar   -                     -1   902361094.20645
+BM       Burnt Mountain Array                                                             ar   -                     -1   902361094.20629
+IL       IL Array                                                                         ar   -                     -1   902361094.20598
+IM       Indian Mountain Array                                                            ar   -                     -1   902361094.20614
+ATWC     ATWC Internet Circuit                                                            cr   K. Lindquist          -1   941239489.86570
+AkHwy    Alaska Highway Circuit                                                           cr   Guy Tytgat            -1   916088461.26454
+Akutan1  Akutan Circuit #1                                                                cr   Guy Tytgat            -1   916095657.67880
+Akutan2  Akutan Circuit #2                                                                cr   Guy Tytgat            -1   916095770.75266
+Anchor1  Anchor River Circuit #1                                                          cr   Guy Tytgat            -1   916087851.58374
+Anchor2  Anchor River Circuit #2                                                          cr   Guy Tytgat            -1   916095611.94081
+Anchor3  Anchor River Circuit #3                                                          cr   Guy Tytgat            -1   916087774.59443
+ClearCr  Clear Creek Butte UHF Circuit                                                    cr   Guy Tytgat            -1   916088273.79456
+ColdBay1 Cold Bay Circuit #1                                                              cr   Guy Tytgat            -1   916087730.18451
+ColdBay2 Cold Bay Circuit #2                                                              cr   Guy Tytgat            -1   916088553.48448
+Cordova  Cordova Airport Circuit                                                          cr   Guy Tytgat            -1   916095347.97306
+Diamond  Diamond Ridge Circuit                                                            cr   Guy Tytgat            -1   916095564.37469
+Dutch    Dutch Harbor Circuit #1                                                          cr   Guy Tytgat            -1   916088591.79448
+Gould1   Gould Hall Circuit #1                                                            cr   Guy Tytgat            -1   916098419.48451
+KCove1   King Cove Circuit #1                                                             cr   Guy Tytgat            -1   916099542.33081
+KCove2   King Cove Circuit #2                                                             cr   Guy Tytgat            -1   916099515.32973
+Kasilof  Kasilof Circuit                                                                  cr   Guy Tytgat            -1   916095632.06759
+KingS1   King Salmon Circuit #1                                                           cr   Guy Tytgat            -1   916095947.11613
+KingS2   King Salmon Circuit #2                                                           cr   Guy Tytgat            -1   916095915.03960
+KingS3   King Salmon Circuit #3                                                           cr   Guy Tytgat            -1   916099268.92983
+Murphy   Murphy Dome UHF Circuit                                                          cr   Guy Tytgat            -1   916088227.51455
+ParksN   Parks Highway North Circuit                                                      cr   Guy Tytgat            -1   916088169.65449
+ParksS   Parks Highway South Circuit                                                      cr   Guy Tytgat            -1   916095743.41011
+PtHeiden Port Heiden Circuit #1                                                           cr   Guy Tytgat            -1   916088941.36451
+RichHwy  Richardson Highway Circuit                                                       cr   Guy Tytgat            -1   916089012.60456
+Sterling Sterling Highway Circuit #1                                                      cr   Guy Tytgat            -1   916099038.51284
+Tolsona  Tolsona Circuit                                                                  cr   Guy Tytgat            -1   916088973.02447
+Valdez   Valdez Circuit                                                                   cr   Guy Tytgat            -1   916095984.54717
+Whittier Whittier Circuit                                                                 cr   Guy Tytgat            -1   916095969.76379
+WoodRv   Wood River Butte UHF Circuit                                                     cr   Guy Tytgat            -1   916088508.64447
+Yakutat  Yakutat/Cordova Circuit                                                          cr   Guy Tytgat            -1   916095013.73381
+AK       Alaskan Network Stations                                                         lo   RHansen               -1   902361094.20293
+AT       Alaska Tsunami Warning Center                                                    lo   KLindquist            -1   908253029.52973
+CNSN     Canadian National Seismic Network                                                lo   KLindquist            -1   902361094.20745
+UW       University of Washington Seismic Network                                         lo   KLindquist            -1   904178286.05782
+A1VCO    Stations with A1VCO's                                                            pr   M. Robinson           -1   902361094.20712
+Adak     Adak Network                                                                     pr   K Lindquist           -1   935640640.26214
+GR       Gain-ranging stations in the Alaskan seismic network                             pr   KLindquist            -1   902361094.20316
+Guralp   Guralp Seismic Instrument                                                        pr   Larsen                -1   909512757.66039
+Paxson   Paxson Network                                                                   pr   RHansen/KGL           -1   902361101.92368
+UAFARR   University of Alaska Arrays                                                      pr   KLindquist            -1   902361094.20583
+mag      Stations usable for measuring magnitudes                                         pr   KLindquist            -1   902361094.20332
+Akutan   Akutan Volcano Network                                                           vo   KLindquist et a       -1   932420616.75669
+Ankchk   Aniakchak Volcano Network                                                        vo   KLindquist            -1   902361094.20729
+Augustn  Augustine Volcano Network                                                        vo   KLindquist            -1   902361094.20489
+Dutton   Dutton Volcano Network                                                           vo   KLindquist            -1   902361094.20522
+GrtStkn  Great Sitkin Volcano Network                                                     vo   K Lindquist           -1   935640702.73647
+Iliamna  Iliamna Volcano Network                                                          vo   KLindquist            -1   932420657.01396
+Kanaga   Kanaga Volcano Network                                                           vo   K Lindquist           -1   935640688.99599
+Katmai   Katmai Volcano Network                                                           vo   KLindquist            -1   932420668.22176
+Makshn   Makushin Volcano Network                                                         vo   KLindquist            -1   932420676.91364
+Pavlof   Pavlof Volcano Network                                                           vo   KLindquist            -1   902361094.20506
+Redoubt  Redoubt Volcano Network                                                          vo   KLindquist            -1   902361094.20472
+Shshldn  Shishaldin Volcano Network                                                       vo   KLindquist            -1   932420694.34364
+Spurr    Spurr Volcano Network                                                            vo   KLindquist            -1   902361094.20456
+StHelens Mt. St. Helens Volcano Network                                                   vo   KLindquist            -1   904178310.64250
+Westdahl Westdahl Volcano Network                                                         vo   KLindquist            -1   902442896.73846
+II       IRIS/IDA segment of Global Seismograph Network                                   ww   -                     -1   907355530.53061
+IU       IRIS/USGS segment of Global Seismograph Network                                  ww   -                     -1   907355397.94954
+PP       Princeton Earth Physics Project Network                                          ww   KLindquist            -1   911603172.29840

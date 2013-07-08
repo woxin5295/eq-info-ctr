@@ -1,0 +1,1 @@
+vdlorb -v SCRIPTS/parms.vdlunr -orbname localhost:12345 -orbchan "NN_DBG.*|NN_WCN.*|NN_BEK.*|NN_PAH.*|NN_DBG2.*" -cph 1 -n 18 -s 46 -f 20 -F 20. -host nsn3.cr.usgs.gov -i vpe 

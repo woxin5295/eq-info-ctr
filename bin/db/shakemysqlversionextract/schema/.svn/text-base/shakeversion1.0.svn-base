@@ -1,0 +1,64 @@
+Schema shakeversion1.0
+	Description ( "Contains Shakemap mysql version information" )
+	Detail {
+		ShakeMaps mysql database contains table
+		shake_version. This table is extracted with the
+		mysql command and deposited into a Antelope
+		shakeversion table.
+		}
+		Timedate lddate
+		;
+
+Attribute mysqlvernum
+	Integer (8)
+	Format ( "%8d" )
+	Null ( "-1" )
+	Range ( "mysqlvernum > 0" )
+	Description ( "Shakemap mysql version number" )
+	Detail {
+		Shakemap mysql version number	
+	}
+	;
+
+Attribute mysqlcomment 
+	String (255)
+	Format ( "%-255s" )
+	Null ( "-" )
+	Description ( "Shakemap mysql version comment" )
+	Detail {
+		Shakemap mysql version comment
+	}
+	;
+
+Attribute shakemap
+	Integer (8)
+	Format ( "%8d" )
+	Null ( "-1" )
+	Range ( "shakemap > 0" )
+	Description ( "0-no shakemap or canceled, > 0 is version number" )
+	Detail {
+		This is a interger that indicates whether or not
+		a shakemap has been created (created if >0), 
+		not created(if 0), or canceled(if 0). 
+	}
+	;
+
+Relation shakeversion
+	Fields ( evid mysqlvernum mysqlcomment lddate )
+	Primary ( evid mysqlvernum )
+	Description ( "Shakemap mysql version information" )
+	Detail {
+		Shakemap mysql version information
+	}
+	;
+
+Relation eventpipe
+	Fields ( evid shakemap lddate )
+	Primary ( evid )
+	Defines evid
+	Description ( "Event identification" )
+	Detail {
+		The purpose of this relation is to
+		keep track of shakemaps
+	}
+	;

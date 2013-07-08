@@ -1,0 +1,124 @@
+Defines &Arr{
+ANTELOPE 	/opt/antelope/4.9
+ORB		bedrock:6510
+ORBICEDATA	ice:6510
+DBDATA		/home/shake/run/dbdata/archive
+DB            /home/shake/run/dbmaster/master_stations
+}
+
+Env	&Arr{
+ANTELOPE		$ANTELOPE
+EDITOR			xvile
+XEDITOR			xvile
+PATH			PRESERVE
+PFPATH                  $ANTELOPE/data/pf:/usr/local/aeic/4.9/data/pf:./pf
+PERL5LIB		PRESERVE
+HOME			PRESERVE
+PWD				PRESERVE
+LOGNAME			PRESERVE
+TZ				PRESERVE
+TERM			PRESERVE || xterm
+DBLOCKS			1	# use locks when updating databases
+SCHEMA_DEFAULT	rt1.0
+SCHEMA_DIR		$ANTELOPE/data/schemas:/usr/local/aeic/4.9/data/schemas
+DISPLAY			PRESERVE || :0
+SYS_NAME        bedrock 
+SITE_DB         /home/shake/run/dbmaster/master_stations
+}
+
+startup_shutdown_email artak@giseis.alaska.edu,mitch@giseis.alaska.edu
+
+Start_period    		 10      
+
+Minimum_period_between_starts   60 	
+
+Failure_threshold 300 # seconds 
+Failure_repetitions 5
+Failure_retry_period 86400
+
+Processes &Tbl{
+orbserver	orbserver64 -p 6510 $ORB
+orb2orb_data orb2orb -B 2048 -m '.*_BH.*|.*_BN.*|.*_HN.*' -S state/orb2orbdata $ORBICEDATA $ORB
+orb2db_data exec orb2db -v -S state/orb2db -r '.*_BHM.*|AK_DCPH.*|.*8040.*|.*EYAK.*' $ORB $DBDATA `epoch +%E now`
+shake_watch	bin/shake_watch
+}
+
+Run     &Arr{
+orbserver	yes
+orb2orb_data	yes
+orb2db_data	yes
+shake_watch	yes
+}
+
+Shutdown_order &Tbl{
+orb2db_data
+orb2orb_data
+orbserver
+}
+
+Startup_tasks	&Tbl{
+}
+
+Shutdown_tasks	&Tbl{
+}
+
+max_cron_gap 3600
+
+crontab &Arr{
+rtdbsplitcron UTC 30 2 * * * /home/shake/run/bin/dbsplitcron
+rtdbclean UTC 20 18 * * * rtdbclean -p /home/display/run/pf/rtdbclean_saveass.pf -m mitch@giseis.alaska.edu $ORB $DBDATA 
+}
+
+Time_to_die	20
+
+Limit	&Arr{
+cputime		unlimited
+filesize	unlimited
+descriptors	unlimited	# large for orb2db
+stacksize	1048575 	# unlimited is too big: can't have larger orbs
+datasize	unlimited
+coredumpsize	unlimited	
+vmemoryuse	unlimited
+}
+
+Database	rtsys/rtsys
+
+email_incident_reports artak@giseis.alaska.edu
+
+include_corefile no
+
+####################################################################
+# rtm Parameters
+# The following parameters are not used directly by rtexec, but
+# are instead read and used by rtm.
+####################################################################
+
+Network_database $SITE_DB	# Database containing site, network 
+				#  and accumulated wfdisc/arrival/... tables
+orbname		$ORB	# name of orbserver 
+				#     (in case a different port is being used) 
+Parameter_files	&Arr{	# if the parameter file doesn't follow the convention
+			# of being named after either the task name or 
+			# the program name, it should be specified here, so
+			# that rtm can allow editing it.
+runrtd  rtd.pf
+orbserver bedrock:6510.pf
+}
+
+disks   &Tbl{
+# name    file  minfree_Mbytes min_kinodes description
+root      /  20   1	root partition
+orb   /export/orb 200 1 database 
+wfdata	/export/wfdata 200 1 rawdata
+shake	/export/bedrock2 200 1 home_shake
+ShakeMap /export/bedrock1 200 1 ShakeMap
+}
+
+Buttons &Tbl{  # Use {} instead of '' to conform to tcl's quoting
+processes	/usr/dt/bin/sdtprocess -t 1
+clients xterm -geom 100x25 -e orbstat -c $ORB 5
+sources xterm -geom 100x40 -e orbstat -s $ORB 5
+}
+
+orbtasks &Arr{
+}

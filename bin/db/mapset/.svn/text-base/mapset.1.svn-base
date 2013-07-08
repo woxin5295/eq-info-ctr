@@ -1,0 +1,134 @@
+.\" @(#)mapset.1        1.3 20 Apr 1995
+.EN
+.TH MAPSET 1 "$Date: 2002-02-07 01:56:32 $"
+.SH NAME
+mapset \- GUI front-end to the Alaskan dbmapevents program
+.SH SYNOPSIS
+.nf
+\fBmapset \fP[\fIdbname\fP]
+.fi
+.SH DESCRIPTION
+.LP
+Mapset is a graphical user interface to the Alaskan version of the dbmapevents
+program, the original version of which was written at the JSPC. Mapset
+allows customizable macros for frequently-used map settings; pre-formatted
+packages of labels that can be specified by users and/or installation
+managers; pre-formatted boilerplates to incorporate descriptive text and/or
+bitmap logos; turnkey or interactive map plotting; and built-in output of
+summary information for the input database.
+
+.LP
+Default macros
+can be established for an entire installation, and individual users
+can modify these in part or in whole to suit their needs. Users can also set up
+their own macros, without affecting the installation-wide defaults. New
+macros can be defined in \fBmapset\fP and saved directly from the program by
+choosing "save as" under the "macros" pull-down menu.
+.LP
+Mapset allows both pre-set map labels and pre-set boilerplates to be
+specified in files that can be referenced either in macros or dynamically
+within the program. The "Label files" and "Boilerplate files" widgets in the
+\fBmapset\fP window are pull-down menus listing available label and boilerplate files.
+The list boxes below them show which label and boilerplate files will
+be used by dbmapevents.
+Choosing items in the pull-down menus will insert them into the lists of label
+and boilerplate files that will be used. Double-clicking on any entry
+in the listboxes will remove the entry. These files can be constructed
+automatically using dbmapevents in interactive mode.
+.SH FILES
+Mapset macros are specified by the suffix _mapset_macro.pf and are in datascope
+parameter-file format.
+Label files have the suffix .label, have a first line with the word "label", and
+are filled with lines of the form
+.ft CW
+.in 2c
+.nf
+
+        lat lon lat lon charsize 0text
+
+.fi
+.in
+.ft R
+Macro, Label, and Boilerplate files are currently stored in
+/home/kent/work/\fBmapset\fP/data.
+.SH ENVIRONMENT
+PFPATH  describes the path(s) in which to find mapset macros. If this
+variable is not set, it defaults to the current working directory. Filenames
+occuring later on the search path will overwrite parameters that have been
+read earlier in the search path from files of the same name. This
+allows users to override certain default parameter settings.
+user-owned versions of the default macros do not need to be complete--they can specify any few of
+the parameters that the user wants to run differently from the defaults, as
+long as the user's macro files are seen after the default macro files. If the
+PFPATH variable does not contain ., . is appended to the end, allowing
+current-working-directory macros to take precedence.
+Sample syntax:
+.ft CW
+.in 2c
+.nf
+
+        setenv PFPATH /home/kent/data/pf:.
+
+.fi
+.in
+.ft R
+.LP
+DBMAPEVENTS_DATA describes the path(s) in which to find boilerplate
+and label files. If this variable is not set, it defaults to the
+current working directory. The first file of a given name found is the
+one that will be used.
+.SH PARAMETER FILE
+Macros are specified in parameter files with the suffix *_mapset_macro.pf.
+Files for map labels are specified *.label. Files for boilerplates are
+specified *.bp.
+.SH "SEE ALSO"
+.nf
+dbmapevents(1), pf(3)
+.fi
+.SH "BUGS AND CAVEATS"
+Currently you must run \fBmapset\fP in a directory in which you have write permission,
+so it can create the dbmapevents.pf file that dbmapevents reads.
+.LP
+Mapset reads in the list of available label and boilerplate files only when it
+first starts up. If you add new label or boilerplate files you have to restart
+the program for them to show up (though if you save a new macro from \fBmapset\fP,
+it will show up immediately).
+.LP
+Double-clicking on an empty label-file or boilerplate-file listbox produces
+an error message.
+.LP
+Mapset will allow you to print out the map while you're still in interactive mode,
+though since the map isn't finished yet the printout won't work
+(there's no "showpage" yet in the dbmapevents.ps file).
+Quit dbmapevents before printing if you started up in interactive mode.
+.LP
+The title specified in the \fBmapset\fP window will be used only if the
+"use custom title" checkbutton is activated.
+.LP
+Once dbmapevents is started in interactive mode, further modification of the
+map must be done from the xterm command window launched for dbmapevents,
+not from the \fBmapset\fP window.
+.LP
+Adding new parameters requires lots of coding. The parameter
+has to be added to:
+.ft CW
+.in 2c
+.nf
+
+the parameter file itself;
+the get_params call in dbmapevents.F;
+the get_params definition in get_params_.c, including declaration
+  of the formal argument;
+the \fBmapset\fP get_macro procedure (declared global...);
+the \fBmapset\fP save_pf procedure;
+the \fBmapset\fP gui (i.e. make a button or whatever for it).
+This could be simplified.
+
+.fi
+.in
+.ft R
+.SH AUTHORS
+Kent Lindquist and Roger Hansen. JSPC Datascope software has been used
+in writing this code.
+.SH AUTHOR
+Kent Lindquist (Seismologist)

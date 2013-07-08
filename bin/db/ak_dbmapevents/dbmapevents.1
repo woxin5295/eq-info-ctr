@@ -1,0 +1,117 @@
+.ds ]W JSPC CSS database programs
+.TH DBMAPEVENTS 1 "$Date: 2002-02-07 01:56:26 $"
+.SH NAME
+dbmapevents \- Make a map of events from a database
+.SH SYNOPSIS
+.B dbmapevents
+.I dbname
+.I {sta | orid | lat:lon}
+.I range
+.I [-c]
+.I [auth1 sym1 hue1 lit1 sat1 ...]
+.SH DESCRIPTION
+.B dbmapevents
+will make a map of events and stations from a v. 3.0 CSS database.
+A detailed worldwide cartography database is used to provide coastlines,
+shorelines, rivers and political boundaries. The level of cartographic
+detail is determined by the size of the map region. Maps are always drawn
+using an equal distance projection with an origin that is determined
+either by a station location (from the \fBsite\fP table), a hypocenter
+(from the \fBorigin\fP table) or a user specified latitude-longitude
+coordinate. The events are always taken from the \fBorigin\fP table and
+can be optionally sifted and color-symbol coded by the \fBauthor\fP field
+within the \fBorigin\fP table. An interactive mode can be optionally
+enabled that allows the user to pan and zoom the map after it is initially
+drawn. PostScirpt versions of the map are put into a file named
+dbmapevents.ps.
+.SH COMMAND LINE ARGUMENTS
+.TP 15
+\fIdbname\fP
+The name of the subject database. The database name is defined as the
+file name of one of the flat relation files without the .relname suffix.
+For example, if the .wfdisc relation file name is ./foo.wfdisc then ./foo
+is the database name.
+This argument is required.
+.TP 15
+\fIsta | orid | lat:lon\fP
+A coordinate origin definition. If a valid station code is specified, then
+the latitude-longitude of that station is used as the origin. If a valid
+\fBorid\fP value is specified, then the hypocenter latitude-longitude
+for that \fBorid\fP is used. If a latitude:longitude value is specified
+(with a : separating the two values), then that value is used. Latitudes
+and longitudes are specified in degrees with +/- values representing
+north and south latitudes, respectively, and east and west longitudes.
+This argument is required.
+.TP 15
+\fIrange\fP
+The map plot range in degrees from the origin to the edges of the map.
+This argument is required.
+.TP 15
+\fI-c\fP
+If specified, then enter interactive mode after making the map. During
+interactive mode, a cross-hairs cursor appears in the plot window and
+can be manipulated with the mouse. If this argument is not specified,
+then the program will exit immediately after making the map.
+.TP 15
+\fIauth1 sym1 hue1 lit1 sat1 ...\fP
+An optional list of hypocenter author sifting keys and color-plotting
+symbol codes for each author. Each element in the list consists of
+\fIauth#\fP which specifies an \fBauthor\fP field within the \fBorigin\fP
+table, \fIsym#\fP, which specifies a plotting symbol and should be
+one of 'box', 'triangle', 'hexagon', or 'cross', \fIhue#\fP, which specifies
+the symbol color hue value (0.0 to 360.0), \fIlit#\fP, which specifies
+the symbol color lightness value (0.0 to 1.0), and \fIsat#\fP, which specifies
+the symbol color saturation value. If no author sifting keys are given, then
+all hypocenters are plotted with the same symbol and color.
+.SH PROGRAM INTERACTION
+If the \fI-c\fP command line argument has been specified, then a cross-hair
+cursor will appear in the map area and the program will go into an
+interactive mode (after the initial map is made). Single key commands
+can then be typed while the cursor cross-hair is active.
+Single key commands are defined as follows (no RETURN is required):
+.br
+\fB?\fP - Display help menu.
+.br
+\fBq\fP - Quit and leave the window on the screen.
+.br
+\fBQ\fP - Quit and destroy the window.
+.br
+\fBp\fP - Pan.
+.br
+\fBi\fP - Zoom in by a small increment.
+.br
+\fBI\fP - Zoom in by a large increment.
+.br
+\fBo\fP - Zoom out by a small increment.
+.br
+\fBO\fP - Zoom out by a large increment.
+.br
+\fBe\fP - Identify closest event.
+.br
+\fBs\fP - Identify closest station.
+.br
+\fBt\fP - Enter time range.
+.br
+\fB1\fP - Toggle orid labels on/off.
+.br
+\fB2\fP - Toggle depth symbol color coding on/off.
+.br
+\fB3\fP - Toggle shallow depth symbol color coding on/off.
+.br
+\fB4\fP - Toggle depth residual symbol color coding on/off.
+.br
+\fB5\fP - Toggle station symbols on/off.
+.br
+\fB6\fP - Toggle color coding of events in the PDE catalog on/off.
+.br
+\fB7\fP - Toggle magnitude symbol size coding on/off.
+.br
+\fB8\fP - Toggle display of distance circles on/off.
+.SH ENVIRONMENT
+The cartography file must be resident at $JSPC/data/maps/mapdata. The JSPC
+environment varibale must be set appropriately. In addition the SCHEMA_DIR
+environment variable can be used (see jspcenv(5)).
+.SH SEE ALSO
+jspcenv(5)
+.SH AUTHOR
+Kent Lindquist (Seismologist)

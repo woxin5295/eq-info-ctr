@@ -1,0 +1,107 @@
+.\" $Name: not supported by cvs2svn $ $Date: 2002-02-07 01:56:43 $
+.TH ORB2AEIC_BEEPER 1 "$Date: 2002-02-07 01:56:43 $"
+.SH NAME
+orb2aeic_beeper \- send message to pager from orb
+.SH SYNOPSIS
+.nf
+\fBorb2aeic_beeper \fP\\[-v\\] \\[-d\\] \\[-p \fIparameter_file\fP]
+                \fIorbserver\fP
+.fi
+.SH DESCRIPTION
+\fBorb2aeic_beeper\fP watches an Antelope ORB for parameter-file messages
+of a type specified in the \fBorb2aeic_beeper\fP parameter file. Upon
+receipt of such a message, \fBorb2aeic_beeper\fP sends the message specified
+to the AEIC pager. If the parameter file on the orb contains the
+parameter "mail", results of the paging attempt are mailed to the
+specified recipients. If the parameter file on the orb contains the
+parameter "orbmsg", results of the paging attempt are put back on
+the orb as a character string under the source name specified, prepended
+by the string "/msg/". This interface is intended for programming
+applications, in which case the callback source identifier would be
+/msg/host_pid. The application sending the page can then look
+for it's results on the orb.
+.SH OPTIONS
+-d debug option for kermit
+
+-v verbose
+
+-p \fIparameter_file\fP allows specification of a parameter file other than
+the default, which is \fBorb2aeic_beeper\fP.pf
+.SH PARAMETER FILE
+.ft CW
+.in 2c
+.nf
+
+.ne 11
+
+nordic% cat \fBorb2aeic_beeper\fP.pf
+source_name /pf/aeic_beeper
+kermit_path /usr/local/bin/kermit
+pager_company_modem_number 9-451-6166
+line    /dev/term/a
+modem   hayes
+speed 1200
+pager_number 496-3588
+nordic%
+
+.fi
+.in
+.ft R
+.SH EXAMPLE
+.ft CW
+.in 2c
+.nf
+
+.ne 14
+
+%\fB orb2aeic_beeper megathrust\fP
+orb2aeic_beeper: Waiting for pager message:
+
+%\fB cat > aeic_beeper.pf\fP
+message &Literal{
+Test Message
+}
+mail kent@giseis.alaska.edu
+orbmsg nordic_1000
+%\fB \fP
+%\fB pf2orb aeic_beeper megathrust\fP
+%\fB \fP
+
+.fi
+.in
+.ft R
+.SH DIAGNOSTICS
+\fBorb2aeic_beeper\fP: unexpected Expect problem. Bye.
+
+\fBorb2aeic_beeper\fP: Kermit connection timed out. Bye.
+
+\fBorb2aeic_beeper\fP: failed to open log %s. Bye
+
+\fBorb2aeic_beeper\fP: no modem on %s. Bye
+
+\fBorb2aeic_beeper\fP: failed to connect to modem.
+
+\fBorb2aeic_beeper\fP: No carrier. Bye.
+
+\fBorb2aeic_beeper\fP: pager id not valid
+
+Unknown error in send_radio_fairbanks
+
+No mail callback specified.
+
+No orbmsg callback specified.
+
+Put callback message on %s as %s\\n", orbname, srcname
+
+\fBorb2aeic_beeper\fP: Waiting for pager message:
+
+Page was accepted.
+.SH "SEE ALSO"
+.nf
+orbserver(1),pf2orb(1)
+.fi
+.SH AUTHOR
+.nf
+Kent Lindquist
+Geophysical Institute
+University of Alaska

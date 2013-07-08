@@ -1,0 +1,94 @@
+.TH HYPODD2DB 1 "$Date: 2009-01-15 22:16:34 $"
+.SH NAME
+dbcorrelate \- program to perform waveform cross-correlation
+.SH DESCRIPTION
+The first step before running this program should be running create_event_pairs program to identify event pairs to be cross-correlated. The next step is to identify phases for cross-correlation and compute the cross-correlations to get 
+the estimated event time delays. The procedure for the next stop depends on the size of the 
+database.  Due to the need to get information for event pairs from non-contiguous parts of the 
+database, a large number of joins and subsets are required.  This becomes very inefficient as the 
+database gets large, say if the hypocenter list has more than a couple hundred events.  It's an N-
+squared type operation.  For instance, an origin table containing just 200 events can easily 
+generate tens of thousands of possible correlation pairs.  An origin table with 2000 closely 
+located events could generate millions of cross-correlations.  An alternative method is needed for 
+larger databases, say > 1000 events.  For a small database, use Method A below.
+
+
+.SH SYNOPSIS
+.nf
+\fBdbcorrelate \fP\ \fIdb\fP \fIflag\fP \fIwinlen\fP \fIlaglen\fP \fIccmin\fP \fIinputfile\fP
+.fi
+.SH INPUT
+.nf
+ where the arguments are:
+
+db - is the input database
+
+flag - is a flag [0/1] which tells the program where to get the data, 
+either in the main directory (0) or in the subdirectories (1).  
+In this case, use flag = 0.  
+
+winlen - is the length of waveform data, in seconds, to use for the cross-corrrelation. 
+A value of 1 to 2 seconds is typically good.  The window is cut starting 0.1 seconds 
+before the particular arrival time.  
+
+laglen - is the lag, in seconds, for the correlation function computation, or how 
+far one waveform will be shifted, both ways, relative to the other.  A value of 
+0.2 to 0.3 seconds is desirable.   
+
+cccmin - is a parameter to control the output size. Because station-event pairs 
+for which the |ccc| is low (say, 0.7 or less) are probably not useful, it is 
+reasonable to set this value to eliminate many of the CC results.  Note that the 
+absolute value is used, so that "0.7" means all ccc ? -0.7 and ? +0.7 are saved.
+
+inputfile - is the file created in running create_event_pairs program 
+  
+outputfile - is the name of the file to hold the output.  (For restarts, remove 
+this file first because it is opened "append").   
+
+.fi
+.SH OUTPUT
+.nf
+
+The output file contains the CC results, with these fields
+
+sta   -- station code (for instance, DOM)
+phase -- phase type (P or S; any others should be excluded if they appear)
+orid1 -- orid for 1st event (local table number)
+jdate1 -- jdate for 1st event
+orid2 -- orid for 2nd event (local table number)
+jdate2 -- jdate for 1st event
+ccc   -- cross-correlation coefficient at the CC peak (-1 < ccc < 1)
+cccp -- cross-variance coefficient at the CC peak, measuring the relative signal amplitude
+tau  -- absolute time shift (seconds) between signals (t2 - t1) as given by the CC peak
+otdiff-- difference in catalog origin times (ot2 - ot1) in seconds
+
+.fi
+.SH EXAMPLE
+.ft CW
+.in 2c
+.nf
+
+%\fB dbcorrelate dbin 0 1 .2 .7 event_pairs.dat dbcorrelate.dat\fP
+
+
+%\fB \fP
+
+.fi
+.in
+.ft R
+.SH "SEE ALSO"
+.nf
+create_event_pairs, create_ccfile
+
+Documentation for dbcorrelate program in 
+/usr/local/aeic/4.10/src/bin/dbcorrelate/cross-correlation_r3.doc
+.fi
+.SH CAVEATS
+This run will take awhile, on the order of hours if the number of events is in the hundreds. Different methods is recommended to be used for large databases. Read original dbcorrelate documentaiton file on the details.
+.SH AUTHOR
+.nf
+David von Seggern
+University of Reno, Nevada
+Installed at AEIC by N.Ruppert
+.fi
+.\" $Id: dbcorrelate.1,v 1.1 2009-01-15 22:16:34 natasha Exp $

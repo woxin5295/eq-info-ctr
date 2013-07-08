@@ -1,0 +1,184 @@
+.TH ORBPLALARM 1 "$Date: 2007-02-13 06:11:01 $"
+.SH NAME
+orbplalarm \- Monitor detections and waveform measurements on an ORB and create /db/plalarm packets accordingly.
+.SH SYNOPSIS
+.nf
+\fBorbplalarm \fP[-v] [-vv] [-start {\fIpktid\fP|\fItime\fP|\fIOLDEST\fP}]
+                [-select \fIselect_expr\fP] [-reject \fIreject_expr\fP]
+                [-pf \fIpfname\fP] \fIorbin\fP [\fIorbout\fP]
+.fi
+.SH DESCRIPTION
+\fBorbplalarm\fP monitors waveforms detections and measurements from /db/ packets
+on an ORB and produces /db/plalarm rows based on threshold levels as described in
+the parameter file. \fBorbplalarm\fP is designed such that the \fIplalarm\fP table 
+represents a snapshot of the current status of stations being monitored. Any row in this
+table that has an undefined \fIendtime\fP has an open alarm defined in the field \fIalarm_state\fP.
+An alarm sequence begins with a detection state of D and ends once a detection state of OFF is reached for a 
+particular station. This requires that the \fIorbdetect(1)\fP process populating the ORB with 
+/db/detection rows \fINOT\fP be running with the -onlypicks argument, which only creates /db/detection 
+rows for the actual pick (D). Once the alarm has been triggered into \fIdetection\fP or \fID\fP mode,
+/db/wfmeas packets are then monitored for peak values as created by \fBorbwfpeak(1)\fP. These reported
+peak values are then compared to the threshold criteria described in the paramter file using
+units_convert(3). It is necessary that the units of the waveform measurements are consistent with 
+the \fIthreshold_units\fP parameter in the parameter file. The detection row of the \fIplalarm\fP 
+table remains open until the OFF state has been reached, even when waveform measurement thresholds
+are exceeded. This means that once ground acceleration exceeds the "low" threshold value, there will
+be two open rows. One representing the detection ON state and another representing the current alarm
+level based on waveform measurements. Additionally, \fBorbplalarm\fP is designed such that the 
+highest \fIalarm_state\fP reached during an alarm sequence is the one reported as current until the 
+detection turns OFF. If the \fIalarm_state\fP increases from low to medium, the \fIplalarm\fP row
+for \fIalarm_state\fP low will receive an \fIendtime\fP that is identical to the \fIalarm_time\fP
+for \fIalarm_state\fP medium. This \fIalarm_state\fP medium database row will not be given an 
+\fIendtime\fP until either the detection turns OFF or the ground acceleration increases to a higher
+level.
+
+\fBorbplalarm\fP can also monitor \fI/db/wfmeas\fP rows continuously with proper use of the 
+\fIuse_detection\fP parameter in the parameter file.
+
+.SH OPTIONS
+.IP "-start {pktid|time|OLDEST}"
+Where to position the ORB read pointer for the input
+ORB waveform packets. If a \fIpktid\fP is given, then
+the ORB read pointer is positioned to that \fIpktid\fP.
+If a valid Antelope \fItime\fP string is given (see epoch(1)),
+then the ORB read pointer is positioned to the first packet
+with a \fItime\fP stamp after the specified \fItime\fP. If \fIOLDEST\fP
+is given, then the read pointer is positioned to the oldest
+ORB packet in the buffer. If this option is not specified,
+then the read pointer is positioned to the next available
+most recent packet.
+.IP "-select select_expr"
+This is a regular UNIX expression that is used as a select
+key (see orbselect(3)) for reading input waveform packets from the input
+ORB. If this option is not specified, the default expression is '/db/(detection|wfmeas)'.
+.IP "-reject rexpr"
+This is a regular UNIX expression that is used as a reject
+key (see orbreject(3)) for reading input waveform packets from the input
+ORB. If this option is not specified,
+then no packet srcnames from the input ORB will be rejected.
+.IP "-pf pfname"
+Name of program parameter file. This argument is optional
+and if not specified defaults to \fBorbplalarm\fP. Note that
+the actual parameter file is named \fIpfname\fP.pf.
+.IP "-v"
+Verbose output flag.
+.IP "-vv"
+Really verbose output flag. Each packet reaped is print to STDOUT using \fIshowPkt\fP.
+.IP "orbin"
+This is the name of the input ORB that contains the /db/detection and
+/db/wfmeas rows to be processed. This argument is required.
+.IP "orbout"
+The /db/plalarm packets are copied to the ORB with this name. If this argument is not
+specified, then output ORB packets will be written to orbin. (2/5/07 orbout must still
+be specified. FIX THIS.)
+.SH PARAMETER FILE
+The \fBorbplalarm\fP parameter file contains all of the information
+necessary for specifying channels and filters for processing detections
+and waveform measurements and producing /db/plalarm packets based on
+prescribed thresholds. Following is an example \fBorbplalarm\fP parameter file.
+
+.in 2c
+.ft CW
+.nf
+
+.ne 10
+
+# If wfmeas_subset is blank, all wfmeas rows for the station are used.
+# If detection_subset is blank, all detections (all channels, all filter bands)
+# for the station are used.
+
+
+# Report all stations' current alarm status to log 
+# file every report_interval seconds. Set to 0 for
+# no reporting. Example reporting:
+# ALARM STATIONS STATUS:
+# BESE: Current OFF Previous OFF
+# DOT: Current OFF Previous D
+# EYAK: Current OFF Previous high
+# PPLA: Current OFF Previous medium
+# SWD: Current OFF Previous D
+ 
+report_interval 120.0
+
+.ne 23
+alarm_templates &Arr{
+    accel_low   &Arr{
+            use_detection 0
+            detection_subset filter == "BW 1.0 4 0 0"
+            wfmeas_subset   meastype == "peak"
+            units   gravity
+            thresholds &Tbl{
+            	low     0.000001
+            	medium      0.0000025
+            	high        0.000035
+            }
+        }
+    accel_EYAK  &Arr{
+            use_detection 1
+            detection_subset filter == "BW 1.0 4 0 0"
+            wfmeas_subset   meastype == "peak"
+            units   gravity
+            thresholds &Tbl{
+            	low     0.0000025
+            	medium      0.0000055
+            	high        0.000035
+            }
+        }
+}
+
+.ne 16
+alarm_stations &Arr{
+    BESE    accel_low
+    BMR &Arr{
+            use_detection 0
+            detection_subset filter == "BW 1.0 4 0 0"
+            wfmeas_subset   meastype == "peak"
+            units   gravity
+            thresholds &Tbl{
+            	low     0.000001
+            	medium      0.0000025
+            	high        0.000035
+            }
+        }
+	EYAK	accel_EYAK
+}
+pf_revision_time 1046974037
+
+.fi
+.ft R
+.in
+.LP
+The stations to be monitored by \fBorbplalarm\fP are defined in the \fIalarm_stations\fP array.
+The keys for this array are the station names and the values are either strings that correspond
+to keys in the \fIalarm_templates\fP array, or the explicit array template itself.
+.IP "report_interval"
+The status of all monitored stations can be reported to the log file every \fIreport_interval\fP
+seconds. Set to 0 for no reporting.
+.IP "use_detection"
+Set to 1 to use detection-based alarms. Otherwise \fI/db/wfmeas\fP rows will be continuously 
+monitored.
+.IP "detection_subset"
+.IP "wfmeas_subset"
+This regular expression is applied to incoming database rows for a particular station.
+.IP "units"
+This is the units of the values in the \fIthresholds\fP table. These units must be compatible
+with the \fIunits1\fP field of the \fI/db/wfmeas\fP row as defined by units_convert(3).
+.IP "thresholds"
+This list defines the thresholds at which alarms are defined. The string is reported in the 
+\fIalarm_state\fP field of the plalarm table as the threshold value is exceeded.
+.SH EXAMPLE
+.SH "BUGS AND CAVEATS"
+Other than the obvious that it doesn't quite work perfectly yet...
+
+This code may need multithreading in order to properly process the /db/wfmeas packets
+once a detection occurs.
+
+Currently, there isn't any statefile information used. This should likely be added 
+along with a timeout variable to close out the event if a detection OFF is not
+received.
+
+The \fIthresholds\fP list in the alarm templates must be listed in ascending order.
+.SH AUTHOR
+Josh Stachnik
+University of Alaska Fairbanks
+February 2007

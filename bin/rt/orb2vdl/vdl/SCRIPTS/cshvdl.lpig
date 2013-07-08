@@ -1,0 +1,5 @@
+cd /export/home0/ketchum/vdl
+vdlmom
+Mail -s "page ketchum" pagemail@nsn4.cr.usgs.gov </export/home0/ketchum/vdl/vdl.mail
+Mail -s "page net\$alarm1" pagemail@nsn4.cr.usgs.gov </export/home0/ketchum/vdl/vdl.mail
+Mail -s "vdlmom down LPIG" ketchum@usgs.gov </export/home0/ketchum/vdl/vdl.mail

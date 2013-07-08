@@ -1,0 +1,113 @@
+'\" e
+
+.\" $Name $Revision: 1.2 $ $Date: 2002-02-07 01:56:25 $
+.EQ
+delim $$
+.EN
+.TH DBCONCAT_EVENT 1 "$Date: 2002-02-07 01:56:25 $"
+.SH NAME
+aeic_dbconcat_event \- combine multiple event databases into single new database
+.SH SYNOPSIS
+.nf
+\fBaeic_dbconcat_event \fP\fIdatabase1\fP \fIdatabase2\fP [ \fIdatabase3\fP ...]
+                \fIdest-database\fP
+.fi
+.SH DESCRIPTION
+\fBaeic_dbconcat_event\fP concatenates multiple event databases into a single
+new database.  Whereas \fBdbconcat_event\fP combines the tables event, origin, arrival,
+assoc, and origerr from all the named databases into one new database
+\fIdest-database\fP, \fBaeic_dbconcat_event\fP adds netmag, stamag, wfmeas,
+beam, centryd, moment, remark, seedformat, seedindex, stassoc, wfedit, and
+wfrms. Note that that the tables that are omitted are either tables of
+quasi-static information ( affiliation, gregion, instrument, network,
+sensor, site, sitechan, sregion, stage, calibration ) or are tables
+that have external file references in them (wfdisc, fkgrid, stgrid, wftape,
+wftar). The -x option turns on these external-file-referencing tables.
+The -s option turns on the quasi-static information tables.
+lastid is omitted because it gets rebuilt.
+ It is assumed that the databases are all independent,
+ie, that there are no conflicting rows in any of the tables.
+If this is not the case, a bad database will result.
+.SH OPTIONS
+-x include tables with external-file references (dir and dfile fields)
+
+-s include tables of quasi-static information (e.g. site, sitechan)
+
+-v verbose mode
+
+.SH FILES
+\fIdatabase_n\fP.{arrival,assoc,event,origerr,origin}
+.SH EXAMPLE
+.ft CW
+.in 2c
+.nf
+
+%\fB aeic_dbconcat_event Quakes_970601 Quakes_970602 twodays\fP
+  [output similar to below]
+%\fB \fP
+
+%\fB dbconcat_event kirc56 kirc57 kirc58  kirc61 new\fP
+Will destroy database new -- ok? y
+copying kirc56.arrival
+copying kirc56.event
+copying kirc56.origin
+copying kirc56.origerr
+copying kirc56.assoc
+copying kirc57.arrival
+copying kirc57.event
+copying kirc57.origin
+copying kirc57.origerr
+copying kirc57.assoc
+copying kirc58.arrival
+copying kirc58.event
+copying kirc58.origin
+copying kirc58.origerr
+copying kirc58.assoc
+copying kirc61.arrival
+copying kirc61.event
+copying kirc61.origin
+copying kirc61.origerr
+copying kirc61.assoc
+Concatenating kirc56 ..arrival ..event ..origin ..origerr ..assoc ..
+Concatenating kirc57 ..arrival ..event ..origin ..origerr ..assoc ..
+Concatenating kirc58 ..arrival ..event ..origin ..origerr ..assoc ..
+Concatenating kirc61 ..arrival ..event ..origin ..origerr ..assoc ..
+sorting and copying arrival
+sorting and copying event
+sorting and copying origin
+sorting and copying origerr
+sorting and copying assoc
+%\fB \fP
+
+.fi
+.in
+.ft R
+.SH RETURN VALUES
+none
+.SH DIAGNOSTICS
+If the \fIdest-database\fP tables already exist, the program will
+ask if you want to destroy them before proceeding.
+.SH "SEE ALSO"
+.nf
+dbsort(3)
+.fi
+.SH "BUGS AND CAVEATS"
+No checks are made for the self consistency of the resulting database.
+It is the responsibility of the user to ensure that there are no
+inconsistencies among the various databases.
+
+Directory pathnames are not altered in tables with external file references.
+Rather, they are blindly copied.
+This becomes a problem if source and destination databases are not in the
+same directory, and the dir field of wfdisc or fkgrid etc. contains
+relative pathnames.
+
+The table names are hard-wired. By all rights they should be looked
+up from the schema, with tables that have external references detected
+by a scan for the dir and dfile fields in them. This would insulate
+the script against the addition of more tables to the Datascope CSS
+schema in the future.
+.SH AUTHOR
+Daniel Quinlan, hacked by Kent Lindquist
+
+.\" $Id: aeic_dbconcat_event.1,v 1.2 2002-02-07 01:56:25 kent Exp $

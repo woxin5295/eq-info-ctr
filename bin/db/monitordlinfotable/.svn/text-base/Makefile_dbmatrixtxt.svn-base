@@ -1,0 +1,4 @@
+BIN= dbmatrixtxt
+
+include $(AEICMAKE)
+DIRS=

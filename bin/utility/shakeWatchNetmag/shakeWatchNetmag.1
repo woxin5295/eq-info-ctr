@@ -1,0 +1,90 @@
+.TH SHAKEWATCHNETMAG 1 2008/11/07 "Glenn Thompson, AEIC" "User Commands"
+.SH NAME
+.nf
+shakeWatchNetmag -  watch an Antelope netmag table for new rows, and call the USGS ShakeMap 
+if an origin is eligible
+.fi
+.SH SYNOPSIS
+.nf
+shakeWatchNetmag [-p pf]
+.fi
+.SH DESCRIPTION
+\fBshakeWatchNetmag\fP periodically checks an Antelope netmag table and processes any
+new rows. The netmag row may not correspond to a prefor, and there can be multiple netmag
+rows for each origin. So the program examines all netmag rows for a particular origin,
+and if this is a prefor, it grabs the most recent values for Mw, Ms, Ml and Mb for that prefor.
+The magnitude to use for a ShakeMap is determined by the order Mw, Ms, Ml and Mb.
+.IP
+The status of this event in the ShakeMap system is determined, e.g. does a ShakeMap already exist
+for this event? The eligibility of the origin is then determined. A series of checks then
+takes places, which either lead to nothing happening, a new ShakeMap being generated (if the
+origin is eligible), or an existing ShakeMap (corresponding to an earlier origin for this event)
+being cancelled.
+.IP
+Any manual cancellation messages are also processed. This simply requires a user to 'touch $evid.cancel'
+(where $evid is the corresponding event id) in the appropriate directory.  
+.SH OPTIONS
+.IP "-p pf"
+Specifies the path of the parameter file to be used. If omitted, defaults to pf/shakeWatchNetmag.pf.
+.SH "PARAMETER FILE"
+.IP run_home
+Directory path to rtexec.pf, e.g. /home/shake/run
+.IP bin_home
+Directory path to USGS ShakeMap executable 'shake', e.g. /usr/local/ShakeMap/bin
+.IP database
+The event database to watch
+.IP second_polygon
+0 or 1, indicating whether a second polygon is defined as part of the magnitude criteria
+.IP auto_cancel
+A boolean flag to indicate whether automatic cancellation of shakemaps is off(0) or on (1)
+.IP minmax
+Array (Hash) of different criteria, keys are nass_min, mmi_min, norids_max
+e.g.
+minmax &Arr{
+nass_min	10
+mmi_min		2.0
+norids_max	200
+}
+.IP minmag_polygon1
+The minimum magnitude for an event in polygon1 that will be considered for a ShakeMap
+.IP polygon1
+Table (List) of different latitude,longitude coordinates specifying a polygon
+e.g.
+polygon1 &Tbl{
+ 	50,-135
+ 	75,-135
+ 	75,-170
+	55,-170
+	55,-180
+	50,-180
+}
+.IP minmag_polygon2
+As for minmag_polygon1
+.IP polygon2
+As for polygon1
+.IP mag_buffer
+Obsolete if auto_cancel = 0
+It is not necessarily desirable to cancel a ShakeMap if the magnitude falls just below the normal magnitude threshold.
+If mag_buffer is set, when considering whether to cancel a ShakeMap, a magnitude threshold of minmag_polygon1 - mag_buffer will be used.
+e.g. if mag_buffer = 0.5, and minmag_polygon=5.0, then to cancel an existing ShakeMap its magnitude must fall below 4.5
+.IP cancelmsgdir
+This is the directory shakeWatchNetmag examines for any requests to cancel a ShakeMap manually. It looks for a file of the name $evid.cancel.
+The file contents are ignored, so creating a cancel request with 'touch' will suffice.
+.IP author_list
+Array (Hash) of different authors and their priority
+e.g.
+author_list &Arr{
+oa_bk		1 
+oa_op		1
+wcatwc 		2 
+neic 		3 
+UAF 		4 
+manual 		5
+}
+.SH BUGS AND CAVEATS
+* shakeWatchNetmag has not yet been tested
+.SH AUTHOR
+Glenn Thompson
+.br
+Alaska Earthquake Information Center
+

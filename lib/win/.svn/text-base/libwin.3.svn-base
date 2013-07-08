@@ -1,0 +1,121 @@
+.TH LIBWIN 3 "$Date: 2000-09-28 05:05:34 $"
+.SH NAME
+libwin \- library for handling Japanese WIN-format data
+.SH SYNOPSIS
+.nf
+#include "win.h"
+
+unsigned char *strip_time( unsigned char *block, double *epoch )
+
+unsigned char *strip_next_channel( unsigned char *block,
+				   char *stacode, int *nsamp, 
+				   int **data )
+
+double japan_timecode_to_epoch( char *bcd_timecode )
+
+void epoch_to_japan_timecode( double epoch,
+			      char *bcd_timecode,
+			      double *remainder_sec )
+
+int bcd2dec( char bcd )
+
+unsigned char dec2bcd( int dec )
+
+char *hex_to_ascii( int hex, char *ascii )
+
+int ascii_to_hex( char *ascii )
+
+void load_station_info( char *site_dbname, char *segtype )
+
+typedef struct sinfo {
+	char    sta[PKT_NAMESIZE];
+	char    net[PKT_NAMESIZE];
+	char    chan[PKT_NAMESIZE];
+	char    loc[PKT_NAMESIZE];
+	char    segtype[4];
+	double  calib;
+	double  calper;
+	double  commdelay;
+} Sinfo;
+
+Sinfo *retrieve_station_info( char *stacode )
+
+int winform( long *inbuf, unsigned char *outbuf,
+	     int sr, unsigned short sys_ch )
+.fi
+.SH DESCRIPTION
+The libwin library contains multiple routines for handling 
+waveform data in the Japanese WIN format.
+
+The strip_time function removes the six-character, binary-coded-decimal 
+timestamp from a WIN-format data block, returning its equivalent in 
+UTC epoch seconds. 
+
+strip_next_channel removes a 'channel block' of data from a WIN-format
+data block, i.e. one second of data for one seismic channel. The number 
+of samples is returned (identical to the sample rate since WIN-format 
+data are defined to be timestamped on the second), along with an ascii 
+representation of the two-byte hexidecimal WIN station code identifying the 
+channel of seismic data. The data are returned in a freshly-allocated 
+buffer of integers. It is the caller's responsibility to free the 
+memory in this buffer when through. 
+
+japan_timecode_to_epoch converts a timecode of the form
+YYMMDDhhmmss, Binary Coded Decimal, Japan Standard Time,
+into UTC epoch time. epoch_to_japan_timecode converts back. Since 
+the WIN-format timecode is rounded to the nearest second, 
+epoch_to_japan_timecode must truncate the fractional seconds of the 
+epoch time, which it returns in the remainder_sec variable. Thus the 
+returned bcd timecode plus the remainder_sec value equals the input 
+epoch time to epoch_to_japan_timecode: i.e. the output of 
+epoch_to_japan_timecode is earlier than the input epoch time by some 
+number of milliseconds. The 6-character bcd_timecode buffers for 
+these routines must be allocated (and in the case of japan_timecode_to_epoch,
+filled) before calling the routines. 
+
+bcd2dec and dec2bcd convert between decimal values and binary-coded-decimal.
+
+hex_to_ascii and ascii_to_hex convert between the ascii and hexidecimal 
+representations of the two-byte station-codes used to identify seismic 
+station-channels in WIN format.
+
+load_station_info reads station-information from the iceworm1.3-format 
+site database specified by site_dbname. retrieve_station_info looks 
+up the information for a given station, specified by the ascii representation
+of the WIN hexidecimal station-identifier code. A pointer to an Sinfo 
+structure is returned. 
+
+The winform function converts an input data-buffer inbuf into WIN format,
+returning the result in outbuf. The sampling rate (i.e. also nsamp, since 
+this routine must be given exactly one second of data for one channel) is 
+given by the argument sr. The two-byte hexidecimal station-code identifier 
+for the station-channel is given by sys_ch.
+.SH OPTIONS
+.SH FILES
+.SH ENVIRONMENT
+.SH PARAMETER FILE
+.SH EXAMPLE
+.ft CW
+.RS .2i
+.RE
+.ft R
+.SH RETURN VALUES
+Both strip_time and strip_next_channel slide the block-pointer along 
+by the number of bytes they strip from the data block, returning 
+a pointer to the next unread character in the block. 
+
+retrieve_station_info returns a null pointer if it is unable to 
+locate the specified station in the loaded site information.
+.SH LIBRARY
+.SH DIAGNOSTICS
+.SH "SEE ALSO"
+.nf
+win2orb(1), win2db(1), orb2win(1)
+.fi
+.SH "BUGS AND CAVEATS"
+segtype should probably be derived from the database rather than
+passed in to the station-information routines.
+.SH AUTHOR
+Kent Lindquist, with bits of code from Dr. Urabe of ERI, Tokyo, 
+and Dr. Katsumata of Hokkaido University in Sapporo.
+.\" $Id: libwin.3,v 1.1 2000-09-28 05:05:34 kent Exp $

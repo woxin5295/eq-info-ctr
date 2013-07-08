@@ -1,0 +1,80 @@
+10
+
+dir
+8
+svn+ssh://svnaeic@deep.giseis.alaska.edu/usr/local/aeic/5.2-64SRCrep/lib
+svn+ssh://svnaeic@deep.giseis.alaska.edu/usr/local/aeic/5.2-64SRCrep
+
+
+
+2012-08-02T19:50:54.989993Z
+1
+svnaeic
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+bb126f95-807d-4900-834b-9c3c7183fc7c
+
+libuser
+dir
+
+vaxlib
+dir
+
+plotpslib
+dir
+
+libtoolsc
+dir
+
+libtoolsf
+dir
+
+win
+dir
+
+Makefile
+file
+
+
+
+
+2012-10-01T22:05:18.000000Z
+41f768a728f596857596fc0d4effa5ae
+2012-08-02T19:50:54.989993Z
+1
+svnaeic
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+20
+

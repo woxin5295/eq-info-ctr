@@ -1,0 +1,141 @@
+Schema pipelinetag1.0
+	Description ( "Maintains a table used as a matrix for pipeline station and event monitoring" )
+	Detail {
+		Pipelinetag schema is used to keep and monitor Pipeline
+		stations and events. 
+		}
+		Timedate lddate
+		;
+
+Attribute p_TagName 
+	String (25)
+	Format ( "%-25s" )
+	Null ( "-" )
+	Description ( "Name of what is being monitored" )
+	Detail {
+		This attribute contains the Station Name of what is being monitored. 
+	}
+	;
+
+Attribute p_tagid 
+          Integer (8)
+          Format ( "%8d" )
+          Null ( "-1" )
+          Range ( "p_tagid > 0" )
+          Description ( "tagid id" )
+          Detail {
+		Each tagid is assigned a unique positive integer which
+                identifies it in a database. Each p_TagName has a unique
+		p_tagid integer number. 
+          }
+          ;
+
+Attribute p_maint
+	Integer (1)
+	Format ( "%1d" )
+	Range ( "p_maint > -1 && p_maint < 2" )
+	Description ( "Mintenance in progress" )
+	Detail {
+		Technician is testing a station for proper function or makeing repairs.
+		The p_maint will contain a 1 when system maintenance is going on.	
+	}
+	;
+
+Attribute p_test
+	Integer (1)
+	Format ( "%1d" )
+	Range ( "p_test > -1 && p_test < 2" )
+	Description ( "Test in progress" )
+	Detail {
+		This test bit will be set if an artificial signal 
+		input such as calibration or other test signals	are applied.  
+		The p_test will contain a 1 when the system 
+		is self-calibrating or signal test are in progress.	
+	}
+	;
+
+Attribute p_status
+	Integer (1)
+	Format ( "%1d" )
+	Range ( "p_status > -1 && p_status < 2" )
+	Description ( "pump station sensors status " )
+	Detail {
+		The p_status column will contain a 1 as long as 
+		pump station sensors has no fault condition and station
+		is online. If a system fault is detected, the p_status 
+		will be set to 0. For example, if sensor latency, gps clock latency,
+		sensor voltage, or some other criteria  exceeds a specified 
+		cutoff p_status is set to 0. 
+	}
+	;
+Attribute p_low
+	Integer (1)
+	Format ( "%1d" )
+	Range ( "p_low > -1 && p_low < 2" )
+	Description ( "0-no threshold, 1-low threshold" )
+	Detail {
+		0-no threshold, 1-low threshold
+	}
+	;
+Attribute p_med
+	Integer (1)
+	Format ( "%1d" )
+	Range ( "p_med > -1 && p_med < 2" )
+	Description ( "0-no threshold, 1-medium threshold" )
+	Detail {
+		0-no threshold, 1-medium threshold
+	}
+	;
+Attribute p_high
+	Integer (1)
+	Format ( "%1d" )
+	Range ( "p_high > -1 && p_high < 2" )
+	Description ( "0-no threshold, 1-low threshold" )
+	Detail {
+		0-no threshold, 1-high threshold
+	}
+	;
+
+Attribute p_mask_desc 
+	String (16)
+	Format ( "%-15s" )
+	Null ( "0000000000000000" )
+	Description ( "MASK used to keep track of p_status and p_maint performed" )
+	Detail {
+		MASK used to keep track of p_status and p_maint. 
+		
+		0000000000000001 - general test condition 
+		0000000000000010 - general status fault 
+		0000000000000100 - calibration test condition 
+		0000000000001000 - Data Latency exceeds a specified cutoff status fault 
+		0000000000010000 - GPS Clock Latency exceeds a specified cutoff status fault
+		0000000000100000 - Sensor voltage is below a specified cutoff status fault
+		0000000001100000 - not used  
+		0000000010000000 - not used  
+		0000000100000000 - not used  
+		0000001000000000 - not used  
+		0000010000000000 - not used  
+		0000100000000000 - not used  
+		0001000000000000 - not used  
+		0010000000000000 - not used  
+		0100000000000000 - not used  
+		1000000000000000 - not used  
+	}
+	;
+Relation a_dlinfo
+	Fields (  time p_TagName p_tagid p_status p_maint p_low p_med p_high p_test p_mask_desc lddate )
+	Primary ( time p_TagName p_tagid)
+	Description ( "Table used to keep track of datalogger and orbtm thresholds values collected from orb")
+	Detail {
+		Table used to keep track of datalogger and orbtm thresholds values collected from orb
+	}
+	;
+
+Relation a_matrix
+	Fields (p_tagid p_status p_maint p_low p_med p_high p_test lddate )
+	Primary ( p_tagid )
+	Description ( "Provides a fixed matrix of status, maintenance, threshold bits" )
+	Detail { 
+		Provides a fixed matrix of status, maintenance, threshold bits	
+	}
+	;

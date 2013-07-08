@@ -1,0 +1,82 @@
+orbname aeicpipe:6510 	# orb to monitor	
+match /db/tm|taps/pf/st|.*/ch/pipelinemsg	# packets to match from orb
+dlsrcname taps/pf/st	# source name of datalogger status packets 
+tmsrcname /db/tm	# source name of thresholds packets
+msgsrcname /ch/pipelinemsg # tail end of source name for message packets  
+outpffile /tmp/dbpipetag.pf	# storage of retrieved orb pf packet
+dlttime 20 # time period in seconds required to trigger data latency flag, default 5 seconds
+clttime 172800 # time period in seconds required to trigger clock latency flag, default 2 days
+low_dv 10.0 # mininun sensor low voltage condition, default 10 volts
+
+low_cutoff_time 60    # time period until low threshold is turned off, default 60 seconds
+		      # set to 0 seconds and cutoff time is contained to orbtm thresholds packets only  
+
+medium_cutoff_time 90 # time period until medium threshold is turned off, default 90 seconds  
+		      # set to 0 seconds and cutoff time is contained to orbtm thresholds packets only  
+
+high_cutoff_time 120  # time period until high threshold is turned off, default 120 seconds
+		      # set to 0 seconds and cutoff time is contained to orbtm thresholds packets only 
+ 
+
+clean_time_period 1209600 # two weeks,time period to remove from database 
+			  # when a Clean Message is sent, also ignore packets with older time 
+			  # period, clean_time_period 0 is default implies do not clean
+
+# database to store matrix informaton
+dbname /iwrun/acq/run/dbmatrix/pipedb
+
+# pipeevent program additional pf information 
+eventdb /iwrun/acq/run/dbevent/dbpipeline # database used to store pipeline events
+eventtimeout 300 # time period to keep event bit active
+origintime_cutoff 3600 # number of seconds the origin time must be within the current UTC time
+			# default 1 hour 
+watchdog_sec 5 # period of watchdog updates, default 5 seconds
+
+# mysql information 
+mysql_hosts localhost
+mysql_user pipe
+mysql_pass ++++++++++
+mysql_database pipeline
+
+# debugging settings
+debug 0 # debugging print statments off
+orboldest 0 # used for debbuging if 1 get oldest orb packets first
+	  # if 0 get newest orb packet or packet pointed to by state file -S option
+#outdbfile /tmp/dbpipetag.db	# storage of retrieved orb db packets
+
+# sta_list
+sta_list &Arr{ 
+	PS01 &Arr{ 
+		tagid 1
+	}
+	PS04 &Arr{ 
+		tagid 4
+	}
+	PS05 &Arr{ 
+		tagid 5
+	}
+	PS06 &Arr{ 
+		tagid 6
+	}
+	PS07 &Arr{ 
+		tagid 7
+	}
+	PS08 &Arr{ 
+		tagid 8
+	}
+	PS09 &Arr{ 
+		tagid 9
+	}
+	PS10 &Arr{ 
+		tagid 10
+	}
+	PS11 &Arr{ 
+		tagid 11
+	}
+	PS12 &Arr{ 
+		tagid 12
+	}
+	VMT &Arr{ 
+		tagid 13
+	}
+}

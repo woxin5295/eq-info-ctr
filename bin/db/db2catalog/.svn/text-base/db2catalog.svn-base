@@ -1,0 +1,807 @@
+#!/usr/bin/perl -w
+# Glenn Thompson, AEIC, 2007 - 2008
+# This script replaces an old cshrc script written more than a decade ago by John C. Lahr
+# The param() function can be called on all variables from this form
+# These are lowerlat, upperlat, leftlon, rightlon, minz, maxz, mintime, maxtime, minmag and maxnum
+
+# This is a Perl script which posts output to itself, incrementing the page number each time
+# This way a whole multi-page web form application can be hosted by a single cgi script
+
+# Uses Larry Walls CGI.pm module for Perl
+
+use strict;
+use CGI qw/:standard/; 
+use lib "/opt/antelope/4.9/data/perl" ;
+use Datascope;
+use File::Basename;
+
+# This cgi script
+our $progname = basename $0;
+our $cgiscript = "/cgi-bin/projects/db2catalog/$progname";
+
+# The source database
+our $database = "/usr/local/apache/htmldocs/summary_database/uptodate";
+
+# The output FTP directory
+our $FTP_PATH = "/Seis/ftp/pub/db_search_results";
+
+# The URL to the same FTP directory
+our $FTP_URL = "ftp://giseis.alaska.edu/pub/db_search_results";
+
+# PAGE MAP
+my $page_index = 0;
+$page_index = 1 if defined(param("submit"));
+$page_index = 2 if defined(param("display")); 
+
+# HTML
+&print_header($page_index);
+&form1() if $page_index==0;
+&summary() if $page_index==1;
+if ($page_index==2) {
+	&disp_origins() if lc(param("submit")) =~ /origin/; 
+	&disp_arrivals() if lc(param("submit")) =~ /arrival/; 
+	&disp_faultplanes() if lc(param("submit")) =~ /focal/; 
+	&disp_momenttensors() if lc(param("submit")) =~ /moment/;
+	print hr, p, a({-href=>"$cgiscript"},'New catalog query');
+}
+our $footer = "<center><i><font size=\"-3\">Last updated: May 2008<br/>If you have any problems using this page please <a href=\"mailto:glenn\@giseis.alaska.edu\">email Glenn<a/></font></i></center>";
+
+print "$footer\n";
+print end_html;
+
+
+###########################################
+
+sub print_header {
+# print HTTP header and HTML document - standard for AEIC external website
+my $page_index = $_;
+my $title = sprintf("AEIC Catalog Search");
+
+print header,
+	start_html(	-title=>$title,
+			-style=>{'src'=>'/Seis/html_docs/db2catalog.css'});
+
+print <<"EOF";
+
+<IFRAME SRC="http://www.aeic.alaska.edu/2ndpagetop.html" TITLE="GI Page Top" width="100%" height="176" frameborder="0" border="0" scrolling="NO">
+<!-- Alternate content for non-supporting browsers -->
+</IFRAME>
+
+<hr>
+EOF
+}
+
+##########################################
+
+sub form1 {
+
+my ($starttimestr) = substr(strtime(`tail -1 /usr/local/mosaic/summary_database/uptodate.origin | cut -c32-47` - 86400 * 30),0,10);
+substr($starttimestr,0,1) = '0' if substr($starttimestr,0,1) eq " ";
+my ($endtimestr) = substr(strtime(`tail -1 /usr/local/mosaic/summary_database/uptodate.origin | cut -c32-47`),0,10);
+substr($endtimestr,0,1) = '0' if substr($endtimestr,0,1) eq " ";
+
+print <<"EOF";
+
+<center>  
+<h3> <b>AEIC Earthquake Database Search</b></h3>
+ </center>        
+
+
+ 
+ <form action="$cgiscript" method="post">
+
+<p>
+  &nbsp;&nbsp;&nbsp;&nbsp; Enter each of the search fields using the same
+format as the sample entry. The database contains earthquake locations from
+01/1898 and was last updated on $endtimestr, although the newest data may be a few days older than this. Times are in UTC. </p>
+ &nbsp; <br>
+ &nbsp;  
+<table border="0" cellpadding="2">
+  <tbody>
+     <tr>
+  <td width="175">Minimum Latitude?</td>
+   <td width="150"><input type="text" name="lowerlat" value="50.0"
+ size="8"></td>
+   <td width="150">Maximum Latitude?</td>
+   <td width="150"><input type="text" name="upperlat" value="71.0"
+ size="8"></td>
+   <td width="250">(decimal degrees, north positive)</td>
+  </tr>
+   <tr>
+  <td>Minimum Longitude?</td>
+   <td><input type="text" name="leftlon" value="-172.0" size="8"></td>
+   <td>Maximum Longitude?</td>
+   <td><input type="text" name="rightlon" value="-130.0" size="8"></td>
+   <td>(decimal degrees, west negative)</td>
+  </tr>
+   <tr>
+  <td>Minimum Depth?</td>
+   <td><input type="text" name="minz" value="0.0" size="6"></td>
+   <td>Maximum Depth?</td>
+   <td><input type="text" name="maxz" value="350.0" size="6"></td>
+   <td>(km)</td>
+  </tr>
+   <tr>
+  <td>Start Date?</td>
+   <td><input type="text" name="mintime" value="$starttimestr" size="10"></td>
+   <td>End Date?</td>
+   <td><input type="text" name="maxtime" value="$endtimestr" size="10"></td>
+   <td>(mm/dd/yyyy)</td>
+  </tr>
+   <tr>
+  <td>Minimum Magnitude?</td>
+   <td><input type="text" name="minmag" value="4.0" size="4"></td>
+   <td>&nbsp;</td>
+   <td>&nbsp;</td>
+   <td>&nbsp;</td>
+  </tr>
+  </tbody> 
+</table>
+<table>
+   <tr>
+  <td>Data to extract:</td>
+   <td width="150">&nbsp;</td>
+   <td><input type="submit" name="submit" value="Origins"></td>
+EOF
+
+if ((-e "$database.arrivals") && (-e "$database.assoc")) {
+	print <<"EOF2";
+<td><input type="submit" name="submit" value="Arrivals"></td>
+EOF2
+}
+
+print <<"EOF3";
+
+    <td><input type="submit" name="submit" value="Focal mechanisms"></td>
+    <td><input type="submit" name="submit" value="Moment tensors"></td>
+    </tr>
+</table>
+    
+ 
+    
+<p>&nbsp;&nbsp;&nbsp;&nbsp; Note that this web catalog is a composite of
+source catalogs in various states of finalization. If these data are to be
+used for scientific research purposes, please consult an <a
+ href="mailto:natasha\@giseis.alaska.edu">AEIC seismologist</a> for details.&nbsp;
+ </p></form>
+ 
+
+<hr/>
+EOF3
+
+
+}
+
+##########################################
+
+sub summary {
+
+	#&show_env();
+	#&show_params();
+
+	my ($lowerlat, $upperlat, $leftlon, $rightlon, $minz, $maxz, $mintime, $maxtime, $minmag, $submit) = &get_params();
+	my $sp = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+
+	# Echo query back to user
+	print h3('Search summary');
+	printf "<p>$sp You asked for all %s that met the following criteria:</p>\n",lc($submit);
+	print table({-border=>'0'}, 
+		Tr({-align=>'CENTER'}, 
+		   [
+			td([$sp,$leftlon,'<=','longitude','<=',$rightlon]),
+			td([$sp,$lowerlat,'<=','latitude','<=',$upperlat]),
+			td([$sp,$minz,'<=','depth','<=',$maxz]),
+			td([$sp,$mintime,'<=','date','<=',$maxtime]),
+			td([$sp,'','','magnitude','=>',$minmag])
+		   ]
+		)	
+	);
+
+	print "<p />\n";
+
+	# Prompt for additional information
+	print start_form(-action=>"$cgiscript", -method=>'get');
+
+	if ($submit =~ /arrival/) {
+		print h3('Please enter extra information needed for filtering arrivals');
+		print table({-border=>'0'},
+			Tr({-align=>'CENTER'}, 
+		   	   [
+				td([$sp,'Minimum number of arrivals per event',textfield(-name=>'minnass',-value=>'0',-maxlength=>'3',-size=>'3')]),
+				td([$sp,'Maximum distance of arrivals from event to include (km)',textfield(-name=>'maxdist',-value=>'20000',-maxlength=>'5',-size=>'5')]),		
+				td([$sp,'Phases to include', popup_menu(-name=>'phases', -value=>['P and S','P only', 'S only'], -default=>'P and S')])
+			   ]
+			)
+		);
+		
+	}
+	
+
+	# Data format 
+	print h3('What format do you wish to receive the results in?');
+	my @formats = ['ASCII'];
+	@formats = ['ASCII', 'CSS 3.0 Database', 'kml', 'USGS compressed / SeisVolE' ] if (lc($submit) =~ /origin/);
+	print table({-border=>'0'},
+		Tr({-align=>'CENTER'}, 
+		    [
+			td([$sp,radio_group(-name=>'format', -value=>@formats)])		    ]
+		)
+	);
+	
+	print "<p>$sp If you choose to receive the results in ASCII format and the number of events meeting your search criteria exceeds&nbsp;<input type=\"text\" name=\"maxnum\" value=\"100\" maxlength=\"3\" size=\"3\"> then the resulting file will be placed in an anonymous ftp directory</p>\n";
+
+	print "<p>$sp If you choose to receive the results in a CSS database click <input type=\"checkbox\" name=\"arrivalsAlso\" value=\"selected\"> if you wish to receive the corresponding arrivals and assoc tables too</p>\n" if ( (lc($submit) =~ /origin/) && (-e "$database.arrivals") && (-e "$database.assoc") );
+
+
+	print table({-border=>'0'},
+		Tr({-align=>'CENTER'}, 
+		    [
+			td([$sp,submit(-name=>"display", -value=>'Get results')])
+		    ]
+		)
+	);
+
+	print hidden(-name=>"lowerlat", 	-value=>"$lowerlat");
+	print hidden(-name=>"upperlat", 	-value=>"$upperlat");
+	print hidden(-name=>"leftlon", 		-value=>"$leftlon");
+	print hidden(-name=>"rightlon", 	-value=>"$rightlon");
+	print hidden(-name=>"minz", 		-value=>"$minz");
+	print hidden(-name=>"maxz", 		-value=>"$maxz");
+	print hidden(-name=>"mintime", 		-value=>"$mintime");
+	print hidden(-name=>"maxtime", 		-value=>"$maxtime");
+	print hidden(-name=>"minmag", 		-value=>"$minmag");
+	print hidden(-name=>"lowerlat", 	-value=>"$lowerlat");
+	print hidden(-name=>"submit", 		-value=>"$submit");
+	print end_form;
+}
+
+##########################################
+
+sub get_params {
+	my ($lowerlat, $upperlat, $leftlon, $rightlon, $minz, $maxz, $mintime, $maxtime, $minmag, $submit);
+
+	# Get data from the user form/GUI
+	$lowerlat = param("lowerlat");
+	$upperlat = param("upperlat");
+	$leftlon  = param("leftlon");
+	$rightlon = param("rightlon");
+	$minz     = param("minz");
+	$maxz     = param("maxz");
+	$mintime  = param("mintime") . " 0:0:0.0 am";
+	$maxtime  = param("maxtime") . " 12:59:59.9 pm";
+	$minmag   = param("minmag");
+	$submit   = lc(param("submit"));
+
+	return ($lowerlat, $upperlat, $leftlon, $rightlon, $minz, $maxz, $mintime, $maxtime, $minmag, $submit);
+}
+
+##########################################
+
+sub get_origins {
+
+	our $database; 
+	my @db; 
+	my ($lowerlat, $upperlat, $leftlon, $rightlon, $minz, $maxz, $mintime, $maxtime, $minmag, $submit) = &get_params();
+
+	# Build the subset expressions
+	my $minepoch = str2epoch($mintime);
+	my $maxepoch = str2epoch($maxtime);
+	$minepoch = -2147472000 if ($minepoch < -2147472000); # for some reason, program does not work if start date is before 12/14/1901
+	my ($expression_time, $expression_lat, $expression_lon, $expression_z, $expression_mag);
+	$expression_time = "( time  >= $minepoch && time  <= $maxepoch )";
+	if ($leftlon < $rightlon) {
+		# does not span the 180 degree discontinuity
+		$expression_lon  = "( lon   >= $leftlon   && lon   <= $rightlon )";
+	}
+	else
+	{
+		# does span the 180 degree discontinuity
+		$expression_lon  = "( lon   >= $leftlon   || lon   <= $rightlon )";
+	}
+	$expression_lat  = "( lat   >= $lowerlat  && lat   <= $upperlat )";
+	$expression_z    = "( depth >= $minz      && depth <=  $maxz    )";
+	$expression_mag  = "( mb    >= $minmag    || ml    >=  $minmag  || ms >=  $minmag )";
+
+	# Open the database
+	@db = dbopen($database, "r");
+
+	# Open the origin table
+	@db = dblookup(@db, "", "origin", "", "");
+
+	# Do the subsetting
+	@db = dbsubset(@db, "$expression_mag");
+	@db = dbsubset(@db, "$expression_time");
+	@db = dbsubset(@db, "$expression_lat");
+	@db = dbsubset(@db, "$expression_lon");
+	@db = dbsubset(@db, "$expression_z");
+
+	# return array
+	return @db;
+}
+
+##########################################
+
+sub disp_origins {
+	my @db = &get_origins();
+	@db = dbjoin(@db, dblookup(@db, "", "origerr", "", ""));
+	@db = dbjoin(@db, dblookup(@db, "", "event", "", ""));
+	@db = dbsubset(@db, "prefor == orid");
+
+	my $numevents = dbquery(@db, "dbRECORD_COUNT");
+	print "<p>Your query matched $numevents events</p>";
+
+	# REQUESTED DATA IN ASCII LIST FORMAT
+	if (lc(param("format")) =~ /ascii/) {
+
+		my ($time, $lat, $lon, $depth, $mb, $ml, $ms, $nass, $sdobs, $smajax, $sdepth, $author);
+		my $title1 = sprintf("Origin Time             Latitude Longitude   Depth   mb    ML    MS    #Arr    RMS   Error Limits (km)   Author\n");
+		my $title2 = sprintf("Mo/Dy/Year  Hr:Mn:Sec                         (km)                             (s)  Horizontal Vertical        \n\n");
+
+
+		# check number of events - too much then put ascii file on ftp server
+		if ($numevents > param("maxnum")) {
+			my $tstamp = &timestamp("local");
+			my $basename = "$tstamp.txt";
+			my $filename = "$FTP_PATH/$basename";
+			open(FOUT,">$filename") or print "<p>Cannot open file for writing $filename</p>";
+			print "<p>Your ASCII file will be saved <a href=\"$FTP_URL/$basename\">here</a> on our ftp server once the data have been extracted from our earthquake catalog. </p>";
+			print FOUT $title1; 
+        		print FOUT $title2;
+		}
+		else
+		{
+			print h2('ORIGINS');
+			print "\n<pre>\n";
+			print $title1; 
+        		print "$title2\n";
+		}
+
+		# Now get & display each resulting record
+		for ( $db[3] = 0; $db[3] < $numevents; $db[3]++) {
+			($time, $lat, $lon, $depth, $mb, $ml, $ms, $nass, $sdobs, $smajax, $sdepth, $author) = dbgetv(@db, qw(time lat lon depth mb ml ms nass sdobs smajax sdepth auth) );
+			$mb = 0.0 if ($mb < 0);
+			$ml = 0.0 if ($ml < 0);
+			$ms = 0.0 if ($ms < 0);
+			my $outputline = sprintf("%s %9.4f %9.4f %7.1f %5.1f %5.1f %5.1f    %3d    %.2f    %5.1f     %5.1f  %s\n",substr(strtime($time),0,22),$lat,$lon,$depth,$mb,$ml,$ms,$nass,$sdobs,$smajax,$sdepth,$author);
+			if ($numevents > param("maxnum")) {
+				printf FOUT $outputline;
+			}
+			else
+			{
+				printf $outputline;
+  			}
+		}
+
+		unless ($numevents > param("maxnum")) {
+			print  "</pre>\n";
+  		}
+
+
+	}
+
+	# REQUESTED DATA IN USGS FORMAT - JUST ANOTHER ASCII FORMAT
+	if (lc(param("format")) =~ /usgs/) {
+
+		my ($time, $lat, $lon, $depth, $mb, $ml, $ms, $nass, $sdobs, $smajax, $sdepth, $author);
+		my $title1 = sprintf("      Origin Time          Lat    Long    Dep #A   mb    ms    Ml\n");
+		my $title2 = sprintf("      YearMoDyHrMnSec                     km                     \n\n");
+
+
+
+		# check number of events - too much then put ascii file on ftp server
+		if ($numevents > param("maxnum")) {
+			my $tstamp = &timestamp("local");
+			my $basename = "$tstamp.txt";
+			my $filename = "$FTP_PATH/$basename";
+			open(FOUT,">$filename") or print "<p>Cannot open file for writing $filename</p>";
+			print "<p>Your ASCII file will be saved <a href=\"$FTP_URL/$basename\">here</a> on our ftp server once the data have been extracted from our earthquake catalog. </p>";
+			print FOUT $title1; 
+        		print FOUT $title2;
+		}
+		else
+		{
+			print h2('ORIGINS');
+			print "\n<pre>\n";
+			print $title1; 
+        		print "$title2\n";
+			print "0123456789012345678901234567890123456789012345678901123456789\n"
+		}
+
+		# Now get & display each resulting record
+		for ( $db[3] = 0; $db[3] < $numevents; $db[3]++) {
+			($time, $lat, $lon, $depth, $mb, $ml, $ms, $nass) = dbgetv(@db, qw(time lat lon depth mb ml ms nass) );
+			$mb = 0.0 if ($mb < 0);
+			$ml = 0.0 if ($ml < 0);
+			$ms = 0.0 if ($ms < 0);
+			my $date = epoch2str($time, "%Y %m%d");
+
+			my $hms = epoch2str($time, "%H%M%S");
+			my $outputline = sprintf("AEIC  %s%s.00  %7.3f%8.3f%3d  G%3d              %4.2fMLPMR             000000... .3.P........                                            \n",$date,$hms,$lat,$lon,$depth,$nass,$ml);
+
+			if ($numevents > param("maxnum")) {
+				printf FOUT $outputline;
+			}
+			else
+			{
+				printf $outputline;
+  			}
+		}
+
+		unless ($numevents > param("maxnum")) {
+			print  "</pre>\n";
+  		}
+
+	}
+
+	# REQUESTED DATA AS A CSS 3.0 DATABASE
+	if (lc(param("format")) =~ /css/) {
+		my ($dbpath,$dburl) = &save2css(@db);
+		my $dbbase = basename $dburl;
+		print "<p>Your database will be saved <a href=\"$dburl.tar\">here</a> on our anonymous ftp server</p>";
+		chdir($FTP_PATH);
+		system("/usr/sbin/tar -cvf $dbbase.tar $dbbase $dbbase.* > /dev/null");
+		unlink("$dbbase $dbbase.????*");
+		#system("rm $filename $filename.????*");
+	}
+
+	
+	# REQUESTED DATA AS KML
+	if (lc(param("format")) =~ /kml/) {
+		# check number of events - too much then don't do it
+		# save to a database
+		my ($dbpath,$dburl) = &save2css(@db);
+		my $kmlpath = $dbpath.".kml";
+		my $kmlurl  = $dburl.".kml";
+		my $cgibin = "/usr/local/apache/cgi-bin";
+		print "<p>db2kml will now be run to turn your extracted database into a kml file for Google Earth</p>";
+		print "<p>/usr/local/aeic/4.9/bin/db2kml -o -p /usr/local/aeic/4.9/data/pf/db2kml $dbpath > $kmlpath</p>";
+		system("$cgibin/projects/db2kml/db2kml -o -p $cgibin/projects/db2kml/db2kml $dbpath > $kmlpath");
+		#my $kml = `db2kml -o -p db2kml $dbpath`;
+		#print "<p>* KML = $kml *</p>\n";
+		#system("echo $kml > $kmlpath");
+
+		print "<p>Complete.</p><p>Please find your kml file <a href=\"$kmlurl\">here</a> on our anonymous ftp server</p>";
+	}
+
+
+	
+}
+##########################################
+
+sub disp_arrivals {
+	my @db = &get_origins();
+	my $numevents = dbquery(@db, "dbRECORD_COUNT");
+	my ($sta, $time, $phase);
+	my @db2;
+	my $numarrivals;
+	my $orid;
+	my $expression;
+
+	print "<p>Your query matched $numevents events</p>";
+
+	if (lc(param("format")) =~ /ascii/) {
+
+		my ($time, $lat, $lon, $depth, $mb, $ml, $ms, $nass, $sdobs, $smajax, $sdepth);
+		my $title1 = sprintf("Station  Origin Time               Phase\n");
+		my $title2 = sprintf("         Mo/Dy/Year  Hr:Mn:Sec  \n\n");
+
+		# check number of events - too much then put ascii file on ftp server
+		if ($numevents > param("maxnum")) {
+			my $tstamp = &timestamp("local");
+			my $basename = "$tstamp.txt";
+			my $filename = "$FTP_PATH/$basename";
+			open(FOUT,">$filename") or print "<p>Cannot open file for writing $filename</p>";
+			print "<p>Your ASCII file will be saved <a href=\"$FTP_URL/$basename\">here</a> on our ftp server once the data have been extracted from our earthquake catalog. </p>";
+			print FOUT $title1; 
+        		print FOUT $title2;
+		}
+		else
+		{
+			print h2('ARRIVALS');
+			print "\n<pre>\n";
+			print $title1; 
+        		print "$title2\n";
+		}
+
+
+		# Now get & display each resulting record
+		for ( $db[3] = 0; $db[3] < $numevents; $db[3]++) {
+			$orid = dbgetv(@db, "orid");
+			# Now lets get a listing of arrivals
+			$expression = "orid == $orid";
+			@db2 = dbsubset(@db, "$expression");
+			@db2 = dbjoin(@db2, dblookup(@db, "", "assoc", "", ""));
+			@db2 = dbjoin(@db2, dblookup(@db, "", "arrival", "", ""));
+			@db2 = dbsort(@db2, "arrival.time");
+			if (param("minnass") > 5) {
+				my $minnass = param("minnass");
+				$expression = "nass >= $minnass";
+				@db2 = dbsubset(@db2, "$expression");
+			}
+			if (param("maxdist") < 20000) {
+				my $maxdist = param("maxdist");
+				$expression = "dist < $maxdist";
+				@db2 = dbsubset(@db2, "$expression");
+			}
+			if (param("phase") ne "P and S") {
+				my $phases = param("phase");
+				$expression = "phase = $phases";
+				@db2 = dbsubset(@db2, "$expression");
+			}
+	
+			$numarrivals = dbquery(@db2, "dbRECORD_COUNT");
+			for ($db2[3] =0; $db2[3] < $numarrivals; $db2[3]++) {
+				($sta, $time, $phase) = dbgetv(@db2, qw(sta arrival.time assoc.phase));
+				$sta = $sta." " if (length($sta)<4);
+				my $outputline = sprintf("$sta     %s   $phase\n",strtime($time));
+				if ($numevents > param("maxnum")) {
+					printf FOUT $outputline;
+				}
+				else
+				{
+					printf $outputline;
+  				}
+
+			}
+	  	}
+		unless ($numevents > param("maxnum")) {
+			print  "</pre>\n";
+  		}
+	}
+}
+##########################################
+sub disp_faultplanes {
+	my @db = &get_origins();
+	my $numevents = dbquery(@db, "dbRECORD_COUNT");
+	my ($time, $str1, $dip1, $rake1, $str2, $dip2, $rake2, $taxazm, $taxplg, $paxazm, $paxplg);
+	my @db2;
+	my $numfaultplanes;
+	my $orid;
+	my $expression;
+
+
+	&save2css() if (lc(param("format")) =~ /css/);
+
+	if (lc(param("format")) =~ /ascii/) {
+
+		my ($time, $lat, $lon, $depth, $mb, $ml, $ms, $nass, $sdobs, $smajax, $sdepth, $author);
+		my $title1 = sprintf("Origin time                Fault plane 1         Fault plane 2           Tension axis      Pressure axis\n");
+		my $title2 = sprintf("Mo/Dy/Year  Hr:Mn:Sec      strike dip    rake    strike dip    rake      azimuth plunge    azimuth plunge\n\n");
+
+
+		# check number of events - too much then put ascii file on ftp server
+		if ($numevents > param("maxnum")) {
+			my $tstamp = &timestamp("local");
+			my $basename = "$tstamp.txt";
+			my $filename = "$FTP_PATH/$basename";
+			open(FOUT,">$filename") or print "<p>Cannot open file for writing $filename</p>";
+			print "<p>Your ASCII file will be saved <a href=\"$FTP_URL/$basename\">here</a> on our ftp server once the data have been extracted from our earthquake catalog. </p>";
+			print FOUT $title1; 
+        		print FOUT $title2;
+		}
+		else
+		{
+			print h2('FAULT PLANES');
+			print "\n<pre>\n";
+			print $title1; 
+        		print "$title2\n";
+		}
+
+		# Now get & display each resulting record
+		for ( $db[3] = 0; $db[3] < $numevents; $db[3]++) {
+			($orid, $time) = dbgetv(@db, qw(orid time));
+			# Now lets get a listing of arrivals
+			$expression = "orid == $orid";
+			@db2 = dbsubset(@db, "$expression");
+			@db2 = dbjoin(@db2, dblookup(@db, "", "fplane", "", ""));
+			$numfaultplanes = dbquery(@db2, "dbRECORD_COUNT");
+			if ($numfaultplanes>0) {
+				$db2[3]=0;
+				($str1, $dip1, $rake1, $str2, $dip2, $rake2, $taxazm, $taxplg, $paxazm, $paxplg) = dbgetv(@db2, qw(str1 dip1 rake1 str2 dip2 rake2 taxazm taxplg paxazm paxplg));
+				my $outputline = sprintf("%s       %5.1f %5.1f %6.1f    %5.1f  %5.1f %6.1f     %5.1f   %5.1f     %5.1f   %5.1f\n",substr(strtime($time),0,20), $str1, $dip1, $rake1, $str2, $dip2, $rake2, $taxazm, $taxplg, $paxazm, $paxplg);
+				if ($numevents > param("maxnum")) {
+					printf FOUT $outputline;
+				}
+				else
+				{
+					printf $outputline;
+  				}
+
+			}
+	  	}
+
+		unless ($numevents > param("maxnum")) {
+			print  "</pre>\n";
+  		}
+	
+	}
+}
+##########################################
+
+sub disp_momenttensors {
+	my @db = &get_origins();
+	my $numevents = dbquery(@db, "dbRECORD_COUNT");
+	my ($time, $mrr, $mtt, $mff, $mrt, $mrf, $mtf);
+	my @db2;
+	my $nummomenttensors;
+	my $orid;
+	my $expression;
+
+
+	&save2css() if (lc(param("format")) =~ /css/);
+
+	if (lc(param("format")) =~ /ascii/) {
+
+		my ($time, $lat, $lon, $depth, $mb, $ml, $ms, $nass, $sdobs, $smajax, $sdepth, $author);
+		my $title1 = sprintf("Origin time                 ------- Tensor components -------\n");
+		my $title2 = sprintf("Mo/Dy/Year  Hr:Mn:Sec       mrr   mtt   mff   mrt   mrf   mtf\n\n");
+
+
+		# check number of events - too much then put ascii file on ftp server
+		if ($numevents > param("maxnum")) {
+			my $tstamp = &timestamp("local");
+			my $basename = "$tstamp.txt";
+			my $filename = "$FTP_PATH/$basename";
+			open(FOUT,">$filename") or print "<p>Cannot open file for writing $filename</p>";
+			print "<p>Your ASCII file will be saved <a href=\"$FTP_URL/$basename\">here</a> on our ftp server once the data have been extracted from our earthquake catalog. </p>";
+			print FOUT $title1; 
+        		print FOUT $title2;
+		}
+		else
+		{
+			print h2('MOMENT TENSORS');
+			print "\n<pre>\n";
+			print $title1; 
+        		print "$title2\n";
+		}
+
+		# Now get & display each resulting record
+		for ( $db[3] = 0; $db[3] < $numevents; $db[3]++) {
+			($orid, $time) = dbgetv(@db, qw(orid time));
+			# Now lets get a listing of arrivals
+			$expression = "orid == $orid";
+			@db2 = dbsubset(@db, "$expression");
+			@db2 = dbjoin(@db2, dblookup(@db, "", "moment", "", ""));
+			$nummomenttensors = dbquery(@db2, "dbRECORD_COUNT");
+			if ($nummomenttensors>0) {
+				$db2[3]=0;
+				($mrr, $mtt, $mff, $mrt, $mrf, $mtf) = dbgetv(@db2, qw(mrr mtt mff mrt mrf mtf));
+				my $outputline = sprintf ("%s   %5.2f %5.2f %5.2f %5.2f %5.2f %5.2f\n",strtime($time), $mrr, $mtt, $mff, $mrt, $mrf, $mtf);
+
+				if ($numevents > param("maxnum")) {
+					printf FOUT $outputline;
+				}
+				else
+				{
+					printf $outputline;
+  				}
+
+			}
+	  	}
+
+		unless ($numevents > param("maxnum")) {
+			print  "</pre>\n";
+  		}
+	
+	}
+}
+############################
+sub save2css {
+	my @db = @_;
+	my $tstamp = &timestamp("local");
+	my $basename = "db". "$tstamp";
+	my $dbpath = "$FTP_PATH/$basename";
+	my $dburl = "$FTP_URL/$basename";
+
+	my $numrecs = dbquery(@db, "dbRECORD_COUNT");
+	print "<p>origerr: numrecs = $numrecs</p>\n";
+
+	@db = dbjoin(@db, dblookup(@db, "", "netmag", "", "")); # need this for db2kml
+	$numrecs = dbquery(@db, "dbRECORD_COUNT");
+	print "<p>netmag: numrecs = $numrecs</p>\n";
+
+	# message to say where it is / how to get it
+	print "<p>Your database is being saved...this may take a while</p>";
+	if (param("arrivalsAlso") eq "selected") {
+
+		@db = dbjoin(@db, dblookup(@db, "", "assoc", "", ""));
+		$numrecs = dbquery(@db, "dbRECORD_COUNT");
+		print "<p>assoc: numrecs = $numrecs</p>\n";
+
+		@db = dbjoin(@db, dblookup(@db, "", "arrival", "", ""));
+		$numrecs = dbquery(@db, "dbRECORD_COUNT");
+		print "<p>arrival: numrecs = $numrecs</p>\n";
+
+	}
+
+	dbunjoin(@db, $dbpath);
+	return ($dbpath, $dburl);
+
+} 
+##########################################
+##########################################
+##########################################
+
+
+sub show_env {
+	while ( my ($key, $value)= each %ENV ) {
+		print "$key = ",$value,"<p/>";
+	}
+}
+	
+
+sub show_params {
+	my ($name,$value);
+	foreach $name ( param() ) {
+		$value = param($name);
+		print "The value of $name is $value\n", "<p />";
+	}
+}
+sub get_time { 
+	my($zone, $days_ago)=@_; 
+
+	my($secs_per_day, $sec, $min, $hour, $mday, $mon, $year, $wday, $yday, $isdst);
+
+	$secs_per_day=60*60*24; 
+ 
+	# use Perl time functions - would be good to replace these Perl routines with epoch2str 
+	if ($zone eq "local") { 
+		($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst)=localtime(time-$days_ago*$secs_per_day); 
+	} else {
+		($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst)=gmtime(time-$days_ago*$secs_per_day); 
+	}; 
+ 
+	# month returned by time has 0 for Jan, 1 for Feb,... make it 1 for Jan, 2 for Feb, ... 
+	$mon=$mon+1; 
+ 
+	# Hack required since perl function 'localtime' returns only 2 digit year 
+	$year = $year + 1900; 
+ 
+	# make sure month, day, hour & minute are all 2 digit strings 
+	($mon,$mday,$hour,$min,$sec)=&make2digits($mon,$mday,$hour,$min,$sec); # re-implemented in terms of &make2digits on 6/11/2002
+
+ 
+	# return results 
+	return ($year,$mon,$mday,$hour,$min,$sec); 
+}; 
+
+sub timestamp {
+	my($zone) = @_;
+
+	my($stamp);	
+
+	my($year, $mon, $day, $hour, $min, $sec) = get_time($zone, 0);
+
+	$stamp = $year.$mon.$day.$hour.$min.$sec;
+
+	return $stamp;
+}
+
+sub make2digits {
+
+	# Input parameters
+	my @stringlist=@_;
+
+	# Declare local variables
+	my ($i,$l,$cc,@out);
+
+	$i=0;
+	foreach $cc (@stringlist) {
+		$l=length($cc);
+		if (($l==4) || ($l==3)) {
+			$out[$i]=substr($cc,$l-2,2);
+		} else {
+			if ($l==1) {
+				$out[$i]="0" . $cc;
+			} else {
+				if ($l==2) {
+					$out[$i]=$cc;
+				}
+			}
+		}
+		$i++;
+	}
+	return @out;
+}
+
+

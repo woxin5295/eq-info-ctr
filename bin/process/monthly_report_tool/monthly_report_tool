@@ -1,0 +1,656 @@
+#!/bin/sh
+# \
+exec $ANTELOPE/bin/awish $0 -- "$@"
+
+package require Datascope
+
+#!/bin/sh
+# This comment extends to the next line for tcl \
+exec awish -f $0 $*
+# Mitch switched wish to awish 2002_02_21
+#exec wish -f $0 $*
+
+package require Datascope;
+package require Tclx;
+
+#
+# monthly_report_maker
+#
+# N.Ratchkovski and T.Cox
+# Geophysical Institute
+# University of Alaska, Fairbanks
+# July, 2002
+#
+# G. Thompson ported from Solaris to MacOs
+# Oct, 2012
+# This mainly involved replacing Framemaker and alchemy calls
+
+set auto_path [linsert $auto_path 0 $env(ANTELOPE)/data/tcl/library]
+
+# 20121016 G. Thompson: createed create_monthly_index to repository,
+# based on create_weekly_index from weekly_report_tool
+global create_monthly_index
+set AEIC "$env(AEIC)"
+set create_monthly_index "$AEIC/bin/create_monthly_index"
+
+proc mytkdialog {w title msg justify args} {
+# 20121005: G. Thompson copied this procedure from another program
+# since it was missing.
+    global tkdialogOk
+    catch {destroy $w}
+    toplevel $w -class Dialog
+    wm title $w $title
+    wm iconname $w $title
+
+    # Create two frames in the main window. The top frame will hold the
+    # message and the bottom one will hold the buttons.  Arrange them
+    # one above the other, with any extra vertical space split between
+    # them.
+
+    frame $w.top -relief raised -border 1
+    frame $w.bot -relief raised -border 1
+    pack $w.bot $w.top -side bottom -fill both -expand yes
+
+    # Create the message widget and arrange for it to be centered in the
+    # top frame.
+
+    message $w.top.msg -justify $justify \
+            -text $msg \
+            -aspect 500 \
+            -bg beige \
+            -fg red
+    catch "$w.top.msg config -font -Adobe-times-medium-r-normal--*-180*"
+    pack $w.top.msg -side top -expand yes -padx 3 -pady 3
+
+    # Create as many buttons as needed and arrange them from left to right
+    # in the bottom frame.  Embed the left button in an additional sunken
+    # frame to indicate that it is the default button, and arrange for that
+    # button to be invoked as the default action for clicks and returns in
+    # the dialog.
+
+    if {[llength $args] > 0} {
+        set arg [lindex $args 0]
+        frame $w.bot.0 -relief sunken -border 1
+        pack $w.bot.0 -side left -expand yes -padx 10 -pady 10
+        button $w.bot.0.button -text [lindex $arg 0] \
+                -command "set tkdialogOk($w) 0; destroy $w"
+        #pack w.bot.0.button -expand yes -padx 6 -pady 6
+        bind $w <Return> "set tkdialogOk($w) 0; destroy $w"
+        focus $w
+
+        set i 1
+        foreach arg [lrange $args 1 end] {
+            button $w.bot.$i -text [lindex $arg 0] \
+                    -command "set tkdialogOk($w) $i; destroy $w"
+            pack $w.bot.$i -side left -expand yes -padx 10
+            incr i
+        }
+    bind $w <Any-Enter> [list focus $w]
+    focus $w
+
+    catch "grab set $w"
+    tkwait window $w
+    grab release $w
+    return $tkdialogOk($w)
+    }
+    return 0
+}
+
+
+proc init_globals {} {
+        global argc argv argv0
+
+        global progname
+        set progname [exec basename $argv0]
+
+	set Pfname "monthly_report_tool"
+
+	global MONTHLYDB
+	set MONTHLYDB [pfget $Pfname MONTHLYDB]
+
+	global DAYdbs
+	set DAYdbs [pfget $Pfname DAYdbs]
+
+	global monthly_template
+	set monthly_template [pfget $Pfname highlight_template]
+
+	#global listing_template
+	#set listing_template [pfget $Pfname listing_template]
+
+	# G.Thompson removed Framemaker Macros, 2012/10
+	#global macros
+	#set macros [pfget $Pfname Macros]
+
+	# G. Thompson adding 4 new parameters, 2012/10
+        global cupsfilter
+        set cupsfilter [pfget $Pfname cupsfilter]
+
+        global convert
+        set convert [pfget $Pfname convert]
+
+        global basewebdir_in
+        set basewebdir_in [pfget $Pfname basewebdir_in]
+
+        global basewebdir_out
+        set basewebdir_out [pfget $Pfname basewebdir_out]
+
+        global monthly_txt
+        set monthly_txt monthly_highlights.txt
+
+        global illustrator
+        set illustrator [pfget $Pfname illustrator]
+
+	if { $argc > 1 } {
+                puts "Usage: $progname \[-n\]"
+                exit 1
+        } elseif { $argc == 1 } {
+                global Exec
+                puts "Defanging $progname"
+                set Exec "echo"
+        } else {
+                global Exec
+                set Exec "exec"
+        }
+
+	global State
+
+        set State(start) [pfget $Pfname start_date]
+        set State(minmag) [pfget $Pfname min_mag]
+        set State(PRINTER) [pfget $Pfname PRINTER]
+
+	set State(tracking_dbname) [pfget aeic_rtsys analysis_control_database]
+
+	if { ! [file exists $State(tracking_dbname)] } {
+		set message "Tracking database $State(tracking_dbname) " 
+		append message " not present. Please contact administrator.\n"
+		wm withdraw .
+		mytkdialog [unique_window .] Error $message center OK
+		exit -1
+	}
+	set State(dbtrack) [dbopen $State(tracking_dbname) r+] 
+	foreach table [list days months months] {
+		set State(dbtrack) [dblookup $State(dbtrack) 0 $table 0 0]
+		if { ! [dbquery $State(dbtrack) dbRECORD_COUNT] } {
+			set message "$State(tracking_dbname).$table "
+			append message "is not present or empty. "
+			append message "Please contact administrator.\n"
+			wm withdraw .
+			mytkdialog [unique_window .] Error $message center OK
+			exit -1
+		}
+		if { ! [dbquery $State(dbtrack) dbTABLE_IS_WRITEABLE] } {
+			set message "$State(tracking_dbname).$table "
+			append message "is not writable by you. "
+			append message "Please contact administrator.\n"
+			wm withdraw .
+			mytkdialog [unique_window .] Error $message center OK
+			exit -1
+		}
+	}
+
+
+
+}
+
+proc MyLblEntry {w args} {
+    frame $w
+    label $w.l
+    entry $w.e
+    pack $w.l -side left
+    pack $w.e -side left -fill x
+    while { ! [lempty $args] } {
+        set option [lvarpop args]
+        switch -- $option {
+            -label      { set value [lvarpop args] ; $w.l config -text $value }
+            -textvariable       { set value [lvarpop args] ; global $value; $w.e config -textvariable $value }
+            -width      { set value [lvarpop args] ; $w.e config -width $value }        }
+    }    
+    return $w
+}
+
+proc CommandCheckoff {w args} {
+        frame $w
+        button $w.b
+        checkbutton $w.cb -command "$w.b config -state normal"
+        pack $w.cb -side left
+        pack $w.b -side left -fill x -expand 1
+        while { ! [lempty $args] } {
+                set option [lvarpop args]
+                switch -- $option {
+                -label  { set value [lvarpop args] ; $w.b config -text $value
+}
+                -variable {
+                        set value [lvarpop args]
+                        global $value
+                        $w.cb config -variable $value
+                }
+                -background { set value [lvarpop args] ; $w.b config -background $value }
+                -command {
+                        set value [lvarpop args]
+                        $w.b config -command \
+                             "$w.cb select; $w.b config -state disabled; $value"
+                        }
+                }
+        }
+        return $w
+}
+
+proc concat_db {} {
+
+	global MONTHLYDB State DAYdbs
+
+	set HERE [exec pwd]
+
+	set start_month [string range $State(start) 0 6]
+	
+	set allfiles [exec ls -1 $DAYdbs/$start_month]
+	set alldays [lmatch -regexp $allfiles {analyzed_...._.._...origin}]
+	foreach f $alldays {
+	regsub .origin $f {} day
+		lappend good_days $DAYdbs/$start_month/$day \
+	}
+	
+	puts "aeic_dbconcat_event $good_days $MONTHLYDB "
+	catch "exec aeic_dbconcat_event -v $good_days $MONTHLYDB"
+	exec echo "css3.0 \n/Seis/databases/stations/{master_stations}:/iwrun/op/db/archive/{archive}" > $MONTHLYDB
+
+#	puts "\n\n...Cleaning concatenated database $MONTHLYDB...\n"
+#	catch "exec aeic_dbclean $MONTHLYDB"
+
+	puts "concat_db DONE\n"
+}
+
+proc review_monthlydb {} {
+
+	global MONTHLYDB State 
+
+	exec dbe $MONTHLYDB 
+
+	puts "review_monthlydb DONE\n"
+
+}
+
+proc run_db2monthly {} {
+
+	global State MONTHLYDB convert
+
+	puts stderr "\nRunning aeic_db2monthly $MONTHLYDB $State(minmag)\n"
+	catch "exec aeic_db2monthly $MONTHLYDB $State(minmag)" db2monthly_result
+	puts stderr $db2monthly_result
+
+	puts stderr "\nConverting monthly_fig1.ps into lastmonth.jpg\n"
+#	catch "exec alchemy -g monthly_fig1.ps -Zc1 -Zm4 -Zo 1000p -Z+ -Zr270 -o" alchemy_result
+#	catch "exec alchemy -e monthly_fig1.ps -Zc1 -Zm4 -Zo 7.5i -Z+ -o" alchemy_result
+	# 20121017 G. Thompson: does not seem this lastmonth.jpg file is used anywhere. But then in update_web lastmonth.gif does not exist. So presume these were once supposed to match. The website is currently looking for a gif  so go with that for now. Created from ps I think. But the ps should be edited first in Illustrator I think
+	#catch "exec $convert -density 288x288 -quality 100 -crop 0x0 -page letter monthly_fig1.ps lastmonth.jpg" convert_result
+	#puts stderr $convert_result
+	
+	# 20121017 G. Thompson: also copy the ps file, since later it gets converted to gif also, and sent to printer
+	exec /bin/cp monthly_fig1.ps lastmonth.ps
+	puts "run_db2monthly DONE"
+}
+
+#proc edit_highlights {} {
+# 20121010: G. Thompson added this procedure to replace maker_highlights
+# as part of effort to migrate from Solaris/Antelope4.11 to MacOSX/Antelope5.2
+#	exec textedit monthly_highlights &
+#}
+
+#proc maker_highlights {} {
+# 20121010: G. Thompson added this procedure to replace maker_highlights
+# as part of effort to migrate from Solaris/Antelope4.11 to MacOSX/Antelope5.2
+#
+#	global State MONTHLYDB monthly_template macros
+#
+#	exec /bin/cp $macros fmMacros
+#	
+#	exec /bin/cp $monthly_template last_months_list.fm
+#	puts "cp $monthly_template last_months_list.fm"
+#	exec maker -f last_months_list.fm &
+#
+#	puts "\n\n*** Opens Framemaker to create last_months_list.html"
+#	puts "\n      control 1 - imports and formats your monthly_highlights text file"
+#}
+
+proc textedit_highlights {} {
+# 20121017: G. Thompson added this procedure to replace maker_highlights
+# as part of effort to migrate from Solaris/Antelope4.11 to MacOSX/Antelope5.2
+
+        global State MONTHLYDB monthly_template cupsfilter monthly_txt
+        puts "Using this template: $monthly_template\n"
+        if  { [file exists $monthly_txt] } {
+                exec /bin/rm $monthly_txt
+        }
+        exec /bin/cp $monthly_template tmp1.txt
+        puts "Inserting the monthly_highlights file into a copy of the template\n"
+        exec /bin/bash -c "/usr/bin/sed '/Insert monthly_highlights file here./r monthly_highlights' tmp1.txt > tmp2.txt"
+        exec /bin/bash -c "/usr/bin/sed 's/Insert monthly_highlights file here.//g' tmp2.txt > $monthly_txt"
+        exec /bin/rm tmp1.txt tmp2.txt
+        exec /usr/bin/open -a textedit $monthly_txt
+
+        puts "textedit_highlights DONE\n"
+}
+
+proc yesno {{message "Press Y or N to continue"}} {
+# 20121012: G. Thompson added this helper procedure from weekly_report_tool
+# there is probably something better than uses a GUI
+    fconfigure stdin -blocking 0
+    exec stty raw
+    read stdin ; # flush
+    puts -nonewline "${message}: "
+    flush stdout
+    while {![eof stdin]} {
+        set c [string tolower [read stdin 1]]
+        if {$c eq "y" || $c eq "n"} break
+    }
+    puts [string toupper $c]
+    exec stty -raw
+    fconfigure stdin -blocking 1
+    return [expr {$c eq "y"}]
+}
+
+
+proc edit_fig {} {
+
+	global State
+
+#	exec IslandDraw exec soffice lastmonth.jpg &
+
+}
+
+proc illustrator_edit_fig {} {
+	global State illustrator
+	# 20121017 G. Thompson:
+	# for some reason even though $illustrator = "Adobe Illustrator.app" the next
+	# line does not work, so I had to hardwire it
+	#exec /usr/bin/open -a "$illustrator" lastmonth.ps 
+	exec /usr/bin/open -a "Adobe Illustrator.app" lastmonth.ps 
+}
+
+proc print_figs {} {
+
+	global State
+
+	puts "\nPrinting lastmonth.ps to printer $State(PRINTER)\n"
+	exec lp -n 2 -d $State(PRINTER) lastmonth.ps
+
+	puts "print_figs DONE\n"
+}
+
+proc run_dbstats {} {
+
+	global State MONTHLYDB 
+
+	puts "\n\nComputing Station Statistics...\n\n"
+#	puts "\n\nNot yet implemented\n\n"
+	catch "exec dbstats $MONTHLYDB" dbstats_result
+	puts stderr $dbstats_result
+        puts "run_dbstats DONE\n"
+
+}
+
+proc view_dbstats_figs {} {
+# 20121012 G. Thompson: replaced call to ghostview with call to "open" on MacOSX
+	global State
+
+	set allfiles [exec ls -1 ./]
+	set printfiles [lmatch -regexp $allfiles {sta_ttres..ps}]
+	foreach f $printfiles {
+		#exec ghostview $f &
+                exec /usr/bin/open $f &
+	}
+	set printfiles [lmatch -regexp $allfiles {sta_magres..ps}]
+	foreach f $printfiles {
+		#exec ghostview $f &
+                exec /usr/bin/open $f &
+	}
+
+	puts "view_dbstats_figs DONE\n"
+}
+
+#proc print_dbstats_figs {} {
+# 20121012 G. Thompson: commented this out as added procedures to print time and
+# magnitude residual figure separately, per Natasha's email today
+#	global State
+#
+#	puts "\nPrinting stat_ttres.ps and stat_magres.ps to printer $State(PRINTER)\n"
+#	
+#	set allfiles [exec ls -1 ./]
+#	set printfiles [lmatch -regexp $allfiles {sta_ttres..ps}]
+#	foreach f $printfiles {
+#	exec lp -d $State(PRINTER) $f
+#	}
+#	set printfiles [lmatch -regexp $allfiles {sta_magres..ps}]
+#	foreach f $printfiles {
+#	exec lp -d $State(PRINTER) $f
+#	}
+#}
+
+proc print_timeresidual_figs {} {
+# 20121012 G. Thompson: added this to print time
+# residual figures separately, per Natasha's email today
+
+        global State
+
+        puts "\nPrinting stat_ttres.ps to printer $State(PRINTER)\n"
+
+        set allfiles [exec ls -1 ./]
+        set printfiles [lmatch -regexp $allfiles {sta_ttres..ps}]
+        foreach f $printfiles {
+                exec lp -d $State(PRINTER) $f
+        }
+
+        puts "print_timeresidual_figs DONE\n"
+}
+
+proc print_magnituderesidual_figs {} {
+
+        global State
+
+        puts "\nPrinting stat_magres.ps to printer $State(PRINTER)\n"
+
+        set allfiles [exec ls -1 ./]
+        set printfiles [lmatch -regexp $allfiles {sta_magres..ps}]
+        foreach f $printfiles {
+                exec lp -d $State(PRINTER) $f
+        }
+
+        puts "print_magnituderesidual_figs DONE\n"
+}
+
+proc update_web {} {
+
+	# 20121012 G. Thompson: Replaced /usr/local/Mosaic/Seis with $basewebdir_in, $basewebdir_in
+	# 20121012 G. Thompson: Replaced last_months_list.txt with $monthly_txt
+	
+	global State monthly_txt basewebdir_in basewebdir_out convert create_monthly_index
+
+	puts "\n\nUpdating web ...\n\n"
+#	catch "exec alchemy -g -Zm4 -Zr 270 -Zo 950p -Z+ -o lastmonth.gif lastmonth.gif" alchemy_result
+#	puts stderr $alchemy_result
+#	exec /bin/cp lastmonth.ps $basewebdir_out/graphics/lastmonth.ps
+
+	# 20121017 G. Thompson: adding conversion to gif here (db2monthly created a jpg, update_web tried to upload a gif which didn't exist)
+	# 20121018 G. Thompson: extensive manual testing revealed that the -density flag resulted in bigger, poorer resolution files
+	# and that the -page flag led to part of the plot missing
+	# and that ai was the best format to save as (though eps and pdf were okay too)
+	# so will now instruct user to save as AI and then use convert to create gif
+	#catch "exec $convert -density 288x288 -quality 100 -crop 0x0 -page letter lastmonth.ps lastmonth.gif" convert_result
+	catch "exec $convert lastmonth.ai lastmonth.gif" convert_result
+	puts stderr $convert_result
+	exec /bin/cp lastmonth.gif $basewebdir_out/graphics/lastmonth.gif
+#	exec /bin/cp last_months_list.html $basewebdir_out/html_docs/last_months_list.html
+	exec /bin/cat $basewebdir_in/monthly/monthly_highlights_header $monthly_txt $basewebdir_in/weekly/weekly_listing_footer > $basewebdir_out/html_docs/last_months_list.html
+#	exec textedit $basewebdir_out/html_docs/last_months_list.html &
+
+# send file to archive directory
+
+        set year [string range $State(start) 0 3]
+        set month [string range $State(start) 5 6]
+        exec /bin/cat $monthly_txt $basewebdir_in/weekly/weekly_archive_middle monthly_list > $basewebdir_out/monthly_archive/${year}_${month}_monthly.txt
+
+#	20121017 G. Thompson: Adding create_monthly_index to mirror weekly_report_tool more closely.
+	puts "$create_monthly_index $basewebdir_in $basewebdir_out\n"
+	exec $create_monthly_index $basewebdir_in $basewebdir_out
+
+	puts "\nupdate_web DONE"
+
+}
+
+
+proc currentify_tracking_database {} {
+
+	global State
+
+	# Update months table
+
+	set State(dbtrack) [dblookup $State(dbtrack) 0 months 0 0]
+#	set nrecs [dbquery $State(dbtrack) dbRECORD_COUNT]
+	
+	set tmp_year [string range $State(start) 0 3]
+	set tmp_month [string range $State(start) 5 6]
+	
+	append month_start $tmp_month / 01 / $tmp_year
+	 
+	set month_start_epoch [str2epoch $month_start]
+	
+	set recno [dbfind $State(dbtrack) 0 0 "time == $month_start_epoch"]
+		
+	dbputv $State(dbtrack) 0 $recno report done status analyzed
+	puts "currentify_tracking_database DONE\n"	
+}
+
+
+proc init_windows {} {
+
+	global State MONTHLYDB
+
+	frame .month
+	pack .month -fill x
+
+	MyLblEntry .month.starttime -label "Start Time(YYYY_MM)"\
+                            -textvariable State(start) \
+                            -width 10 
+	MyLblEntry .month.minmag -label "Min. Ml"\
+                            -textvariable State(minmag) \
+                            -width 4
+
+	pack .month.starttime -side left -fill x
+	pack .month.minmag -side left -fill x
+
+
+	CommandCheckoff .concat_db -background yellow \
+                          -label "Concatenate daily databases" \
+			  -variable concat_db \
+			  -command concat_db
+        pack .concat_db -side top -fill x
+
+	CommandCheckoff .review_monthlydb -background lightgreen \
+                          -label "Review $MONTHLYDB with dbe" \
+			  -variable review_monthlydb \
+			  -command review_monthlydb
+        pack .review_monthlydb -side top -fill x
+
+	CommandCheckoff .db2monthly -background pink \
+                          -label "Generate monthly map, list and highlights" \
+			  -variable run_db2monthly \
+			  -command run_db2monthly
+        pack .db2monthly -side top -fill x
+
+#	CommandCheckoff .edit_highlights -background pink \
+#                          -label "View monthly earthquake highlights" \
+#			  -variable edit_highlights \
+#			  -command edit_highlights
+#        pack .edit_highlights -side top -fill x
+
+# 20121012 G. Thompson: eliminating Framemaker
+#	CommandCheckoff .maker_highlights -background white \
+#                          -label "Open Framemaker to edit monthly highlights" \
+#			  -variable maker_highlights \
+#			  -command maker_highlights
+#        pack .maker_highlights -side top -fill x
+
+# 20121012 G.Thompson: Replacing Framemaker with textedit.
+        CommandCheckoff .textedit_highlights -background pink \
+                          -label "Edit monthly earthquake highlights" \
+                          -variable textedit_highlights \
+                          -command textedit_highlights
+        pack .textedit_highlights -side top -fill x
+
+# 20121012 G.Thompson: eliminating StarOffice. Replacing  with Illustrator below.
+	#CommandCheckoff .edit_fig -background tan \
+        #                  -label "Edit seismicity map with StarOffice" \
+	#		  -variable edit_fig \
+	#		  -command edit_fig
+        #pack .edit_fig -side top -fill x
+
+# 20121012 G.Thompson: New procedure to edit map with Illustrator.
+	CommandCheckoff .illustrator_edit_fig -background tan \
+                          -label "Edit seismicity map with Illustrator" \
+			  -variable illustrator_edit_fig \
+			  -command illustrator_edit_fig
+        pack .illustrator_edit_fig -side top -fill x
+
+#	CommandCheckoff .print_figs -background tan \
+#	CommandCheckoff .print_figs -background tan \
+#                          -label "Print seismicity map on $State(PRINTER)" \
+#			  -variable print_figs \
+#			  -command print_figs
+#        pack .print_figs -side top -fill x
+
+	CommandCheckoff .update_web -background "pale turquoise" \
+                          -label "Update AEIC monthly report website" \
+                          -variable update_web \
+                          -command update_web
+        pack .update_web -side top -fill x
+
+	CommandCheckoff .currentify_tracking_database -background "pale turquoise" \
+                          -label "Update AEIC tracking database" \
+                          -variable currentify_tracking_database \
+                          -command currentify_tracking_database
+        pack .currentify_tracking_database -side top -fill x
+
+	CommandCheckoff .run_dbstats -background orange \
+                          -label "Compute station statistics" \
+			  -variable run_dbstats \
+			  -command run_dbstats
+        pack .run_dbstats -side top -fill x
+
+	CommandCheckoff .view_dbstats_figs -background orange \
+                          -label "View station statistics figures" \
+			  -variable view_dbstats_figs \
+			  -command view_dbstats_figs
+        pack .view_dbstats_figs -side top -fill x
+
+        # 20121012 G. Thompson: broke print_dbstats_figs into print_timeresidual_figs and
+        # print_magnituderesidual_figs per Natasha's email today
+        #CommandCheckoff .print_dbstats_figs -background orange \
+        #                  -label "Print station statistics figures on $State(PRINTER)" \
+        #                 -variable print_dbstats_figs \
+        #                 -command print_dbstats_figs
+        #pack .print_dbstats_figs -side top -fill x
+
+        CommandCheckoff .print_timeresidual_figs -background orange \
+                          -label "Print time residual figures on $State(PRINTER)" \
+                          -variable print_timeresidual_figs \
+                          -command print_timeresidual_figs
+        pack .print_timeresidual_figs -side top -fill x
+
+        CommandCheckoff .print_magnituderesidual_figs -background orange \
+                          -label "Print magnitude residual figures on $State(PRINTER)" \
+                          -variable print_magnituderesidual_figs \
+                          -command print_magnituderesidual_figs
+        pack .print_magnituderesidual_figs -side top -fill x
+
+	button .quit -bg red -fg yellow -text Quit -command "destroy ."
+        pack .quit -side top -fill x
+}
+
+
+
+
+
+init_globals
+
+init_windows
+

@@ -1,0 +1,1 @@
+nohup csh /export/home/ketchudc/vdl/SCRIPTS/cshvdl.eggpass >/export/home/ketchudc/vdl/vdl.log &

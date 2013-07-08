@@ -1,0 +1,141 @@
+.TH AEIC_RESPOND 1 "$Date: 2005-06-20 22:48:00 $"
+.SH NAME
+aeic_respond \- Respond to an earthquake at AEIC
+.SH SYNOPSIS
+.nf
+\fBaeic_respond \fP\\[-g\\] \\[-n\\] \\[-o \fIorid\fP\\] \\[ -e \fIevid\fP\\] \fIdbname\fP
+.fi
+.SH DESCRIPTION
+\fBaeic_respond\fP is the driver script for alarm-response information-release
+construction at the Alaska Earthquake Information Center.
+
+The Database name may be specified on the command line. If this database
+contains only one event, the preferred origin for that event will be
+used. If there is only one origin, that origin will be used. The -o and -e
+options allow the origin or event to be explicitly specified. If \fIdbname\fP is "-",
+\fBaeic_respond\fP reads the database from stdin. Again, this presumes a unique
+event and/or origin is specified in the input database.
+
+For release information (e-mail, fax, web update) \fBaeic_respond\fP chooses either 
+Ms, mb, or Ml magnitude (in this order of preference). 
+
+.SH OPTIONS
+-g Graphical error messages option: This brings up error messages using
+the tkshow_message(1) utility, which is a more natural way to see
+error messages when \fBaeic_respond\fP is launched from graphical
+utilities such as dbe(1).
+
+-n Nofangs option: This prevents the framemaker FAX-release from being
+printed. Also, it launches aeic_release_distributor(1) in nofangs mode.
+
+-o \fIorid\fP This allows a specific \fIorid\fP to be chosen from the database.
+
+-e \fIevid\fP This allows a specific \fIevid\fP to be chosen from the database. This
+option requires the presence of the event table, and the presence of a row
+in the origin table matching the prefor field of the event chosen.
+.SH PARAMETER FILE
+The parameter file for \fBaeic_respond\fP is called aeic_release.pf. Several
+programs use it.
+.ft CW
+.in 2c
+.nf
+
+.ne 7
+# aeic_release parameter file
+#
+# K. Lindquist
+# Geophysical Institute
+# University of Alaska, Fairbanks
+# 1999
+
+.ne 6
+# Where to send the output
+#########################################################################
+email_release_recipient aeic_release
+web_directory /usr/local/frame2html/results
+EVA_LOG /home/quake/eva_alarm.log
+
+.ne 7
+# Where to get necessary information and templates
+#########################################################################
+
+place_database /home/kent/work/mynearest/mycities_AK
+contact_database /home/kent/data/db/mycities
+maker_template /home/kent/work/response/mytemplate.fm
+
+.ne 8
+number_of_contacts 40   # How many contacts to show for felt report investigation
+
+# What the output should look like
+#########################################################################
+
+num_nearest 8           # Number of nearest cities shown
+map_range 4             # Range of map in degrees
+
+.ne 6
+stock_felt_report &Literal{
+No reports of this event having been felt and/or causing damage
+have been received at this time.
+}
+
+.ne 14
+# Where and how to get the job done, and with what software
+#########################################################################
+
+base_release_dir        HOME/releases
+
+# Working files. These templates refer to the origin time
+email_file              aeic_release.email
+makertextfile           aeic_release.makertext
+fmrelease_file          myrelease.fm
+fmpdf_file              %y%m%d%H%M%S_.pdf
+gif_release_file        %y%m%d%H%M%S_.gif
+map_epsi_file           db_release.epsi
+eva_log_file            eva_log.text
+
+.ne 13
+# Use the n'th printer listed in Framemaker's "Print..." dialog-box:
+framemaker_printer_sequence_number 6            # 6 = ec
+# framemaker_printer_sequence_number 7          # 7 = avops
+
+Helpers &Arr{
+aeic_region_name                /usr/tools/bin/aeic_region_name
+aeic_release_distributor        /usr/tools/bin/aeic_release_distributor
+alchemy                         /usr/local/bin/alchemy
+dbmaprelease                    /usr/tools/bin/dbmaprelease
+felt_report_tool                /usr/tools/scripts/felt_report_tool
+Framemaker                      /usr/local/frame5.5/bin/maker
+}
+
+.ne 6
+# Avoid the following displays when starting framemaker, due to
+# obscure framemaker/Xserver interaction bug
+bad_framemaker_displays &Arr{
+nordic 1
+}
+
+# Who to harass with problems
+#########################################################################
+
+maintainer natasha@giseis.alaska.edu
+
+.fi
+.in
+.ft R
+.SH RETURN VALUES
+\fBaeic_respond\fP exits with 0 if everything went OK. If an error occurs,
+the exit code will be nonzero.
+.SH "SEE ALSO"
+.nf
+felt_report_tool(1), aeic_release_distributor(1), dbe(1)
+.fi
+.SH "BUGS AND CAVEATS"
+\fBaeic_respond\fP does not check if a framemaker license is available.  
+.SH AUTHOR
+.nf
+Kent Lindquist
+Geophysical Institute
+University of Alaska, Fairbanks
+February 1999
+.fi
+.\" $Id: aeic_respond.1,v 1.7 2005-06-20 22:48:00 natasha Exp $

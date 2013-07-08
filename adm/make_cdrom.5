@@ -1,0 +1,51 @@
+.\" %W% $Date: 2002-02-07 01:56:20 $
+.TH MAKE_CDROM 5 "$Date: 2002-02-07 01:56:20 $"
+.SH NAME
+make_cdrom \- instructions for making cdrom at AEIC
+.SH DESCRIPTION
+The following instructions detail the procedure for making a CDROM at AEIC.
+.LP
+1) su to rommaker on salcha
+.LP
+2) set the DISPLAY environment variable and type "xrmk" to launch rommaker
+.LP
+3) Under the 'Options' menu type in a volume label using only alphanumeric characters
+and underscores; set Filename Standard to "Rockridge"; set ISO Filename Standard to
+"Full ISO 9660"; click "Use ISO Version Number."
+.LP
+4) Hit "Add Data" in the main menu and choose the data to go on the CDROM
+.LP
+5) Choose "Create Virtual Image" under Make, responding "OK" to "(Using Input Layout List)"
+.LP
+6) Enter a description of the CD in the box on the main menu
+.LP
+7) Choose "Create File Image" under Make, entering a name such as "temp.IMG" along
+a path where there's enough space for the image file. Note that there are two
+links to staging areas in /home/rommaker, one called AEIC and one called AVO.
+.LP
+8) Load a recordable CD into the caddy
+.LP
+9) Choose "Make: Replicate CD-ROM From Image"
+.LP
+10) Use "Utilities: eject" or just hit the eject button on the drive
+.LP
+11) Check the cdrom somewhere to make sure it's been written correctly.
+
+.SH EXAMPLE
+Example of space considerations (reportedly 650 MB available on 74-minute WCD):
+.ft CW
+.in 2c
+.nf
+
+salcha:rommaker 17 tcsh>> du -sk /Seis/week/kent/cdrom_staging
+587734  /Seis/week/kent/cdrom_staging
+salcha:rommaker 18 tcsh>>
+salcha:rommaker 18 tcsh>> ls -l kent.IMG
+-rw-rw-r--   1 rommaker 620683264 Jul 20 15:38 kent.IMG
+salcha:rommaker 19 tcsh>>
+
+.fi
+.in
+.ft R
+.SH AUTHOR
+man page by Kent Lindquist, following notes from John Benoit

@@ -1,0 +1,3 @@
+cd /export/home/decipc/ketchum/vdl
+vdlmom
+Mail -s "Gldfs::vdlmom down" ketchum@gldfs.cr.usgs.gov </export/home/decipc/ketchum/vdl/vdl.mail

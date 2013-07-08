@@ -1,0 +1,116 @@
+Schema places1.1
+	Description ( "Schema for places on the earth" )
+	Detail {
+		Schema for point-coordinate places on earth, such
+		as cities, pipeline pump-stations, volcanoes, etc.
+	}
+	Timedate lddate
+	;
+
+Attribute contact_name
+	String (50)
+	Format ( "%-50s" )
+	Null ( "-" )
+	Description ( "contact name" )
+	Detail {
+		name of potential contact for felt information 
+		on earthquakes
+	}
+	;
+Attribute lat
+	Real ( 9 )
+	Format ( "%9.4lf" ) 
+	Units ( "Degrees" ) 
+	Range ( "lat >= -90.0 && lat <= 90.0" ) 
+	Null  ( "-999.0"  ) 
+	Description ( "estimated latitude" ) 
+	Detail {
+	    This attribute is the geographic latitude.  Locations
+	    north of the equator have positive latitudes.  
+	}
+	; 
+
+Attribute lon
+	Real ( 9 )
+	Format ( "%9.4lf" ) 
+	Units ( "Degrees" ) 
+	Range ( "lon >= -180.0 && lon <= 180.0" ) 
+	Null  ( "-999.0"  ) 
+	Description ( "estimated longitude" ) 
+	Detail {
+	    This attribute is the geographic longitude in degrees. 
+	    Longitudes are measured positive east of the Greenwich
+	    meridian.  
+	}
+	; 
+
+Attribute lddate
+	Time ( 17 )
+	Format ( "%17.5lf" ) 
+	Units ( "Seconds" ) 
+	Null  ( "-9999999999.999"  ) 
+	Description ( "(epoch) time of last record modification" ) 
+	Detail {
+	    This is the last time the record was modified.  
+	}
+	; 
+
+Attribute note
+	String (50)
+	Format ( "%-50s" )
+	Null ( "-" )
+	Description ( "note on contact info" )
+	Detail {
+		Note on contact information for felt reports
+	}
+	;
+
+Attribute phone
+	String (20)
+	Format ( "%-20s" )
+	Null ( "-" )
+	Description ( "phone number" )
+	Detail {
+		phone number of contact
+	}
+	;
+
+Attribute place
+	String (50)
+	Format ( "%-50s" )
+	Null ( "-" )
+	Description ( "place name" )
+	Detail {
+		name of a place on the earth
+	}
+	;
+
+Attribute placetype
+	String (20)
+	Format ( "%-20s" )
+	Null ( "-" )
+	Description ( "place type" )
+	Detail {
+		type of place, e.g. city, volcano, etc.
+	}
+	;
+
+Relation phone
+	Fields ( place contact_name phone note lddate )
+	Primary ( place phone )
+	Description ( "phone contacts for felt-report investigation" )
+	Detail {
+		This table lists phone-numbers and contact names
+		for investigation of felt reports from earthquakes.
+	}
+	;
+
+Relation places
+	Fields ( lat lon place placetype lddate )
+	Primary ( place )
+	Description ( "table of place names and locations" )
+	Detail {
+		Table of place names and locations
+	}
+	;
+

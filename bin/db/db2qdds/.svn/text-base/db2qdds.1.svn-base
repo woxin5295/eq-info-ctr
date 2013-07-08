@@ -1,0 +1,52 @@
+.TH DB2QDDS 1 "$Date: 2008-04-08 22:15:46 $"
+.SH NAME
+db2qdds \- db2qdds converts CSS db events into CUBE files
+.SH SYNOPSIS
+db2qdds -dbin dbin -dbignore dbignore -dbqdds dbqdds -polldir qdds_polldir_loc [-days days] [-sleeptime seconds] [-debug]
+.LP
+where:
+.LP
+-dbin = input database to monitor 
+.LP
+-dbignore = database to monitor with events that need delete request sent 
+.LP
+-dbqdds = qdds database (schema qddsaeic1.0)
+.LP
+-polldir = location of polldir to submit qdds CUBE files
+.LP
+-days = number of current days to keep in dbqdds database, default is 7
+.LP
+-sleeptime = number of seconds to wait between database table modification checks 
+.LP
+-debug = print debug information 
+.LP
+.SH DESCRIPTION
+db2qdds \-
+.LP 
+db2qdds monitors an in input database(dbsum). db2qdds creates and maintains and dbqdds database that reflects events contained in the input database. If events are added or removed from the input database, then they are added and removed from the dbqdds database. Deleted CUBE events are sent by monitoring row added to the dbignore database. db2qdds keeps a fixed number of the mosts recent days in the dbqdds database. db2qdds sends CUBE files to the qdds polldir directory.   
+.SH OPTIONS
+.IP "dbin"
+The input database name. Assumed to be a CSS database. This argument is required.
+.IP "dbignore"
+This database stores event ids that should not be sent out as QDDS CUBE delete request. This argument is required. 
+.IP "dbqdds"
+The dbqdds database stores current event summary information for QDDS CUBE files and CSS event information.
+This argument is required. The dbqdds database requires qddsaeic1.0 schema.
+.IP "qdds_polldir_loc"
+The location of the CUBE polldir directory. This argument is required.
+.IP "days"
+The time period in current days that db2qdds contains, default is 7.
+.IP "sleeptime" 
+Number of seconds to wait between database table modification checks 
+.IP "Debug" 
+Print debug information 
+
+.ft CW
+.RS .2i
+.RE
+.ft R
+.nf
+.fi
+.SH "BUGS AND CAVEATS"
+.SH AUTHOR
+Mitch Robinson Mon Oct  8 09:54:32 AKDT 2007.

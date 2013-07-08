@@ -1,0 +1,6 @@
+.TH AEIC_CVSNOTIFY 1 "$Date: 2002-02-07 01:56:23 $"
+.SH NAME
+aeic_cvsnotify \- hacked version of DanQ's CVS Notify script
+.SH AUTHOR
+Hacked by K. Lindquist
+.\" $Id: aeic_cvsnotify.1,v 1.2 2002-02-07 01:56:23 kent Exp $

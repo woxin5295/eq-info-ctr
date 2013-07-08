@@ -1,0 +1,2 @@
+#! /usr/bin/tcsh
+mysql -u shakepipe -p+++++++++ -e'select * from shake_version' shakemappipe > $1

@@ -1,0 +1,40 @@
+.\" @(#)pick_counts.1  1.1 06/11/2010
+.TH DBSTATS "$Date: 2010-06-11 19:49:33 $"
+.SH NAME
+pick_counts \- counts number of picks for each station listed in the input station database
+.SH SYNOPSIS
+pick_counts dbin 
+.LP
+where:
+.LP
+dbin = input database
+.SH DESCRIPTION
+Given a css earthquake database with arrival and site tables, pick_counts will count number of picks for each station in the site table. It first finds time span of the arrivals and then matches station on/offdates with these max/min times. It only includes stations that were open at the time of the recorded arrivals.  It will generate a file with the list of stations and pick counts. 
+.SH OPTIONS
+.IP "dbin"
+The input dabase name. Assumed to be a CSS database. This argument is required. Arrival and site tables need to be present.
+.SH FILES
+pick_counts generates flat file pickcounts.out 
+with list of stations and counted picks. The list is sorted by counts, from minimum number to maximum.
+
+.SH ENVIRONMENT
+Requires $ANTELOPE environment.
+.SH EXAMPLE
+ 
+.ft CW
+.RS .2i
+.RE
+.ft R
+.SH RETURN VALUES
+.SH LIBRARY
+.SH DIAGNOSTICS
+.SH "SEE ALSO"
+$ANTELOPE
+.nf
+.fi
+.SH "BUGS AND CAVEATS"
+Picks are counted only for stations in this region:
+(lat>50&&lat<72&&lon<-130)||(lat>50&&lat<72&&lon>170). 
+Maximum number of stations is 1000.
+.SH AUTHOR
+Natasha Ruppert 06/2010 

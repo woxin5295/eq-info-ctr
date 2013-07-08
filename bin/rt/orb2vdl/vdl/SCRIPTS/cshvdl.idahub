@@ -1,0 +1,5 @@
+cd /home/idahub/ketchum/vdl
+vdlmom
+Mail -s "page ketchum" pagemail@nsn4.cr.usgs.gov </home/idahub/ketchum/vdl/vdl.mail
+Mail -s "Gldfs::vdlmom down" ketchum@gldfs.cr.usgs.gov </home/idahub/ketchum/vdl/vdl.mail
+echo "Mail sent to GLDFS."

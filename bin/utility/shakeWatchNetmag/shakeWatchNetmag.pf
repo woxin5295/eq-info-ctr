@@ -1,0 +1,60 @@
+run_home	/home/shakeD/run
+bin_home	/usr/local/ShakeMapD/bin
+database	/iwrun/sum/run/dbsum/dbsum
+second_polygon	1 # 1=yes, 0=no
+auto_cancel	0 # automatic cancellation 1=yes, 0=no
+
+minmax &Arr{
+nass_min	10
+mmi_min		2.0
+nmagids_max	10
+}
+
+minmag_polygon1		5.0
+ak_polygon &Tbl{
+ 	50,-130
+ 	75,-130
+ 	75,-170
+	55,-170
+	55,-180
+	50,-180
+}
+
+minmag_polygon2		3.8
+ak_polygon2 &Tbl{
+	54,-133
+	59,-139
+	60,-146
+	56,-154
+	54,-164
+	52,-172
+	51,-180
+	52,-180
+	53,-172
+	56,-162
+	58,-158
+	58,-162
+	60,-168
+	64,-164
+	65,-168
+	66,-168
+	67,-164
+	69,-168
+	71,-156
+	70,-140
+	61,-140
+	60,-134
+	54,-128
+}
+
+mag_buffer	0.0
+cancelmsgdir	/home/shakeD/run/data/cancel_shakemap_request 
+
+author_list &Arr{
+oa_bk		1 
+oa_op		1
+wcatwc 		2 
+neic 		3 
+UAF 		4 
+manual 		5
+}

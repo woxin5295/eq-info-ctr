@@ -1,0 +1,67 @@
+#! /bin/csh
+# A C-Shell script used to run fpfit and fpplot 
+# This script is intended to interface with the Xpick pickfile name 
+#  selection 
+# get name of pickfile
+echo "**************************************"
+echo "**************************************"
+if ($#argv == 0) then
+	echo -n "ray filename? "
+	set pickfile_ray = $<
+	set pickfile_ray = $pickfile_ray
+else
+	set pickfile_ray = $argv[1]
+endif
+# For postscript output, set PS_FILE to the desired postscript filename:
+unsetenv PS_FILE
+setenv PS_FILE fpplot.ps
+
+# For X-windows output on screen, set the X11_INTERFACE variable:
+unsetenv X11_INTERFACE
+setenv X11_INTERFACE "yes"
+
+setenv XPS_LOG_FILE "xps.log"
+setenv XPS_ROTATION "0"
+setenv X_WORLD_XMIN "0.0"
+setenv X_WORLD_XMAX "8.5"
+setenv X_WORLD_YMIN "0.0"
+setenv X_WORLD_YMAX "11.0"
+setenv X_XSCALE "1.0"
+setenv X_YSCALE "1.0"
+setenv X_XOFF "0.0"
+setenv X_YOFF "0.0"
+unsetenv X_FIXED_FONT
+setenv X_FIXED_FONT "yes"
+setenv X_FONT "fixed"
+setenv PS_FONT "Courier"
+setenv PS_FONT_SIZE "12."
+setenv PS_LNWT "0.0033"
+setenv X_LNWIDTH "0.0"
+setenv X_WIN_WIDTH "-1.0"
+setenv X_WIN_HEIGHT "-1.0"
+setenv PS_LANDSCAPE "yes"
+unsetenv PS_LANDSCAPE
+set symtable = "/we/src/fpfit/symtable"
+#
+# plot focal mechanism
+#       /we/src/fpfit/fpplot
+	echo "Fpplot is plotting $pickfile_ray"
+ 	fpplot >& ${pickfile_ray}.fpplot << ENTER_FPPLOT_DATA
+#	/we/src/fpfit/fpplot  << ENTER_FPPLOT_DATA
+ ${pickfile_ray}
+ ${symtable}
+ 0
+ 999.00
+ n
+ n
+ENTER_FPPLOT_DATA
+echo Just finished fpplot
+echo -n "Print focal mechanism? (CR = no) "
+set answer = $<
+if ("$answer" == "yes") then
+        lpr $PS_FILE
+endif
+
+#	cat $PS_FILE | lpr
+#	rrm $PS_FILE
+endif

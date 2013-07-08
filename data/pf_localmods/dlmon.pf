@@ -1,0 +1,1920 @@
+
+icon_title 
+
+dump	getgif $window $period $name
+
+#screen_height	0.95
+screen_height	0.75
+#screen_width	0.95
+screen_width	0.75
+
+#size_icons	48
+size_icons	46
+icon_columns	25
+#size_cells	18
+size_cells	17
+
+font_logs	fixed normal
+font_cells	helvetica bold 
+font_dlname	helvetica bold
+
+backup_time	0.0
+state		Icons
+sort		dlname
+
+map		usa
+
+station_status_lists &Arr{
+	default &Arr{
+		single &Tbl{
+			dlt
+			rtm
+			gp24
+			nr24
+			nl24
+			dr
+			ce
+			pb
+		}
+		multi &Tbl{
+			STATUS_LATENCY
+			dlt
+			pbr
+			tput
+			dr
+			m0-2
+			m3-5
+		}
+		icons &Tbl{
+			dlt
+			rtm
+			gp24
+			nr24
+			nl24
+			dr
+			ce
+			pb
+		}
+	}
+	q330 &Arr{
+		single &Tbl{
+			STATUS_LATENCY
+			dlt
+			rtm
+			ce
+			pbr
+			nr24
+			gp1
+			tput
+			gpss
+			clq
+			m0-2
+			m3-5
+			dt
+			dv
+			da
+		}
+		logs &Tbl{
+			comt
+			prov
+			gp24
+			gp1
+			nr24
+			opt
+			STATUS_LATENCY
+			dlt
+			rtm
+			tput
+			ce
+			pbr
+			nl24
+			np24
+			ni24
+			dr
+			cld
+			m0-2
+			dt
+			dv
+			da
+		}
+		multi &Tbl{
+			STATUS_LATENCY
+			dlt
+			rtm
+			ce
+			pbr
+			nr24
+			g24
+			tput
+			gpss
+			clq
+			m0-2
+			m3-5
+			dt
+			dv
+			da
+		}
+		icons &Tbl{
+			gp24
+			nr24
+			opt
+			m0-2
+			dlt
+			pbr
+			rtm
+			tput
+		}
+	}
+	altus &Arr{
+		single &Tbl{
+			rtm
+			com
+			strm
+			dr
+			dra
+			pkse
+			dt
+			dv
+			dvs
+			lat
+			lon
+			elev
+			gpss
+			gps
+			clq
+			clt
+			dg
+			dlt
+		}
+		multi &Tbl{
+			dlt
+			rtm
+			dr
+			com
+			strm
+			clt
+			clq
+			pkse
+		}
+		icons &Tbl{
+			dlt
+			rtm
+			dr
+			com
+			strm
+			clt
+			clq
+			pkse
+		}
+	}
+}
+
+station_status_list_model	q330
+
+model_callbacks &Arr{
+	q330 &Arr{
+		log_debug &Arr{
+			names &Tbl{
+				debug_data
+				debug_control
+				debug_udp
+				debug_ack
+			}
+			get_proc &Literal{
+				dlcmd $pfarray_ref->{$dlname}{orbcmd} $pfarray_ref->{$dlname}{target} q330 $dlname get $name $value
+			}
+			set_proc &Literal{
+				dlcmd -noreply $pfarray_ref->{$dlname}{orbcmd} $pfarray_ref->{$dlname}{target} q330 $dlname set $name $value
+			}
+		}
+	}
+}
+
+subset_defs &Tbl{
+target eq 'tadata'
+( ! defined dltncy || dltncy > 7200.0 || ( defined nr24 && nr24 == 0 && gp24 > 0.001 ) )
+}
+
+sort_defs &Arr{
+	default &Arr{
+		sortorder_proc &Literal{
+			my $runstat = $pfarray_ref->{$dlname}{con} ;
+			$sortorder = 1 ;
+			if (defined $runstat) {
+				if ($runstat eq 'no') {
+					if ($pfarray_ref->{$dlname}{rtm} ne '-' && $pfarray_ref->{$dlname}{rtm} > -3600.0) {
+						$runstat = 'su' ;
+						$pfarray_ref->{$dlname}{con} = 'su' ;
+					}
+				}
+				if ($runstat eq "yes") {
+					$sortorder = 4 ;
+				} elsif ($runstat eq "waiting") {
+					$sortorder = 4 ;
+				} elsif ($runstat eq "su") {
+					if (defined $pfarray_ref->{$dlname}{lastsortorder}) {
+						$sortorder = $pfarray_ref->{$dlname}{lastsortorder} ;
+					}
+				} elsif ($runstat eq "reg") {
+					if (defined $pfarray_ref->{$dlname}{lastsortorder}) {
+						$sortorder = $pfarray_ref->{$dlname}{lastsortorder} ;
+					}
+				} elsif ($runstat eq "stopped") {
+					$sortorder = 0 ;
+				} elsif ($runstat eq "no") {
+					$sortorder = 1 ;
+				}
+			}
+			$pfarray_ref->{$dlname}{lastsortorder} = $sortorder ;
+			$sortorder .= $dlname ;
+			$pfarray_ref->{$dlname}{sortorder} = $sortorder ;
+		}
+	}
+	dlstate &Arr{
+		sortorder_proc &Literal{
+			my $runstat = $pfarray_ref->{$dlname}{con} ;
+			$sortorder = 0 ;
+			if (defined $runstat) {
+				if (defined $pfarray_ref->{$dlname}{dlip} &&
+						$pfarray_ref->{$dlname}{dlip} eq "-") {
+					$sortorder = 1 ;
+				} elsif ($runstat eq "yes") {
+					$sortorder = 9 ;
+				} elsif ($runstat eq "waiting") {
+					$sortorder = 8 ;
+				} elsif ($runstat eq "su") {
+					$sortorder = 7 ;
+				} elsif ($runstat eq "reg") {
+					$sortorder = 6 ;
+				} elsif ($runstat eq "sleeping") {
+					$sortorder = 5 ;
+				} elsif ($runstat eq "hibernating") {
+					$sortorder = 4 ;
+				} elsif ($runstat eq "nr") {
+					$sortorder = 3 ;
+				} elsif ($runstat eq "no") {
+					$sortorder = 2 ;
+				} elsif ($runstat eq "stopped") {
+					$sortorder = 0 ;
+				}
+			}
+			$pfarray_ref->{$dlname}{lastsortorder} = $sortorder ;
+			$sortorder .= $dlname ;
+			$pfarray_ref->{$dlname}{sortorder} = $sortorder ;
+		}
+	}
+}
+
+station_status_defs &Arr{
+	dlname &Arr{
+		title	dlname
+		sizestr	XXXXXXXX
+		justify left
+		render_proc &Literal{
+			$value = $pfarray_ref->{$dlname}{con} ;
+			if ($value ne '-') {
+				$txt = $dlname ;
+				if (defined $pfarray_ref->{$dlname}{dlip} &&
+						$pfarray_ref->{$dlname}{dlip} eq "-") {
+					$color = "#ffff00" ;
+				} elsif ($value eq "stopped") {
+					$color = "#808080" ;
+				} elsif ($value eq "yes") {
+					$color = "#00ff00" ;
+				} elsif ($value eq "waiting") {
+					$color = "#00ffff" ;
+				} elsif ($value eq "hibernating") {
+					$color = "#ff00ff" ;
+				} elsif ($value eq "sleeping") {
+					$color = "#ff0000" ;
+				} elsif ($value eq "reg") {
+					$color = "#ffd000" ;
+				} elsif ($value eq "su") {
+					$color = "#ffa000" ;
+				} elsif ($value eq "nr") {
+					$color = "#ffa0a0" ;
+				} else {
+					$color = "#ff0000" ;
+				}
+			}
+			$sort = $dlname ;
+		}
+		description &Literal{
+Datalogger name.  (Usually the SEED net_sta.)
+green   - Currently connected and acquiring data
+cyan    - Waiting for a datalogger POC
+orange  - Establishing a connection
+red     - Sleeping after a connection setup failure
+magenta - Hibernating
+yellow  - NULL datalogger ip-address
+gray    - Stopped}
+	}
+	model &Arr{
+		title	model
+		sizestr	XXXXXX
+		justify left
+		render_proc &Literal{
+			if ($value ne '-') {
+				$txt = $value ;
+				if ($value eq "q330") {
+					$color = "#ff8000"  ;
+				} elsif ($value eq "qt") {
+					$color = "#ffc040"  ;
+				} elsif ($value eq "altus") {
+					$color = "darkgray"  ;
+				} elsif ($value eq "reftek") {
+					$txt = "reftk" ;
+					$color = "black"  ;
+				} else {
+					$color = "red"  ;
+				}
+			}
+		}
+		description &Literal{
+Datalogger model.}
+	}
+	comt &Arr{
+		title	comt
+		sizestr	XXXX
+		justify center
+		derived 1
+		render_proc &Literal{
+			if ($value ne '-') {
+				if ($value eq "cdma poc") {
+					$txt = "cpoc"  ;
+					$color = "#d0ffd0" ;
+				} elsif ($value eq "regular internet") {
+					$txt = "rint"  ;
+					$color = "#d0ffff" ;
+				} elsif ($value eq "DSL") {
+					$txt = "dsl"  ;
+					$color = "#d0ffff" ;
+				} elsif ($value eq "cable") {
+					$txt = "cble"  ;
+					$color = "#d0ffff" ;
+				} elsif ($value eq "no comms") {
+					$txt = "none"  ;
+					$color = "#ffa0a0"  ;
+				} elsif ($value eq "vsat") {
+					$txt = "vsat" ;
+					$color = "#d0d0ff" ;
+				} else {
+					$txt = substr ($value, 0, 4) ;
+					$color = "#ffa0a0"  ;
+				}
+				$sort = $txt . $dlname ;
+				$subset = $txt ;
+			} else {
+				$sort = "zzzzzz" . $dlname ;
+			} 
+		}
+		description &Literal{
+Communications type.
+cpoc - Cell phone POC
+rint - Regular internet
+cble - Cable internet
+dsl  - DSL
+vsat - VSAT}
+	}
+	prov &Arr{
+		title	comp
+		sizestr	XXXX
+		justify center
+		derived 1
+		render_proc &Literal{
+			if ($value ne '-') {
+				if ($value eq "verizon") {
+					$txt = "VZ"  ;
+					$color = "#d0ffd0" ;
+				} elsif ($value eq "cingular") {
+					$txt = "CG"  ;
+					$color = "#d0ffd0" ;
+				} elsif ($value eq "hosted") {
+					$txt = "I"  ;
+					$color = "#d0ffff" ;
+				} elsif ($value eq "starstream") {
+					$txt = "SS"  ;
+					$color = "#d0ffff" ;
+				} elsif ($value eq "QWEST/CCS") {
+					$txt = "QW"  ;
+					$color = "#d0ffff" ;
+				} elsif ($value eq "Siskiyou tel") {
+					$txt = "SK"  ;
+					$color = "#d0ffff" ;
+				} elsif ($value eq "Volcano Telco") {
+					$txt = "VT"  ;
+					$color = "#d0ffff" ;
+				} elsif ($value eq "Cal_Ore tel") {
+					$txt = "CO"  ;
+					$color = "#d0ffff" ;
+				} elsif ($value eq "Telus") {
+					$txt = "Tl"  ;
+					$color = "#d0ffff" ;
+				} elsif ($value eq "DSL Frontier") {
+					$txt = "Fr"  ;
+					$color = "#d0ffff" ;
+				} elsif ($value eq "charter") {
+					$txt = "Ch"  ;
+					$color = "#d0ffff" ;
+				} elsif ($value eq "none") {
+					$txt = "none"  ;
+					$color = "#ffa0a0"  ;
+				} elsif ($value eq "spacenet") {
+					$txt = "SN"  ;
+					$color = "#d0d0ff" ;
+				} elsif ($value eq "Wild Blue") {
+					$txt = "WB"  ;
+					$color = "#d0d0ff" ;
+				} elsif ($value eq "Hughes") {
+					$txt = "H"  ;
+					$color = "#d0d0ff" ;
+				} else {
+					$txt = substr ($value, 0, 4) ;
+					$color = "#ffa0a0"  ;
+				}
+				$sort = $txt . $dlname ;
+				$subset = $txt ;
+			} else {
+				$sort = "zzzzzz" . $dlname ;
+			}
+		}
+		description &Literal{
+Communications provider.
+VZ - Verizon
+CG - Cingular
+I  - Hosted internet
+SS - Starstream
+QW - QWEST/CCS
+SK - Siskiyou Telephone
+VT - Volcano Telecommunications
+CO - CalOre Telephone
+Tl - Telus
+Fr - DSL Frontier    
+Ch - Charter Cable 
+WB - Wild Blue
+SN - Spacenet
+H  - Hughes}
+	}
+	STATUS_LATENCY &Arr{
+		title	SLT
+		sizestr	000d00h00m00s
+		sort	numerical
+		null	-999999999.9
+		justify right
+		render_proc &Literal{
+			if ($value ne '-') {
+				$color = "#d0d0ff" ;
+				my $aval = abs($value) ;
+				my $d  = int(($aval+0.001)/86400.0) ;
+				$aval -= $d*86400.0 ;
+				my $h  = int(($aval+0.001)/3600.0) ;
+				$aval -= $h*3600.0 ;
+				my $m  = int(($aval+0.001)/60.0) ;
+				$aval -= $m*60.0 ;
+				my $s  = int($aval+0.001) ;
+
+				if ($d > 0) {
+					$txt = sprintf ( "%3dd%2.2dh%2.2dm%2.2ds", $d, $h, $m, $s ) ;
+				} elsif ($h > 0) {
+					$txt = sprintf ( "    %2.2dh%2.2dm%2.2ds", $h, $m, $s ) ;
+				} elsif ($m > 0) {
+					$txt = sprintf ( "       %2.2dm%2.2ds", $m, $s ) ;
+				} else {
+					$txt = sprintf ( "          %2.2ds", $s ) ;
+				}
+
+				if ($value >= 60.0) {$color = "#c0ffc0" ;}
+				if ($value >= 3600.0) {$color = "#ffff00" ;}
+				if ($value >= 7200.0) {$color = "#ff0000" ;}
+			} else {
+				$sort = 9999999999.999 ;
+				$subset = 9999999999.999 ;
+			}
+		}
+		description &Literal{
+Status latency - Age of last status packet
+received. }
+	}
+	dr &Arr{
+		title	dr
+		sizestr	XXXX
+		sort	numerical
+		null	-999999999.9
+		justify center
+		render_proc &Literal{
+			if ($value ne '-') {
+				if ($value >= 10000000000.0) {
+					$color = "#d0d0ff" ;
+					$txt = sprintf ( "%.0fg", $value/1000000000.0 ) ;
+				} elsif ($value >= 1000000000.0) {
+					$color = "#d0d0ff" ;
+					$txt = sprintf ( "%.1fg", $value/1000000000.0 ) ;
+				} elsif ($value >= 10000000.0) {
+					$color = "#d0d0ff" ;
+					$txt = sprintf ( "%.0fm", $value/1000000.0 ) ;
+				} elsif ($value >= 1000000.0) {
+					$color = "#d0d0ff" ;
+					$txt = sprintf ( "%.1fm", $value/1000000.0 ) ;
+				} elsif ($value >= 10000.0) {
+					$color = "#d0d0ff" ;
+					$txt = sprintf ( "%.0fk", $value/1000.0 ) ;
+				} elsif ($value >= 1000.0) {
+					$color = "#a0ffa0" ;
+					$txt = sprintf ( "%.1fk", $value/1000.0 ) ;
+				} elsif ($value >= 500.0) {
+					$color = "#a0ffa0" ;
+					$txt = sprintf ( "%.0f", $value ) ;
+				} elsif ($value > 0.0) {
+					$color = "#ffffa0" ;
+					$txt = sprintf ( "%.0f", $value ) ;
+				} else {
+					$color = "#ffa0a0" ;
+					$txt = sprintf ( "%.0f", $value ) ;
+				}
+				if ($pfarray_ref->{$dlname}{con} eq 'waiting') {
+					$color  = "#d0d0ff" ;
+				}
+				if ($pfarray_ref->{$dlname}{con} eq 'su') {
+					$color  = "#d0d0ff" ;
+				}
+			} else {
+				$sort = -999999999.999 ;
+				$subset = -9999999999.999 ;
+			}
+		}
+		description &Literal{
+Input & output data rate in bits per second.}
+	}
+	br24 &Arr{
+		title	br24
+		sizestr	XXXX
+		sort	numerical
+		null	-999999999.9
+		justify center
+		render_proc &Literal{
+			if ($value ne '-') {
+				if ($value >= 10000000000.0) {
+					$color  = "#d0d0ff" ;
+					$txt = sprintf ( "%.0fg", $value/1000000000.0 ) ;
+				} elsif ($value < 10000000000.0  && $value >= 1000000000.0) {
+					$color  = "#d0d0ff" ;
+					$txt = sprintf ( "%.1fg", $value/1000000000.0 ) ;
+				} elsif ($value < 1000000000.0 && $value >= 10000000.0) {
+					$color  = "#d0d0ff" ;
+					$txt = sprintf ( "%.0fm", $value/1000000.0 ) ;
+				} elsif ($value < 10000000.0  && $value >= 1000000.0) {
+					$color  = "#d0d0ff" ;
+					$txt = sprintf ( "%.1fm", $value/1000000.0 ) ;
+				} elsif ($value < 1000000.0  && $value >= 10000.0) {
+					$color  = "#d0d0ff" ;
+					$txt = sprintf ( "%.0fk", $value/1000.0 ) ;
+				} elsif ($value < 10000.0  && $value >= 1000.0) {
+					$color  = "#d0d0ff" ;
+					$txt = sprintf ( "%.1fk", $value/1000.0 ) ;
+				} elsif ($value < 1000.0) {
+					$color  = "#d0d0ff" ;
+					$txt = sprintf ( "%.0fk", $value ) ;
+				}
+			} else {
+				$sort = -999999999.999 ;
+				$subset = -9999999999.999 ;
+			}
+		}
+		description &Literal{
+Total number of bytes read in last 24 hours}
+	}
+	bw24 &Arr{
+		title	bw24
+		sizestr	XXXX
+		sort	numerical
+		null	-999999999.9
+		justify center
+		render_proc &Literal{
+			if ($value ne '-') {
+				if ($value >= 10000000000.0) {
+					$color  = "#d0d0ff" ;
+					$txt = sprintf ( "%.0fg", $value/1000000000.0 ) ;
+				} elsif ($value < 10000000000.0  && $value >= 1000000000.0) {
+					$color  = "#d0d0ff" ;
+					$txt = sprintf ( "%.1fg", $value/1000000000.0 ) ;
+				} elsif ($value < 1000000000.0 && $value >= 10000000.0) {
+					$color  = "#d0d0ff" ;
+					$txt = sprintf ( "%.0fm", $value/1000000.0 ) ;
+				} elsif ($value < 10000000.0  && $value >= 1000000.0) {
+					$color  = "#d0d0ff" ;
+					$txt = sprintf ( "%.1fm", $value/1000000.0 ) ;
+				} elsif ($value < 1000000.0  && $value >= 10000.0) {
+					$color  = "#d0d0ff" ;
+					$txt = sprintf ( "%.0fk", $value/1000.0 ) ;
+				} elsif ($value < 10000.0  && $value >= 1000.0) {
+					$color  = "#d0d0ff" ;
+					$txt = sprintf ( "%.1fk", $value/1000.0 ) ;
+				} elsif ($value < 1000.0) {
+					$color  = "#d0d0ff" ;
+					$txt = sprintf ( "%.0fk", $value ) ;
+				}
+			} else {
+				$sort = -999999999.999 ;
+				$subset = -9999999999.999 ;
+			}
+		}
+		description &Literal{
+Total number of bytes written in last 24 hours}
+	}
+	ce &Arr{
+		title	cme
+		sizestr	00000
+		sort	numerical
+		null	-999999999.9
+		justify center
+		render_proc &Literal{
+			if ($value ne '-') {
+				if ($value eq 'inf') {
+					$txt  = 'inf' ;
+					$color  = "#ff0000" ;
+				} else {
+					$color = "#d0d0ff" ;
+					if ($value < 90.0) {$color  = "#d0ffd0" ;}
+					if ($value <= 50.0) {$color  = "#ffff00" ;}
+					if ($value <= 10.0) {$color  = "#ff0000" ;}
+					if ($value < 10.0) {
+						$txt = sprintf ( "%.1f%%", $value ) ;
+					} else {
+						$txt = sprintf ( "%.0f%%", $value ) ;
+					}
+					if ($pfarray_ref->{$dlname}{con} eq 'waiting') {
+						$color  = "#a0ffa0" ;
+					} elsif ($pfarray_ref->{$dlname}{con} eq 'su') {
+						$color  = "#ffa0a0" ;
+					}
+				}
+			} else {
+				$sort = -999999999.999 ;
+				$subset = -9999999999.999 ;
+			}
+		}
+		description &Literal{
+Communication efficiency as a percentage of processed to read + missed packets}
+	}
+	pb &Arr{
+		title	buf
+		sizestr	00000
+		sort	numerical
+		null	-999999999.9
+		justify center
+		render_proc &Literal{
+			if ($value ne '-') {
+				if ($value eq 'inf') {
+					$txt  = 'inf' ;
+					$color  = "#ffa0a0" ;
+				} else {
+					$color = "#ffa0a0" ;
+					if ($value < 50.0) {$color = "#ffffa0" ;}
+					if ($value < 10.0) {$color = "#a0ffa0" ;}
+					if ($value <= 1.0) {$color = "#d0d0ff" ;}
+					if ($value < 10.0) {
+						$txt = sprintf ( "%.1f%%", $value ) ;
+					} else {
+						$txt = sprintf ( "%.0f%%", $value ) ;
+					}
+				}
+			} else {
+				$sort = -999999999.999 ;
+				$subset = -9999999999.999 ;
+			}
+		}
+		description &Literal{
+Percent of datalogger buffer full}
+	}
+	pbr &Arr{
+		title	bufr
+		sizestr	00000
+		sort	numerical
+		null	-999999999.9
+		justify center
+		render_proc &Literal{
+			if ($value ne '-') {
+				if ($value eq 'inf') {
+					$txt  = 'inf' ;
+					$color  = "#ff0000" ;
+				} else {
+					$color = "#ff0000" ;
+					if ($value < 50.0) {$color = "#ffff00" ;}
+					if ($value < 10.0) {$color = "#a0ffa0" ;}
+					if ($value <= 1.0) {$color = "#d0d0ff" ;}
+					if ($value < 10.0) {
+						$txt = sprintf ( "%.1f%%", $value ) ;
+					} else {
+						$txt = sprintf ( "%.0f%%", $value ) ;
+					}
+				}
+			} else {
+				$sort = -999999999.999 ;
+				$subset = -9999999999.999 ;
+			}
+		}
+		description &Literal{
+Percent of datalogger buffer full}
+	}
+	clt &Arr{
+		title	cltncy
+		sizestr	000d00h00m00s
+		sort	numerical
+		null	-999999999.9
+		justify right
+		render_proc &Literal{
+			if ($value ne '-') {
+				$color = "#d0d0ff" ;
+				my $aval = abs($value) ;
+				my $d  = int(($aval+0.001)/86400.0) ;
+				$aval -= $d*86400.0 ;
+				my $h  = int(($aval+0.001)/3600.0) ;
+				$aval -= $h*3600.0 ;
+				my $m  = int(($aval+0.001)/60.0) ;
+				$aval -= $m*60.0 ;
+				my $s  = int($aval+0.001) ;
+
+				if ($d > 0) {
+					$txt = sprintf ( "%3dd%2.2dh%2.2dm%2.2ds", $d, $h, $m, $s ) ;
+				} elsif ($h > 0) {
+					$txt = sprintf ( "    %2.2dh%2.2dm%2.2ds", $h, $m, $s ) ;
+				} elsif ($m > 0) {
+					$txt = sprintf ( "       %2.2dm%2.2ds", $m, $s ) ;
+				} else {
+					$txt = sprintf ( "          %2.2ds", $s ) ;
+				}
+				if ($value >= 3600.0) {$color = "#c0ffc0" ;}
+				if ($value >= 21600.0) {$color = "#ffff00" ;}
+				if ($value >= 86400.0) {$color = "#ff0000" ;}
+			} else {
+				$sort = 999999999.999 ;
+				$subset = 9999999999.999 ;
+			}
+		}
+		description &Literal{
+Clock latency - Age of last GPS clock update.}
+	}
+	dlt &Arr{
+		title	dltncy
+		sizestr	0000d00h00m00s
+		sort	numerical
+		null	999999999.9
+		justify	right
+		render_proc &Literal{
+			if ($value ne '-') {
+				$sort = $value ;
+				$subset = $value ;
+				$color = "#d0d0ff" ;
+				my $aval = abs($value) ;
+				my ($d, $h, $m, $s) ;
+				$d  = int(($aval+0.001)/86400.0) ;
+				$aval -= $d*86400.0 ;
+				$h  = int(($aval+0.001)/3600.0) ;
+				$aval -= $h*3600.0 ;
+				$m  = int(($aval+0.001)/60.0) ;
+				$aval -= $m*60.0 ;
+				$s  = int($aval+0.001) ;
+
+				if ($value >= 0.0) {
+					if ($d > 0) {
+						$txt = sprintf ( "%3dd%2.2dh%2.2dm%2.2ds", $d, $h, $m, $s ) ;
+					} elsif ($h > 0) {
+						$txt = sprintf ( "    %2.2dh%2.2dm%2.2ds", $h, $m, $s ) ;
+					} elsif ($m > 0) {
+						$txt = sprintf ( "       %2.2dm%2.2ds", $m, $s ) ;
+					} else {
+						$txt = sprintf ( "          %2.2ds", $s ) ;
+					}
+				} else {
+					if ($d > 0) {
+						$txt = sprintf ( "-%3dd%2.2dh%2.2dm%2.2ds", $d, $h, $m, $s ) ;
+					} elsif ($h > 0) {
+						$txt = sprintf ( "    -%2.2dh%2.2dm%2.2ds", $h, $m, $s ) ;
+					} elsif ($m > 0) {
+						$txt = sprintf ( "       -%2.2dm%2.2ds", $m, $s ) ;
+					} else {
+						$txt = sprintf ( "          -%2.2ds", $s ) ;
+					}
+				}
+
+				if ($pfarray_ref->{$dlname}{con} eq 'waiting') {
+					$color  = "#a0ffa0" ;
+					if ($d*24+$h >= 3) {
+						$color  = "#ff0000" ;
+					} elsif ($d*24+$h >= 2) {
+						$color  = "#ff8000" ;
+					} elsif ($d*24+$h >= 1) {
+						$color  = "#ffff00" ;
+					}
+				} else {
+					if ($value >= 60.0) {$color = "#c0ffc0" ;}
+					if ($value >= 3600.0) {$color = "#ffff00" ;}
+					if ($value >= 7200.0) {$color = "#ff0000" ;}
+				}
+			} else {
+				$sort = 9999999999.999 ;
+				$subset = 9999999999.999 ;
+			}
+		}
+		description &Literal{
+Data latency - Age of last data packet sample received.}
+	}
+	rtm &Arr{
+		title	runtm
+		sizestr	0000d00h00m00s
+		sort	numerical
+		null	-999999999.9
+		justify	right
+		render_proc &Literal{
+			if ($value ne '-') {
+				$sort = $value ;
+				$subset = $value ;
+				$color = "#d0d0ff" ;
+				my $aval = abs($value) ;
+				my $d  = int(($aval+0.001)/86400.0) ;
+				$aval -= $d*86400.0 ;
+				my $h  = int(($aval+0.001)/3600.0) ;
+				$aval -= $h*3600.0 ;
+				my $m  = int(($aval+0.001)/60.0) ;
+				$aval -= $m*60.0 ;
+				my $s  = int($aval+0.001) ;
+			
+				if ($d > 0) {
+					$txt = sprintf ( "%3dd%2.2dh%2.2dm%2.2ds", $d, $h, $m, $s ) ;
+				} elsif ($h > 0) {
+					$txt = sprintf ( "    %2.2dh%2.2dm%2.2ds", $h, $m, $s ) ;
+				} elsif ($m > 0) {
+					$txt = sprintf ( "       %2.2dm%2.2ds", $m, $s ) ;
+				} else {
+					$txt = sprintf ( "          %2.2ds", $s ) ;
+				}
+
+				if ($value >= 0.0) {
+					$color = "#d0d0ff" ;
+				} else {
+					if ($pfarray_ref->{$dlname}{con} eq 'waiting') {
+						$color  = "#a0ffa0" ;
+						if ($h >= 3) {
+							$color  = "#ff0000" ;
+						} elsif ($h >= 2) {
+							$color  = "#ff8000" ;
+						} elsif ($h >= 1) {
+							$color  = "#ffff00" ;
+						}
+					} elsif ($pfarray_ref->{$dlname}{con} eq 'su' && $value > -3600.0) {
+						$color  = "#ffa0a0" ;
+					} elsif ($pfarray_ref->{$dlname}{con} eq 'no' && $value > -3600.0) {
+						$color  = "#ffa0a0" ;
+					} elsif ($pfarray_ref->{$dlname}{con} eq 'yes' && $value < 0.0) {
+						$color  = "#ffa0a0" ;
+					} else {
+						$color  = "#ff0000" ;
+					}
+				}
+			} else {
+				$sort = -9999999999.999 ;
+				$subset = -9999999999.999 ;
+			}
+		}
+		description &Literal{
+blue     - Running time since current connection was established.
+not blue - Running time since connection has been down.}
+	}
+	gp24 &Arr{
+		title	gp24
+		sizestr	XXXX
+		null	-999999999.9
+		justify center
+		render_proc &Literal{
+			if ($value ne '-') {
+				if ($value >= 86400.0) {
+					$color  = "#ff0000" ;
+					$txt = sprintf ( "%.0fd", $value/86400.0 ) ;
+				} elsif ($value >= 3600.0) {
+					$color  = "#ff0000" ;
+					$txt = sprintf ( "%.0fh", $value/3600.0 ) ;
+				} elsif ($value >= 60.0) {
+					$color  = "#ff0000" ;
+					$txt = sprintf ( "%.0fm", $value/60.0 ) ;
+				} elsif ($value > 0.0) {
+					$color  = "#ffff00" ;
+					$txt = sprintf ( "%.0fs", $value ) ;
+				} else {
+					$color  = "#d0d0ff" ;
+					$txt = "0s" ;
+				}
+			} else {
+				$sort = 9999999999.999 ;
+				$subset = 9999999999.999 ;
+			}
+		}
+		description &Literal{
+data gaps in last 24 hours}
+	}
+	gp1 &Arr{
+		title	gp1
+		sizestr	000h
+		sort	numerical
+		null	-999999999.9
+		justify center
+		render_proc &Literal{
+			if ($value ne '-') {
+				if ($value >= 86400.0) {
+					$color  = "#ff0000" ;
+					$txt = sprintf ( "%.0fd", $value/86400.0 ) ;
+				} elsif ($value >= 3600.0) {
+					$color  = "#ff0000" ;
+					$txt = sprintf ( "%.0fh", $value/3600.0 ) ;
+				} elsif ($value >= 60.0) {
+					$color  = "#ff0000" ;
+					$txt = sprintf ( "%.0fm", $value/60.0 ) ;
+				} elsif ($value > 0.0) {
+					$color  = "#ffff00" ;
+					$txt = sprintf ( "%.0fs", $value ) ;
+				} else {
+					$color  = "#d0d0ff" ;
+					$txt = "0s" ;
+				}
+			} else {
+				$sort = 9999999999.999 ;
+				$subset = 9999999999.999 ;
+			}
+		}
+		description &Literal{
+data gaps in last 1 hour}
+	}
+	nl24 &Arr{
+		title	nl24
+		sizestr	XXXX
+		sort	numerical
+		null	-999999999.9
+		justify center
+		render_proc &Literal{
+			if ($value ne '-') {
+				$txt = sprintf ( "%.0f", $value ) ;
+				if ($value >= 500.0) {
+					$color  = "#ff0000" ;
+				} elsif ($value >= 200.0) {
+					$color  = "#ffff00" ;
+				} elsif ($value > 20.0) {
+					$color  = "#d0ffd0" ;
+				} else {
+					$color  = "#d0d0ff" ;
+				}
+			} else {
+				$sort = 9999999999.999 ;
+				$subset = 9999999999.999 ;
+			}
+		}
+		description &Literal{
+comm link cycles in last 24 hours}
+	}
+	np24 &Arr{
+		title	np24
+		sizestr	XXXX
+		sort	numerical
+		null	-999999999.9
+		justify center
+		render_proc &Literal{
+			if ($value ne '-') {
+				$txt = sprintf ( "%.0f", $value ) ;
+				if ($value >= 500.0) {
+					$color  = "#ff0000" ;
+				} elsif ($value >= 200.0) {
+					$color  = "#ffff00" ;
+				} elsif ($value > 20.0) {
+					$color  = "#d0ffd0" ;
+				} else {
+					$color  = "#d0d0ff" ;
+				}
+			} else {
+				$sort = 9999999999.999 ;
+				$subset = 9999999999.999 ;
+			}
+		}
+		description &Literal{
+POCs received in last 24 hours}
+	}
+	ni24 &Arr{
+		title	ni24
+		sizestr	XXXX
+		sort	numerical
+		null	-999999999.9
+		justify center
+		render_proc &Literal{
+			if ($value ne '-') {
+				$txt = sprintf ( "%.0f", $value ) ;
+				if ($value >= 10.0) {
+					$color  = "#ff0000" ;
+				} elsif ($value >= 5.0) {
+					$color  = "#ff8000" ;
+				} elsif ($value > 1.0) {
+					$color  = "#ffff00" ;
+				} else {
+					$color  = "#d0d0ff" ;
+				}
+			} else {
+				$sort = 9999999999.999 ;
+				$subset = 9999999999.999 ;
+			}
+		}
+		description &Literal{
+datalogger ip-address changes in last 24 hours}
+	}
+	nr24 &Arr{
+		title	nr24
+		sizestr	XXXX
+		sort	numerical
+		null	-999999999.9
+		justify center
+		render_proc &Literal{
+			if ($value ne '-') {
+				$txt = sprintf ( "%.0f", $value ) ;
+				if ($value > 0.0) {
+					$color  = "#ff0000" ;
+				} else {
+					$color  = "#d0d0ff" ;
+				}
+			} else {
+				$sort = 9999999999.999 ;
+				$subset = 9999999999.999 ;
+			}
+		}
+		description &Literal{
+Datalogger reboots in last 24 hours}
+	}
+	meme &Arr{
+		title	meme
+		sizestr	XXXX
+		sort	numerical
+		null	-999999999.9
+		justify center
+		render_proc &Literal{
+			if ($value ne '-') {
+				$txt = sprintf ( "%.0f", $value ) ;
+				if ($value > 0.0) {
+					$color  = "#ff0000" ;
+				} else {
+					$color  = "#d0d0ff" ;
+				}
+			} else {
+				$sort = 9999999999.999 ;
+				$subset = 9999999999.999 ;
+			}
+		}
+		description &Literal{
+buffer memory error}
+	}
+	cale &Arr{
+		title	ade
+		sizestr	XXXX
+		sort	numerical
+		null	-999999999.9
+		justify center
+		render_proc &Literal{
+			if ($value ne '-') {
+				$value =~ s/ch//g ;
+				$txt = $value ;
+				$color  = "#ff0000" ;
+			} else {
+				$sort = 9999999999.999 ;
+				$subset = 9999999999.999 ;
+			}
+		}
+		description &Literal{
+data A/D calibration error}
+	}
+	cala &Arr{
+		title	cala
+		sizestr	XXXX
+		justify center
+		render_proc &Literal{
+			if ($value ne '-') {
+				if ($value == 0) {
+					$txt = "ok" ;
+					$color  = "#d0d0ff" ;
+				} else {
+					$txt = "abt" ;
+					$color  = "#ff0000" ;
+				}
+			}
+		}
+		description &Literal{
+sensor calibration error}
+	}
+	cals &Arr{
+		title	cals
+		sizestr	XXXXXX
+		justify center
+		render_proc &Literal{
+			if ($value ne '-') {
+				if ($value eq "") {
+					$txt = "off" ;
+					$color  = "#d0d0ff" ;
+				} else {
+					if ($value =~ /.*sig.*/) {
+						$value =~ s/on//g;
+						$value =~ s/sig//g;
+						$value =~ s/ //g;
+						$value =~ s/00/0/g;
+						$value =~ s/11/1/g;
+						$value =~ s/22/2/g;
+						$value =~ s/33/3/g;
+						$value =~ s/44/4/g;
+						$value =~ s/55/5/g;
+						$txt = $value ;
+						$color  = "#00ff00" ;
+					} else {
+						$value =~ s/on//g;
+						$value =~ s/ //g;
+						$txt = $value ;
+						$color  = "#00ffff" ;
+					}
+				}
+			}
+		}
+		description &Literal{
+sensor calibration relay position}
+	}
+	tput &Arr{
+		title	tp
+		sizestr	000.00
+		sort	numerical
+		null	-999999999.9
+		justify center
+		render_proc &Literal{
+			if ($value ne '-') {
+				if ($value eq 'inf') {
+					$txt  = 'inf' ;
+					$color  = "#ff0000" ;
+				} else {
+					if ($value <= 0.5) {$color = "#ffa0a0" ;}
+					elsif ($value <= 0.8) {$color = "#ff80a0" ;}
+					elsif ($value <= 0.9) {$color = "#ffffa0" ;}
+					elsif ($value < 1.1) {$color = "#d0ffd0" ;}
+					else { $color = "#d0d0ff" ; }
+					$txt = sprintf ( "%.2f", $value ) ;
+				}
+				if ($pfarray_ref->{$dlname}{con} eq 'waiting') {
+					$color  = "#d0ffd0" ;
+				}
+				if ($pfarray_ref->{$dlname}{con} eq 'su') {
+					$color  = "#d0ffd0" ;
+				}
+			} else {
+				$sort = -9999999999.999 ;
+				$subset = -9999999999.999 ;
+			}
+		}
+		description &Literal{
+Thruput as a ratio of seconds read to the real-time clock}
+		thistory &Arr{
+			npmax 17280
+			decimation 1
+			ybot	-0.1
+			ytop	2.0
+			twin	36000.0
+		}
+	}
+	lcq &Arr{
+		title	lcq
+		sizestr	00000
+		sort	numerical
+		null	-999999999.9
+		justify center
+		render_proc &Literal{
+			my $c ;
+			if ($value ne '-') {
+				if ($value eq 'inf') {
+					$txt  = 'inf' ;
+					$color  = "#ff0000" ;
+				} else {
+					$color = "#ff0000" ;
+					if ($value >= 10.0 && $value <= 60.0) {
+						$c = int(63.0*($value-10.0)/50.0+0.5) ;
+						$color  = sprintf ( "\#ff%2.2xd0", 192+$c ) ;
+					} elsif ($value > 60.0 && $value < 90.0) {
+						$color = "#f0ffd0" ;
+						if ($value < 80.0) {$color  = "#ffffd0" ;}
+					} elsif ($value >= 90.0) {
+						if ($value < 95.0) {
+							$c  = int(63.0*(95.0-$value)/5.0+0.5) ;
+							$color = sprintf ( "\#d0ff%2.2x", 255-$c ) ;
+						} elsif ($value >= 95.0 && $value < 100.0) {
+							$c  = int(63.0*(100.0-$value)/5.0+0.5) ;
+							$color = sprintf ( "\#d0%2.2xff", 192+$c ) ;
+						} elsif ($value >= 100.0) {$color = "#d0d0ff" ;}
+					}
+					if ($value < 10.0) {
+						$txt = sprintf ( "%.1f%%", $value ) ;
+					} else {
+						$txt = sprintf ( "%.0f%%", $value ) ;
+					}
+				}
+			}
+		}
+		description &Literal{
+Percent clock quality}
+		thistory &Arr{
+			npmax 17280
+			decimation 1
+			ybot	-5.0
+			ytop	105.0
+			twin	36000.0
+		}
+	}
+	cld &Arr{
+		title	cldrf
+		sizestr	1000ms
+		justify center
+		sort 	numerical
+		render_proc &Literal{
+			if ($value ne '-') {
+				if ($value >= 10000.0 || $value <= -10000.0) {
+					$txt = sprintf ( "%.2fs", 0.000001*$value ) ;
+					$color = "#ff0000" ;
+				} elsif ($value >= 1000.0 || $value <= -1000.0) {
+					$txt = sprintf ( "%.1fms", 0.001*$value ) ;
+					$color = "#d0ffd0" ;
+				} else {
+					$color  = "#d0d0ff" ;
+					$txt = sprintf ( "%dus", $value ) ;
+				}
+				if ($value > 2000.0 || $value < -2000.0) {$color = "#ffffd0" ;}
+				if ($value > 5000.0 || $value < -5000.0) {$color = "#ffd0d0" ;}
+			} else {
+				$sort = -9999999999.999 ;
+				$subset = -9999999999.999 ;
+			}
+		}
+		description &Literal{
+Clock drift from true
+second mark registration.}
+		thistory &Arr{
+			npmax 17280
+			decimation 10
+			ybot	-10.0
+			ytop	10.0
+			twin	36000.0
+		}
+	}
+	sc0 &Arr{
+		title	sc0
+		sizestr	123456789
+		justify center
+		sort 	numerical
+		render_proc &Literal{
+			if ($value ne '-') {
+				$value  = int($value) ;
+				$txt = sprintf ( "%d", $value ) ;
+				$color  = "#d0d0ff" ;
+			} else {
+				$sort = -9999999999.999 ;
+				$subset = -9999999999.999 ;
+			}
+		}
+		description &Literal{
+Serial sensor channel 0.}
+	}
+	sc1 &Arr{
+		title	sc1
+		sizestr	123456789
+		justify center
+		sort 	numerical
+		render_proc &Literal{
+			if ($value ne '-') {
+				$value  = int($value) ;
+				$txt = sprintf ( "%d", $value ) ;
+				$color  = "#d0d0ff" ;
+			} else {
+				$sort = -9999999999.999 ;
+				$subset = -9999999999.999 ;
+			}
+		}
+		description &Literal{
+Serial sensor channel 1.}
+	}
+	sc2 &Arr{
+		title	sc2
+		sizestr	123456789
+		justify center
+		sort 	numerical
+		render_proc &Literal{
+			if ($value ne '-') {
+				$value  = int($value) ;
+				$txt = sprintf ( "%d", $value ) ;
+				$color  = "#d0d0ff" ;
+			} else {
+				$sort = -9999999999.999 ;
+				$subset = -9999999999.999 ;
+			}
+		}
+		description &Literal{
+Serial sensor channel 2.}
+	}
+	sc3 &Arr{
+		title	sc3
+		sizestr	123456789
+		justify center
+		sort 	numerical
+		render_proc &Literal{
+			if ($value ne '-') {
+				$value  = int($value) ;
+				$txt = sprintf ( "%d", $value ) ;
+				$color  = "#d0d0ff" ;
+			} else {
+				$sort = -9999999999.999 ;
+				$subset = -9999999999.999 ;
+			}
+		}
+		description &Literal{
+Serial sensor channel 3.}
+	}
+	m0 &Arr{
+		title	m0
+		sizestr	-128
+		justify center
+		sort 	numerical
+		render_proc &Literal{
+			if ($value ne '-') {
+				$value  = int($value) ;
+				if ($value >= 50 || $value <= -50) {$color = "#ff0000" ;}
+				elsif ($value >= 35 || $value <= -35) {$color = "#ffff00" ;}
+				elsif ($value >= 20 || $value <= -20) {$color = "#a0ffa0" ;}
+				else {$color = "#d0d0ff" ;}
+				$txt = sprintf ( "%d", $value ) ;
+			} else {
+				$sort = -9999999999.999 ;
+				$subset = -9999999999.999 ;
+			}
+		}
+		description &Literal{
+Seismometer mass position for physical channel 0.
+Ranges from -128 to +127.}
+	}
+	m1 &Arr{
+		title	m1
+		sizestr	-128
+		justify center
+		sort 	numerical
+		render_proc &Literal{
+			if ($value ne '-') {
+				$value  = int($value) ;
+				if ($value >= 50 || $value <= -50) {$color = "#ff0000" ;}
+				elsif ($value >= 35 || $value <= -35) {$color = "#ffff00" ;}
+				elsif ($value >= 20 || $value <= -20) {$color = "#a0ffa0" ;}
+				else {$color = "#d0d0ff" ;}
+				$txt = sprintf ( "%d", $value ) ;
+			} else {
+				$sort = -9999999999.999 ;
+				$subset = -9999999999.999 ;
+			}
+		}
+		description &Literal{
+Seismometer mass position for physical channel 1.
+Ranges from -128 to +127.}
+	}
+	m2 &Arr{
+		title	m2
+		sizestr	-128
+		justify center
+		sort 	numerical
+		render_proc &Literal{
+			if ($value ne '-') {
+				$value  = int($value) ;
+				if ($value >= 50 || $value <= -50) {$color = "#ff0000" ;}
+				elsif ($value >= 35 || $value <= -35) {$color = "#ffff00" ;}
+				elsif ($value >= 20 || $value <= -20) {$color = "#a0ffa0" ;}
+				else {$color = "#d0d0ff" ;}
+				$txt = sprintf ( "%d", $value ) ;
+			} else {
+				$sort = -9999999999.999 ;
+				$subset = -9999999999.999 ;
+			}
+		}
+		description &Literal{
+Seismometer mass position for physical channel 2.
+Ranges from -128 to +127.}
+	}
+	m3 &Arr{
+		title	m3
+		sizestr	-128
+		justify center
+		sort 	numerical
+		render_proc &Literal{
+			if ($value ne '-') {
+				$value  = int($value) ;
+				if ($value >= 50 || $value <= -50) {$color = "#ff0000" ;}
+				elsif ($value >= 35 || $value <= -35) {$color = "#ffff00" ;}
+				elsif ($value >= 20 || $value <= -20) {$color = "#a0ffa0" ;}
+				else {$color = "#d0d0ff" ;}
+				$txt = sprintf ( "%d", $value ) ;
+			} else {
+				$sort = -9999999999.999 ;
+				$subset = -9999999999.999 ;
+			}
+		}
+		description &Literal{
+Seismometer mass position for physical channel 3.
+Ranges from -128 to +127.}
+	}
+	m4 &Arr{
+		title	m4
+		sizestr	-128
+		justify center
+		sort 	numerical
+		render_proc &Literal{
+			if ($value ne '-') {
+				$value  = int($value) ;
+				if ($value >= 50 || $value <= -50) {$color = "#ff0000" ;}
+				elsif ($value >= 35 || $value <= -35) {$color = "#ffff00" ;}
+				elsif ($value >= 20 || $value <= -20) {$color = "#a0ffa0" ;}
+				else {$color = "#d0d0ff" ;}
+				$txt = sprintf ( "%d", $value ) ;
+			} else {
+				$sort = -9999999999.999 ;
+				$subset = -9999999999.999 ;
+			}
+		}
+		description &Literal{
+Seismometer mass position for physical channel 4.
+Ranges from -128 to +127.}
+	}
+	m5 &Arr{
+		title	m5
+		sizestr	-128
+		justify center
+		sort 	numerical
+		render_proc &Literal{
+			if ($value ne '-') {
+				$value  = int($value) ;
+				if ($value >= 50 || $value <= -50) {$color = "#ff0000" ;}
+				elsif ($value >= 35 || $value <= -35) {$color = "#ffff00" ;}
+				elsif ($value >= 20 || $value <= -20) {$color = "#a0ffa0" ;}
+				else {$color = "#d0d0ff" ;}
+				$txt = sprintf ( "%d", $value ) ;
+			} else {
+				$sort = -9999999999.999 ;
+				$subset = -9999999999.999 ;
+			}
+		}
+		description &Literal{
+Seismometer mass position for physical channel 5.
+Ranges from -128 to +127.}
+	}
+	m0-2 &Arr{
+		title	m0-2
+		sizestr	XXXXX
+		justify center
+		using	m0 m1 m2
+		sort 	numerical
+		render_proc &Literal{
+			my $avalue = 0 ;
+			my $m0 = $pfarray_ref->{$dlname}{m0} ;
+			my $m1 = $pfarray_ref->{$dlname}{m1} ;
+			my $m2 = $pfarray_ref->{$dlname}{m2} ;
+			if (defined $m0 && $m0 ne '-') {
+				$value = $m0 ;
+				$avalue = abs($m0) ;
+			}
+			if (defined $m1 && $m1 ne '-') {
+				if (abs($m1) > $avalue) {
+					$value = $m1 ;
+					$avalue = abs($m1) ;
+				}
+			}
+			if (defined $m2 && $m2 ne '-') {
+				if (abs($m2) > $avalue) {
+					$value = $m2 ;
+					$avalue = abs($m2) ;
+				}
+			}
+			if ($value ne "-") {
+				if ($avalue >= 50) {$color = "#ff0000" ;}
+				elsif ($avalue >= 35) {$color = "#ffff00" ;}
+				elsif ($avalue >= 20) {$color = "#a0ffa0" ;}
+				else {$color = "#d0d0ff" ;}
+				$txt = sprintf ( "%d", $value ) ;
+				$sort = $value ;
+				$subset = $value ;
+			} else {
+				$sort = -9999999999.999 ;
+				$subset = -9999999999.999 ;
+			}
+		}
+		description &Literal{
+Largest seismometer mass position for physical channels 0-2.
+Ranges from -128 to +127.}
+	}
+	m3-5 &Arr{
+		title	m3-5
+		sizestr	XXXXX
+		justify center
+		using	m3 m4 m5
+		sort 	numerical
+		render_proc &Literal{
+			my $avalue = 0 ;
+			my $m3 = $pfarray_ref->{$dlname}{m3} ;
+			my $m4 = $pfarray_ref->{$dlname}{m4} ;
+			my $m5 = $pfarray_ref->{$dlname}{m5} ;
+			if (defined $m3 && $m3 ne '-') {
+				$value = $m3 ;
+				$avalue = abs($m3) ;
+			}
+			if (defined $m4 && $m4 ne '-') {
+				if (abs($m4) > $avalue) {
+					$value = $m4 ;
+					$avalue = abs($m4) ;
+				}
+			}
+			if (defined $m5 && $m5 ne '-') {
+				if (abs($m5) > $avalue) {
+					$value = $m5 ;
+					$avalue = abs($m5) ;
+				}
+			}
+			if ($value ne "-") {
+				if ($avalue >= 50) {$color = "#ff0000" ;}
+				elsif ($avalue >= 35) {$color = "#ffff00" ;}
+				elsif ($avalue >= 20) {$color = "#a0ffa0" ;}
+				else {$color = "#d0d0ff" ;}
+				$txt = sprintf ( "%d", $value ) ;
+				$sort = $value ;
+				$subset = $value ;
+			} else {
+				$sort = -9999999999.999 ;
+				$subset = -9999999999.999 ;
+			}
+		}
+		description &Literal{
+Largest seismometer mass position for physical channels 3-5.
+Ranges from -128 to +127.}
+	}
+	dt &Arr{
+		title	temp
+		sizestr	-50C
+		justify center
+		sort	numerical
+		render_proc &Literal{
+			if ($value ne '-') {
+				if ($value >= 50.0) {$color  = "#ff0000" ;}
+				elsif ($value >= 40.0) {$color  = "#ffff00" ;}
+				elsif ($value >= 3.0) {$color  = "#a0ffa0" ;}
+				elsif ($value >= -10.0) {$color  = "#d0d0ff" ;}
+				elsif ($value >= -20.0) {$color  = "#0000ff" ;}
+				else {$color  = "#ffd0ff" ;}
+				$txt = sprintf ( "%.0fC", $value ) ;
+			} else {
+				$sort = 9999999999.999 ;
+				$subset = 9999999999.999 ;
+			}
+		}
+		description &Literal{
+Digitizer temperature.}
+		thistory &Arr{
+			npmax 17280
+			decimation 1
+			ybot	0.0
+			ytop	50.0
+			twin	36000.0
+		}
+	}
+	dv &Arr{
+		title	volt
+		sizestr	00.0V
+		justify center
+		sort	numerical
+		render_proc &Literal{
+			if ($value ne '-') {
+				if ($value >= 12 || $value <= 14 ) {$color = "#a0ffa0" ;}
+				elsif ( ($value > 14 && $value <= 14.5) || ($value > 11.8 && $value < 12) ) {$color = "#f0ffd0" ;}
+				elsif ($value > 14.5 || $value <= 11.8 ) {$color = "#ff8080" ;}
+				else {$color = "#d0d0ff" ;}
+				$txt = sprintf ( "%.1fV", $value ) ;
+			} else {
+				$sort = 9999999999.999 ;
+				$subset = 9999999999.999 ;
+			}
+		}
+		description &Literal{
+Digitizer voltage.}
+		thistory &Arr{
+			npmax 17280
+			decimation 1
+			ybot	0.0
+			ytop	15.0
+			twin	36000.0
+		}
+	}
+	da &Arr{
+		title	amp
+		sizestr	1000mA
+		justify center
+		sort	numerical
+		render_proc &Literal{
+			if ($value ne '-') {
+				if ($value >= 1.00) {$color  = "#ff0000" ;}
+				elsif ($value >= 0.2) {$color  = "#a0ffa0" ;}
+				else { $color = "#d0d0ff" ;}
+				$txt = sprintf ( "%.0fmA", $value*1000.0 ) ;
+			} else {
+				$sort = 9999999999.999 ;
+				$subset = 9999999999.999 ;
+			}
+		}
+		description &Literal{
+Digitizer current.}
+		thistory &Arr{
+			npmax 17280
+			decimation 1
+			ybot	0.0
+			ytop	0.1
+			twin	36000.0
+		}
+	}
+	gpss &Arr{
+		title	gpss
+		sizestr	XXXX
+		justify center
+		render_proc &Literal{
+			if ($value eq "-")	{
+			} elsif ( $value eq "on" )	{
+				$color  = "#d0d0ff" ;
+				$txt = $value ;
+			} elsif ( $value eq "ona" )	{
+				$color  = "#d0d0ff" ;
+				$txt = $value ;
+			} elsif ( $value eq "onc" )	{
+				$color  = "#d0d0ff" ;
+				$txt = $value ;
+			} elsif ( $value eq "off" )	{
+				$color  = "#ffd0aa" ;
+				$txt = $value ;
+			} elsif ( $value eq "offg" )	{
+				$color  = "#d0ffd0" ;
+				$txt = $value ;
+			} elsif ( $value eq "offp" )	{
+				$color  = "#d0ffd0" ;
+				$txt = $value ;
+			} elsif ( $value eq "offt" )	{
+				$color  = "#ffd0aa" ;
+				$txt = $value ;
+			} elsif ( $value eq "offc" )	{
+				$color  = "#ffd0aa" ;
+				$txt = $value ;
+			} elsif ( $value eq "cs" )	{
+				$color  = "#ff0000" ;
+				$txt = $value ;
+			} else	{
+				$color  = "#ffd0d0" ;
+				$txt = $value ;
+			}
+		}
+		description &Literal{
+GPS status
+off    - powered off
+offg   - powered off due to GPS lock
+offp   - powered off due to PLL lock
+offt   - powered off due to time limit
+offc   - powered off by command
+on     - powered on
+ona    - powered on automatically
+onc    - powered on by command
+cs     - cold start}
+	}
+	gps &Arr{
+		title	gps
+		sizestr	offp
+		justify center
+		render_proc &Literal{
+			my $fr = 0 ;
+			my $el = 0 ;
+			my $d = 0 ;
+			$_ = $value ;
+			if (/elck/) {$el = 1;}
+			if (/fr/) {$fr = 1;}
+			if (/1d/) {$d = 1;}
+			if (/2d/) {$d = 2;}
+			if (/3d/) {$d = 3;}
+
+			if ($fr != 0 || $el != 0 || $d != 0) {
+				if ($d == 0)	{
+					$value  = "" ;
+					if ($el != 0) {$value .= 'l' ;}
+					if ($fr != 0) {$value .= 'f' ;}
+				} elsif ($d == 1)	{
+					$value  = "1D" ;
+					if ($fr != 0) {$value .= 'f' ;}
+				} elsif ($d == 2)	{
+					$value  = "2D" ;
+					if ($fr != 0) {$value .= 'f' ;}
+				} elsif ($d == 3)	{
+					$value  = "3D" ;
+					if ($fr != 0) {$value .= 'f' ;}
+				}
+			}
+
+			if ($value eq "-")	{
+			} elsif ($value eq "L")	{
+				$color = "#d0d0ff" ;
+				$txt = "L" ;
+			} elsif ($value eq "3D")	{
+				$color = "#d0d0ff" ;
+				$txt = "3D" ;
+			} elsif ($value eq "3Df")	{
+				$color = "#aaaaff" ;
+				$txt = "3Df" ;
+			} elsif ($value eq "2D")	{
+				$color = "#d0ffd0" ;
+				$txt = "2D" ;
+			} elsif ($value eq "2Df")	{
+				$color = "#aaffaa" ;
+				$txt = "2Df" ;
+			} elsif ($value eq "1D")	{
+				$color = "#ffffD0" ;
+				$txt = "1D" ;
+			} elsif ($value eq "1Df")	{
+				$color = "#ffffaa" ;
+				$txt = "1Df" ;
+			} elsif ($value eq "lf")	{
+				$color = "#d0ffd0" ;
+				$txt = "lf" ;
+			} elsif ($value eq "off")	{
+				$color = "#ffd0aa" ;
+				$txt = $value ;
+			} elsif ($value eq "U")	{
+				$color = "#ffd0d0" ;
+				$txt = $value ;
+			} elsif ($value eq "u")	{
+				$color = "#ffd0d0" ;
+				$txt = $value ;
+			} elsif ($value eq "nb")	{
+				$color = "#ffd0d0" ;
+				$txt = $value ;
+			} elsif ($value eq "uf")	{
+				$color = "#ffaaaa" ;
+				$txt = $value ;
+			} else {
+				$color = "#ff0000" ;
+				$txt = $value ;
+			}
+		}
+		description &Literal{
+GPS position fix quality
+3D  - best quality, 3-dimensional fix
+2D  - 2-dimension (lat-lon) fix
+1D  - poor quality, 1-dimension fix
+L   - gps locked - unknown fix
+U   - gps not locked - unknown fix
+3Df - gps off, last fix was 3D
+2Df - gps off, last fix was 2D
+1Df - gps off, last fix was 1D
+lf  - gps off, clock was ever locked
+off - gps off, unknown lock
+nb  - no gps board}
+	}
+	clq &Arr{
+		title	pll
+		sizestr	XXX
+		justify center
+		render_proc &Literal{
+			if ($value eq "-") {
+			} elsif ($value eq "5")	{
+				$color = "#d0d0ff" ;
+				$txt = "L" ;
+			} elsif ($value eq "l")	{
+				$color = "#d0d0ff" ;
+				$txt = "L" ;
+			} elsif ($value eq "ex")	{
+				$color = "#d0d0ff" ;
+				$txt = "EX" ;
+			} elsif ($value eq "g")	{
+				$color = "#d0d0ff" ;
+				$txt = "IG" ;
+			} elsif ($value eq "4")	{
+				$color = "#d0ffd0" ;
+				$txt = "T" ;
+			} elsif ($value eq "t")	{
+				$color = "#d0ffd0" ;
+				$txt = "T" ;
+			} elsif ($value eq "k")	{
+				$color = "#d0ffd0" ;
+				$txt = "K" ;
+			} elsif ($value eq "3")	{
+				$color = "#f0ffd0" ;
+				$txt = "H" ;
+			} elsif ($value eq "h")	{
+				$color = "#f0ffd0" ;
+				$txt = "H" ;
+			} elsif ($value eq "2")	{
+				$color = "#ff8000" ;
+				$txt = "2" ;
+			} elsif ($value eq "1")	{
+				$color = "#ff8000" ;
+				$txt = "1" ;
+			} elsif ($value eq "0")	{
+				$color = "#ff8000" ;
+				$txt = "0" ;
+			} elsif ($value eq "cs")	{
+				$color = "#ff0000" ;
+				$txt = "IC" ;
+			} else	{
+				$color = "#ff0000" ;
+				$txt = "IC" ;
+			}
+		}
+		description &Literal{
+Clock status.
+L  - VCO phase locked.
+T  - VCO tracking for phase lock.
+H  - VCO holding (determining clock drift)
+IC - Bad clock (no GPS reception, on local clock)
+EX - Synced with external clock
+IG - Synced with internal GPS
+K  - Set with keyboard}
+	}
+	lat &Arr{
+		title	lat
+		sizestr 0000.000
+		justify right
+		sort	numerical
+		render_proc &Literal{
+			if ($value ne '-') {
+				$color = "#d0d0ff" ;
+				$txt = sprintf ( "%.3f", $value ) ;
+				$pfarray_ref->{$dlname}{latdl} = $value ;
+			} else {
+				$sort = -9999999999.999 ;
+				$subset = -9999999999.999 ;
+			}
+		}
+		description &Literal{
+GPS reported latitude.}
+	}
+	lon &Arr{
+		title	lon
+		sizestr 00000.000
+		justify right
+		sort	numerical
+		render_proc &Literal{
+			if ($value ne '-') {
+				$color = "#d0d0ff" ;
+				$txt = sprintf ( "%.3f", $value ) ;
+				$pfarray_ref->{$dlname}{londl} = $value ;
+			} else {
+				$sort = -9999999999.999 ;
+				$subset = -9999999999.999 ;
+			}
+		}
+		description &Literal{
+GPS reported longitude.}
+	}
+	elev &Arr{
+		title	elev
+		sizestr 00000m
+		justify right
+		sort	numerical
+		render_proc &Literal{
+			if ($value ne '-') {
+				$color = "#d0d0ff" ;
+				$txt = sprintf ( "%.0fm", $value*1000.0 ) ;
+			} else {
+				$sort = -9999999999.999 ;
+				$subset = -9999999999.999 ;
+			}
+		}
+		description &Literal{
+GPS reported elevation.}
+	}
+	opt &Arr{
+                title   pmp
+		sizestr XXX
+		justify center
+                render_proc &Literal{
+			if ($value ne '-') {
+                                my $spi = 0 ;
+                                my $spo = 0 ;
+				$_ = $value ;
+                                if (/isp1/) {$spi = 1;}
+                                if (/isp2/) {$spo = 1;}
+        
+                                if ($spi == 1 && $spo == 0) {
+                                        $color = "#00ff00" ;
+                                        $txt = "I" ;
+                                }
+                                if ($spi == 1 && $spo == 1) {
+                                        $color = "#ff0000" ;
+                                        $txt = "On" ;
+                                }
+                        }
+                }
+                description &Literal{
+Sump pump disposition
+I   - installed and not on
+On  - installed and on}
+        }
+}
+
+
+
+pf_revision_time 1308856560

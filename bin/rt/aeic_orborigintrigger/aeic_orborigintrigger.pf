@@ -1,0 +1,5 @@
+pf_srcname orbpftrigger
+commands &Tbl{
+echo %lat% %lon% %depth% %time%
+echo %lat * 2 - depth%
+}

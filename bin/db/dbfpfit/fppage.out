@@ -1,0 +1,6 @@
+ Table 1. Hypocenter and focal mechanism parameters
+ fppage read focal parameters from:  dbout.ray
+
+ Event   Date      Time      Latitude  Longitude Depth  Mag     Plane 1        Plane 2      P-axis  T-axis  Misfit  Conf Area  Numb
+  no.  yr mo da hr mn sec    deg  min  deg   min   km    ML  strk dip rake  strk dip rake    az pl   az pl   score    P   T    data
+

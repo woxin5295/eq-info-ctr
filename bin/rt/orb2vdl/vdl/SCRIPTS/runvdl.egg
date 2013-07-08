@@ -1,0 +1,1 @@
+nohup csh /export/home/ketchudc/vdl/cshvdl >/export/home/ketchudc/vdl/vdl.log &

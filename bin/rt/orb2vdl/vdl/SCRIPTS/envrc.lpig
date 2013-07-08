@@ -1,0 +1,4 @@
+echo "source .envrc"
+setenv OPENWINHOME /usr/openwin
+setenv MOZILLA_HOME /export/home0/netscape
+set term=vt100

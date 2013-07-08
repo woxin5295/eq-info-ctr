@@ -1,0 +1,100 @@
+.TH DB2DBSUBSET 1 "$Date: 2008-05-21 18:44:32 $"
+.SH NAME
+db2dbsubset \- db2dbsubset monitors a real-time input database and subsets database rows to output databases. 
+    
+.SH SYNOPSIS
+db2dbsubset [-pf parameter_file] [-debug]
+.LP
+db2dbsubset \-
+.LP 
+db2dbsubset monitors a specified table in an input database. It waits for modification time or size of the table to change. When db2dbsubset detects a change, it subsets the input database, using values specified in the parameter file. It compares the returned subset of values, with current output database values mapped in memory and adds, updates, or dbmark rows, currently in the output db.
+.ft CW
+.RS .2i
+.RE
+.ft R
+.nf
+.fi
+.SS "Example parameter file"
+.nf
+ sleeptime 10 # sleep 10 seconds between input db checks
+ waitandgetsleep 25 # wait 25 seconds for table updates after event detection
+		    # if no new mag ignore aftereventsleep
+ aftereventsleep 240 # wait at least four minutes before waiing for next event
+ db_templates &Arr{ # template of different input and output criteria
+	a_qdds &Arr{ # example qdds template
+ 		dbin /iwrun/sum/run/dbsum/dbsum # input database
+		monitor origin # monitor input database for modifications
+    		dbout /usr/local/aeic/4.9/src/bin/db/db2dbsubset/testdbs/dbqdds # output database
+    		maxdays 1 # only subset the most recent maxday of jdate, 0 all days
+    		lddate 1 # update lddate if set to 1, default 
+    			 # preserve lddate from dbin if set to 0
+    		realloc 512 # memory map of output database reallocation up and down steps, in db rows 
+    			    # default 512 rows
+    		crunchinterval 86400 # frequency to crunch dbmark rows in output database in seconds 
+    
+    		# CAVEAT subset_sequence must connect all output_tables 
+    		# ignorerow is table that allow deletion of events, but input db is not modified
+    		subset_sequence &Tbl{
+    			dbopen event
+    			dbjoin origin 
+    			dbsubset (prefor==orid)&&(lat>=55.0&&lat<=71.0&&lon>=-170.0&&lon<=-135.0)||(lat>=50.0&&lat<=55.0&&lon>=-180.0&&lon<=-153.0)||(lat>=50.0&&lat<=55.0&&lon>=160.0&&lon<=180.0)&&((ml>=4.0||mb>=4.0||ms>=4.0)&&(ndef<10))
+    			dbjoin -o ignorerow
+    			dbsubset ((whoig!="all"&&whoig!="qdds")||whoig=="-")
+    			dbjoin -o origerr orid
+    			dbjoin -o assoc orid
+    			dbjoin -o arrival arid
+    			dbjoin -o emodel orid
+    			dbjoin -o netmag orid
+    		}
+    		output_tables &Tbl{
+    			event
+    			origin
+    			origerr
+    			assoc
+    			arrival
+    			emodel
+    			netmag
+    		}
+    	}
+    	# database of events which need to be removed
+    	# qdds will scan this database and create CUBE delete request
+    	a_igqdds &Arr{
+    		dbin /iwrun/sum/run/dbsum/dbsum
+    		monitor origin
+    		dbout /usr/local/aeic/4.9/src/bin/db/db2dbsubset/testdbs/dbqddsig
+    		maxdays 1 # only subset the most recent maxday of jdate, 0 all days
+    		lddate 1 # update lddate if set to 1, default 
+    			 # preserve lddate from dbin if set to 0
+    		realloc 512 # memory map of output database reallocation up and down steps, in db rows 
+    			    # default 512 rows
+    		crunchinterval 86400 # frequency to crunch null rows in output database in seconds 
+    
+    		# CAVEAT subset_sequence must connect all output_tables 
+    		subset_sequence &Tbl{
+    			dbopen event
+    			dbjoin origin 
+    			dbsubset prefor==orid
+    			dbjoin ignorerow
+    			dbsubset (whoig=="all"||whoig=="qdds")
+    			dbjoin -o origerr orid
+    			dbjoin -o assoc orid
+    			dbjoin -o arrival arid
+    			dbjoin -o emodel orid
+    			dbjoin -o netmag orid
+    		}
+    		output_tables &Tbl{
+    			event
+    			origin
+    			origerr
+    			assoc
+    			arrival
+    			emodel
+    			netmag
+    		}
+    	}
+    }
+.fi
+pf_revision_time 1193686392
+
+.SH AUTHOR
+Mitch Robinson Mon Oct  8 09:54:32 AKDT 2007.

@@ -1,0 +1,58 @@
+# parameter file for MT_inversion_tool.tcl
+
+Maintainer natasha<natasha@gi.alaska.edu>
+
+# list of paths used by the program
+Paths &Arr{
+ entry_db 	/home/shake/run/db/quakes 	# path to database
+ website_path 	/usr/local/Mosaic/Seis/moment_tensors/current_year	# website path
+ data_path 	/Seis/processing/moment_tensors/current_year	# data path
+ data_path_iso 	/usr/local/mt_code/MTPACKAGE_2007/EXAMPLE_4	# data path iso version
+}
+
+#helpers array
+Helpers &Arr{
+ psigl 		/usr/local/mt_code/tdmt/BIN/psigl	#scrpit to produce ps graphics file
+ plot_var_depth /usr/local/mt_code/gmt_plots/plot_var_depth.gmt	#gmt script to produce variance vs depth plot
+ map_nonDC	/usr/local/mt_code/gmt_plots/map_nonDC.gmt	#gmt script to make map
+ bb_plot_nonDC	/usr/local/mt_code/gmt_plots/bb_plot_nonDC.gmt	#gmt script to produce beach-ball plot for the website update
+ tdmt_invc 	/usr/local/mt_code/tdmt/BIN/tdmt_invc  # path to tdmt_invc - inversion program for single depthc
+ redi_path 	/usr/local/mt_code/tdmt/BIN/tdmt_redi_sched  # path to tdmt_redi_sched - main inversion program 
+ dmtiso_invc	/usr/local/mt_code/MTPACKAGE_2007/MTCODE/BIN/tdmtiso_invc   # path to tdmtiso_invc - inversion program with isotropic component
+}
+
+# values of environment variables that used to be in tdmt.config
+# these variables are set before calling tdmt_redi_sched_*
+tdmt.config &Arr{
+ RESP		/usr/local/mt_code/stations/bdsn.resp   #file with instrument responses 
+ STATLIST	/usr/local/mt_code/stations/bdsn.stat	#file with station coordinates 
+ BINDIR		/usr/local/mt_code/tdmt/BIN	#location of all executables for data and synthetics preparation 
+ SYNTHDIR	/iwrun/op/run/bin/moment_tensors/synalaska	#location of synthetics
+ EXTRACT_OPTIONS	-f # do not change the rest of options
+ DEBUG_OPTION	1
+ DATASTREAM	BH
+ PLOT		1
+
+ PROG1_PAGE      0
+ PROG1_GFLOC     /iwrun/op/run/bin/moment_tensors/synalaska
+ PROG1_STATMAX   `awk '{}END{print NR}' $REDI_MT_STATLIST`	
+ PROG1_GETLIST 	`awk '{if(NR==1){printf("%s",$1)} else printf(",%s",$1)}' $REDI_MT_STATLIST`
+}
+
+# templates for database files, used in 'extract waveforms'
+descr_templ &Arr{
+	dbextract_data	css3.0\n$dbpath{$dbname}:/Seis/databases/stations/{master_stations}:/iwrun/$waveforms/db/archive/{archive_$date}
+	dbout	css3.0\n/Seis/databases/stations/{master_stations} 
+}
+
+# a list of values used to fill entry fields at the right side of the program window
+# fields are set to these values from top to bottom
+default_entries	&Arr{
+	min_dist	30	# min distance
+	max_dist	500	# max distance
+	max_st		20	# max # of stations
+	iso		no	# isotropic (yes/no)
+	velocity_mod	auto	# velocity model
+	waveform	op	# waveforms are from
+	depth 		30
+}

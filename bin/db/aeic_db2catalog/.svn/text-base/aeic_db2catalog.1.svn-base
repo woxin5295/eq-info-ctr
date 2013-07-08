@@ -1,0 +1,284 @@
+.TH AEIC_DB2CATALOG 1 "$Date: 2002-02-07 01:56:24 $"
+.SH NAME
+aeic_db2catalog \-  Generate a monthly AEIC catalog from a database
+.SH SYNOPSIS
+.nf
+\fBaeic_db2catalog \fP[-v] [-t] [-m] \fIdbname\fP
+.fi
+.SH DESCRIPTION
+\fBaeic_db2catalog\fP makes a monthly catalog, including earthquake listings
+and figures, for the Alaska Earthquake Information Center (AEIC).
+The form and contents of the maps and highlight listings are specified in the parameter
+file.
+.SH OPTIONS
+-v verbose
+-t text output only
+-m maps only
+.SH FILES
+monthly_list
+monthly_m4
+monthly_quarry
+monthly_highlights
+.SH PARAMETER FILE
+The parameter file contains a table of highlights to make, and a table of
+figures. The parameter information for the figures includes an embedded ak_dbmapevents(1)
+parameter file, as well as an optional profile to be drawn from ak_dbmapevents. The
+title listed for each figure, as well as the time_format for the highlights, are
+escape strings for epoch2str(3) which interpret the time of the first earthquake in the
+database.
+
+.ft CW
+.in 2c
+.nf
+
+.ne 31
+highlights &Tbl{
+        &Arr{
+                title 20 largest NEIC mb
+                subset mb != NULL
+                reverse_sort_field mb
+                nmax 20
+                time_format %y %m %e (%j) %T
+        }
+        &Arr{
+                title 20 largest AEIC ml
+                subset ml != NULL
+                reverse_sort_field ml
+                nmax 20
+                time_format %y %m %e (%j) %T
+        }
+        &Arr{
+                title 20 deepest events
+                subset ml != NULL
+                reverse_sort_field depth
+                nmax 20
+                time_format %y %m %e (%j) %T
+        }
+        &Arr{
+                title 20 northern events
+                subset ml != NULL
+                reverse_sort_field lat
+                nmax 20
+                time_format %y %m %e (%j) %T
+        }
+}
+
+figures &Tbl{
+        &Arr{
+                filename fig1.ps
+                figure_name Figure 1
+                ak_dbmapevents &Arr{
+                        title Figure 1: %B %Y -- AEIC Monthly Seismicity Report
+                        center 61:-159
+                        range 10
+                        istaplt 0
+                        istnam 0
+                        ipdeplt 0
+                        ipdepth 4
+                        iporid 0
+                        icities 1
+                        ipipe 1
+                        iblue 0
+                        ipmag 1
+                        idcirc 0
+                        ititl 1
+                        iflt 1
+                        ipumps 0
+                        icol 1
+                        itran 1
+                        ilegnd 1
+                        label_files  &Tbl{
+                                country
+                                new_faults
+                                oceans
+                                pipeline
+                                volcanoes
+                        }
+                        boilerplate_files  &Tbl{
+                                aeic
+                                aeic_vol
+                        }
+                }
+        }
+        &Arr{
+                filename fig2a.ps
+                figure_name Figure 2
+                ak_dbmapevents &Arr{
+                        title Figure 2a: %B %Y -- South Central Alaska Seismicity
+                        center 62.4047:-150.2695
+                        range 5
+                        istaplt 0
+                        istnam  0
+                        ipdeplt 0
+                        ipdepth 4
+                        iporid 0
+                        icities 1
+                        ipipe 1
+                        iblue 0
+                        ipmag 1
+                        idcirc 0
+                        ititl 1
+                        iflt 1
+                        ipumps 0
+                        icol 1
+                        itran 0
+                        ilegnd 0
+                        label_files  &Tbl{
+                                country
+                                new_faults
+                                oceans
+                                pipeline
+                                volcanoes
+                        }
+                        boilerplate_files  &Tbl{
+                                aeic
+                                aeic_vol
+                        }
+                }
+                profile &Arr{
+                        filename fig2b.ps
+                        title Figure 2b: %B %Y -- Cross-sections from Figure 2a
+                        width 50
+                        depth 200
+                        angle 90
+                        scale 1
+                        vert_exag 1
+                        prof_coord &Tbl{
+                                63.5315 -152.628, 61.2100 -145.550
+                                60.3792 -154.902, 59.5339 -148.665
+                        }
+                }
+        }
+        &Arr{
+                filename fig3.ps
+                figure_name "Figure 3"
+                subset "ml >= 3"
+                ak_dbmapevents &Arr{
+                        title Figure 3: %B %Y -- Magnitude 3.0 and Greater
+                        center 62.4047:-150.2695
+                        range 5
+                        istaplt 0
+                        istnam  0
+                        ipdeplt 0
+                        ipdepth 4
+                        iporid 0
+                        icities 1
+                        ipipe 1
+                        iblue 0
+                        ipmag 1
+                        idcirc 0
+                        ititl 1
+                        iflt 1
+                        ipumps 0
+                        icol 1
+                        itran 0
+                        ilegnd 0
+                        label_files  &Tbl{
+                                country
+                                new_faults
+                                oceans
+                                pipeline
+                                volcanoes
+                        }
+                        boilerplate_files  &Tbl{
+                                aeic
+                                aeic_vol
+                        }
+                }
+        }
+        &Arr{
+                filename fig4.ps
+                figure_name Figure 4
+                subset "depth < 30"
+                ak_dbmapevents &Arr{
+                        title Figure 4: %B %Y -- Earthquake Depth < 30 km
+                        center 62.4047:-150.2695
+                        range 5
+                        istaplt 0
+                        istnam  0
+                        ipdeplt 0
+                        ipdepth 4
+                        iporid 0
+                        icities 1
+                        ipipe 1
+                        iblue 0
+                        ipmag 1
+                        idcirc 0
+                        ititl 1
+                        iflt 1
+                        ipumps 0
+                        icol 1
+                        itran 0
+                        ilegnd 0
+                        label_files  &Tbl{
+                                country
+                                new_faults
+                                oceans
+                                pipeline
+                                volcanoes
+                        }
+                        boilerplate_files  &Tbl{
+                                aeic
+                                aeic_vol
+                        }
+                }
+        }
+        &Arr{
+                filename fig5.ps
+                figure_name Figure 5
+                subset "depth >= 30"
+                ak_dbmapevents &Arr{
+                        title Figure 5: %B %Y -- Earthquake Depth >= 30 km
+                        center 62.4047:-150.2695
+                        range 5
+                        istaplt 0
+                        istnam  0
+                        ipdeplt 0
+                        ipdepth 4
+                        iporid 0
+                        icities 1
+                        ipipe 1
+                        iblue 0
+                        ipmag 1
+                        idcirc 0
+                        ititl 1
+                        iflt 1
+                        ipumps 0
+                        icol 1
+                        itran 0
+                        ilegnd 0
+                        label_files  &Tbl{
+                                country
+                                new_faults
+                                oceans
+                                pipeline
+                                volcanoes
+                        }
+                        boilerplate_files  &Tbl{
+                                aeic
+                                aeic_vol
+                        }
+                }
+        }
+}
+
+.fi
+.in
+.ft R
+.SH "SEE ALSO"
+.nf
+ak_dbmapevents(1)
+.fi
+.SH "BUGS AND CAVEATS"
+This is a recast of a prototype, which generates maps and files of text
+for import into Framemaker. In principle, it should by possible to automate
+the complete catalog generation process, adopting technology from the AEIC release
+software and the reference-guide builders.
+
+The output files could probably be specified more generically in the parameter
+file as well, thus cleaning up the internals and a couple hard-wires (e.g. the specification
+that 'big' events are mag 4 and larger).
+
+.SH AUTHOR
+Kent Lindquist, modelled after a prototype by Dan McNamara
+.\" $Id: aeic_db2catalog.1,v 1.4 2002-02-07 01:56:24 kent Exp $

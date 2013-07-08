@@ -1,0 +1,5 @@
+vdlucb -H jetrt_66.gps.caltech.edu -P 21010 -S SNCC -t 1 -n 15 -s 87 -f 20 -l 0 -i sncc -k 0
+vdlucb -H jetrt_66.gps.caltech.edu -P 21013 -S VTV -t 1 -n 15 -s 88 -f 20 -l 0 -i vtv -k 0
+vdlucb -H jetrt_66.gps.caltech.edu -P 21012 -S MTP -t 1 -n 15 -s 85 -f 20 -l 0 -i mtpc -k 0
+!vdlucb -H jetrt_66.gps.caltech.edu -P 21014 -S CWC -t 1 -n 15 -s 86 -f 20 -l 0 -i cwc -k 0
+vdlucb -H jetrt_66.gps.caltech.edu -P 21011 -S PAS -t 1 -n 15 -s 89 -f 20 -l 0 -i pas -k 0

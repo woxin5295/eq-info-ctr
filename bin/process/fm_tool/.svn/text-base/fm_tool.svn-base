@@ -1,0 +1,606 @@
+#!/bin/sh
+# \
+exec $ANTELOPE/bin/awish $0 -- "$@"
+
+package require Datascope
+
+#!/bin/sh
+# \
+exec $ANTELOPE/bin/awish $0 -- "$@"
+package require Datascope
+
+package require Tclx
+#load /usr/local/lib/libqwm.so.3
+
+lappend auto_path $env(ANTELOPE)/data/tcl/library
+
+# parameter file name
+set param_file "fm_tool"
+
+# these paths are reset by values from the parameter file
+set entry_db "/home/shake/run/db/quakes"  
+#set website_path "./website"
+set data_path "."
+set entry_orid ""
+
+# butons on the left hand side of the program window
+set buttons_list [list 5_dbe 10_save 20_pick 30_calc 40_gs 50_upd 60_print ]
+
+# name on the button, command associated with button, background and foreground colors for each button
+array set buttons {
+	5_dbe,name	"open database" 
+	5_dbe,command	"open_dbe $entry_db" 
+	5_dbe,bgcolor	#BBBBFF 
+	5_dbe,fgcolor	black 
+	10_save,name	"save new db" 
+	10_save,command	"new_db $entry_db $entry_orid " 
+	10_save,bgcolor	#BBBBFF 
+	10_save,fgcolor	black 
+	20_pick,name "open dbpick"	
+	20_pick,command "open_dbpick $entry_db $entry_orid "	
+	20_pick,bgcolor #BBBBFF	
+	20_pick,fgcolor black
+	30_calc,name "calculate focal mechanism"	
+	30_calc,command "calculate $entry_db $entry_orid $prog_fm_path $pf_path"	
+	30_calc,bgcolor #BBBBFF	
+	30_calc,fgcolor	black 
+	40_gs,name "view results"	
+	40_gs,command "show_results $entry_db $entry_orid $helpers(prog_plot_path)"	
+	40_gs,bgcolor #BBBBFF	
+	40_gs,fgcolor	black 
+	50_upd,name "update fplane table"	
+	50_upd,command "update_fplane $entry_db $entry_orid"	
+	50_upd,bgcolor #BBBBFF	
+	50_upd,fgcolor	black
+	60_print,name "print results"	
+	60_print,command "print_results"	
+	60_print,bgcolor #BBBBFF	
+	60_print,fgcolor	black 
+}
+
+# buttons at the ringht hand side
+set log_buttons_list [list 70_gedit 80_prob 10 20 30 40]
+
+# name, command, colors for each button on the right
+array set log_buttons {
+	70_gedit,name "edit dbfpfit parameter file"	
+	70_gedit,command "run_gedit $pf_path"	
+	70_gedit,bgcolor #CCFFCC	
+	70_gedit,fgcolor	black
+	80_prob,name "send a problem report"	
+	80_prob,command "report_problem"	
+	80_prob,bgcolor #FFBBBB
+	80_prob,fgcolor	black
+	10,name	"minimize output window" 
+	10,command	"minimize_log " 
+	10,bgcolor	#555555 
+	10,fgcolor	white 
+	20,name	"maximize output window" 
+	20,command	"maximize_log " 
+	20,bgcolor	#555555 
+	20,fgcolor	white 
+	30,name	"create output window" 
+	30,command	"create_log " 
+	30,bgcolor	#555555
+	30,fgcolor	white 
+	40,name	"  Quit  " 
+	40,command	"quit" 
+	40,bgcolor	#BB6600
+	40,fgcolor	black 
+}
+
+# entries on the right side of the window
+set entries_list [list waveform]
+# name, type and value of each entry
+array set entries {
+	waveform,name "waveforms" 
+	waveform,type 3radio
+	waveform,var "op"
+}
+
+# create all the buttons and entries
+proc create_interface { } {
+	global buttons buttons_list
+	global log_buttons log_buttons_list
+	global entries entries_list
+	global entry_db entry_orid
+	set left_frame_color #BBBBBB
+	#set right_frame_color #FFFFCC
+	set top_frame_color #664400
+	set right_frame_color #AAAAAA
+	# create main frames
+	frame .top_frame   -padx 2 -pady 2 -background $top_frame_color 	
+	frame .left_frame -padx 2 -pady 2 -background $left_frame_color 
+	frame .right_frame  -padx 2 -pady 2  -background $right_frame_color
+	# database and origin entry fields
+	label .top_frame.db_caption -text "database"  -background $top_frame_color -foreground white
+	entry .db_name -width 20 -textvariable entry_db -background white -width 50
+	label .origin_caption -text "origin"  -background $top_frame_color -foreground white
+	entry .orid -width 7  -textvariable entry_orid -background white
+	
+	grid .top_frame.db_caption -in .top_frame -row 0 -column 0 -sticky nsew -padx 2  
+	grid .db_name -in .top_frame -row 0 -column 1 -sticky nsew -padx 2
+	grid .origin_caption -in .top_frame  -row 0 -column 2  -padx 2
+	grid .orid -in .top_frame  -row 0 -column 3 -sticky nsew -padx 2
+	grid columnconfigure .top_frame 1 -weight 1
+	
+	
+	grid .top_frame -row 0  -columnspan 2  -sticky nsew
+	grid .left_frame -row 1 -column 0 -sticky nsew	
+	grid .right_frame -row 1  -column 1 -sticky nsew
+	
+	# X-resize is done by the entry column
+	grid columnconfigure . 0 -weight 1
+	grid columnconfigure . 1 -weight 1
+	#grid columnconfigure . 1 -weight 1
+	
+	#  Y-resize should be at the bottom...
+	grid rowconfigure . 1 -weight 1
+	
+	# lay buttons
+	foreach i $buttons_list {
+		button .but($i) -text $buttons($i,name) -command $buttons($i,command) -background $buttons($i,bgcolor) -foreground $buttons($i,fgcolor)
+		pack .but($i) -in .left_frame -expand yes -fill x 
+		#grid .but($i) -in .left_frame -sticky nwse
+	}
+	# entries
+	set row 0
+	foreach i $entries_list {
+		frame .fr$i -background $right_frame_color 
+		label .lab($i) -text $entries($i,name) -background $right_frame_color
+		grid .lab($i)  -in .fr$i -sticky ne -column 0 -row $row 
+		if { $entries($i,type)=="radiobutton"  } {
+			radiobutton .rad($i,yes) -variable entries($i,var) -value "yes" -text "yes" -background $right_frame_color -command disable_non_iso
+			radiobutton .rad($i,no) -variable entries($i,var) -value "no" -text "no" -background $right_frame_color -command enable_all
+			grid .rad($i,yes)  -in .fr$i  -column 2  -row $row  
+			grid .rad($i,no)   -in .fr$i  -column 3   -row $row
+		} elseif {$entries($i,type)=="entry" } {
+			entry .ent($i) -width 10 -textvariable entries($i,var) -background white 
+			grid .ent($i)  -in .fr$i -sticky ne -column 1 -columnspan 3  -row $row
+		} else {
+			set entries($i,var) "op"
+			radiobutton .rad($i,op) -variable entries($i,var) -value "op" -text "op" -background $right_frame_color 
+			radiobutton .rad($i,bak) -variable entries($i,var) -value "bak" -text "bak" -background $right_frame_color
+			radiobutton .rad($i,mig) -variable entries($i,var) -value "mig" -text "mig" -background $right_frame_color
+			grid .rad($i,op)  -in .fr$i  -column 1   -row $row
+			grid .rad($i,bak)   -in .fr$i  -column 2   -row $row
+			grid .rad($i,mig)   -in .fr$i  -column 3   -row $row
+		}
+		pack .fr$i -in .right_frame -expand yes -fill x 
+		set row [incr row]
+	}
+	
+	# log buttons
+	foreach i $log_buttons_list {
+		button .lbut($i) -text $log_buttons($i,name) -command $log_buttons($i,command) -background $log_buttons($i,bgcolor) -foreground $log_buttons($i,fgcolor)
+		pack .lbut($i) -in .right_frame  -fill x -expand yes 
+	}
+	# create the output window
+	create_log
+	#sleep 1
+}
+
+
+proc minimize_log {} {
+	global out
+	send FP_log "wm iconify ."
+	
+}
+proc maximize_log {} {
+	global out
+	send FP_log "wm deiconify ."
+	send FP_log "focus ."
+	send FP_log "raise ."
+	
+}
+
+# creates the output window
+proc create_log {} {
+	if { [catch {send FP_log ""} result] } {
+		global out
+		# start awish interpreter 
+		set out [open "| awish  " w+]
+		# send tcl command to awish
+		puts $out "package require Tclx "
+		puts $out {set log [text .log -width 80 -height 40 -borderwidth 2 -relief raised -setgrid true -yscrollcommand {.scro set}]  }
+		puts $out "scrollbar .scro -command {.log yview} "
+		puts $out "pack .scro -side right -fill y "
+		puts $out "pack .log -side left -fill both -expand true "
+		puts $out {wm title . "focal mechanism tool output window" }
+		# this name will be used to communicate with the output window by send commands
+		puts $out {tk appname "FP_log" }
+		flush $out
+		sleep 1
+	} else {
+		Log "Output window already exists"
+		maximize_log
+	}
+}
+# send the line of text to the output window
+proc Log { var } {
+	global out
+	regsub -all {"} $var {\"} var
+	regsub -all {\[} $var {\\[} var
+	catch {
+		send FP_log ".log insert end \"$var\n\""
+		send FP_log ".log see end"
+	} result
+}
+#"
+
+# send contents of the file to the output window
+proc LogFile { fn } {
+	set fid [open $fn r]
+	#select $fid
+	catch {
+		while {![eof $fid]} {
+			set var [read $fid 1000]
+			regsub -all {"} $var {\"} var
+			regsub -all {\[} $var {\\[} var
+			send FP_log ".log insert end \"$var\""
+		}
+		close $fid
+		send FP_log ".log see end"
+	} result
+}
+#"
+# redirect data from the pipe to the output window
+# not used here
+proc LogPipe { fid } {
+	while { [gets $fid line] } {
+		regsub -all {"} $line {\"} line
+		regsub -all {\[} $line {\\[} line
+		if { $line == ">>showpage, press <return> to continue<<" } { break  }
+		#puts $line\n
+		set send_line ".log insert end \'$line\'"
+		send FP_log $send_line
+		send FP_log ".log insert end \"\n\""
+		#"
+		
+		if { [eof $fid] } { break }
+	}
+	send FP_log ".log see end"
+}
+
+# send a horizontal line to the output window
+proc makeLine {} {
+	Log "===================================="
+	
+}
+
+# generate a name for the new database
+# dbyymmdd
+proc newdb_name {db orid} {
+	if {$db == "" || $orid == ""} {
+		tk_messageBox -message "Please enter database name and origin id"
+		Log "No database or origin"
+		return
+	}
+	set orid_data [exec  dbsubset $db.origin "orid==$orid" | dbselect - time]
+	if { [llength $orid_data] == 0 } {
+		if { [file exist $db] } {
+			tk_messageBox -message "Origin '$orid' does not exist in the database '$db'"
+			Log "Origin '$orid' does not exist "
+		} else {
+			tk_messageBox -message "Database '$db' does not exist "
+			Log "Database '$db' does not exist "
+		}
+		return
+	}
+	set etime [lindex $orid_data 0]
+	#set date [epoch2str $etime  %Y_%m_%d  ]
+	return db[epoch2str $etime  %y%m%d%H%M%S  ] 
+}
+
+
+# get time for a given database and origin
+proc gettime {db orid} {
+	set orid_data [exec  dbsubset $db.origin "orid==$orid" | dbselect - time]
+	if { [llength $orid_data] == 0 } {
+		if { [file exist $db] } {
+			tk_messageBox -message "Origin '$orid' does not exist in the database '$db'"
+			Log "Origin '$orid' does not exist "
+		} else {
+			tk_messageBox -message "Database '$db' does not exist "
+			Log "Database '$db' does not exist "
+		}
+		return
+	}
+	set etime [lindex $orid_data 0]
+	#set date [epoch2str $etime  %Y_%m_%d  ]
+	return $etime
+}
+
+# run dbe with entered database name
+proc open_dbe {db} {
+	makeLine
+	Log "Starting open dbe"
+	exec dbe $db &
+}
+
+
+# create a new database from origin, assoc, arrival
+proc new_db {db orid} {
+	global descr_templ entries
+	makeLine
+	Log "Starting save new database"
+	# get the name of the new database
+	if { $db!="" && $orid!=""} {
+		set new_db [newdb_name $db $orid]
+		if {$new_db == ""} {return} 
+		if { [catch {
+				set orid_data [exec  dbsubset $db.origin "orid==$orid" | dbjoin - $db.assoc | dbjoin - $db.arrival | dbunjoin -f -o $new_db -]
+		} ] } {
+			Log "error creating a new database"
+			tk_messageBox -message "error creating a new database "
+		} else {
+			# create a descriptor file
+			
+			# make curly braces around database name
+			set dbpath [string range $db 0 [expr [string last "/" $db]]]
+			set dbname [string range $db [expr [string last "/" $db] + 1] [string length $db] ]
+			#extract date from dbname (I don't want to make another database request)
+			set date [epoch2str [gettime $db $orid] %Y_%m_%d]
+			set waveforms $entries(waveform,var)
+			#set waveforms "op"
+			set output [subst $descr_templ(dbextract_data)] 
+			set fhandle [open $new_db w]
+			puts $fhandle $output
+			close $fhandle
+			
+			Log "done"
+		}
+		
+	} else {
+		Log "No database name or orid"
+		tk_messageBox -message "Please enter database name and orid "
+	}
+}
+
+
+# run dbpick with new database
+proc open_dbpick {db orid} {
+	makeLine
+	Log "Starting open dbpick"
+	set db_name [newdb_name $db $orid]
+	if {$db_name!=""} {
+		catch {exec smartpick_classic $db_name & } result
+		Log $result
+		Log "done"
+	}
+}
+
+# run aeic_dbaddema & dbfpfit
+proc calculate {db orid path pf_path} {
+	makeLine
+	Log "Starting calculate focal mechanism"
+	set newdb [newdb_name $db $orid]
+	if {$newdb!=""} {
+		catch {exec  $path/aeic_dbaddema $newdb } result
+		Log $result
+#		catch {exec env PFPATH=$pf_path:\${PFPATH} $path/dbfpfit -o $orid $newdb ev[epoch2str [gettime $db $orid] %y%m%d%H%M%S] } result	
+		catch {exec $path/dbfpfit -o $orid $newdb ev[epoch2str [gettime $db $orid] %y%m%d%H%M%S] } result	
+		Log $result
+		Log "done"
+	}
+}
+
+# generate a ps file using fpplot
+# show the ps file
+proc show_results {db orid path} {
+	makeLine
+	Log "Starting view results"
+	if {$db=="" || $orid == ""} 	{
+		Log "No database name or orid"
+		tk_messageBox -message "Please enter database name and orid "
+		return 
+	}
+	set time [gettime $db $orid]
+	if {$time == ""} {
+		return 
+	}
+	set filename ev[epoch2str $time %y%m%d%H%M%S]
+	
+	catch {
+		# call the script
+		exec echo $filename.ray\n\n\n\n\n\n | $path >& errors   
+	} result
+	Log  $result
+	while {![file writable errors]} {
+	}
+	LogFile  errors
+	Log "show results"
+	catch {exec ghostview  fppage.ps & } result
+	Log $result
+	Log "done"
+}
+
+# update table $db.fplane
+proc update_fplane { db orid } {
+	makeLine
+	Log "Starting update fplane table"
+	set newdb [newdb_name $db $orid]
+	if {$newdb==""} {return}
+	set append 0
+	# ask user if he wants to append or overwrite
+	if { [file exists $db.fplane] } {
+		set append [tk_dialog .del_files "" "Fplane table already exists. Append or overwrite?" \
+		questhead 0 Append "Overwrite"]
+	} else {
+	}
+	if {$append == 0 } { #append
+		Log "exec cat $newdb.fplane >> $db.fplane"
+		exec cat $newdb.fplane >> $db.fplane
+	} else { #overwrite
+		Log "exec cp -f $newdb.fplane  $db.fplane"
+		exec cp -f $newdb.fplane  $db.fplane
+	}
+	Log "done"
+}
+
+# run gedit with parameter file
+# Copy the parameter file to the current data directory if it was not done before
+proc run_gedit {pf_path} {
+	makeLine
+	Log "Starting gedit"
+	set fname "dbfpfit.pf"
+	if {![file exists $fname]} {
+		catch {
+			file copy $pf_path/$fname ./
+		} result
+		Log $result
+	}
+	exec gedit $fname &
+}
+
+
+# send the ps file with results to a postscript printer
+proc print_results {  } {
+	makeLine
+	Log "Starting print waveforms"
+	set ps_file fppage.ps
+	if { [file exists $ps_file]} {
+		Log "printing $ps_file"
+		exec lpr $ps_file
+		tk_messageBox -message "Printed"
+		Log "done"
+	} else {
+		Log "File $ps_file does not exist"
+		tk_messageBox -message "File $ps_file does not exist"
+		return 
+	}
+}
+
+# load parameters from pf file and set global variables
+# file name is defined at the top of this file in param_file variable
+proc load_param_file { pf } {
+	global param_file helpers Maintainer
+	makeLine
+	Log "Start load parameter file"
+	
+	if { [catch { set Maintainer [pfget $param_file Maintainer] } result] } {
+		Log "There was an error reading parameter file (Maintainer)"
+	}
+	
+	#puts $Maintainer
+	
+	if { [catch { pfgetarr paths @$param_file#Paths 
+	} result] } {
+		Log "There was an error reading parameter file (Paths)"
+	} 
+	foreach var [array names paths] {
+		global $var
+		set $var $paths($var)
+		
+	}
+	if { [catch { pfgetarr helpers @$param_file#Helpers 
+	} result] } {
+		Log "There was an error reading parameter file (Helpers)"
+	} 
+	global descr_templ
+	if { [catch { pfgetarr descr_templ @$param_file#descr_templ 
+	} result] } {  
+		Log "There was an error reading parameter file (templates)"
+	}  
+	
+	Log "done"
+}
+
+# called on exit
+# deletes the program window and the log window
+proc quit {} {
+	catch {send FP_log "destroy ."}
+	destroy .
+	exit
+}
+
+# Sends an e-mail to maintainer
+# based on felt_report_tool from aeic/response
+proc report_problem {} {
+	makeLine
+	Log "Start report a problem"
+	
+	global Maintainer
+	global Problem_report
+	global Submit
+	
+	catch {destroy .rep}
+	toplevel .rep -class Dialog
+	wm title .rep "Report a problem to $Maintainer"
+	
+	frame .rep.enter
+	pack .rep.enter -side top -fill x
+	
+	label .rep.enter.l -text "Describe Problem:" 
+	pack .rep.enter.l -side top -anchor n
+	
+	frame .rep.enter.f
+	pack .rep.enter.f -side bottom
+	
+	#wm minsize . 0 0
+	#text .text
+	#pack append . .text {fill expand}
+	
+	set Problem_report ""
+	text .rep.enter.f.e \
+	-width 40 -height 10 -yscrollcommand ".rep.enter.f.s set"
+	pack .rep.enter.f.e -side left 
+	
+	
+	scrollbar .rep.enter.f.s -orient vertical -command ".rep.enter.f.e yview"
+	pack .rep.enter.f.s -side right -fill y
+	
+	frame .rep.f
+	pack .rep.f -side right -fill both -expand yes
+	
+	set Submit 0
+	set text ""
+	button .rep.f.submit -text "Submit" -bg #337733 -command {
+		global Submit
+		set Submit 1
+		set Problem_report [.rep.enter.f.e get 1.0 end]
+		#puts $text
+		destroy .rep
+	}
+	pack .rep.f.submit -side top -fill x
+	
+	button .rep.f.cancel -text "Cancel" -bg #993333 -command {
+		global Submit
+		destroy .rep
+	}
+	pack .rep.f.cancel -side top -fill x
+	
+	grab set .rep
+	tkwait window .rep
+	grab release .rep
+	
+	if { $Submit } {
+		set mail [open \
+		"|rtmail -s \"fm_tool problem\" $Maintainer" w]
+		puts $mail $Problem_report
+		
+		close $mail
+		Log "mail sent"
+	}
+	Log "done"
+}
+
+create_interface
+load_param_file { $param_file }
+cd $data_path
+#check argument, if present -- set db and orid
+if { $argc >= 1 } {
+	set tmp [lindex  $argv 0]
+	if { $tmp!="" } {
+		set entry_db $tmp
+	}
+}
+if {$argc ==2 } {	
+	set tmp [lindex  $argv 1]
+	if { $tmp!="" } {
+		set entry_orid $tmp
+	}
+} 
+wm protocol . WM_DELETE_WINDOW {
+	quit
+}

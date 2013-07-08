@@ -1,0 +1,112 @@
+velocity_model_name scak
+phases &Arr{
+P  &Arr{
+	travel_time_calculator general
+	TTmethod tt1dcvl tt1dcvl u1dcvl
+	TTmodel scak
+	time_distance_weight_function &Tbl{
+	0.0	1.0
+	1.5	1.0
+	5.0	0.1
+	10.0	0.0
+	360.0	0.0
+	}
+	ux_distance_weight_function &Tbl{
+        0.0     1.0
+        10.0    1.0
+        90.0    0.7
+        92.0    0.0
+        360.0   0.0
+        }
+        uy_distance_weight_function &Tbl{
+        0.0     1.0
+        10.0     1.0
+        90.0    0.7
+        92.0    0.0
+        360.0   0.0
+        }
+	default_time_uncertainty 0.2
+	default_slowness_uncertainty 0.01
+        dt_bound_factor 0.01
+        du_bound_factor 0.035
+	time_station_corrections &Tbl{
+	FIB 0.80
+	GALN -.15
+	ILI .44
+	ILM .44
+	ILN .44
+	LOWE -.2
+	NIN 1.47
+	NKA 1.65
+	NNL 1.05
+	RDW .02
+	RED -.02
+	REF .01
+	VLZ .1
+	VOGL 0.996
+	}
+	ux_station_corrections &Tbl{
+        }
+        uy_station_corrections &Tbl{
+        }
+}
+# Vs = Vp / sqrt(3) = Vp / 1.7321 = 0.5774*Vp
+S  &Arr{
+	travel_time_calculator general
+	TTmethod tt1dcvl tt1dcvl u1dcvl
+	TTmodel scak
+	time_distance_weight_function &Tbl{
+	0.0	1.0
+	1.5	1.0
+	5.0	0.1
+	10.0	0.0
+	360.0	0.0
+	}
+	ux_distance_weight_function &Tbl{
+        0.0     1.0
+        10.0     1.0
+        90.0    0.7
+        92.0    0.0
+        360.0   0.0
+        }
+        uy_distance_weight_function &Tbl{
+        0.0     1.0
+        10.0     1.0
+        90.0    0.7
+        92.0    0.0
+        360.0   0.0
+        }
+	default_time_uncertainty 0.5
+	default_slowness_uncertainty 0.005
+        dt_bound_factor 0.01
+        du_bound_factor 0.035
+	time_station_corrections &Tbl{
+	DFR -.10
+	FIB 1.41
+	GALN -.27
+	ILI .78
+	ILM .78
+	ILN .78
+	LOWE -.36
+	NCT 0.06
+	NIN 2.59
+	NKA 2.90
+	NNL 1.85
+	RDT -.02
+	RDW -.12
+	RED -.05
+	REF 0.01
+	RS1 -.05
+	RS2 -.05
+	RSO -.05
+	VLZ 0.18
+	VOGL 1.75
+	}	
+	ux_station_corrections &Tbl{
+        }
+        uy_station_corrections &Tbl{
+        }
+}
+}
+
+# $Id: scak.pf,v 1.5 2006-04-06 00:10:46 natasha Exp $ 

@@ -1,0 +1,44 @@
+.\" @(#)dbml.1  1.1 07/29/02
+.TH DB2MONTHLY "$Date: 2003-03-19 03:12:05 $"
+.SH NAME
+db2monthly \- generates the lists and figures used in the AEIC monthly report.
+.SH SYNOPSIS
+db2monthly dbin minimim_mag 
+.LP
+where:
+.LP
+dbin = input database
+.LP
+minimum_mag =  Minimum magnitude threshold for highlights
+.SH DESCRIPTION
+db2monthly assumes that the input database includes a full month worth of earthquakes. Given a 
+monthly database, db2monthly will generate a complete USGS style event listing
+of events that meet the minimum magnitude criterion and one map of seismicity in Alaska. 
+.SH OPTIONS
+.IP "dbin"
+The input dabase name. Assumed to be a monthly database. This argument is required.
+.IP "minimum_mag"
+The minimum earthquake magnitude to report in the highlights. This argument is required.
+.SH FILES
+db2monthly generates the highlights list and a seismicity figure used in the AEIC monthly report. Output files include
+a listing of events that exceed the minimum manitude (monthly_list) and a map of Alaska with all events
+in the monthly database (monthly_fig1.ps).
+The file monthly_list is ASCII format. The map monthly_fig1.ps is PostScript format.
+
+db2monthly will also generate a file of errors detected in the input monthly database (db2monthly.err).
+
+.SH ENVIRONMENT
+.SH EXAMPLE
+.ft CW
+.RS .2i
+.RE
+.ft R
+.SH RETURN VALUES
+.SH LIBRARY
+.SH DIAGNOSTICS
+.SH "SEE ALSO"
+.nf
+.fi
+.SH "BUGS AND CAVEATS"
+.SH AUTHOR
+Dan McNamara. Modifications by Natalia Ratchkovski (location uncertainty calculations (SEZ and SEH) for 68.3% error ellipse, magnitude string, memory problems).

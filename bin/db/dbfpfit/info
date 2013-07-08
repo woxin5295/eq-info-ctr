@@ -1,0 +1,53 @@
+$INFO
+FPPLOT AND ITS SUBROUTINES FOR MAKING FOCAL PLOTS.
+        LINK WITH FPPLOT.LNK
+
+FPPAGE  PLOTS EARTHQUAKE RAY POLARITIES AND FAULT PLANES ON A 
+        LOWER OR SIDE HEMISPHERE EQUAL AREA PROJECTION.
+        MAKES MULTIPLE PLOTS PER PAGE.
+
+PLOTFM (CALLS FMPLT) - PLOTS HYPOELLIPSE ARCHIVE FM'S ON PRINTER
+
+GENPT   READS A *.EXTSUM FILE AND GENERATES A PLOT OF P & T AXES AS WELL
+        AS A NEW SUMMARY FILE AUGMENTED WITH THE P & T AXES.
+
+rotmech and its subroutines rotates a focal mechanism (6/21/95)
+
+12/14/92
+In rerunning the focal mechanisms through fpfit on the sun, the speed
+achived was 175 events per hour.
+
+11/28/93
+Found Xpsc library in: /usr/tools/Xpsc
+spurr:lahr 237 csh>> !grep
+grep PS *.f
+changefont.f:	if (PS_inter.EQ.1) then
+changeweight.f:	if (PS_inter.EQ.1) then
+plot.f:	IF (PS_inter.EQ.1) THEN
+plot.f:	  if ( PS_inter.EQ.1) then
+plot.f:	 if(PS_inter.EQ.1) then 
+plot.f:	  if (PS_inter.EQ.1) then
+plot.f:				status = getenv_r ('PS_LNWT', line_weight)
+plot.f:				status = getenv_s ('PS_LANDSCAPE', landscape)
+plot.f:	if (PS_inter.EQ.1) then
+plots.f:      status = getenv_s ('XPS_LOG_FILE', log_file)
+plots.f:          CALL report_comment ('XPS_LOG_FILE ignored.')
+plots.f:C    &    ('Warning: XPS_LOG_FILE is not set.')
+plots.f:      PS_inter = 0
+plots.f:      status = getenv_s ('PS_FILE', ps_file)
+plots.f:	PS_inter = 1	
+plots.f:        CALL report_s ('PS_FILE', ps_file)
+plots.f:      status = getenv_r ('XPS_ROTATION', rotation)
+plots.f:        CALL report_r ('XPS_ROTATION', rotation)
+plots.f:      status = getenv_s ('PS_FONT', ps_font)
+plots.f:        CALL report_s ('PS_FONT', ps_font)
+plots.f:      status = getenv_r ('PS_LNWT', line_weight)
+plots.f:        CALL report_r ('PS_LNWT', line_weight)
+plots.f:      status = getenv_r ('PS_FONT_SIZE', font_size)
+plots.f:        CALL report_r ('PS_FONT_SIZE', font_size)
+plots.f:      if(PS_inter .EQ. 1) then
+plots.f:      status = getenv_s ('PS_LANDSCAPE', landscape)
+plots.f:	CALL report_s ('PS_LANDSCAPE', landscape)
+scale.f:      if(PS_inter.EQ.1) then
+symbol.f:      if(PS_inter.EQ.1) then
+spurr:lahr 238 csh>> 

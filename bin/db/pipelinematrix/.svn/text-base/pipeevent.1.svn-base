@@ -1,0 +1,40 @@
+.TH PIPEEVENT 1 "$Date: 2008-04-03 19:08:01 $"
+.SH NAME
+pipeevent \- Pipeevent monitors an antelope event table. When a new event shows up, it sets the event_detected bit in the mysql events table. The bit stays active for a fixed period of time, specified in the parameter file. Pipeevent continuously updates the mysql events table event_watchdog element, at fixed time periods, specified in the parameter file. 
+	 
+	  
+.SH SYNOPSIS
+pipeevent [-pf parameter_file] [-debug] 
+.LP
+.LP
+.nf
+-pf parameter_file ,specify parameter file (default pipelinematrix.pf) 
+-debug ,turn on debugging
+.fi
+.ft CW
+.RS .2i
+.RE
+.ft R
+.nf
+.fi
+.SS "Example Parameter File Parts"
+.nf
+# pipeevent program additional pf information 
+eventdb /iwrun/acq/run/dbevent/dbpipeline # database used to store pipeline events
+eventtimeout 300 # time period to keep event bit active
+origintime_cutoff 3600 # number of seconds the origin time must be within the current UTC time
+                        # default 1 hour
+watchdog_sec 5 # period of watchdog updates, default 5 seconds
+
+# mysql information 
+mysql_hosts localhost
+mysql_user pipe
+mysql_pass ++++++++++
+mysql_database pipeline
+
+# debugging settings
+debug 0 # debugging print statements off
+.fi
+
+.SH AUTHOR
+Mitch Robinson Mon Mar 31 16:29:30 AKDT 2008.

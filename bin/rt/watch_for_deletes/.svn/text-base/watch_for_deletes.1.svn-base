@@ -1,0 +1,25 @@
+.TH WATCH_FOR_DELETES 1 2007/11/12 "Glenn Thompson, AEIC" "User Commands"
+.SH NAME
+.nf
+watch_for_deletes - watch for delete messages, and call delete_event to delete corresponding events from database
+.fi
+.SH SYNOPSIS
+.nf
+watch_for_deletes [-p parameter_file] database xferdir
+.fi
+.SH DESCRIPTION
+\fBwatch_for_deletes\fP should be run as an rtexec cronjob on an iMac. It is designed to monitor xferdir for delete messages and then call delete_event to delete an event so it doesn't show up in dbevents_aeic. 
+
+\fBwatch_for_deletes\fP is smart enough to work out whether the delete message refers to an event time or an event id, and call delete_event in the appropriate manner.
+.SH OPTIONS
+.IP "-p pf"
+Specifies the path of the parameter file to be used. If omitted, defaults to pf/watch_for_deletes.pf.
+.IP database        
+database from which to remove evid
+.IP xferdir
+The directory to monitor for delete messages
+.SH AUTHOR
+Glenn Thompson
+.br
+Alaska Earthquake Information Center
+

@@ -1,0 +1,20 @@
+# authors lower in list have higher priority
+authpref	&Tbl{
+# auth.netmag magtype.netmag
+USGS:AK		ml	# Ml from USGS
+USGS:ak 	ml	# Ml from USGS
+orbml		ml	# Ml automatic from AEIC
+aeic_dbml	ml	# Ml reviewed from AEIC
+orbmb		mb	# mb automatic from AEIC
+USGS:US		mb	# mb reviewed from USGS
+aeicmwa		mw	# Mw automatic from AEIC
+orbmwp		mwp	# Mwp automatic from AEIC
+aeicmwr		mw	# Mw reviewed from AEIC
+USGS:US		mwp 	# Mwp reviewed from USGS, global (nsta=null always), 
+USGS:AK		mwp 	# Mwp reviewed from USGS, Alaskan event (nsta=null always), 
+USGS:US		mw 	# Mw reviewed from USGS, global (nsta=null always), 
+			# in case they mis-label Alaskan event as global
+USGS:AK		mw	# Mw reviewed from USGS (nsta=null always)
+}
+
+pf_revision_time 1285093522

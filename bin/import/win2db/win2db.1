@@ -1,0 +1,33 @@
+.TH WIN2DB 1 "$Date: 2002-02-07 01:56:36 $"
+.SH NAME
+win2db \- Convert Japanese WIN-format data to CSS database
+.SH SYNOPSIS
+.nf
+\fBwin2db \fP\\[-v\\] \\[-f\\] \\[-s \fIsite_dbname\fP\\] \fIwinfile\fP \fIdbname\fP
+.fi
+.SH DESCRIPTION
+\fBwin2db\fP converts data in the Japanese WIN-format data file \fIwinfile\fP
+into the specified CSS database.
+
+\fBwin2db\fP uses the iceworm1.3 site database specified with the -s option or
+through the SITE_DB environment variable to translation WIN hexidecimal
+station codes into CSS station-channel names.
+.SH OPTIONS
+.ft CW
+.in 2c
+.nf
+
+-v verbose
+-f use fake station names
+-s site_database
+
+.fi
+.in
+.ft R
+.SH "SEE ALSO"
+.nf
+win2orb(1), orb2win(1), libwin(3)
+.fi
+.SH AUTHOR
+Kent Lindquist
+.\" $Id: win2db.1,v 1.2 2002-02-07 01:56:36 kent Exp $

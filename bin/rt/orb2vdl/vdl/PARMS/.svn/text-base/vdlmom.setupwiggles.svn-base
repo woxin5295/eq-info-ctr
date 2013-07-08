@@ -1,0 +1,6 @@
+/cnmsn/bin/datasock -p 5001 SIUC BHZ,BHN,BHE,LHZ,LHN,LHE >>datasocksiuc.log
+vdlucb -n 15 -s 52 -f 20 -c 1 -l 0 -i siuc -S SIUC -H wiggles.eas.slu.edu -P 5001 -C BHZ,BHN,BHE,LHZ,LHN,LHE -host nsn5.cr.usgs.gov -port 2003 -t 1 -k 0
+/cnmsn/bin/datasock -p 5002 SLM BHZ,BHN,BHE,LHZ,LHN,LHE >>datasockslm.log
+vdlucb -n 15 -s 53 -f 20 -c 1 -l 0 -i slm -S SLM -H wiggles.eas.slu.edu -P 5002 -C BHZ,BHN,BHE,LHZ,LHN,LHE -host nsn4.cr.usgs.gov -port 2003 -t 1 -k 0
+/cnmsn/bin/datasock -p 5003 UTMT BHZ,BHN,BHE,LHZ,LHN,LHE >>datasockutm.log
+vdlucb -n 15 -s 54 -f 20 -c 1 -l 0 -i utm -S UTMT -H wiggles.eas.slu.edu -P 5003 -C BHZ,BHN,BHE,LHZ,LHN,LHE -host nsn4.cr.usgs.gov -port 2003 -t 1 -k 0

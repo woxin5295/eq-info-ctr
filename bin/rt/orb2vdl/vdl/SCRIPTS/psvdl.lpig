@@ -1,0 +1,1 @@
+/usr/bin/ps -A -o "pid ppid pcpu time vsz args" | grep vdl

@@ -1,0 +1,66 @@
+# Sample makefile for nrts_tap based client
+
+CC     = cc 
+INCDIR = idatap-1.2.2/include
+BINDIR = ../bin/$(PLATFORM)
+LIBDIR =
+OPTMIZ = -O -g
+INCS   = -I$(INCDIR)
+#CFLAGS = $(OPTMIZ) $(INCS) -L$(LIBDIR) -D$(OSNAME) -D$(OSTYPE) -DDEBUG_PRINT
+CFLAGS = $(OPTMIZ) $(INCS) -L$(LIBDIR) -D$(OSNAME) -D$(OSTYPE)
+ALL    = vdltap vdl 
+
+all: $(ALL)
+
+
+remove: FORCE
+	rm $(ALL)
+
+clean: FORCE
+
+FORCE:
+
+#*
+#*   VDLIDATAP
+#*
+vdlidatap: vdl.o vdltrg.o vdlput.o vdlidatap.o vdlqsub.o ifft1024.o ifft512.o ifft256.o fftlib.o cmprs.o vdltcp_nopass.o filtheli.o vdlfilt.o filt2.o filt5.o filt10.o idatap-1.2.2/libidatap.a
+	 makedate
+	$(CC) $(CFLAGS)  datetime.c -c
+	$(CC) $(CFLAGS)  vdl.o vdltrg.o vdlput.o vdlidatap.o vdlqsub.o ifft1024.o ifft256.o ifft512.o fftlib.o cmprs.o vdltcp_nopass.o datetime.o vdlfilt.o filtheli.o filt2.o filt5.o filt10.o idatap-1.2.2/libidatap.a -o vdl -lm $(SOCKLIBS)
+vdl.o: vdl.c vdl.h vdlgbl.h cmprs.h ifft.h vdlqsub.h
+	$(CC) $(CFLAGS) vdl.c -c
+vdltrg.o: vdltrg.c vdl.h vdlgbl.h cmprs.h ifft.h vdlqsub.h
+	$(CC) $(CFLAGS)  vdltrg.c -c
+vdlput.o: vdlput.c vdl.h vdlgbl.h cmprs.h ifft.h vdlqsub.h
+	$(CC) $(CFLAGS)  vdlput.c -c
+vdlqsub.o: vdlqsub.c vdl.h vdlqsub.h vdlgbl.h
+	$(CC) $(CFLAGS)  vdlqsub.c -c
+vdltcp_nopass.o: vdltcp_nopass.c vdlgbl.h vdl.h
+	$(CC) $(CFLAGS)  vdltcp_nopass.c -c
+vdltcp.o: vdltcp.c vdlgbl.h vdl.h
+	$(CC) $(CFLAGS)  vdltcp.c -c
+vdlidatap.o: vdlidatap.c
+	$(CC) $(CFLAGS)  vdlidatap.c -c
+ifft1024.o: ifft1024.c ifft.h
+	$(CC) $(CFLAGS) ifft1024.c -c
+ifft256.o: ifft256.c ifft.h
+	$(CC) $(CFLAGS)  ifft256.c -c
+ifft512.o: ifft512.c ifft.h
+	$(CC) $(CFLAGS)  ifft512.c -c
+fftlib.o: fftlib.c ifft.h
+	$(CC) $(CFLAGS)  fftlib.c -c
+filt2: filt2.c 
+	$(CC) $(CFLAGS) filt2.c -c
+filt5: filt5.c 
+	$(CC) $(CFLAGS) filt5.c -c
+filt10: filt10.c 
+	$(CC) $(CFLAGS) filt10.c -c
+filtheli: filtheli.c 
+	$(CC) $(CFLAGS) filtheli.c -c
+vdlfilt: vdlfilt.c 
+	$(CC) $(CFLAGS) vdlfilt.c -c
+vdlmom: vdlmom.o
+	$(CC) $(CFLAGS) vdlmom.o -o vdlmom -lm
+vdlmom.o: vdlmom.c
+	$(CC) $(CFLAGS) vdlmom.c -c
+

@@ -1,0 +1,10 @@
+#CFLAGS = -D_REENTRANT -D_EARTHWORM -DDEBUG_PRINT $(GLOBALFLAGS)
+CC = gcc
+CFLAGS = -D_REENTRANT -D_EARTHWORM $(GLOBALFLAGS) 
+
+BINARIES =   vdl.o vdltrg.o vdlput.o vdlqsub.o ifft512.o ifft256.o ifft1024.o\
+		 fftlib.o vdlfilt.o filtheli.o \
+		 cmprs.o vdltcp_nopass.o filt2.o filt10.o filt5.o feed_vdl_ew_dbg.o 
+
+vdl: $(BINARIES)
+	gcc -o vdl $(BINARIES) -lnsl -lsocket -mt -lposix4 -lthread -lc -lm

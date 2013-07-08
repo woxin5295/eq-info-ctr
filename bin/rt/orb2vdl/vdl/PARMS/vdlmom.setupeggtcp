@@ -1,0 +1,4 @@
+vdlnevtcp -t 1 -n 15 -s 80 -f 40 -i dac -k 0 -l 0 -host nsn4.cr.usgs.gov -port 2003 -H sandia.egg.nv.doe.gov -P 20011 -S DAC -C BHZ,BHN,BHE,LHZ,LHN,LHE
+vdlnevtcp -t 1 -n 15 -s 81 -f 40 -i mvu -k 0 -l 0 -host nsn4.cr.usgs.gov -port 2003 -H sandia.egg.nv.doe.gov -P 20021 -S MVU -C BHZ,BHN,BHE,LHZ,LHN,LHE
+vdlnevtcp -t 1 -n 15 -s 82 -f 40 -i tph -k 0 -l 0 -host nsn4.cr.usgs.gov -port 2003 -H sandia.egg.nv.doe.gov -P 20031 -S TPH -C BHZ,BHN,BHE,LHZ,LHN,LHE
+vdlnevtcp -t 1 -n 15 -s 83 -f 40 -i bmn -k 0 -l 0 -host nsn4.cr.usgs.gov -port 2003 -H sandia.egg.nv.doe.gov -P 20041 -S BMN -C BHZ,BHN,BHE,LHZ,LHN,LHE

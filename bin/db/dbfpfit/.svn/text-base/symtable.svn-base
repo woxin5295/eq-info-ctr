@@ -1,0 +1,30 @@
+FPPLOT SYMBOL TABLE        WEIGHT .GT. 0       
+--------------------------------------------------------------------------------
+MOTION          PLOT?          SYMBOL   PEN    SIZE       SCALE BY    ADD
+         Give largest weight            1-4  (INCHES)      WEIGHT?    NAME?
+         to exclude from plot                               -------------
+          [0. includes all]                                 [1=YES, 2=NO]
+------------------*-----------***.***----*------***----------*--------*---------
+UPGOING    c      0.          930.000    3      0.2          1        1
+DOWNGOING  c      0.          930.060    3      0.2          1        1
+UPGOING    +      0.          931.000    3      0.3          1        1
+DOWNGOING  +      0.          931.060    3      0.3          1        1
+UPGOING    d      0.           30.000    3      0.2          1        1
+DOWNGOING  d      0.           30.060    3      0.2          1        1
+UPGOING    -      0.           31.000    3      0.3          1        1
+DOWNGOING  -      0.           31.060    3      0.3          1        1
+--------------------------------------------------------------------------------
+                            WEIGHT .EQ. 0       
+--------------------------------------------------------------------------------
+MOTION          PLOT?          SYMBOL   PEN    SIZE           ADD
+                                        1-4  (INCHES)         NAME?
+            [1=YES, 2=NO]                                [1=YES, 2=NO]
+------------------*-----------***.***----*------****-----------*----------------
+UPGOING    c      1            52.000    1      0.12           1 
+DOWNGOING  c      1            52.036    1      0.12           1 
+UPGOING    +      1            52.000    1      0.12           1 
+DOWNGOING  +      1            52.036    1      0.12           1 
+UPGOING    d      1            32.000    1      0.12           1 
+DOWNGOING  d      1            32.060    1      0.12           1 
+UPGOING    -      1            32.000    1      0.12           1 
+DOWNGOING  -      1            32.060    1      0.12           1 

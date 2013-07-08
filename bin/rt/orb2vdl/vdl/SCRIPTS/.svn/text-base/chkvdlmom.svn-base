@@ -1,0 +1,23 @@
+#!/bin/csh -f
+#	chkvdlmom sees if a vdlmom is running using the ps command.  If it
+#	is running, the $VDL_DIR/chkvdlmom.file is touched.  If it is not 
+#	running, then it is started using run runvdl script.  Running can also
+#	be prevented by the presence of the file $VDL_LOCK.  This mechanism was 
+#	used at SLU to prevent the cron job from firing off at an awkward moment
+#	in the boot up process.
+#
+#  set up a crontab entry like :
+#  0,10,20,30,40,50 * * * * csh /home/ketchum/vdl/SCRIPTS/chkvdlmom
+source ~/.vdlrc
+$PSVDL | grep "[0-9] vdlmom" >/dev/null
+if ($status == 0)  then
+	touch $VDL_DIR/chkvdlmom.file
+else
+	date
+	echo "VDLMOM not found at $VDL_STATION"
+	if ( -f $VDL_LOCK ) then
+		echo "VDL is prevented from running by lock file"
+	else
+		csh $VDL_DIR/SCRIPTS/runvdl
+	endif
+endif

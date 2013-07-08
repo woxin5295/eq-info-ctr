@@ -1,0 +1,1 @@
+vdlorb -v SCRIPTS/parms.vdlbbarray -orbname igpprt:knet -orbchan KN_AAK.*|KN_AML.* -n 18 -s 60 -f 40 -F 40. -host nsn3.cr.usgs.gov -cph 1 -i vpe 

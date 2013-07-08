@@ -1,0 +1,75 @@
+proc send_command {} {
+	global command matrixbit station onoff message orb
+	puts "orblog -s $message $orb \"$matrixbit $station $onoff\"" 
+	puts [exec orblog -s $message $orb "$matrixbit $station $onoff" >& /dev/null ]
+}
+
+set message "pipelinemsg"
+set orb "aeicpipe:6510"
+set matrixbit Maintain
+set onoff on 
+set station ALL 
+
+radiobutton .r_maint  -variable matrixbit -value Maintain  -text "Maintain" 
+radiobutton .r_test  -variable matrixbit -value Test  -text "Test    " 
+radiobutton .r_fault  -variable matrixbit -value Fault  -text "Fault   "
+
+grid .r_maint -column 1 -row 1
+grid .r_test -column 1 -row 2
+grid .r_fault -column 1 -row 3
+
+radiobutton .r_on  -variable onoff -value on -text "on "
+radiobutton .r_off  -variable onoff -value off -text "off"
+
+grid .r_on -column 2 -row 1
+grid .r_off -column 2 -row 2
+
+radiobutton .r_ALL  -variable station -value ALL  -text "ALL "
+radiobutton .r_PS01  -variable station -value PS01  -text PS01
+radiobutton .r_PS04  -variable station -value PS04  -text PS04
+radiobutton .r_PS05  -variable station -value PS05  -text PS05
+radiobutton .r_PS06  -variable station -value PS06  -text PS06
+radiobutton .r_PS07  -variable station -value PS07  -text PS07
+radiobutton .r_PS08  -variable station -value PS08  -text PS08
+radiobutton .r_PS09  -variable station -value PS09  -text PS09
+radiobutton .r_PS10  -variable station -value PS10  -text PS10
+radiobutton .r_PS11  -variable station -value PS11  -text PS11
+radiobutton .r_PS12  -variable station -value PS12  -text PS12
+radiobutton .r_VMT  -variable station -value VMT  -text "VMT "
+
+label .labmeg -text "Srcname:" 
+entry  .messagename -textvariable message
+
+label .laborb -text "Orb:" 
+entry  .orbname -textvariable orb 
+
+button .orbsend -fg white -bg red -activebackground red -activeforeground white -command send_command -text "Send Message"
+button .quit -text Quit -command {destroy .} 
+
+grid .labmeg -column 5 -row 1 
+grid .messagename -column 6 -row 1 
+grid .laborb -column 5 -row 2 
+grid .orbname -column 6 -row 2 
+
+grid .orbsend -column 7 -row 1 
+grid .quit -column 7 -row 2 
+
+grid .r_ALL -column 3 -row 1
+grid .r_PS01 -column 3 -row 2
+grid .r_PS04 -column 3 -row 3
+grid .r_PS05 -column 3 -row 4
+grid .r_PS06 -column 3 -row 5
+grid .r_PS07 -column 3 -row 6
+grid .r_PS08 -column 4 -row 1
+grid .r_PS09 -column 4 -row 2
+grid .r_PS10 -column 4 -row 3
+grid .r_PS11 -column 4 -row 4
+grid .r_PS12 -column 4 -row 5
+grid .r_VMT -column 4 -row 6
+
+
+#orblog -s pipelinemsg aeicpipe:6510 "Maintain ALL on"
+#orblog -s pipelinemsg aeicpipe:6510 "Maintain PS11 on"
+#orblog -s pipelinemsg aeicpipe:6510 "Test PS11 on"
+#orblog -s pipelinemsg aeicpipe:6510 "Fault PS11 on"
+

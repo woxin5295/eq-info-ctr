@@ -1,0 +1,33 @@
+'\" te	
+.TH CONVERT_NEWSMINER_MAP 1 "$Date: 2000-05-23 23:27:07 $"
+.SH NAME
+convert_newsminer_map \- convert an eps file to CMYK tiff for newspaper printing
+.SH SYNOPSIS
+.nf
+convert_newsminer_map eps_file
+.fi
+.SH DESCRIPTION
+convert_newsminer_map converts an eps file to a format suitable for printing
+in the newspaper. The eps file is rotated 270 degrees and the bounding box
+is fixed to adjust for problems with IslandDraw output of a modified 
+ak_dbmapevents file.
+.SH OPTIONS
+.SH FILES
+.SH ENVIRONMENT
+.SH PARAMETER FILE
+.SH EXAMPLE
+.ft CW
+.RS .2i
+.RE
+.ft R
+.SH RETURN VALUES
+.SH LIBRARY
+.SH DIAGNOSTICS
+.SH "SEE ALSO"
+.nf
+ak_dbmapevents(1)
+.fi
+.SH "BUGS AND CAVEATS"
+.SH AUTHOR
+Kent Lindquist, wrapping Kevin Engle's alchemy command in Perl
+.\" $Id: convert_newsminer_map.1,v 1.1.1.1 2000-05-23 23:27:07 kent Exp $

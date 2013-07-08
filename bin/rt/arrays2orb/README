@@ -1,0 +1,12 @@
+Step 1> start up orb_server on erebus
+	orbserver erebus
+Step 2> start up arrays2orb
+	arrays2orb erebus
+
+note check orb_status -
+	orbstat -c erebus 
+	or
+	orbstat -s erebus
+
+orb parameter file is -
+	

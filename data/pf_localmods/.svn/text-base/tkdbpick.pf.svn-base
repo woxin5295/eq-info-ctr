@@ -1,0 +1,88 @@
+#
+#   Parameter file for tkdbpick
+#
+
+#
+#   The following correspond to program parameters.
+#   Each parameter corresponds to a program command
+#   argument. Command line arguments override the
+#   parameters that are specified here.
+#
+
+sc		*:*		# database station:channel sifter
+tw		600.0		# display time window
+maxchannels	6		# Maximum number of channels to show
+				#   in display
+gaps		segment		# One of "segment", "zero", "interp"
+				#   or "none" - describes how to
+				#   process internally flagged gap
+				#   values
+comout		none		# File name for output of display
+				#   time windows and arrival info
+				#   (used by dbloc2)
+stam		seed		# One of "css" or "seed" - describes
+				#   namespace to use for displaying
+				#   [network-]station-channel[-loc] codes 
+ampm		auto		# One of "fixed", "auto", "auto0", "auto1",
+				#   or "autoa" - describes trace 
+				#   amplitude scaling mode 
+trcrm		both		# One of "both", "time", or "none"
+				#   - describes trace cursor mode
+geom		1000x800+0+0	# X-window style geometry specification
+bg		240.0:0.3:1.0	# Trace window background color
+fg		yellow		# Trace window foreground color
+cr		0.0:0.8:1.0	# Trace window cursor color
+fgcss		240.0:0.2:1.0	# CSS Station label foreground color
+fgseed		0.0:0.4:1.0	# SEED Station label foreground color
+fgfil		0.0:0.3:0.0	# Filter label foreground color
+bga		red		# Arrival background color
+fga		240.0:0.9:1.0	# Arrival foreground color
+bgsa		240.0:0.9:1.0	# Selected arrival background color
+fgsa		black		# Selected arrival foreground color
+timefm		%T		# Time date time format
+datefm		%G		# Time date label format
+phase_default	P		# default phase code 
+switchbuttons	no		# Should the middle and right mouse
+				#   buttons be switched? (for 2-button
+				#   mice)
+noedit		no		# Should edits of arrivals be disabled?
+nosort		no		# Should sta-chan sorting be disabled?
+noshowwfs	no		# Should waveform displays be disabled?
+noshowarrs	no		# Should arrival displays be disabled?
+noshowpreds	no		# Should predicted arrival displays be disabled?
+cliptraces	no		# Should trace plots be amplitude clipped?
+counts		no		# show amplitudes as counts?
+palign		no		# time align on P-arrivals?
+v		no		# verbose flag
+
+filters &Tbl{			# filter specifications
+#label		tpad	filter
+WAV		100.0	WAV 1
+WAA		100.0	WAA 1
+0.3_HP		15.0	BW 0.3 5 0.0 0
+0.5_HP		10.0	BW 0.5 5 0.0 0
+1_HP		5.0	BW 1.0 2 0.0 0
+5_HP		2.0	BW 5.0 2 0.0 0
+0.3-1_BP	15.0	BW 0.3 5 1.0 5
+0.5-2_BP	10.0	BW 0.5 5 1.0 5
+0.8-3_BP	5.0	BW 0.8 5 3.0 5
+1-5_BP		5.0	BW 1.0 5 5.0 5
+1-12_BP		5.0	BW 1.0 5 12.0 5
+3-10_BP		5.0	BW 3.0 4 10.0 4
+INT		10.0	DEMEAN ; INT
+INT_0.1		40.0	BW 0.1 2 0.0 0 ; INT
+INT_0.3		40.0	BW 0.3 2 0.0 0 ; INT
+INT_0.5		40.0	BW 0.5 2 0.0 0 ; INT
+INT2		10.0	DEMEAN ; INT2
+DIF		5.0	DIF
+DIF2		5.0	DIF2
+}
+
+phases &Tbl{			# phase codes
+P
+S
+N
+}
+
+
+pf_revision_time 1214342890

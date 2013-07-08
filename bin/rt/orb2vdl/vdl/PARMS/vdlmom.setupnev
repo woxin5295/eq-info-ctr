@@ -1,0 +1,4 @@
+vdlnev -H sandia.egg.nv.doe.gov -P 20011 -S DAC -t 1 -n 15 -s 80 -f 40 -i DAC -k 0 -l 0
+vdlnev -H sandia.egg.nv.doe.gov -P 20021 -S LDS -t 1 -n 15 -s 81 -f 40 -i LDS -k 0 -l 0
+vdlnev -H sandia.egg.nv.doe.gov -P 20031 -S TPH -t 1 -n 15 -s 82 -f 40 -i TPH -k 0 -l 0
+vdlnev -H sandia.egg.nv.doe.gov -P 20041 -S BMN -t 1 -n 15 -s 83 -f 40 -i BMN -k 0 -l 0

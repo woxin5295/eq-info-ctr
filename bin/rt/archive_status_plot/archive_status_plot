@@ -1,0 +1,61 @@
+: # use perl
+eval 'exec $ANTELOPE/bin/perl -S $0 "$@"'
+if 0;
+
+use lib "$ENV{ANTELOPE}/data/perl" ;
+# archive_status_plot
+#
+# K. Lindquist
+# Geophysical Institute
+# University of Alaska
+# January 1999
+
+require "pf2.pl";
+use Datascope;
+
+sub myeval_pf {
+        my( $pffile_in ) = @_;
+ 
+        $pffile = $pffile_in;
+        $pffile =~ s@.*/([^/])@$1@;
+ 
+        foreach $pfdir ( split( /:/, $ENV{"PFPATH"} ) ) {
+ 
+                $pf_file_path = "$pfdir/$pffile";
+ 
+                if( -r $pf_file_path ) { &eval_pf( $pf_file_path ); }
+ 
+        }
+ 
+        if( $pffile ne $pffile_in ) { &eval_pf( $pffile_in ); }
+}
+
+myeval_pf( "archive_status_plot.pf" );
+
+$Tempdir = "/tmp/asp_$<_$$";
+
+mkdir( $Tempdir, 0755 );
+
+chdir( $Tempdir );
+
+$endtime = str2epoch('now');
+$starttime = epoch2str( $endtime - 86400, "%Y-%j" );
+
+foreach $plot ( keys( %Plots ) ) {
+
+	$Subset_expr = $plot;
+	$Output_file = $Plots{$plot};
+
+	$cmd = "aeic_dbplotcov $Dbname $Subset_expr $starttime $endtime -nodisplay";
+	system( $cmd );
+
+	$cmd = "alchemy -g -o -Zr270 -Zo1000p -Z+ aeic_dbplotcov.ps";
+	system( $cmd );
+
+	$cmd = "/usr/bin/mv aeic_dbplotcov.gif $Output_file";
+	system( $cmd );
+}
+
+chdir( "/" );
+system( "/bin/rm -rf $Tempdir" );
+rmdir( $Tempdir );

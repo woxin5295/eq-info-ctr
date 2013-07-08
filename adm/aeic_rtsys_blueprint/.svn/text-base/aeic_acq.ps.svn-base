@@ -1,0 +1,1814 @@
+%!PS-Adobe-2.0
+%%Title: aeic_acq.fig
+%%Creator: fig2dev Version 3.2 Patchlevel 5-alpha5
+%%CreationDate: Sat Feb 19 21:48:40 2005
+%%For: stach@rover ()
+%%Orientation: Portrait
+%%Pages: 1
+%%BoundingBox: 0 0 792 1224
+%%DocumentPaperSizes: tabloid
+%%BeginSetup
+[{
+%%BeginFeature: *PageRegion Tabloid
+<</PageSize [792 1224]>> setpagedevice
+%%EndFeature
+} stopped cleartomark
+%%EndSetup
+%Magnification: 0.4320
+%%EndComments
+/$F2psDict 200 dict def
+$F2psDict begin
+$F2psDict /mtrx matrix put
+/col-1 {0 setgray} bind def
+/col0 {0.000 0.000 0.000 srgb} bind def
+/col1 {0.000 0.000 1.000 srgb} bind def
+/col2 {0.000 1.000 0.000 srgb} bind def
+/col3 {0.000 1.000 1.000 srgb} bind def
+/col4 {1.000 0.000 0.000 srgb} bind def
+/col5 {1.000 0.000 1.000 srgb} bind def
+/col6 {1.000 1.000 0.000 srgb} bind def
+/col7 {1.000 1.000 1.000 srgb} bind def
+/col8 {0.000 0.000 0.560 srgb} bind def
+/col9 {0.000 0.000 0.690 srgb} bind def
+/col10 {0.000 0.000 0.820 srgb} bind def
+/col11 {0.530 0.810 1.000 srgb} bind def
+/col12 {0.000 0.560 0.000 srgb} bind def
+/col13 {0.000 0.690 0.000 srgb} bind def
+/col14 {0.000 0.820 0.000 srgb} bind def
+/col15 {0.000 0.560 0.560 srgb} bind def
+/col16 {0.000 0.690 0.690 srgb} bind def
+/col17 {0.000 0.820 0.820 srgb} bind def
+/col18 {0.560 0.000 0.000 srgb} bind def
+/col19 {0.690 0.000 0.000 srgb} bind def
+/col20 {0.820 0.000 0.000 srgb} bind def
+/col21 {0.560 0.000 0.560 srgb} bind def
+/col22 {0.690 0.000 0.690 srgb} bind def
+/col23 {0.820 0.000 0.820 srgb} bind def
+/col24 {0.500 0.190 0.000 srgb} bind def
+/col25 {0.630 0.250 0.000 srgb} bind def
+/col26 {0.750 0.380 0.000 srgb} bind def
+/col27 {1.000 0.500 0.500 srgb} bind def
+/col28 {1.000 0.630 0.630 srgb} bind def
+/col29 {1.000 0.750 0.750 srgb} bind def
+/col30 {1.000 0.880 0.880 srgb} bind def
+/col31 {1.000 0.840 0.000 srgb} bind def
+
+end
+save
+newpath 0 1224 moveto 0 0 lineto 792 0 lineto 792 1224 lineto closepath clip newpath
+48.1 -25.0 translate
+
+/cp {closepath} bind def
+/ef {eofill} bind def
+/gr {grestore} bind def
+/gs {gsave} bind def
+/sa {save} bind def
+/rs {restore} bind def
+/l {lineto} bind def
+/m {moveto} bind def
+/rm {rmoveto} bind def
+/n {newpath} bind def
+/s {stroke} bind def
+/sh {show} bind def
+/slc {setlinecap} bind def
+/slj {setlinejoin} bind def
+/slw {setlinewidth} bind def
+/srgb {setrgbcolor} bind def
+/rot {rotate} bind def
+/sc {scale} bind def
+/sd {setdash} bind def
+/ff {findfont} bind def
+/sf {setfont} bind def
+/scf {scalefont} bind def
+/sw {stringwidth} bind def
+/tr {translate} bind def
+/tnt {dup dup currentrgbcolor
+  4 -2 roll dup 1 exch sub 3 -1 roll mul add
+  4 -2 roll dup 1 exch sub 3 -1 roll mul add
+  4 -2 roll dup 1 exch sub 3 -1 roll mul add srgb}
+  bind def
+/shd {dup dup currentrgbcolor 4 -2 roll mul 4 -2 roll mul
+  4 -2 roll mul srgb} bind def
+/reencdict 12 dict def /ReEncode { reencdict begin
+/newcodesandnames exch def /newfontname exch def /basefontname exch def
+/basefontdict basefontname findfont def /newfont basefontdict maxlength dict def
+basefontdict { exch dup /FID ne { dup /Encoding eq
+{ exch dup length array copy newfont 3 1 roll put }
+{ exch newfont 3 1 roll put } ifelse } { pop pop } ifelse } forall
+newfont /FontName newfontname put newcodesandnames aload pop
+128 1 255 { newfont /Encoding get exch /.notdef put } for
+newcodesandnames length 2 idiv { newfont /Encoding get 3 1 roll put } repeat
+newfontname newfont definefont pop end } def
+/isovec [
+8#055 /minus 8#200 /grave 8#201 /acute 8#202 /circumflex 8#203 /tilde
+8#204 /macron 8#205 /breve 8#206 /dotaccent 8#207 /dieresis
+8#210 /ring 8#211 /cedilla 8#212 /hungarumlaut 8#213 /ogonek 8#214 /caron
+8#220 /dotlessi 8#230 /oe 8#231 /OE
+8#240 /space 8#241 /exclamdown 8#242 /cent 8#243 /sterling
+8#244 /currency 8#245 /yen 8#246 /brokenbar 8#247 /section 8#250 /dieresis
+8#251 /copyright 8#252 /ordfeminine 8#253 /guillemotleft 8#254 /logicalnot
+8#255 /hyphen 8#256 /registered 8#257 /macron 8#260 /degree 8#261 /plusminus
+8#262 /twosuperior 8#263 /threesuperior 8#264 /acute 8#265 /mu 8#266 /paragraph
+8#267 /periodcentered 8#270 /cedilla 8#271 /onesuperior 8#272 /ordmasculine
+8#273 /guillemotright 8#274 /onequarter 8#275 /onehalf
+8#276 /threequarters 8#277 /questiondown 8#300 /Agrave 8#301 /Aacute
+8#302 /Acircumflex 8#303 /Atilde 8#304 /Adieresis 8#305 /Aring
+8#306 /AE 8#307 /Ccedilla 8#310 /Egrave 8#311 /Eacute
+8#312 /Ecircumflex 8#313 /Edieresis 8#314 /Igrave 8#315 /Iacute
+8#316 /Icircumflex 8#317 /Idieresis 8#320 /Eth 8#321 /Ntilde 8#322 /Ograve
+8#323 /Oacute 8#324 /Ocircumflex 8#325 /Otilde 8#326 /Odieresis 8#327 /multiply
+8#330 /Oslash 8#331 /Ugrave 8#332 /Uacute 8#333 /Ucircumflex
+8#334 /Udieresis 8#335 /Yacute 8#336 /Thorn 8#337 /germandbls 8#340 /agrave
+8#341 /aacute 8#342 /acircumflex 8#343 /atilde 8#344 /adieresis 8#345 /aring
+8#346 /ae 8#347 /ccedilla 8#350 /egrave 8#351 /eacute
+8#352 /ecircumflex 8#353 /edieresis 8#354 /igrave 8#355 /iacute
+8#356 /icircumflex 8#357 /idieresis 8#360 /eth 8#361 /ntilde 8#362 /ograve
+8#363 /oacute 8#364 /ocircumflex 8#365 /otilde 8#366 /odieresis 8#367 /divide
+8#370 /oslash 8#371 /ugrave 8#372 /uacute 8#373 /ucircumflex
+8#374 /udieresis 8#375 /yacute 8#376 /thorn 8#377 /ydieresis] def
+/Times-Roman /Times-Roman-iso isovec ReEncode
+/$F2psBegin {$F2psDict begin /$F2psEnteredState save def} def
+/$F2psEnd {$F2psEnteredState restore end} def
+
+$F2psBegin
+10 setmiterlimit
+0 slj 0 slc
+ 0.02592 0.02592 sc
+%%Page: 1 1
+%%BeginPageSetup
+ 90 rotate
+1 -1 scale
+%%EndPageSetup
+%
+% Fig objects follow
+%
+% 
+% here starts figure with depth 50
+% Polyline
+0 slj
+0 slc
+7.500 slw
+n 7836 2963 m 7731 2963 7731 3403 105 arcto 4 {pop} repeat
+  7731 3508 9248 3508 105 arcto 4 {pop} repeat
+  9353 3508 9353 3068 105 arcto 4 {pop} repeat
+  9353 2963 7836 2963 105 arcto 4 {pop} repeat
+ cp gs col0 s gr 
+/Times-Roman-iso ff 233.33 scf sf
+7858 3331 m
+gs 1 -1 sc (orbserver:6510) col0 sh gr
+% Polyline
+n 9978 3434 m 11975 3434 l 11975 3749 l 9978 3749 l
+ cp gs col0 s gr 
+/Times-Roman-iso ff 200.00 scf sf
+10017 3644 m
+gs 1 -1 sc (orb2db_diag -m \(note3\)) col0 sh gr
+% Polyline
+n 9969 3094 m 11908 3094 l 11908 3351 l 9969 3351 l
+ cp gs col0 s gr 
+/Times-Roman-iso ff 200.00 scf sf
+10005 3280 m
+gs 1 -1 sc (orb2db_avo -m \(note2\)) col0 sh gr
+% Polyline
+n 9953 2705 m 11437 2705 l 11437 2987 l 9953 2987 l
+ cp gs col0 s gr 
+/Times-Roman-iso ff 200.00 scf sf
+10023 2910 m
+gs 1 -1 sc (orb2db -r \(note1\)) col0 sh gr
+% Polyline
+n 9986 3857 m 10657 3857 l 10657 4097 l 9986 4097 l
+ cp gs col0 s gr 
+/Times-Roman-iso ff 200.00 scf sf
+10009 4039 m
+gs 1 -1 sc (orb2dbt) col0 sh gr
+% Polyline
+n 12523 2596 m
+ 13740 2596 l gs col0 s gr 
+/Times-Roman-iso ff 200.00 scf sf
+12542 2554 m
+gs 1 -1 sc (/iwrun/op/run/) col0 sh gr
+% Polyline
+n 2641 3182 m 7005 3182 l 7005 3516 l 2641 3516 l
+ cp gs col0 s gr 
+/Times-Roman-iso ff 200.00 scf sf
+2752 3407 m
+gs 1 -1 sc (orb2orb -r \(/db/|/pf/|NULL_|PP_GCSA_BH.4\).* fk) col0 sh gr
+% Polyline
+n 5008 2673 m 6421 2673 l 6421 3045 l 5008 3045 l
+ cp gs col0 s gr 
+/Times-Roman-iso ff 200.00 scf sf
+5064 2932 m
+gs 1 -1 sc (orb2orb fk:6511) col0 sh gr
+% Polyline
+n 5020 3714 m 6496 3714 l 6496 4012 l 5020 4012 l
+ cp gs col0 s gr 
+/Times-Roman-iso ff 200.00 scf sf
+5077 3925 m
+gs 1 -1 sc (adsend2orb 9900) col0 sh gr
+/Times-Roman-iso ff 200.00 scf sf
+7366 4859 m
+gs 1 -1 sc (CRONTAB) col0 sh gr
+/Times-Roman-iso ff 200.00 scf sf
+7366 5114 m
+gs 1 -1 sc (make_archive_dblinks) col0 sh gr
+/Times-Roman-iso ff 200.00 scf sf
+7366 5369 m
+gs 1 -1 sc (split_archive_database) col0 sh gr
+/Times-Roman-iso ff 200.00 scf sf
+7366 5624 m
+gs 1 -1 sc (archive_status_plot) col0 sh gr
+/Times-Roman-iso ff 200.00 scf sf
+7366 5879 m
+gs 1 -1 sc (rtreport) col0 sh gr
+/Times-Roman-iso ff 200.00 scf sf
+7366 6134 m
+gs 1 -1 sc (rtdbclean) col0 sh gr
+/Times-Roman-iso ff 200.00 scf sf
+7366 6389 m
+gs 1 -1 sc (//iwrun/op/run/bin/dbsplitcron) col0 sh gr
+% Polyline
+n 11448 2822 m
+ 12366 2822 l gs col0 s gr 
+% Polyline
+n 11919 3207 m
+ 12192 3219 l gs col0 s gr 
+% Polyline
+n 11994 3591 m
+ 12428 3616 l gs col0 s gr 
+% Polyline
+n 10667 3975 m
+ 12329 3988 l gs col0 s gr 
+% Polyline
+gs  clippath
+7601 3533 m 7760 3477 l 7740 3420 l 7581 3476 l 7581 3476 l 7705 3465 l 7601 3533 l cp
+eoclip
+n 6508 3888 m
+ 7736 3454 l gs col0 s gr gr
+
+% arrowhead
+n 7601 3533 m 7705 3465 l 7581 3476 l 7601 3533 l  cp gs 0.00 setgray ef gr  col0 s
+% Polyline
+gs  clippath
+7589 3305 m 7754 3283 l 7746 3224 l 7581 3246 l 7581 3246 l 7704 3260 l 7589 3305 l cp
+eoclip
+n 7004 3355 m
+ 7736 3256 l gs col0 s gr gr
+
+% arrowhead
+n 7589 3305 m 7704 3260 l 7581 3246 l 7589 3305 l  cp gs 0.00 setgray ef gr  col0 s
+% Polyline
+gs  clippath
+7592 3064 m 7758 3089 l 7767 3030 l 7601 3005 l 7601 3005 l 7716 3053 l 7592 3064 l cp
+eoclip
+n 6434 2859 m
+ 7748 3058 l gs col0 s gr gr
+
+% arrowhead
+n 7592 3064 m 7716 3053 l 7601 3005 l 7592 3064 l  cp gs 0.00 setgray ef gr  col0 s
+% Polyline
+gs  clippath
+9663 3239 m 9830 3239 l 9830 3179 l 9663 3179 l 9663 3179 l 9783 3209 l 9663 3239 l cp
+eoclip
+n 9365 3209 m
+ 9815 3209 l gs col0 s gr gr
+
+% arrowhead
+n 9663 3239 m 9783 3209 l 9663 3179 l 9663 3239 l  cp gs 0.00 setgray ef gr  col0 s
+% Polyline
+n 8146 6078 m 10996 6003 l
+ 12571 4578 l gs col0 s gr 
+% Polyline
+n 2390 2178 m 15459 2178 l 15459 8023 l 2390 8023 l
+ cp gs col0 s gr 
+/Times-Roman-iso ff 200.00 scf sf
+3365 7161 m
+gs 1 -1 sc (note1: '\(AK_\(PAX|COLD|PPLA\)/\(pf|MGENC|log\)/.*|/db/.*|/pf/.*|.*_\(ACD|AFC|AFP|VE1|UE1|VK1|VM.|BHM.|00BHM.\).*\)) col0 sh gr
+/Times-Roman-iso ff 200.00 scf sf
+3365 7416 m
+gs 1 -1 sc (note2: \(AK_\(GAEA|GAKI|GALA|GANE|GANO|GASW|TACS|TAFL|TAFP|TANO|TAPA|TASE\)_.*\)) col0 sh gr
+/Times-Roman-iso ff 200.00 scf sf
+3365 7671 m
+gs 1 -1 sc (note3: 'AK_\(PAX|COLD|PPLA\)/\(pf|MGENC|log\)/.*|.*_\(ACD|AFC|AFP|VE1|UE1|VK1|VM.|BHM.|00BHM.\).*) col0 sh gr
+/Times-Roman-iso ff 200.00 scf sf
+8120 3788 m
+gs 1 -1 sc (orbdetect) col0 sh gr
+/Times-Roman-iso ff 200.00 scf sf
+8120 4002 m
+gs 1 -1 sc (orbtrigger) col0 sh gr
+/Times-Roman-iso ff 200.00 scf sf
+8122 4203 m
+gs 1 -1 sc (orbassoc) col0 sh gr
+/Times-Roman-iso ff 200.00 scf sf
+8122 4449 m
+gs 1 -1 sc (orbmag) col0 sh gr
+/Times-Roman-iso ff 200.00 scf sf
+12543 2865 m
+gs 1 -1 sc (db/archive) col0 sh gr
+/Times-Roman-iso ff 200.00 scf sf
+12544 3703 m
+gs 1 -1 sc (dbdiag/diagnostic) col0 sh gr
+/Times-Roman-iso ff 200.00 scf sf
+12313 3285 m
+gs 1 -1 sc (../archive_wf/avobaddata/avobaddata) col0 sh gr
+/Times-Roman-iso ff 200.00 scf sf
+12500 4038 m
+gs 1 -1 sc (dbseg/quakes) col0 sh gr
+/Times-Roman-iso ff 300.00 scf sf
+7131 2046 m
+gs 1 -1 sc (earlybird:137.229.32.250) col0 sh gr
+/Times-Roman-iso ff 200.00 scf sf
+12515 4503 m
+gs 1 -1 sc (dbseg/quakesdbevents) col0 sh gr
+% Polyline
+n 8014 10463 m 7909 10463 7909 10903 105 arcto 4 {pop} repeat
+  7909 11008 9426 11008 105 arcto 4 {pop} repeat
+  9531 11008 9531 10568 105 arcto 4 {pop} repeat
+  9531 10463 8014 10463 105 arcto 4 {pop} repeat
+ cp gs col0 s gr 
+/Times-Roman-iso ff 233.33 scf sf
+8036 10831 m
+gs 1 -1 sc (orbserver:6510) col0 sh gr
+% Polyline
+n 10131 10205 m 11615 10205 l 11615 10487 l 10131 10487 l
+ cp gs col0 s gr 
+/Times-Roman-iso ff 200.00 scf sf
+10201 10410 m
+gs 1 -1 sc (orb2db -r \(note1\)) col0 sh gr
+% Polyline
+n 2819 10682 m 7183 10682 l 7183 11016 l 2819 11016 l
+ cp gs col0 s gr 
+/Times-Roman-iso ff 200.00 scf sf
+2930 10907 m
+gs 1 -1 sc (orb2orb -r \(/db/|/pf/|NULL_|PP_GCSA_BH.4\).* fk) col0 sh gr
+% Polyline
+n 5186 10173 m 6599 10173 l 6599 10545 l 5186 10545 l
+ cp gs col0 s gr 
+/Times-Roman-iso ff 200.00 scf sf
+5242 10432 m
+gs 1 -1 sc (orb2orb fk:6511) col0 sh gr
+% Polyline
+n 5198 11214 m 6674 11214 l 6674 11512 l 5198 11512 l
+ cp gs col0 s gr 
+/Times-Roman-iso ff 200.00 scf sf
+5255 11425 m
+gs 1 -1 sc (adsend2orb 9900) col0 sh gr
+% Polyline
+n 10145 11046 m 10816 11046 l 10816 11286 l 10145 11286 l
+ cp gs col0 s gr 
+/Times-Roman-iso ff 200.00 scf sf
+10168 11228 m
+gs 1 -1 sc (orb2dbt) col0 sh gr
+% Polyline
+n 10099 10592 m 12096 10592 l 12096 10907 l 10099 10907 l
+ cp gs col0 s gr 
+/Times-Roman-iso ff 200.00 scf sf
+10138 10802 m
+gs 1 -1 sc (orb2db_diag -m \(note2\)) col0 sh gr
+/Times-Roman-iso ff 200.00 scf sf
+10019 12650 m
+gs 1 -1 sc (CRONTAB) col0 sh gr
+/Times-Roman-iso ff 200.00 scf sf
+10019 12905 m
+gs 1 -1 sc (make_archive_dblinks) col0 sh gr
+/Times-Roman-iso ff 200.00 scf sf
+10019 13160 m
+gs 1 -1 sc (split_archive_database) col0 sh gr
+/Times-Roman-iso ff 200.00 scf sf
+10019 13415 m
+gs 1 -1 sc (archive_status_plot) col0 sh gr
+/Times-Roman-iso ff 200.00 scf sf
+10019 13670 m
+gs 1 -1 sc (rtreport) col0 sh gr
+/Times-Roman-iso ff 200.00 scf sf
+10019 13925 m
+gs 1 -1 sc (rtdbclean) col0 sh gr
+/Times-Roman-iso ff 200.00 scf sf
+10019 14180 m
+gs 1 -1 sc (//iwrun/op/run/bin/dbsplitcron) col0 sh gr
+% Polyline
+n 9987 11630 m 12222 11630 l 12222 11960 l 9987 11960 l
+ cp gs col0 s gr 
+/Times-Roman-iso ff 200.00 scf sf
+10047 11840 m
+gs 1 -1 sc (orbptrigger \(tdmt_launch\)) col0 sh gr
+% Polyline
+n 11626 10322 m
+ 12544 10322 l gs col0 s gr 
+% Polyline
+gs  clippath
+7779 11033 m 7938 10977 l 7918 10920 l 7759 10976 l 7759 10976 l 7883 10965 l 7779 11033 l cp
+eoclip
+n 6686 11388 m
+ 7914 10954 l gs col0 s gr gr
+
+% arrowhead
+n 7779 11033 m 7883 10965 l 7759 10976 l 7779 11033 l  cp gs 0.00 setgray ef gr  col0 s
+% Polyline
+gs  clippath
+7767 10805 m 7932 10783 l 7924 10724 l 7759 10746 l 7759 10746 l 7882 10760 l 7767 10805 l cp
+eoclip
+n 7182 10855 m
+ 7914 10756 l gs col0 s gr gr
+
+% arrowhead
+n 7767 10805 m 7882 10760 l 7759 10746 l 7767 10805 l  cp gs 0.00 setgray ef gr  col0 s
+% Polyline
+gs  clippath
+7770 10564 m 7936 10589 l 7945 10530 l 7779 10505 l 7779 10505 l 7894 10553 l 7770 10564 l cp
+eoclip
+n 6612 10359 m
+ 7926 10558 l gs col0 s gr gr
+
+% arrowhead
+n 7770 10564 m 7894 10553 l 7779 10505 l 7770 10564 l  cp gs 0.00 setgray ef gr  col0 s
+% Polyline
+gs  clippath
+9841 10739 m 10008 10739 l 10008 10679 l 9841 10679 l 9841 10679 l 9961 10709 l 9841 10739 l cp
+eoclip
+n 9543 10709 m
+ 9993 10709 l gs col0 s gr gr
+
+% arrowhead
+n 9841 10739 m 9961 10709 l 9841 10679 l 9841 10739 l  cp gs 0.00 setgray ef gr  col0 s
+% Polyline
+n 2568 9678 m 15637 9678 l 15637 15523 l 2568 15523 l
+ cp gs col0 s gr 
+% Polyline
+n 12701 10096 m
+ 13918 10096 l gs col0 s gr 
+% Polyline
+n 12173 10744 m
+ 12597 10685 l gs col0 s gr 
+% Polyline
+n 10881 11141 m
+ 12612 11045 l gs col0 s gr 
+% Polyline
+n 10947 13850 m 13197 13550 l
+ 13692 12485 l gs col0 s gr 
+/Times-Roman-iso ff 200.00 scf sf
+8298 11288 m
+gs 1 -1 sc (orbdetect) col0 sh gr
+/Times-Roman-iso ff 200.00 scf sf
+8298 11502 m
+gs 1 -1 sc (orbtrigger) col0 sh gr
+/Times-Roman-iso ff 200.00 scf sf
+8300 11703 m
+gs 1 -1 sc (orbassoc) col0 sh gr
+/Times-Roman-iso ff 200.00 scf sf
+8300 11949 m
+gs 1 -1 sc (orbmag) col0 sh gr
+/Times-Roman-iso ff 200.00 scf sf
+12721 10365 m
+gs 1 -1 sc (db/archive) col0 sh gr
+/Times-Roman-iso ff 300.00 scf sf
+7309 9546 m
+gs 1 -1 sc (energy:137.229.32.60) col0 sh gr
+/Times-Roman-iso ff 200.00 scf sf
+12720 10054 m
+gs 1 -1 sc (/iwrun/mig/run/) col0 sh gr
+/Times-Roman-iso ff 200.00 scf sf
+12684 10734 m
+gs 1 -1 sc (dbdiag/diagnostic) col0 sh gr
+/Times-Roman-iso ff 200.00 scf sf
+12696 11088 m
+gs 1 -1 sc (dbseg/quakes) col0 sh gr
+/Times-Roman-iso ff 200.00 scf sf
+8307 12185 m
+gs 1 -1 sc (orbampmag \(mb\)) col0 sh gr
+/Times-Roman-iso ff 200.00 scf sf
+8307 12440 m
+gs 1 -1 sc (orbampmag \(ms\)) col0 sh gr
+/Times-Roman-iso ff 200.00 scf sf
+8307 12695 m
+gs 1 -1 sc (orbgenloc) col0 sh gr
+/Times-Roman-iso ff 200.00 scf sf
+12663 12363 m
+gs 1 -1 sc (dbseg/quakesdbevents) col0 sh gr
+/Times-Roman-iso ff 200.00 scf sf
+3518 15406 m
+gs 1 -1 sc (note2: 'AK_\(PAX|COLD|PPLA\)/\(pf|MGENC|log\)/.*|.*_\(ACD|AFC|AFP|VE1|UE1|VK1|VM.|BHM.|00BHM.\).*) col0 sh gr
+/Times-Roman-iso ff 200.00 scf sf
+3543 15096 m
+gs 1 -1 sc (           AK_\(GAEA|GAKI|GALA|GANE|GANO|GASW|TACS|TAFL|TAFP|TANO|TAPA|TASE\)_.*\)) col0 sh gr
+/Times-Roman-iso ff 200.00 scf sf
+3543 14826 m
+gs 1 -1 sc (note1: \(AK_\(PAX|COLD|PPLA\)/\(pf|MGENC|log\)/.*|/db/.*|/pf/.*|.*_\(ACD|AFC|AFP|VE1|UE1|VK1|VM.|BHM.|00BHM.\).*|) col0 sh gr
+/Times-Roman-iso ff 200.00 scf sf
+17607 17303 m
+gs 1 -1 sc (note1: '/db/.*|/pf/.*|IU_COLA_BHZ_00/LISS|AK_AKT_BHZ.*|AK_\(DOT|PAX|DCPH|BESE|SWD|PIN|ATKA|BMR|DIV|EYAK|FALS|GAMB|MCK|SPIA|TNA|UNV|NIKO|PPLA\)_BHZ.*|\(AK_BGM|AK_PDB\)_.*) col0 sh gr
+/Times-Roman-iso ff 200.00 scf sf
+17601 17646 m
+gs 1 -1 sc (note2: kdak.giseis.alaska.edu kdak:bhe00,bhe10,bhn00,bhn10,bhz00,bhz10) col0 sh gr
+/Times-Roman-iso ff 200.00 scf sf
+17608 17968 m
+gs 1 -1 sc (note3: whole bunch of stations - see rtexec) col0 sh gr
+/Times-Roman-iso ff 200.00 scf sf
+17612 18305 m
+gs 1 -1 sc (note4: CN_\(BBB|DAWY|DLBC|INK|WHY|YK..\)_.*|CN_\(BNAB|BNB|FSB|HYT|MASB|NDB|RUB|VIB\)_EHZ) col0 sh gr
+% Polyline
+n 18860 12641 m 24093 12641 l 24093 13008 l 18860 13008 l
+ cp gs col0 s gr 
+/Times-Roman-iso ff 200.00 scf sf
+18893 12908 m
+gs 1 -1 sc (orb2orb -r \(/db/|/pf/|NULL_|PP_GCSA_BH.4\).* earlybird:6510) col0 sh gr
+% Polyline
+n 18860 13123 m 21593 13123 l 21593 13406 l 18860 13406 l
+ cp gs col0 s gr 
+/Times-Roman-iso ff 200.00 scf sf
+18893 13323 m
+gs 1 -1 sc (orb2orb -r /.*|NULL_.* ice:6510) col0 sh gr
+% Polyline
+n 18845 13495 m 24028 13495 l 24028 13795 l 18845 13795 l
+ cp gs col0 s gr 
+/Times-Roman-iso ff 200.00 scf sf
+18878 13728 m
+gs 1 -1 sc (orb2orb -r \(/db/|/pf/|NULL_|PP_GCSA_BH.4\).* moment:6510) col0 sh gr
+% Polyline
+n 18833 13860 m 23917 13860 l 23917 14193 l 18833 14193 l
+ cp gs col0 s gr 
+/Times-Roman-iso ff 200.00 scf sf
+18867 14093 m
+gs 1 -1 sc (orb2orb -r \(/db/|/pf/|NULL_|PP_GCSA_BH.4\).* energy:6510) col0 sh gr
+% Polyline
+n 18831 14308 m 21681 14308 l 21681 14624 l 18831 14624 l
+ cp gs col0 s gr 
+/Times-Roman-iso ff 200.00 scf sf
+18847 14541 m
+gs 1 -1 sc (orb2orb -r /db/.*|/pf/.* nordic:6510) col0 sh gr
+% Polyline
+n 25091 9091 m 24986 9091 24986 9531 105 arcto 4 {pop} repeat
+  24986 9636 26503 9636 105 arcto 4 {pop} repeat
+  26608 9636 26608 9196 105 arcto 4 {pop} repeat
+  26608 9091 25091 9091 105 arcto 4 {pop} repeat
+ cp gs col0 s gr 
+/Times-Roman-iso ff 233.33 scf sf
+25113 9459 m
+gs 1 -1 sc (orbserver:6510) col0 sh gr
+% Polyline
+n 25139 11370 m 25034 11370 25034 11810 105 arcto 4 {pop} repeat
+  25034 11915 26551 11915 105 arcto 4 {pop} repeat
+  26656 11915 26656 11475 105 arcto 4 {pop} repeat
+  26656 11370 25139 11370 105 arcto 4 {pop} repeat
+ cp gs col0 s gr 
+/Times-Roman-iso ff 233.33 scf sf
+25161 11738 m
+gs 1 -1 sc (orbserver:6511) col0 sh gr
+% Polyline
+n 25196 13224 m 25091 13224 25091 13664 105 arcto 4 {pop} repeat
+  25091 13769 26608 13769 105 arcto 4 {pop} repeat
+  26713 13769 26713 13329 105 arcto 4 {pop} repeat
+  26713 13224 25196 13224 105 arcto 4 {pop} repeat
+ cp gs col0 s gr 
+/Times-Roman-iso ff 233.33 scf sf
+25218 13592 m
+gs 1 -1 sc (orbserver:6512) col0 sh gr
+% Polyline
+n 25210 14879 m 25105 14879 25105 15319 105 arcto 4 {pop} repeat
+  25105 15424 26622 15424 105 arcto 4 {pop} repeat
+  26727 15424 26727 14984 105 arcto 4 {pop} repeat
+  26727 14879 25210 14879 105 arcto 4 {pop} repeat
+ cp gs col0 s gr 
+/Times-Roman-iso ff 233.33 scf sf
+25232 15247 m
+gs 1 -1 sc (orbserver:1234) col0 sh gr
+% Polyline
+n 27944 8629 m 28863 8629 l 28863 8967 l 27944 8967 l
+ cp gs col0 s gr 
+/Times-Roman-iso ff 200.00 scf sf
+27981 8892 m
+gs 1 -1 sc (grf2orb ???) col0 sh gr
+% Polyline
+n 22972 15150 m 24247 15150 l 24247 15488 l 22972 15488 l
+ cp gs col0 s gr 
+/Times-Roman-iso ff 200.00 scf sf
+23013 15416 m
+gs 1 -1 sc (ew2orb ATWC) col0 sh gr
+% Polyline
+n 27604 14982 m 29366 14982 l 29366 15319 l 27604 15319 l
+ cp gs col0 s gr 
+/Times-Roman-iso ff 200.00 scf sf
+27663 15229 m
+gs 1 -1 sc (orb2orb -r \(note1\) fk) col0 sh gr
+% Polyline
+n 28069 11787 m 28969 11787 l 28969 12119 l 28069 12119 l
+ cp gs col0 s gr 
+/Times-Roman-iso ff 200.00 scf sf
+28103 12022 m
+gs 1 -1 sc (q3302orb) col0 sh gr
+% Polyline
+n 28058 12205 m 29226 12205 l 29226 12516 l 28058 12516 l
+ cp gs col0 s gr 
+/Times-Roman-iso ff 200.00 scf sf
+28111 12443 m
+gs 1 -1 sc (k22orb 8028) col0 sh gr
+% Polyline
+n 28047 12580 m 29205 12580 l 29205 12869 l 28047 12869 l
+ cp gs col0 s gr 
+/Times-Roman-iso ff 200.00 scf sf
+28103 12794 m
+gs 1 -1 sc (k22orb 8027) col0 sh gr
+% Polyline
+n 28048 12934 m 29237 12934 l 29237 13213 l 28048 13213 l
+ cp gs col0 s gr 
+/Times-Roman-iso ff 200.00 scf sf
+28119 13146 m
+gs 1 -1 sc (k22orb 8007) col0 sh gr
+% Polyline
+n 28037 13287 m 29034 13287 l 29034 13619 l 28037 13619 l
+ cp gs col0 s gr 
+/Times-Roman-iso ff 200.00 scf sf
+28087 13514 m
+gs 1 -1 sc (guralp2orb) col0 sh gr
+% Polyline
+n 29740 12869 m 31484 12869 l 31484 13226 l 29740 13226 l
+ cp gs col0 s gr 
+/Times-Roman-iso ff 200.00 scf sf
+29796 13113 m
+gs 1 -1 sc (liss2orb -m COLA.*) col0 sh gr
+% Polyline
+n 29759 15588 m 31791 15588 l 31791 15945 l 29759 15945 l
+ cp gs col0 s gr 
+/Times-Roman-iso ff 200.00 scf sf
+29815 15832 m
+gs 1 -1 sc (liss2orb -m YSS_BH.*) col0 sh gr
+% Polyline
+n 29759 16038 m 31941 16038 l 31941 16395 l 29759 16395 l
+ cp gs col0 s gr 
+/Times-Roman-iso ff 200.00 scf sf
+29815 16282 m
+gs 1 -1 sc (liss2orb -m PET_[BS]H.*) col0 sh gr
+% Polyline
+n 29759 15138 m 31798 15138 l 31798 15495 l 29759 15495 l
+ cp gs col0 s gr 
+/Times-Roman-iso ff 200.00 scf sf
+29815 15382 m
+gs 1 -1 sc (liss2orb -m TIXI_BH.*) col0 sh gr
+% Polyline
+n 29759 14688 m 31798 14688 l 31798 15045 l 29759 15045 l
+ cp gs col0 s gr 
+/Times-Roman-iso ff 200.00 scf sf
+29815 14932 m
+gs 1 -1 sc (liss2orb -m MA2_BH.*) col0 sh gr
+% Polyline
+n 29759 14238 m 31806 14238 l 31806 14595 l 29759 14595 l
+ cp gs col0 s gr 
+/Times-Roman-iso ff 200.00 scf sf
+29815 14482 m
+gs 1 -1 sc (liss2orb -m BILL_BH.*) col0 sh gr
+% Polyline
+n 29759 13806 m 31806 13806 l 31806 14163 l 29759 14163 l
+ cp gs col0 s gr 
+/Times-Roman-iso ff 200.00 scf sf
+29815 14050 m
+gs 1 -1 sc (liss2orb -m YAK_BH.*) col0 sh gr
+% Polyline
+n 29759 13338 m 31503 13338 l 31503 13695 l 29759 13695 l
+ cp gs col0 s gr 
+/Times-Roman-iso ff 200.00 scf sf
+29815 13582 m
+gs 1 -1 sc (liss2orb -m ADK.*) col0 sh gr
+% Polyline
+n 18973 7919 m 24206 7919 l 24206 8286 l 18973 8286 l
+ cp gs col0 s gr 
+/Times-Roman-iso ff 200.00 scf sf
+19006 8186 m
+gs 1 -1 sc (orb2orb -r \(/db/|/pf/|NULL_|PP_GCSA_BH.4\).* earlybird:6510) col0 sh gr
+% Polyline
+n 18973 8401 m 21706 8401 l 21706 8684 l 18973 8684 l
+ cp gs col0 s gr 
+/Times-Roman-iso ff 200.00 scf sf
+19006 8601 m
+gs 1 -1 sc (orb2orb -r /.*|NULL_.* ice:6510) col0 sh gr
+% Polyline
+n 18958 8773 m 24141 8773 l 24141 9073 l 18958 9073 l
+ cp gs col0 s gr 
+/Times-Roman-iso ff 200.00 scf sf
+18991 9006 m
+gs 1 -1 sc (orb2orb -r \(/db/|/pf/|NULL_|PP_GCSA_BH.4\).* moment:6510) col0 sh gr
+% Polyline
+n 18946 9138 m 24030 9138 l 24030 9471 l 18946 9471 l
+ cp gs col0 s gr 
+/Times-Roman-iso ff 200.00 scf sf
+18980 9371 m
+gs 1 -1 sc (orb2orb -r \(/db/|/pf/|NULL_|PP_GCSA_BH.4\).* energy:6510) col0 sh gr
+% Polyline
+n 18944 9586 m 21794 9586 l 21794 9902 l 18944 9902 l
+ cp gs col0 s gr 
+/Times-Roman-iso ff 200.00 scf sf
+18960 9819 m
+gs 1 -1 sc (orb2orb -r /db/.*|/pf/.* nordic:6510) col0 sh gr
+% Polyline
+n 27936 10944 m 29295 10944 l 29295 11340 l 27936 11340 l
+ cp gs col0 s gr 
+/Times-Roman-iso ff 200.00 scf sf
+28007 11227 m
+gs 1 -1 sc (orb2orb marvin) col0 sh gr
+% Polyline
+n 19566 10525 m 21741 10525 l 21741 10840 l 19566 10840 l
+ cp gs col0 s gr 
+/Times-Roman-iso ff 200.00 scf sf
+19626 10750 m
+gs 1 -1 sc (orbquake_email earlybird) col0 sh gr
+% Polyline
+n 19571 11252 m 21791 11252 l 21791 11567 l 19571 11567 l
+ cp gs col0 s gr 
+/Times-Roman-iso ff 200.00 scf sf
+19631 11447 m
+gs 1 -1 sc (orb2ew earlybird \(ATWC\)) col0 sh gr
+% Polyline
+n 19554 10917 m 21624 10917 l 21624 11172 l 19554 11172 l
+ cp gs col0 s gr 
+/Times-Roman-iso ff 200.00 scf sf
+19614 11082 m
+gs 1 -1 sc (orbquake_cell earlybird) col0 sh gr
+/Times-Roman-iso ff 200.00 scf sf
+26040 16261 m
+gs 1 -1 sc (CRONTAB) col0 sh gr
+/Times-Roman-iso ff 200.00 scf sf
+25891 16532 m
+gs 1 -1 sc (checkhomerdata) col0 sh gr
+% Polyline
+n 27904 10013 m 32086 10013 l 32086 10351 l 27904 10351 l
+ cp gs col0 s gr 
+/Times-Roman-iso ff 200.00 scf sf
+27979 10238 m
+gs 1 -1 sc (orb2orb -m \(note4\) 139.142.67.7:55555 \(Canada\)) col0 sh gr
+% Polyline
+n 27932 9563 m 30080 9563 l 30080 9901 l 27932 9901 l
+ cp gs col0 s gr 
+/Times-Roman-iso ff 200.00 scf sf
+27981 9788 m
+gs 1 -1 sc (orb2orb -m \(note3\) beam) col0 sh gr
+% Polyline
+n 27944 9076 m 29169 9076 l 29169 9432 l 27944 9432 l
+ cp gs col0 s gr 
+/Times-Roman-iso ff 200.00 scf sf
+28001 9319 m
+gs 1 -1 sc (ida2orb note2) col0 sh gr
+% Polyline
+n 27940 8138 m 30724 8138 l 30724 8505 l 27940 8505 l
+ cp gs col0 s gr 
+/Times-Roman-iso ff 200.00 scf sf
+27973 8405 m
+gs 1 -1 sc (orb2orb -m /db/.* earlybird:6510) col0 sh gr
+% Polyline
+gs  clippath
+24286 8917 m 24140 8835 l 24111 8887 l 24256 8970 l 24256 8970 l 24167 8885 l 24286 8917 l cp
+eoclip
+n 24139 8869 m
+ 24911 9304 l gs col0 s gr gr
+
+% arrowhead
+n 24286 8917 m 24167 8885 l 24256 8970 l 24286 8917 l  cp gs 0.00 setgray ef gr  col0 s
+% Polyline
+gs  clippath
+24311 13514 m 24145 13519 l 24146 13579 l 24313 13574 l 24313 13574 l 24193 13548 l 24311 13514 l cp
+eoclip
+n 25066 13520 m
+ 24161 13549 l gs col0 s gr gr
+
+% arrowhead
+n 24311 13514 m 24193 13548 l 24313 13574 l 24311 13514 l  cp gs 0.00 setgray ef gr  col0 s
+% Polyline
+gs  clippath
+17348 12876 m 17196 12807 l 17171 12862 l 17323 12931 l 17323 12931 l 17227 12854 l 17348 12876 l cp
+eoclip
+n 18821 13584 m
+ 17198 12841 l gs col0 s gr gr
+
+% arrowhead
+n 17348 12876 m 17227 12854 l 17323 12931 l 17348 12876 l  cp gs 0.00 setgray ef gr  col0 s
+% Polyline
+gs  clippath
+26745 9128 m 26587 9183 l 26606 9240 l 26765 9185 l 26765 9185 l 26642 9196 l 26745 9128 l cp
+eoclip
+n 27923 8757 m
+ 26611 9207 l gs col0 s gr gr
+
+% arrowhead
+n 26745 9128 m 26642 9196 l 26765 9185 l 26745 9128 l  cp gs 0.00 setgray ef gr  col0 s
+% Polyline
+gs  clippath
+26759 9312 m 26593 9328 l 26599 9388 l 26765 9371 l 26765 9371 l 26643 9354 l 26759 9312 l cp
+eoclip
+n 27923 9226 m
+ 26611 9357 l gs col0 s gr gr
+
+% arrowhead
+n 26759 9312 m 26643 9354 l 26765 9371 l 26759 9312 l  cp gs 0.00 setgray ef gr  col0 s
+% Polyline
+gs  clippath
+26784 9506 m 26619 9474 l 26608 9533 l 26773 9565 l 26773 9565 l 26661 9513 l 26784 9506 l cp
+eoclip
+n 27904 9751 m
+ 26629 9507 l gs col0 s gr gr
+
+% arrowhead
+n 26784 9506 m 26661 9513 l 26773 9565 l 26784 9506 l  cp gs 0.00 setgray ef gr  col0 s
+% Polyline
+gs  clippath
+26725 9670 m 26570 9604 l 26547 9659 l 26701 9725 l 26701 9725 l 26603 9651 l 26725 9670 l cp
+eoclip
+n 27904 10201 m
+ 26573 9638 l gs col0 s gr gr
+
+% arrowhead
+n 26725 9670 m 26603 9651 l 26701 9725 l 26725 9670 l  cp gs 0.00 setgray ef gr  col0 s
+% Polyline
+gs  clippath
+26671 8975 m 26525 9057 l 26554 9109 l 26700 9028 l 26700 9028 l 26581 9060 l 26671 8975 l cp
+eoclip
+n 27940 8307 m
+ 26553 9076 l gs col0 s gr gr
+
+% arrowhead
+n 26671 8975 m 26581 9060 l 26700 9028 l 26671 8975 l  cp gs 0.00 setgray ef gr  col0 s
+% Polyline
+gs  clippath
+22802 15365 m 22968 15355 l 22965 15295 l 22798 15305 l 22798 15305 l 22920 15328 l 22802 15365 l cp
+eoclip
+n 22952 15326 m
+ 20928 15451 l gs col0 s gr gr
+
+% arrowhead
+n 22802 15365 m 22920 15328 l 22798 15305 l 22802 15365 l  cp gs 0.00 setgray ef gr  col0 s
+% Polyline
+gs  clippath
+24928 15191 m 25092 15158 l 25080 15099 l 24916 15132 l 24916 15132 l 25040 15138 l 24928 15191 l cp
+eoclip
+n 25072 15132 m
+ 24247 15301 l gs col0 s gr gr
+
+% arrowhead
+n 24928 15191 m 25040 15138 l 24916 15132 l 24928 15191 l  cp gs 0.00 setgray ef gr  col0 s
+% Polyline
+gs  clippath
+26584 9776 m 26539 9615 l 26482 9631 l 26526 9792 l 26526 9792 l 26524 9669 l 26584 9776 l cp
+eoclip
+n 27978 14963 m
+ 26515 9638 l gs col0 s gr gr
+
+% arrowhead
+n 26584 9776 m 26524 9669 l 26526 9792 l 26584 9776 l  cp gs 0.00 setgray ef gr  col0 s
+% Polyline
+gs  clippath
+27432 15184 m 27599 15180 l 27598 15120 l 27431 15124 l 27431 15124 l 27552 15152 l 27432 15184 l cp
+eoclip
+n 26722 15169 m
+ 27584 15151 l gs col0 s gr gr
+
+% arrowhead
+n 27432 15184 m 27552 15152 l 27431 15124 l 27432 15184 l  cp gs 0.00 setgray ef gr  col0 s
+% Polyline
+gs  clippath
+26888 13176 m 26737 13248 l 26763 13302 l 26914 13231 l 26914 13231 l 26793 13255 l 26888 13176 l cp
+eoclip
+n 28039 12669 m
+ 26764 13269 l gs col0 s gr gr
+
+% arrowhead
+n 26888 13176 m 26793 13255 l 26914 13231 l 26888 13176 l  cp gs 0.00 setgray ef gr  col0 s
+% Polyline
+gs  clippath
+26894 13771 m 26730 13736 l 26718 13795 l 26882 13830 l 26882 13830 l 26771 13776 l 26894 13771 l cp
+eoclip
+n 29764 14419 m
+ 26739 13769 l gs col0 s gr gr
+
+% arrowhead
+n 26894 13771 m 26771 13776 l 26882 13830 l 26894 13771 l  cp gs 0.00 setgray ef gr  col0 s
+% Polyline
+gs  clippath
+17492 8104 m 17331 8059 l 17315 8116 l 17476 8162 l 17476 8162 l 17369 8101 l 17492 8104 l cp
+eoclip
+n 18909 8531 m
+ 17338 8092 l gs col0 s gr gr
+
+% arrowhead
+n 17492 8104 m 17369 8101 l 17476 8162 l 17492 8104 l  cp gs 0.00 setgray ef gr  col0 s
+% Polyline
+gs  clippath
+26808 11498 m 26649 11551 l 26668 11608 l 26827 11555 l 26827 11555 l 26704 11565 l 26808 11498 l cp
+eoclip
+n 27919 11156 m
+ 26673 11575 l gs col0 s gr gr
+
+% arrowhead
+n 26808 11498 m 26704 11565 l 26827 11555 l 26808 11498 l  cp gs 0.00 setgray ef gr  col0 s
+% Polyline
+gs  clippath
+17559 10138 m 17396 10101 l 17382 10159 l 17546 10197 l 17546 10197 l 17436 10141 l 17559 10138 l cp
+19415 10629 m 19578 10666 l 19592 10608 l 19428 10570 l 19428 10570 l 19539 10627 l 19415 10629 l cp
+eoclip
+n 19571 10634 m
+ 17404 10134 l gs col0 s gr gr
+
+% arrowhead
+n 19415 10629 m 19539 10627 l 19428 10570 l 19415 10629 l  cp gs 0.00 setgray ef gr  col0 s
+% arrowhead
+n 17559 10138 m 17436 10141 l 17546 10197 l 17559 10138 l  cp gs 0.00 setgray ef gr  col0 s
+% Polyline
+gs  clippath
+17693 10682 m 17528 10651 l 17517 10710 l 17682 10741 l 17682 10741 l 17570 10690 l 17693 10682 l cp
+19382 11052 m 19547 11083 l 19558 11024 l 19393 10993 l 19393 10993 l 19506 11045 l 19382 11052 l cp
+eoclip
+n 19538 11051 m
+ 17538 10684 l gs col0 s gr gr
+
+% arrowhead
+n 19382 11052 m 19506 11045 l 19393 10993 l 19382 11052 l  cp gs 0.00 setgray ef gr  col0 s
+% arrowhead
+n 17693 10682 m 17570 10690 l 17682 10741 l 17693 10682 l  cp gs 0.00 setgray ef gr  col0 s
+% Polyline
+n 17970 7503 m 32495 7503 l 32495 16803 l 17970 16803 l
+ cp gs col0 s gr 
+/Times-Roman-iso ff 366.67 scf sf
+24582 7378 m
+gs 1 -1 sc (fk: 137.229.32.207) col0 sh gr
+% Polyline
+n 43878 10801 m 44673 10801 l 44673 11086 l 43878 11086 l
+ cp gs col0 s gr 
+/Times-Roman-iso ff 200.00 scf sf
+43983 11023 m
+gs 1 -1 sc (orb2dbt) col0 sh gr
+% Polyline
+n 43501 11175 m 44206 11175 l 44206 11475 l 43501 11475 l
+ cp gs col0 s gr 
+/Times-Roman-iso ff 200.00 scf sf
+43591 11382 m
+gs 1 -1 sc (dbgme) col0 sh gr
+% Polyline
+n 40658 10198 m 42893 10198 l 42893 10483 l 40658 10483 l
+ cp gs col0 s gr 
+/Times-Roman-iso ff 200.00 scf sf
+40742 10393 m
+gs 1 -1 sc (orb2orb -m '/db/detection' ) col0 sh gr
+/Times-Roman-iso ff 200.00 scf sf
+41467 10658 m
+gs 1 -1 sc (ice) col0 sh gr
+% Polyline
+n 40931 9292 m 42700 9292 l 42700 9561 l 40931 9561 l
+ cp gs col0 s gr 
+/Times-Roman-iso ff 200.00 scf sf
+41042 9513 m
+gs 1 -1 sc (orb2orb -m \(note1\)) col0 sh gr
+/Times-Roman-iso ff 200.00 scf sf
+41446 9758 m
+gs 1 -1 sc (moment) col0 sh gr
+% Polyline
+n 41661 11221 m 42411 11221 l 42411 11506 l 41661 11506 l
+ cp gs col0 s gr 
+/Times-Roman-iso ff 200.00 scf sf
+41715 11416 m
+gs 1 -1 sc (orb2orb) col0 sh gr
+% Polyline
+n 44559 9166 m 46554 9166 l 46554 9496 l 44559 9496 l
+ cp gs col0 s gr 
+% Polyline
+n 44694 9714 m
+ 45044 9486 l gs col0 s gr 
+% Polyline
+gs  clippath
+42967 9675 m 43126 9731 l 43146 9674 l 42987 9619 l 42987 9619 l 43091 9687 l 42967 9675 l cp
+eoclip
+n 43122 9698 m
+ 42700 9551 l gs col0 s gr gr
+
+% arrowhead
+n 42967 9675 m 43091 9687 l 42987 9619 l 42967 9675 l  cp gs 0.00 setgray ef gr  col0 s
+% Polyline
+n 43187 9683 m 43082 9683 43082 10111 105 arcto 4 {pop} repeat
+  43082 10216 44620 10216 105 arcto 4 {pop} repeat
+  44725 10216 44725 9788 105 arcto 4 {pop} repeat
+  44725 9683 43187 9683 105 arcto 4 {pop} repeat
+ cp gs col0 s gr 
+% Polyline
+n 44289 10218 m
+ 44291 10766 l gs col0 s gr 
+% Polyline
+n 43727 10237 m
+ 43727 11175 l gs col0 s gr 
+% Polyline
+n 45149 10856 m
+ 46576 10856 l gs col0 s gr 
+% Polyline
+n 44677 10940 m
+ 45318 11030 l gs col0 s gr 
+% Polyline
+n 44205 11333 m
+ 45312 11109 l gs col0 s gr 
+% Polyline
+n 40584 9016 m 46816 9016 l 46816 12501 l 40584 12501 l
+ cp gs col0 s gr 
+% Polyline
+gs  clippath
+43323 10312 m 43430 10183 l 43384 10145 l 43277 10274 l 43277 10274 l 43377 10201 l 43323 10312 l cp
+eoclip
+n 43398 10176 m
+ 42411 11372 l gs col0 s gr gr
+
+% arrowhead
+n 43323 10312 m 43377 10201 l 43277 10274 l 43323 10312 l  cp gs 0.00 setgray ef gr  col0 s
+% Polyline
+gs  clippath
+42999 10256 m 43109 10131 l 43064 10091 l 42954 10217 l 42954 10217 l 43056 10147 l 42999 10256 l cp
+eoclip
+n 43077 10123 m
+ 42897 10327 l gs col0 s gr gr
+
+% arrowhead
+n 42999 10256 m 43056 10147 l 42954 10217 l 42999 10256 l  cp gs 0.00 setgray ef gr  col0 s
+/Times-Roman-iso ff 200.00 scf sf
+44664 9388 m
+gs 1 -1 sc (orbwfmeas \(detection\)) col0 sh gr
+/Times-Roman-iso ff 233.33 scf sf
+43209 10051 m
+gs 1 -1 sc (orbserver:5614) col0 sh gr
+/Times-Roman-iso ff 300.00 scf sf
+42838 8927 m
+gs 1 -1 sc (tele:137.229.32.157) col0 sh gr
+/Times-Roman-iso ff 200.00 scf sf
+45415 11100 m
+gs 1 -1 sc (db/quakes) col0 sh gr
+/Times-Roman-iso ff 200.00 scf sf
+45172 10838 m
+gs 1 -1 sc (/home/shake/run/) col0 sh gr
+/Times-Roman-iso ff 200.00 scf sf
+41717 11679 m
+gs 1 -1 sc (ice:6512) col0 sh gr
+/Times-Roman-iso ff 200.00 scf sf
+45222 11894 m
+gs 1 -1 sc (note1: .*_.*_BH.*) col0 sh gr
+% Polyline
+n 40047 14390 m 39942 14390 39942 14830 105 arcto 4 {pop} repeat
+  39942 14935 41459 14935 105 arcto 4 {pop} repeat
+  41564 14935 41564 14495 105 arcto 4 {pop} repeat
+  41564 14390 40047 14390 105 arcto 4 {pop} repeat
+ cp gs col0 s gr 
+/Times-Roman-iso ff 233.33 scf sf
+40069 14758 m
+gs 1 -1 sc (orbserver:6510) col0 sh gr
+% Polyline
+n 40062 17848 m 39957 17848 39957 18320 105 arcto 4 {pop} repeat
+  39957 18425 41459 18425 105 arcto 4 {pop} repeat
+  41564 18425 41564 17953 105 arcto 4 {pop} repeat
+  41564 17848 40062 17848 105 arcto 4 {pop} repeat
+ cp gs col0 s gr 
+/Times-Roman-iso ff 233.33 scf sf
+40084 18216 m
+gs 1 -1 sc (orbserver:6512) col0 sh gr
+/Times-Roman-iso ff 200.00 scf sf
+40379 15110 m
+gs 1 -1 sc (orbdetect) col0 sh gr
+/Times-Roman-iso ff 200.00 scf sf
+40379 15365 m
+gs 1 -1 sc (orbtrigger) col0 sh gr
+/Times-Roman-iso ff 200.00 scf sf
+40379 15620 m
+gs 1 -1 sc (orbassoc) col0 sh gr
+/Times-Roman-iso ff 200.00 scf sf
+40379 15875 m
+gs 1 -1 sc (orbmag) col0 sh gr
+% Polyline
+n 42780 14800 m 43863 14800 l 43863 15027 l 42780 15027 l
+ cp gs col0 s gr 
+/Times-Roman-iso ff 200.00 scf sf
+42809 14960 m
+gs 1 -1 sc (orb2db_diag) col0 sh gr
+% Polyline
+n 42780 14522 m 43409 14522 l 43409 14749 l 42780 14749 l
+ cp gs col0 s gr 
+/Times-Roman-iso ff 200.00 scf sf
+42809 14705 m
+gs 1 -1 sc (orb2db) col0 sh gr
+% Polyline
+n 42780 15085 m 43453 15085 l 43453 15268 l 42780 15268 l
+ cp gs col0 s gr 
+/Times-Roman-iso ff 200.00 scf sf
+42801 15244 m
+gs 1 -1 sc (orb2dbt) col0 sh gr
+% Polyline
+n 40080 16130 m 39975 16130 39975 16580 105 arcto 4 {pop} repeat
+  39975 16685 41477 16685 105 arcto 4 {pop} repeat
+  41582 16685 41582 16235 105 arcto 4 {pop} repeat
+  41582 16130 40080 16130 105 arcto 4 {pop} repeat
+ cp gs col0 s gr 
+/Times-Roman-iso ff 233.33 scf sf
+40102 16498 m
+gs 1 -1 sc (orbserver:6511) col0 sh gr
+% Polyline
+n 44351 16454 m
+ 46151 16454 l gs col0 s gr 
+/Times-Roman-iso ff 200.00 scf sf
+44333 16417 m
+gs 1 -1 sc (/Seis/catalogs/releases/) col0 sh gr
+/Times-Roman-iso ff 200.00 scf sf
+44324 16704 m
+gs 1 -1 sc (initial_releases) col0 sh gr
+% Polyline
+n 44417 17531 m
+ 45697 17531 l gs col0 s gr 
+/Times-Roman-iso ff 200.00 scf sf
+44431 17486 m
+gs 1 -1 sc (/iwrun/bak/run/) col0 sh gr
+/Times-Roman-iso ff 200.00 scf sf
+44521 14697 m
+gs 1 -1 sc (db/archive) col0 sh gr
+/Times-Roman-iso ff 200.00 scf sf
+44521 14952 m
+gs 1 -1 sc (dbdiag/diagnostic) col0 sh gr
+/Times-Roman-iso ff 200.00 scf sf
+44521 15207 m
+gs 1 -1 sc (dbseg/quakes) col0 sh gr
+% Polyline
+n 44492 14449 m
+ 45772 14449 l gs col0 s gr 
+/Times-Roman-iso ff 200.00 scf sf
+44506 14404 m
+gs 1 -1 sc (/iwrun/bak/run/) col0 sh gr
+% Polyline
+n 42270 16286 m 42964 16286 l 42964 16567 l 42270 16567 l
+ cp gs col0 s gr 
+/Times-Roman-iso ff 200.00 scf sf
+42362 16494 m
+gs 1 -1 sc (dbt2pf) col0 sh gr
+% Polyline
+n 42233 16905 m 43415 16905 l 43415 17242 l 42233 17242 l
+ cp gs col0 s gr 
+/Times-Roman-iso ff 200.00 scf sf
+42301 17157 m
+gs 1 -1 sc (orb2dbt_web) col0 sh gr
+% Polyline
+n 40088 18949 m 39983 18949 39983 19421 105 arcto 4 {pop} repeat
+  39983 19526 41485 19526 105 arcto 4 {pop} repeat
+  41590 19526 41590 19054 105 arcto 4 {pop} repeat
+  41590 18949 40088 18949 105 arcto 4 {pop} repeat
+ cp gs col0 s gr 
+/Times-Roman-iso ff 233.33 scf sf
+40110 19317 m
+gs 1 -1 sc (orbserver:6513) col0 sh gr
+/Times-Roman-iso ff 200.00 scf sf
+40495 19159 m
+gs 1 -1 sc (test) col0 sh gr
+/Times-Roman-iso ff 200.00 scf sf
+38423 20539 m
+gs 1 -1 sc (make_archive_dblinks -v /iwrun/bak/db/archive/archive) col0 sh gr
+/Times-Roman-iso ff 200.00 scf sf
+38423 20794 m
+gs 1 -1 sc (split_archive_database -v /iwrun/bak/db/archive/archive 2) col0 sh gr
+/Times-Roman-iso ff 200.00 scf sf
+38423 21049 m
+gs 1 -1 sc (remove_old_archive_waveforms -v /iwrun/bak/archive_wf 80) col0 sh gr
+/Times-Roman-iso ff 200.00 scf sf
+38423 21304 m
+gs 1 -1 sc (archive_status_plot) col0 sh gr
+/Times-Roman-iso ff 200.00 scf sf
+38423 21559 m
+gs 1 -1 sc (rtreport) col0 sh gr
+/Times-Roman-iso ff 200.00 scf sf
+38423 21814 m
+gs 1 -1 sc (dbrecenteqs ) col0 sh gr
+/Times-Roman-iso ff 200.00 scf sf
+38423 22069 m
+gs 1 -1 sc (rtdbclean dbseg/quakesdbevents) col0 sh gr
+/Times-Roman-iso ff 200.00 scf sf
+38423 22324 m
+gs 1 -1 sc (dbsplitcron) col0 sh gr
+/Times-Roman-iso ff 200.00 scf sf
+40148 20246 m
+gs 1 -1 sc (CRONTAB) col0 sh gr
+% Polyline
+n 42141 15371 m 44054 15371 l 44054 15671 l 42141 15671 l
+ cp gs col0 s gr 
+/Times-Roman-iso ff 200.00 scf sf
+42202 15598 m
+gs 1 -1 sc (orb2orb -m /pf/orb2dbt) col0 sh gr
+% Polyline
+n 37779 17067 m 39167 17067 l 39167 17330 l 37779 17330 l
+ cp gs col0 s gr 
+/Times-Roman-iso ff 200.00 scf sf
+37824 17282 m
+gs 1 -1 sc (orb2orb -m /db/*) col0 sh gr
+/Times-Roman-iso ff 200.00 scf sf
+38732 18798 m
+gs 1 -1 sc (orb2orb) col0 sh gr
+% Polyline
+n 38697 18590 m 39428 18590 l 39428 18853 l 38697 18853 l
+ cp gs col0 s gr 
+% Polyline
+n 36820 14933 m 38320 14933 l 38320 15200 l 36820 15200 l
+ cp gs col0 s gr 
+/Times-Roman-iso ff 200.00 scf sf
+36873 15139 m
+gs 1 -1 sc (adsend2orb 9900) col0 sh gr
+% Polyline
+n 36817 15339 m 38017 15339 l 38017 15605 l 36817 15605 l
+ cp gs col0 s gr 
+/Times-Roman-iso ff 200.00 scf sf
+36867 15534 m
+gs 1 -1 sc (orb2ew AVO) col0 sh gr
+% Polyline
+n 36552 14442 m 38917 14442 l 38917 14776 l 36552 14776 l
+ cp gs col0 s gr 
+/Times-Roman-iso ff 200.00 scf sf
+36610 14683 m
+gs 1 -1 sc (orb2orb -r /.*|NULL_.* fk) col0 sh gr
+% Arc
+gs  clippath
+41731 16087 m 41570 16135 l 41588 16193 l 41748 16144 l 41748 16144 l 41625 16151 l 41731 16087 l cp
+eoclip
+n 41472.6 15531.4 640.3 -80.4380 79.0739 arc
+gs col0 s gr
+ gr
+
+% arrowhead
+n 41731 16087 m 41625 16151 l 41748 16144 l 41731 16087 l  cp gs 0.00 setgray ef gr  col0 s
+% Arc
+gs  clippath
+39825 19211 m 39987 19252 l 40001 19194 l 39839 19153 l 39839 19153 l 39949 19212 l 39825 19211 l cp
+eoclip
+n 40031.1 18736.5 486.1 -101.4056 96.0380 arcn
+gs col0 s gr
+ gr
+
+% arrowhead
+n 39825 19211 m 39949 19212 l 39839 19153 l 39825 19211 l  cp gs 0.00 setgray ef gr  col0 s
+% Arc
+gs  clippath
+39796 18041 m 39953 18098 l 39974 18041 l 39817 17984 l 39817 17984 l 39920 18054 l 39796 18041 l cp
+eoclip
+n 40174.7 17251.3 844.1 -103.3342 105.4366 arcn
+gs col0 s gr
+ gr
+
+% arrowhead
+n 39796 18041 m 39920 18054 l 39817 17984 l 39796 18041 l  cp gs 0.00 setgray ef gr  col0 s
+% Polyline
+n 43409 14617 m
+ 44375 14632 l gs col0 s gr 
+% Polyline
+n 43863 14932 m
+ 44390 14902 l gs col0 s gr 
+% Polyline
+n 43453 15195 m
+ 44404 15158 l gs col0 s gr 
+% Polyline
+gs  clippath
+44993 18072 m 45021 17907 l 44961 17897 l 44934 18062 l 44934 18062 l 44984 17949 l 44993 18072 l cp
+39587 21716 m 39421 21732 l 39426 21792 l 39593 21776 l 39593 21776 l 39471 21758 l 39587 21716 l cp
+eoclip
+n 39439 21761 m 44408 21292 l
+ 44989 17917 l gs col0 s gr gr
+
+% arrowhead
+n 39587 21716 m 39471 21758 l 39593 21776 l 39587 21716 l  cp gs 0.00 setgray ef gr  col0 s
+% arrowhead
+n 44993 18072 m 44984 17949 l 44934 18062 l 44993 18072 l  cp gs 0.00 setgray ef gr  col0 s
+% Polyline
+gs  clippath
+41728 16350 m 41561 16350 l 41561 16410 l 41728 16410 l 41728 16410 l 41608 16380 l 41728 16350 l cp
+eoclip
+n 42251 16380 m
+ 41576 16380 l gs col0 s gr gr
+
+% arrowhead
+n 41728 16350 m 41608 16380 l 41728 16410 l 41728 16350 l  cp gs 0.00 setgray ef gr  col0 s
+% Polyline
+gs  clippath
+43118 16425 m 42952 16404 l 42945 16463 l 43111 16485 l 43111 16485 l 42996 16440 l 43118 16425 l cp
+eoclip
+n 44276 16605 m
+ 42964 16436 l gs col0 s gr gr
+
+% arrowhead
+n 43118 16425 m 42996 16440 l 43111 16485 l 43118 16425 l  cp gs 0.00 setgray ef gr  col0 s
+% Polyline
+gs  clippath
+44205 17600 m 44348 17688 l 44379 17637 l 44236 17549 l 44236 17549 l 44323 17638 l 44205 17600 l cp
+eoclip
+n 43433 17092 m
+ 44351 17655 l gs col0 s gr gr
+
+% arrowhead
+n 44205 17600 m 44323 17638 l 44236 17549 l 44205 17600 l  cp gs 0.00 setgray ef gr  col0 s
+% Polyline
+gs  clippath
+41644 17787 m 41526 17906 l 41568 17948 l 41687 17830 l 41687 17830 l 41581 17894 l 41644 17787 l cp
+eoclip
+n 42233 17242 m
+ 41558 17917 l gs col0 s gr gr
+
+% arrowhead
+n 41644 17787 m 41581 17894 l 41687 17830 l 41644 17787 l  cp gs 0.00 setgray ef gr  col0 s
+% Polyline
+n 42233 16886 m
+ 41558 16642 l gs col0 s gr 
+% Polyline
+n 36110 13999 m 46604 13999 l 46604 22624 l 36110 22624 l
+ cp gs col0 s gr 
+% Polyline
+gs  clippath
+39748 14651 m 39915 14650 l 39914 14590 l 39747 14591 l 39747 14591 l 39868 14621 l 39748 14651 l cp
+eoclip
+n 38925 14624 m
+ 39900 14621 l gs col0 s gr gr
+
+% arrowhead
+n 39748 14651 m 39868 14621 l 39747 14591 l 39748 14651 l  cp gs 0.00 setgray ef gr  col0 s
+% Polyline
+gs  clippath
+39792 14822 m 39957 14795 l 39947 14735 l 39782 14763 l 39782 14763 l 39906 14773 l 39792 14822 l cp
+eoclip
+n 38318 15047 m
+ 39938 14768 l gs col0 s gr gr
+
+% arrowhead
+n 39792 14822 m 39906 14773 l 39782 14763 l 39792 14822 l  cp gs 0.00 setgray ef gr  col0 s
+% Polyline
+gs  clippath
+36662 15063 m 36826 15095 l 36838 15036 l 36674 15004 l 36674 15004 l 36786 15057 l 36662 15063 l cp
+eoclip
+n 35830 14868 m
+ 36818 15063 l gs col0 s gr gr
+
+% arrowhead
+n 36662 15063 m 36786 15057 l 36674 15004 l 36662 15063 l  cp gs 0.00 setgray ef gr  col0 s
+% Polyline
+gs  clippath
+38155 15364 m 37993 15404 l 38007 15462 l 38169 15422 l 38169 15422 l 38046 15422 l 38155 15364 l cp
+eoclip
+n 39993 14943 m
+ 38015 15430 l gs col0 s gr gr
+
+% arrowhead
+n 38155 15364 m 38046 15422 l 38169 15422 l 38155 15364 l  cp gs 0.00 setgray ef gr  col0 s
+% Polyline
+gs  clippath
+35894 15333 m 35728 15316 l 35721 15376 l 35888 15393 l 35888 15393 l 35772 15351 l 35894 15333 l cp
+eoclip
+n 36818 15462 m
+ 35740 15348 l gs col0 s gr gr
+
+% arrowhead
+n 35894 15333 m 35772 15351 l 35888 15393 l 35894 15333 l  cp gs 0.00 setgray ef gr  col0 s
+/Times-Roman-iso ff 200.00 scf sf
+40427 16940 m
+gs 1 -1 sc (orbmag) col0 sh gr
+/Times-Roman-iso ff 200.00 scf sf
+44445 17729 m
+gs 1 -1 sc (webquakes/quakes) col0 sh gr
+/Times-Roman-iso ff 200.00 scf sf
+40552 18005 m
+gs 1 -1 sc (josh) col0 sh gr
+/Times-Roman-iso ff 200.00 scf sf
+40529 16295 m
+gs 1 -1 sc (web) col0 sh gr
+/Times-Roman-iso ff 300.00 scf sf
+37383 13848 m
+gs 1 -1 sc (ice:137.229.32.103) col0 sh gr
+/Times-Roman-iso ff 200.00 scf sf
+41998 17707 m
+gs 1 -1 sc (\(db\)) col0 sh gr
+/Times-Roman-iso ff 200.00 scf sf
+43726 14204 m
+gs 1 -1 sc (dbids /iwrun/bak/db/ids/globalids) col0 sh gr
+% Polyline
+n 10209 18664 m 10104 18664 10104 19104 105 arcto 4 {pop} repeat
+  10104 19209 11621 19209 105 arcto 4 {pop} repeat
+  11726 19209 11726 18769 105 arcto 4 {pop} repeat
+  11726 18664 10209 18664 105 arcto 4 {pop} repeat
+ cp gs col0 s gr 
+/Times-Roman-iso ff 233.33 scf sf
+10231 19032 m
+gs 1 -1 sc (orbserver:6510) col0 sh gr
+% Polyline
+n 7341 18848 m 8817 18848 l 8817 19146 l 7341 19146 l
+ cp gs col0 s gr 
+/Times-Roman-iso ff 200.00 scf sf
+7398 19059 m
+gs 1 -1 sc (adsend2orb 9900) col0 sh gr
+% Polyline
+n 10210 20448 m 10105 20448 10105 20888 105 arcto 4 {pop} repeat
+  10105 20993 11622 20993 105 arcto 4 {pop} repeat
+  11727 20993 11727 20553 105 arcto 4 {pop} repeat
+  11727 20448 10210 20448 105 arcto 4 {pop} repeat
+ cp gs col0 s gr 
+/Times-Roman-iso ff 233.33 scf sf
+10162 20816 m
+gs 1 -1 sc (orbserver:31415) col0 sh gr
+% Polyline
+n 12572 18444 m 14548 18444 l 14548 18778 l 12572 18778 l
+ cp gs col0 s gr 
+/Times-Roman-iso ff 200.00 scf sf
+12632 18669 m
+gs 1 -1 sc (orb2orb -r \(/db/|/pf/.*\) fk) col0 sh gr
+% Polyline
+n 12296 20409 m 15009 20409 l 15009 20803 l 12296 20803 l
+ cp gs col0 s gr 
+/Times-Roman-iso ff 200.00 scf sf
+12348 20653 m
+gs 1 -1 sc (orb2orb -r \(note2\) -m \(note3\) ice) col0 sh gr
+/Times-Roman-iso ff 200.00 scf sf
+8604 21947 m
+gs 1 -1 sc (note1: whole mess of stations) col0 sh gr
+/Times-Roman-iso ff 200.00 scf sf
+8614 22161 m
+gs 1 -1 sc (note2: \(/pf/.*|/db/.*|AK_\(AUL|AKT\)_.*|AK_.*_BH[0M].*\)) col0 sh gr
+/Times-Roman-iso ff 200.00 scf sf
+8614 22388 m
+gs 1 -1 sc (note3: whole mess of stations) col0 sh gr
+% Polyline
+n 7014 20555 m 9182 20555 l 9182 20878 l 7014 20878 l
+ cp gs col0 s gr 
+/Times-Roman-iso ff 200.00 scf sf
+7066 20773 m
+gs 1 -1 sc (orb2vdl nsn8.cr.usgs.gov) col0 sh gr
+% Polyline
+n 5501 19458 m 9319 19458 l 9319 19785 l 5501 19785 l
+ cp gs col0 s gr 
+/Times-Roman-iso ff 200.00 scf sf
+5571 19668 m
+gs 1 -1 sc (orb2orb -r /.*|KN_59.* igpprt.ucsd.edu:6520) col0 sh gr
+% Polyline
+n 6658 18366 m 8845 18366 l 8845 18642 l 6658 18642 l
+ cp gs col0 s gr 
+/Times-Roman-iso ff 200.00 scf sf
+6728 18558 m
+gs 1 -1 sc (orb2orb -m \(note1\) beam) col0 sh gr
+% Polyline
+gs  clippath
+9978 19238 m 10133 19177 l 10112 19121 l 9956 19182 l 9956 19182 l 10079 19167 l 9978 19238 l cp
+eoclip
+n 9319 19462 m
+ 10109 19155 l gs col0 s gr gr
+
+% arrowhead
+n 9978 19238 m 10079 19167 l 9956 19182 l 9978 19238 l  cp gs 0.00 setgray ef gr  col0 s
+% Polyline
+gs  clippath
+9958 18995 m 10125 18986 l 10122 18926 l 9955 18935 l 9955 18935 l 10077 18959 l 9958 18995 l cp
+eoclip
+n 8832 19022 m
+ 10109 18957 l gs col0 s gr gr
+
+% arrowhead
+n 9958 18995 m 10077 18959 l 9955 18935 l 9958 18995 l  cp gs 0.00 setgray ef gr  col0 s
+% Polyline
+gs  clippath
+9000 18522 m 8835 18491 l 8824 18550 l 8989 18581 l 8989 18581 l 8877 18530 l 9000 18522 l cp
+eoclip
+n 8845 18524 m
+ 10121 18759 l gs col0 s gr gr
+
+% arrowhead
+n 9000 18522 m 8877 18530 l 8989 18581 l 9000 18522 l  cp gs 0.00 setgray ef gr  col0 s
+% Polyline
+gs  clippath
+9337 20684 m 9170 20692 l 9173 20752 l 9340 20744 l 9340 20744 l 9219 20720 l 9337 20684 l cp
+eoclip
+n 9187 20722 m
+ 10088 20679 l gs col0 s gr gr
+
+% arrowhead
+n 9337 20684 m 9219 20720 l 9340 20744 l 9337 20684 l  cp gs 0.00 setgray ef gr  col0 s
+% Polyline
+gs  clippath
+11867 18782 m 11705 18822 l 11719 18880 l 11881 18841 l 11881 18841 l 11758 18840 l 11867 18782 l cp
+eoclip
+n 11727 18848 m
+ 12530 18656 l gs col0 s gr gr
+
+% arrowhead
+n 11867 18782 m 11758 18840 l 11881 18841 l 11867 18782 l  cp gs 0.00 setgray ef gr  col0 s
+% Polyline
+gs  clippath
+11893 20599 m 11727 20615 l 11732 20675 l 11899 20659 l 11899 20659 l 11777 20641 l 11893 20599 l cp
+eoclip
+n 11745 20644 m
+ 12303 20592 l gs col0 s gr gr
+
+% arrowhead
+n 11893 20599 m 11777 20641 l 11899 20659 l 11893 20599 l  cp gs 0.00 setgray ef gr  col0 s
+% Polyline
+gs  clippath
+5934 18508 m 5767 18514 l 5770 18574 l 5937 18568 l 5937 18568 l 5816 18543 l 5934 18508 l cp
+eoclip
+n 5784 18544 m
+ 6639 18509 l gs col0 s gr gr
+
+% arrowhead
+n 5934 18508 m 5816 18543 l 5937 18568 l 5934 18508 l  cp gs 0.00 setgray ef gr  col0 s
+% Polyline
+gs  clippath
+6326 20741 m 6160 20756 l 6165 20816 l 6332 20801 l 6332 20801 l 6210 20782 l 6326 20741 l cp
+eoclip
+n 6178 20785 m
+ 7006 20712 l gs col0 s gr gr
+
+% arrowhead
+n 6326 20741 m 6210 20782 l 6332 20801 l 6326 20741 l  cp gs 0.00 setgray ef gr  col0 s
+% Polyline
+gs  clippath
+15198 20511 m 15031 20511 l 15031 20571 l 15198 20571 l 15198 20571 l 15078 20541 l 15198 20511 l cp
+eoclip
+n 15046 20541 m
+ 15569 20541 l gs col0 s gr gr
+
+% arrowhead
+n 15198 20511 m 15078 20541 l 15198 20571 l 15198 20511 l  cp gs 0.00 setgray ef gr  col0 s
+% Polyline
+n 5278 18103 m 15384 18103 l 15384 22753 l 5278 22753 l
+ cp gs col0 s gr 
+/Times-Roman-iso ff 200.00 scf sf
+10332 21307 m
+gs 1 -1 sc (CRONTAB) col0 sh gr
+/Times-Roman-iso ff 200.00 scf sf
+10332 21562 m
+gs 1 -1 sc (update_finger) col0 sh gr
+/Times-Roman-iso ff 300.00 scf sf
+9504 17954 m
+gs 1 -1 sc (nordic:137.229.32.109) col0 sh gr
+% Polyline
+n 24344 20898 m 24239 20898 24239 21338 105 arcto 4 {pop} repeat
+  24239 21443 25756 21443 105 arcto 4 {pop} repeat
+  25861 21443 25861 21003 105 arcto 4 {pop} repeat
+  25861 20898 24344 20898 105 arcto 4 {pop} repeat
+ cp gs col0 s gr 
+/Times-Roman-iso ff 233.33 scf sf
+24366 21266 m
+gs 1 -1 sc (orbserver:6510) col0 sh gr
+% Polyline
+n 27467 20935 m
+ 29333 20935 l gs col0 s gr 
+/Times-Roman-iso ff 200.00 scf sf
+27467 20900 m
+gs 1 -1 sc (/export/inverse/fema/run/) col0 sh gr
+% Polyline
+n 20979 20593 m 22833 20593 l 22833 20907 l 20979 20907 l
+ cp gs col0 s gr 
+/Times-Roman-iso ff 200.00 scf sf
+21074 20818 m
+gs 1 -1 sc (orb2orb -m \(note1\) ice) col0 sh gr
+% Polyline
+n 21476 21082 m 22952 21082 l 22952 21380 l 21476 21380 l
+ cp gs col0 s gr 
+/Times-Roman-iso ff 200.00 scf sf
+21533 21293 m
+gs 1 -1 sc (orb2orb ice:6513) col0 sh gr
+% Polyline
+n 21694 21692 m 22984 21692 l 22984 22024 l 21694 22024 l
+ cp gs col0 s gr 
+/Times-Roman-iso ff 200.00 scf sf
+21799 21902 m
+gs 1 -1 sc (orbdbt2orb ice) col0 sh gr
+% Polyline
+n 24345 22264 m 24240 22264 24240 22704 105 arcto 4 {pop} repeat
+  24240 22809 25757 22809 105 arcto 4 {pop} repeat
+  25862 22809 25862 22369 105 arcto 4 {pop} repeat
+  25862 22264 24345 22264 105 arcto 4 {pop} repeat
+ cp gs col0 s gr 
+/Times-Roman-iso ff 233.33 scf sf
+24366 22632 m
+gs 1 -1 sc (orbserver:6511) col0 sh gr
+% Polyline
+n 26196 21348 m 26887 21348 l 26887 21615 l 26196 21615 l
+ cp gs col0 s gr 
+/Times-Roman-iso ff 200.00 scf sf
+26228 21536 m
+gs 1 -1 sc (orb2db) col0 sh gr
+% Polyline
+n 26176 21064 m 26943 21064 l 26943 21309 l 26176 21309 l
+ cp gs col0 s gr 
+/Times-Roman-iso ff 200.00 scf sf
+26229 21238 m
+gs 1 -1 sc (orb2dbt) col0 sh gr
+/Times-Roman-iso ff 200.00 scf sf
+22705 24102 m
+gs 1 -1 sc (note1: AK_\(CHUM|BPAW|MCK|BMR|SAW|PPLA|TRF|KTH|DIV|) col0 sh gr
+/Times-Roman-iso ff 200.00 scf sf
+22705 24328 m
+gs 1 -1 sc (DCPH|PIN|PNL|PAX|BESE|EYAK|HARP|SWD|ATKA|UNV\)_\(BHZ.*\)) col0 sh gr
+% Polyline
+gs  clippath
+24109 21468 m 24268 21412 l 24248 21355 l 24089 21411 l 24089 21411 l 24213 21400 l 24109 21468 l cp
+eoclip
+n 23016 21823 m
+ 24244 21389 l gs col0 s gr gr
+
+% arrowhead
+n 24109 21468 m 24213 21400 l 24089 21411 l 24109 21468 l  cp gs 0.00 setgray ef gr  col0 s
+% Polyline
+gs  clippath
+24093 21229 m 24260 21220 l 24257 21160 l 24090 21169 l 24090 21169 l 24212 21193 l 24093 21229 l cp
+eoclip
+n 22967 21256 m
+ 24244 21191 l gs col0 s gr gr
+
+% arrowhead
+n 24093 21229 m 24212 21193 l 24090 21169 l 24093 21229 l  cp gs 0.00 setgray ef gr  col0 s
+% Polyline
+gs  clippath
+24100 20998 m 24266 21025 l 24275 20965 l 24110 20939 l 24110 20939 l 24224 20988 l 24100 20998 l cp
+eoclip
+n 22862 20768 m
+ 24256 20993 l gs col0 s gr gr
+
+% arrowhead
+n 24100 20998 m 24224 20988 l 24110 20939 l 24100 20998 l  cp gs 0.00 setgray ef gr  col0 s
+% Polyline
+gs  clippath
+24072 22533 m 24239 22524 l 24236 22464 l 24069 22474 l 24069 22474 l 24191 22497 l 24072 22533 l cp
+eoclip
+n 23019 22565 m
+ 24223 22495 l gs col0 s gr gr
+
+% arrowhead
+n 24072 22533 m 24191 22497 l 24069 22474 l 24072 22533 l  cp gs 0.00 setgray ef gr  col0 s
+% Polyline
+n 26909 21504 m
+ 27317 21470 l gs col0 s gr 
+% Polyline
+n 26960 21169 m
+ 27339 21197 l gs col0 s gr 
+% Polyline
+n 25889 21147 m
+ 26146 21175 l gs col0 s gr 
+% Polyline
+n 25889 21342 m
+ 26146 21470 l gs col0 s gr 
+% Polyline
+n 20305 20339 m 29938 20339 l 29938 25006 l 20305 25006 l
+ cp gs col0 s gr 
+% Polyline
+n 20839 23018 m 22605 23018 l 22605 23339 l 20839 23339 l
+ cp gs col0 s gr 
+% Polyline
+gs  clippath
+21553 22537 m 21719 22563 l 21728 22504 l 21563 22478 l 21563 22478 l 21677 22527 l 21553 22537 l cp
+eoclip
+n 20488 22339 m
+ 21709 22532 l gs col0 s gr gr
+
+% arrowhead
+n 21553 22537 m 21677 22527 l 21563 22478 l 21553 22537 l  cp gs 0.00 setgray ef gr  col0 s
+% Polyline
+n 21721 22439 m 22972 22439 l 22972 22789 l 21721 22789 l
+ cp gs col0 s gr 
+/Times-Roman-iso ff 200.00 scf sf
+27432 21261 m
+gs 1 -1 sc (db/quakedb) col0 sh gr
+/Times-Roman-iso ff 200.00 scf sf
+27414 21534 m
+gs 1 -1 sc (db/quakedb_data) col0 sh gr
+/Times-Roman-iso ff 200.00 scf sf
+27503 22146 m
+gs 1 -1 sc (CRONTAB) col0 sh gr
+/Times-Roman-iso ff 300.00 scf sf
+23689 20197 m
+gs 1 -1 sc (inverse:137.229.32.208) col0 sh gr
+/Times-Roman-iso ff 200.00 scf sf
+20891 23227 m
+gs 1 -1 sc (orb2ew ice ->menlo) col0 sh gr
+/Times-Roman-iso ff 200.00 scf sf
+21808 22683 m
+gs 1 -1 sc (orbwatch ice) col0 sh gr
+% Polyline
+n 32331 2720 m 32226 2720 32226 3160 105 arcto 4 {pop} repeat
+  32226 3265 33743 3265 105 arcto 4 {pop} repeat
+  33848 3265 33848 2825 105 arcto 4 {pop} repeat
+  33848 2720 32331 2720 105 arcto 4 {pop} repeat
+ cp gs col0 s gr 
+/Times-Roman-iso ff 233.33 scf sf
+32353 3088 m
+gs 1 -1 sc (orbserver:6510) col0 sh gr
+% Polyline
+n 27980 2765 m 31236 2765 l 31236 3081 l 27980 3081 l
+ cp gs col0 s gr 
+/Times-Roman-iso ff 200.00 scf sf
+28038 2988 m
+gs 1 -1 sc (orb2orb -m \(/db/|/pf/\).* earlybird:6510) col0 sh gr
+% Polyline
+n 29241 3275 m 30741 3275 l 30741 3542 l 29241 3542 l
+ cp gs col0 s gr 
+/Times-Roman-iso ff 200.00 scf sf
+29294 3481 m
+gs 1 -1 sc (adsend2orb 9900) col0 sh gr
+% Polyline
+n 29265 3710 m 30711 3710 l 30711 3986 l 29265 3986 l
+ cp gs col0 s gr 
+/Times-Roman-iso ff 200.00 scf sf
+29315 3905 m
+gs 1 -1 sc (orb2orb fk:6511) col0 sh gr
+% Polyline
+n 28041 4700 m 33617 4700 l 33617 5098 l 28041 5098 l
+ cp gs col0 s gr 
+/Times-Roman-iso ff 200.00 scf sf
+28129 4963 m
+gs 1 -1 sc (orb2orb -m \(AK_DPA[1234]/MGENC/\(M200|M1\)\) earlybird:6510) col0 sh gr
+% Polyline
+n 34372 2992 m 35001 2992 l 35001 3219 l 34372 3219 l
+ cp gs col0 s gr 
+/Times-Roman-iso ff 200.00 scf sf
+34401 3175 m
+gs 1 -1 sc (orb2db) col0 sh gr
+% Polyline
+n 35598 2992 m
+ 37169 2992 l gs col0 s gr 
+/Times-Roman-iso ff 200.00 scf sf
+35612 2947 m
+gs 1 -1 sc (/home/display/run/) col0 sh gr
+/Times-Roman-iso ff 200.00 scf sf
+35597 3199 m
+gs 1 -1 sc (dbdisplay/dbdisplay) col0 sh gr
+/Times-Roman-iso ff 200.00 scf sf
+31288 5807 m
+gs 1 -1 sc (rtdbclean moment:6510 dbdisplay/dbdisplay) col0 sh gr
+/Times-Roman-iso ff 200.00 scf sf
+31288 6062 m
+gs 1 -1 sc (touch_wfdisc) col0 sh gr
+/Times-Roman-iso ff 200.00 scf sf
+32541 5525 m
+gs 1 -1 sc (CRONTAB) col0 sh gr
+% Polyline
+gs  clippath
+32076 2943 m 32243 2942 l 32242 2882 l 32075 2883 l 32075 2883 l 32196 2913 l 32076 2943 l cp
+eoclip
+n 31253 2916 m
+ 32228 2913 l gs col0 s gr gr
+
+% arrowhead
+n 32076 2943 m 32196 2913 l 32075 2883 l 32076 2943 l  cp gs 0.00 setgray ef gr  col0 s
+% Polyline
+gs  clippath
+31895 4550 m 31817 4699 l 31870 4727 l 31948 4579 l 31948 4579 l 31866 4671 l 31895 4550 l cp
+eoclip
+n 32616 3260 m
+ 31851 4700 l gs col0 s gr gr
+
+% arrowhead
+n 31895 4550 m 31866 4671 l 31948 4579 l 31895 4550 l  cp gs 0.00 setgray ef gr  col0 s
+% Polyline
+gs  clippath
+32177 3384 m 32302 3272 l 32262 3227 l 32137 3339 l 32137 3339 l 32247 3282 l 32177 3384 l cp
+eoclip
+n 31236 4190 m
+ 32271 3260 l gs col0 s gr gr
+
+% arrowhead
+n 32177 3384 m 32247 3282 l 32137 3339 l 32177 3384 l  cp gs 0.00 setgray ef gr  col0 s
+% Polyline
+gs  clippath
+32097 3287 m 32251 3221 l 32227 3166 l 32073 3232 l 32073 3232 l 32196 3213 l 32097 3287 l cp
+eoclip
+n 32226 3200 m
+ 30726 3845 l gs col0 s gr gr
+
+% arrowhead
+n 32097 3287 m 32196 3213 l 32073 3232 l 32097 3287 l  cp gs 0.00 setgray ef gr  col0 s
+% Polyline
+gs  clippath
+32082 3126 m 32246 3091 l 32234 3032 l 32070 3067 l 32070 3067 l 32194 3072 l 32082 3126 l cp
+eoclip
+n 30726 3380 m
+ 32226 3065 l gs col0 s gr gr
+
+% arrowhead
+n 32082 3126 m 32194 3072 l 32070 3067 l 32082 3126 l  cp gs 0.00 setgray ef gr  col0 s
+% Polyline
+n 35016 3097 m
+ 35447 3094 l gs col0 s gr 
+% Polyline
+n 27737 2304 m 37453 2304 l 37453 6500 l 27737 6500 l
+ cp gs col0 s gr 
+% Polyline
+n 28502 4205 m 31723 4205 l 31723 4545 l 28502 4545 l
+ cp gs col0 s gr 
+/Times-Roman-iso ff 300.00 scf sf
+31636 2157 m
+gs 1 -1 sc (moment:137.229.32.40) col0 sh gr
+/Times-Roman-iso ff 200.00 scf sf
+28562 4447 m
+gs 1 -1 sc (orb2orb  128.111.236.181:6710 \(DPA\)) col0 sh gr
+% Polyline
+gs  clippath
+42225 11712 m 42210 11545 l 42150 11550 l 42165 11717 l 42165 11717 l 42185 11595 l 42225 11712 l cp
+eoclip
+n 41558 18142 m 42305 13008 l
+ 42182 11563 l gs col0 s gr gr
+
+% arrowhead
+n 42225 11712 m 42185 11595 l 42165 11717 l 42225 11712 l  cp gs 0.00 setgray ef gr  col0 s
+% Polyline
+gs  clippath
+41017 10726 m 41062 10565 l 41005 10549 l 40959 10710 l 40959 10710 l 41021 10603 l 41017 10726 l cp
+eoclip
+n 41030 10572 m
+ 39954 14384 l gs col0 s gr gr
+
+% arrowhead
+n 41017 10726 m 41021 10603 l 40959 10710 l 41017 10726 l  cp gs 0.00 setgray ef gr  col0 s
+% here ends figure;
+$F2psEnd
+rs
+showpage
+%%Trailer
+%EOF

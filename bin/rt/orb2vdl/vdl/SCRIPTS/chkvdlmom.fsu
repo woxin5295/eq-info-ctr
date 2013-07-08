@@ -1,0 +1,8 @@
+if ps -e | grep "[0-9] vdlmom" >/dev/null
+then
+	touch /home/neic/chkvdlmom.file
+else
+	date
+	echo "vdlmom not found at fsuhub"
+	sh /home/neic/vdl/runvdl
+fi

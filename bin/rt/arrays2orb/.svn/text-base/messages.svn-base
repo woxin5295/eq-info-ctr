@@ -1,0 +1,477 @@
+Jun  2 10:21:34 erebus unix:  SunOS Release 5.5.1 Version Generic [UNIX(R) System V Release 4.0]
+Jun  2 10:21:34 erebus unix: Copyright (c) 1983-1996, Sun Microsystems, Inc.
+Jun  2 10:21:34 erebus unix: mem = 40960K (0x2800000)
+Jun  2 10:21:34 erebus unix: avail mem = 37814272
+Jun  2 10:21:34 erebus unix: Ethernet address = 8:0:20:4:9:56
+Jun  2 10:21:34 erebus unix: root nexus = SUNW,Sun 4_25
+Jun  2 10:21:34 erebus unix: sbus0 at root: obio 0xf8000000
+Jun  2 10:21:34 erebus unix: dma0 at sbus0: SBus slot 0 0x400000
+Jun  2 10:21:34 erebus unix: esp0 at sbus0: SBus slot 0 0x800000 SBus level 3 sparc ipl 3
+Jun  2 10:21:34 erebus unix: sd0 at esp0: target 0 lun 0
+Jun  2 10:21:34 erebus unix: sd0 is /sbus@1,f8000000/esp@0,800000/sd@0,0
+Jun  2 10:21:34 erebus unix: 	<MAXTOR 120MB cyl 648 alt 2 hd 7 sec 43> 
+Jun  2 10:21:34 erebus unix: sd3 at esp0: target 3 lun 0
+Jun  2 10:21:34 erebus unix: sd3 is /sbus@1,f8000000/esp@0,800000/sd@3,0
+Jun  2 10:21:34 erebus unix: 	<Maxtor 7120S 120MB cyl 648 alt 2 hd 7 sec 43> 
+Jun  2 10:21:34 erebus unix: sd6 at esp0: target 6 lun 0
+Jun  2 10:21:34 erebus unix: sd6 is /sbus@1,f8000000/esp@0,800000/sd@6,0
+Jun  2 10:21:34 erebus unix: 	<CD-ROM Disc for SunOS Solaris_2.5.1 Installation    > 
+Jun  2 10:21:34 erebus unix: root on /sbus@1,f8000000/esp@0,800000/sd@3,0:a fstype ufs
+Jun  2 10:21:34 erebus unix: zs0 at root: obio 0xf1000000 sparc ipl 12
+Jun  2 10:21:34 erebus unix: zs0 is /zs@1,f1000000
+Jun  2 10:21:34 erebus unix: zs1 at root: obio 0xf0000000 sparc ipl 12
+Jun  2 10:21:34 erebus unix: zs1 is /zs@1,f0000000
+Jun  2 10:21:34 erebus unix: bwtwo0 at sbus0: SBus slot 3 0x0 SBus level 5 sparc ipl 7
+Jun  2 10:21:34 erebus unix: bwtwo0 is /sbus@1,f8000000/bwtwo@3,0
+Jun  2 10:21:37 erebus unix: bwtwo0: resolution 1152 x 900
+Jun  2 10:21:37 erebus unix: le0 at sbus0: SBus slot 0 0xc00000 SBus level 4 sparc ipl 5
+Jun  2 10:21:37 erebus unix: le0 is /sbus@1,f8000000/le@0,c00000
+Jun  2 10:21:37 erebus unix: dump on /swap1 size 20468K
+Jun  2 10:37:35 erebus syslogd: going down on signal 15
+Jun  2 10:40:52 erebus unix:  SunOS Release 5.5.1 Version Generic [UNIX(R) System V Release 4.0]
+Jun  2 10:40:52 erebus unix: Copyright (c) 1983-1996, Sun Microsystems, Inc.
+Jun  2 10:40:52 erebus unix: mem = 40960K (0x2800000)
+Jun  2 10:40:52 erebus unix: avail mem = 37814272
+Jun  2 10:40:52 erebus unix: Ethernet address = 8:0:20:4:9:56
+Jun  2 10:40:52 erebus unix: root nexus = SUNW,Sun 4_25
+Jun  2 10:40:52 erebus unix: sbus0 at root: obio 0xf8000000
+Jun  2 10:40:52 erebus unix: dma0 at sbus0: SBus slot 0 0x400000
+Jun  2 10:40:52 erebus unix: esp0 at sbus0: SBus slot 0 0x800000 SBus level 3 sparc ipl 3
+Jun  2 10:40:52 erebus unix: sd0 at esp0: target 0 lun 0
+Jun  2 10:40:52 erebus unix: sd0 is /sbus@1,f8000000/esp@0,800000/sd@0,0
+Jun  2 10:40:52 erebus unix: 	<MAXTOR 120MB cyl 648 alt 2 hd 7 sec 43> 
+Jun  2 10:40:52 erebus unix: sd3 at esp0: target 3 lun 0
+Jun  2 10:40:52 erebus unix: sd3 is /sbus@1,f8000000/esp@0,800000/sd@3,0
+Jun  2 10:40:52 erebus unix: 	<Maxtor 7120S 120MB cyl 648 alt 2 hd 7 sec 43> 
+Jun  2 10:40:52 erebus unix: sd6 at esp0: target 6 lun 0
+Jun  2 10:40:52 erebus unix: sd6 is /sbus@1,f8000000/esp@0,800000/sd@6,0
+Jun  2 10:40:52 erebus unix: 	<CD-ROM Disc for SunOS Solaris_2.5.1 Installation    > 
+Jun  2 10:40:52 erebus unix: root on /sbus@1,f8000000/esp@0,800000/sd@3,0:a fstype ufs
+Jun  2 10:40:52 erebus unix: zs0 at root: obio 0xf1000000 sparc ipl 12
+Jun  2 10:40:52 erebus unix: zs0 is /zs@1,f1000000
+Jun  2 10:40:52 erebus unix: zs1 at root: obio 0xf0000000 sparc ipl 12
+Jun  2 10:40:52 erebus unix: zs1 is /zs@1,f0000000
+Jun  2 10:40:52 erebus unix: bwtwo0 at sbus0: SBus slot 3 0x0 SBus level 5 sparc ipl 7
+Jun  2 10:40:52 erebus unix: bwtwo0 is /sbus@1,f8000000/bwtwo@3,0
+Jun  2 10:40:56 erebus unix: bwtwo0: resolution 1152 x 900
+Jun  2 10:40:56 erebus unix: le0 at sbus0: SBus slot 0 0xc00000 SBus level 4 sparc ipl 5
+Jun  2 10:40:56 erebus unix: le0 is /sbus@1,f8000000/le@0,c00000
+Jun  2 10:40:56 erebus unix: dump on /swap1 size 20468K
+Jun  2 10:40:56 erebus unix: syncing file systems... [2] done
+Jun  2 10:40:56 erebus unix: rebooting...
+Jun  2 10:40:56 erebus unix:  SunOS Release 5.5.1 Version Generic [UNIX(R) System V Release 4.0]
+Jun  2 10:40:56 erebus unix: Copyright (c) 1983-1996, Sun Microsystems, Inc.
+Jun  2 10:40:56 erebus unix: mem = 40960K (0x2800000)
+Jun  2 10:40:56 erebus unix: avail mem = 37822464
+Jun  2 10:40:56 erebus unix: Ethernet address = 8:0:20:4:9:56
+Jun  2 10:40:56 erebus unix: root nexus = SUNW,Sun 4_25
+Jun  2 10:40:56 erebus unix: sbus0 at root: obio 0xf8000000
+Jun  2 10:40:56 erebus unix: dma0 at sbus0: SBus slot 0 0x400000
+Jun  2 10:40:56 erebus unix: esp0 at sbus0: SBus slot 0 0x800000 SBus level 3 sparc ipl 3
+Jun  2 10:40:56 erebus unix: sd0 at esp0: target 0 lun 0
+Jun  2 10:40:56 erebus unix: sd0 is /sbus@1,f8000000/esp@0,800000/sd@0,0
+Jun  2 10:40:56 erebus unix: 	<MAXTOR 120MB cyl 648 alt 2 hd 7 sec 43> 
+Jun  2 10:40:56 erebus unix: sd3 at esp0: target 3 lun 0
+Jun  2 10:40:56 erebus unix: sd3 is /sbus@1,f8000000/esp@0,800000/sd@3,0
+Jun  2 10:40:56 erebus unix: 	<Maxtor 7120S 120MB cyl 648 alt 2 hd 7 sec 43> 
+Jun  2 10:40:56 erebus unix: sd6 at esp0: target 6 lun 0
+Jun  2 10:40:56 erebus unix: sd6 is /sbus@1,f8000000/esp@0,800000/sd@6,0
+Jun  2 10:40:56 erebus unix: 	<CD-ROM Disc for SunOS Solaris_2.5.1 Installation    > 
+Jun  2 10:40:56 erebus unix: root on /sbus@1,f8000000/esp@0,800000/sd@3,0:a fstype ufs
+Jun  2 10:40:56 erebus unix: zs0 at root: obio 0xf1000000 sparc ipl 12
+Jun  2 10:41:00 erebus unix: zs0 is /zs@1,f1000000
+Jun  2 10:41:00 erebus unix: zs1 at root: obio 0xf0000000 sparc ipl 12
+Jun  2 10:41:00 erebus unix: zs1 is /zs@1,f0000000
+Jun  2 10:41:00 erebus unix: bwtwo0 at sbus0: SBus slot 3 0x0 SBus level 5 sparc ipl 7
+Jun  2 10:41:00 erebus unix: bwtwo0 is /sbus@1,f8000000/bwtwo@3,0
+Jun  2 10:41:00 erebus unix: bwtwo0: resolution 1152 x 900
+Jun  2 10:41:00 erebus unix: le0 at sbus0: SBus slot 0 0xc00000 SBus level 4 sparc ipl 5
+Jun  2 10:41:00 erebus unix: le0 is /sbus@1,f8000000/le@0,c00000
+Jun  2 10:41:00 erebus unix: dump on /swap1 size 20468K
+Jun  2 15:53:43 erebus unix:  SunOS Release 5.5.1 Version Generic [UNIX(R) System V Release 4.0]
+Jun  2 15:53:43 erebus unix: Copyright (c) 1983-1996, Sun Microsystems, Inc.
+Jun  2 15:53:43 erebus unix: mem = 40960K (0x2800000)
+Jun  2 15:53:43 erebus unix: avail mem = 37814272
+Jun  2 15:53:43 erebus unix: Ethernet address = 8:0:20:4:9:56
+Jun  2 15:53:43 erebus unix: root nexus = SUNW,Sun 4_25
+Jun  2 15:53:43 erebus unix: sbus0 at root: obio 0xf8000000
+Jun  2 15:53:43 erebus unix: dma0 at sbus0: SBus slot 0 0x400000
+Jun  2 15:53:43 erebus unix: esp0 at sbus0: SBus slot 0 0x800000 SBus level 3 sparc ipl 3
+Jun  2 15:53:43 erebus unix: sd0 at esp0: target 0 lun 0
+Jun  2 15:53:43 erebus unix: sd0 is /sbus@1,f8000000/esp@0,800000/sd@0,0
+Jun  2 15:53:43 erebus unix: 	<MAXTOR 120MB cyl 648 alt 2 hd 7 sec 43> 
+Jun  2 15:53:43 erebus unix: sd3 at esp0: target 3 lun 0
+Jun  2 15:53:43 erebus unix: sd3 is /sbus@1,f8000000/esp@0,800000/sd@3,0
+Jun  2 15:53:43 erebus unix: 	<Maxtor 7120S 120MB cyl 648 alt 2 hd 7 sec 43> 
+Jun  2 15:53:43 erebus unix: sd6 at esp0: target 6 lun 0
+Jun  2 15:53:43 erebus unix: sd6 is /sbus@1,f8000000/esp@0,800000/sd@6,0
+Jun  2 15:53:43 erebus unix: 	<CD-ROM Disc for SunOS Solaris_2.5.1 Installation    > 
+Jun  2 15:53:43 erebus unix: root on /sbus@1,f8000000/esp@0,800000/sd@3,0:a fstype ufs
+Jun  2 15:53:43 erebus unix: zs0 at root: obio 0xf1000000 sparc ipl 12
+Jun  2 15:53:43 erebus unix: zs0 is /zs@1,f1000000
+Jun  2 15:53:43 erebus unix: zs1 at root: obio 0xf0000000 sparc ipl 12
+Jun  2 15:53:43 erebus unix: zs1 is /zs@1,f0000000
+Jun  2 15:53:43 erebus unix: bwtwo0 at sbus0: SBus slot 3 0x0 SBus level 5 sparc ipl 7
+Jun  2 15:53:43 erebus unix: bwtwo0 is /sbus@1,f8000000/bwtwo@3,0
+Jun  2 15:53:47 erebus unix: bwtwo0: resolution 1152 x 900
+Jun  2 15:53:47 erebus unix: le0 at sbus0: SBus slot 0 0xc00000 SBus level 4 sparc ipl 5
+Jun  2 15:53:47 erebus unix: le0 is /sbus@1,f8000000/le@0,c00000
+Jun  2 15:53:47 erebus unix: dump on /swap1 size 20468K
+Jun  3 10:04:43 erebus unix:  SunOS Release 5.5.1 Version Generic [UNIX(R) System V Release 4.0]
+Jun  3 10:04:43 erebus unix: Copyright (c) 1983-1996, Sun Microsystems, Inc.
+Jun  3 10:04:43 erebus unix: mem = 40960K (0x2800000)
+Jun  3 10:04:43 erebus unix: avail mem = 37814272
+Jun  3 10:04:43 erebus unix: Ethernet address = 8:0:20:4:9:56
+Jun  3 10:04:43 erebus unix: root nexus = SUNW,Sun 4_25
+Jun  3 10:04:43 erebus unix: sbus0 at root: obio 0xf8000000
+Jun  3 10:04:43 erebus unix: dma0 at sbus0: SBus slot 0 0x400000
+Jun  3 10:04:43 erebus unix: esp0 at sbus0: SBus slot 0 0x800000 SBus level 3 sparc ipl 3
+Jun  3 10:04:43 erebus unix: sd0 at esp0: target 0 lun 0
+Jun  3 10:04:43 erebus unix: sd0 is /sbus@1,f8000000/esp@0,800000/sd@0,0
+Jun  3 10:04:43 erebus unix: 	<MAXTOR 120MB cyl 648 alt 2 hd 7 sec 43> 
+Jun  3 10:04:43 erebus unix: sd3 at esp0: target 3 lun 0
+Jun  3 10:04:43 erebus unix: sd3 is /sbus@1,f8000000/esp@0,800000/sd@3,0
+Jun  3 10:04:43 erebus unix: 	<Maxtor 7120S 120MB cyl 648 alt 2 hd 7 sec 43> 
+Jun  3 10:04:43 erebus unix: sd6 at esp0: target 6 lun 0
+Jun  3 10:04:43 erebus unix: sd6 is /sbus@1,f8000000/esp@0,800000/sd@6,0
+Jun  3 10:04:43 erebus unix: 	<CD-ROM Disc for SunOS Solaris_2.5.1 Installation    > 
+Jun  3 10:04:43 erebus unix: root on /sbus@1,f8000000/esp@0,800000/sd@3,0:a fstype ufs
+Jun  3 10:04:43 erebus unix: zs0 at root: obio 0xf1000000 sparc ipl 12
+Jun  3 10:04:43 erebus unix: zs0 is /zs@1,f1000000
+Jun  3 10:04:43 erebus unix: zs1 at root: obio 0xf0000000 sparc ipl 12
+Jun  3 10:04:43 erebus unix: zs1 is /zs@1,f0000000
+Jun  3 10:04:43 erebus unix: bwtwo0 at sbus0: SBus slot 3 0x0 SBus level 5 sparc ipl 7
+Jun  3 10:04:43 erebus unix: bwtwo0 is /sbus@1,f8000000/bwtwo@3,0
+Jun  3 10:04:47 erebus unix: bwtwo0: resolution 1152 x 900
+Jun  3 10:04:47 erebus unix: le0 at sbus0: SBus slot 0 0xc00000 SBus level 4 sparc ipl 5
+Jun  3 10:04:47 erebus unix: le0 is /sbus@1,f8000000/le@0,c00000
+Jun  3 10:04:47 erebus unix: dump on /swap1 size 20468K
+Jun  3 14:33:16 erebus unix:  SunOS Release 5.5.1 Version Generic [UNIX(R) System V Release 4.0]
+Jun  3 14:33:16 erebus unix: Copyright (c) 1983-1996, Sun Microsystems, Inc.
+Jun  3 14:33:16 erebus unix: mem = 40960K (0x2800000)
+Jun  3 14:33:16 erebus unix: avail mem = 37814272
+Jun  3 14:33:16 erebus unix: Ethernet address = 8:0:20:4:9:56
+Jun  3 14:33:16 erebus unix: root nexus = SUNW,Sun 4_25
+Jun  3 14:33:16 erebus unix: sbus0 at root: obio 0xf8000000
+Jun  3 14:33:16 erebus unix: dma0 at sbus0: SBus slot 0 0x400000
+Jun  3 14:33:16 erebus unix: esp0 at sbus0: SBus slot 0 0x800000 SBus level 3 sparc ipl 3
+Jun  3 14:33:16 erebus unix: sd0 at esp0: target 0 lun 0
+Jun  3 14:33:16 erebus unix: sd0 is /sbus@1,f8000000/esp@0,800000/sd@0,0
+Jun  3 14:33:16 erebus unix: 	<MAXTOR 120MB cyl 648 alt 2 hd 7 sec 43> 
+Jun  3 14:33:16 erebus unix: sd3 at esp0: target 3 lun 0
+Jun  3 14:33:16 erebus unix: sd3 is /sbus@1,f8000000/esp@0,800000/sd@3,0
+Jun  3 14:33:16 erebus unix: 	<Maxtor 7120S 120MB cyl 648 alt 2 hd 7 sec 43> 
+Jun  3 14:33:16 erebus unix: sd6 at esp0: target 6 lun 0
+Jun  3 14:33:16 erebus unix: sd6 is /sbus@1,f8000000/esp@0,800000/sd@6,0
+Jun  3 14:33:16 erebus unix: 	<CD-ROM Disc for SunOS Solaris_2.5.1 Installation    > 
+Jun  3 14:33:16 erebus unix: root on /sbus@1,f8000000/esp@0,800000/sd@3,0:a fstype ufs
+Jun  3 14:33:16 erebus unix: zs0 at root: obio 0xf1000000 sparc ipl 12
+Jun  3 14:33:16 erebus unix: zs0 is /zs@1,f1000000
+Jun  3 14:33:16 erebus unix: zs1 at root: obio 0xf0000000 sparc ipl 12
+Jun  3 14:33:16 erebus unix: zs1 is /zs@1,f0000000
+Jun  3 14:33:16 erebus unix: bwtwo0 at sbus0: SBus slot 3 0x0 SBus level 5 sparc ipl 7
+Jun  3 14:33:16 erebus unix: bwtwo0 is /sbus@1,f8000000/bwtwo@3,0
+Jun  3 14:33:20 erebus unix: bwtwo0: resolution 1152 x 900
+Jun  3 14:33:20 erebus unix: le0 at sbus0: SBus slot 0 0xc00000 SBus level 4 sparc ipl 5
+Jun  3 14:33:20 erebus unix: le0 is /sbus@1,f8000000/le@0,c00000
+Jun  3 14:33:20 erebus unix: dump on /swap1 size 20468K
+Jun  4 15:31:48 erebus unix: NFS server chaos not responding still trying
+Jun  4 15:31:49 erebus unix: NFS server chaos ok
+Jun  4 17:01:32 erebus automountd[130]: chaos:/export/chaos server not responding: RPC: Timed out
+Jun  4 17:01:32 erebus automountd[130]: Could not remount /net/chaos/export/chaos 
+Jun  5 08:39:38 erebus unix:  SunOS Release 5.5.1 Version Generic [UNIX(R) System V Release 4.0]
+Jun  5 08:39:38 erebus unix: Copyright (c) 1983-1996, Sun Microsystems, Inc.
+Jun  5 08:39:38 erebus unix: mem = 40960K (0x2800000)
+Jun  5 08:39:38 erebus unix: avail mem = 37814272
+Jun  5 08:39:38 erebus unix: Ethernet address = 8:0:20:4:9:56
+Jun  5 08:39:38 erebus unix: root nexus = SUNW,Sun 4_25
+Jun  5 08:39:38 erebus unix: sbus0 at root: obio 0xf8000000
+Jun  5 08:39:38 erebus unix: dma0 at sbus0: SBus slot 0 0x400000
+Jun  5 08:39:38 erebus unix: esp0 at sbus0: SBus slot 0 0x800000 SBus level 3 sparc ipl 3
+Jun  5 08:39:38 erebus unix: sd0 at esp0: target 0 lun 0
+Jun  5 08:39:38 erebus unix: sd0 is /sbus@1,f8000000/esp@0,800000/sd@0,0
+Jun  5 08:39:38 erebus unix: 	<MAXTOR 120MB cyl 648 alt 2 hd 7 sec 43> 
+Jun  5 08:39:38 erebus unix: sd3 at esp0: target 3 lun 0
+Jun  5 08:39:38 erebus unix: sd3 is /sbus@1,f8000000/esp@0,800000/sd@3,0
+Jun  5 08:39:38 erebus unix: 	<Maxtor 7120S 120MB cyl 648 alt 2 hd 7 sec 43> 
+Jun  5 08:39:38 erebus unix: sd6 at esp0: target 6 lun 0
+Jun  5 08:39:38 erebus unix: sd6 is /sbus@1,f8000000/esp@0,800000/sd@6,0
+Jun  5 08:39:38 erebus unix: 	<CD-ROM Disc for SunOS Solaris_2.5.1 Installation    > 
+Jun  5 08:39:38 erebus unix: root on /sbus@1,f8000000/esp@0,800000/sd@3,0:a fstype ufs
+Jun  5 08:39:38 erebus unix: zs0 at root: obio 0xf1000000 sparc ipl 12
+Jun  5 08:39:38 erebus unix: zs0 is /zs@1,f1000000
+Jun  5 08:39:38 erebus unix: zs1 at root: obio 0xf0000000 sparc ipl 12
+Jun  5 08:39:38 erebus unix: zs1 is /zs@1,f0000000
+Jun  5 08:39:38 erebus unix: bwtwo0 at sbus0: SBus slot 3 0x0 SBus level 5 sparc ipl 7
+Jun  5 08:39:38 erebus unix: bwtwo0 is /sbus@1,f8000000/bwtwo@3,0
+Jun  5 08:39:41 erebus unix: bwtwo0: resolution 1152 x 900
+Jun  5 08:39:41 erebus unix: le0 at sbus0: SBus slot 0 0xc00000 SBus level 4 sparc ipl 5
+Jun  5 08:39:41 erebus unix: le0 is /sbus@1,f8000000/le@0,c00000
+Jun  5 08:39:41 erebus unix: dump on /swap1 size 20468K
+Jun  5 08:39:41 erebus unix: panic: zero
+Jun  5 08:39:41 erebus unix: syncing file systems...WARNING: zs0: message lost 
+Jun  5 08:39:41 erebus unix: WARNING: zs0: message lost 
+Jun  5 08:39:41 erebus last message repeated 16 times
+Jun  5 08:39:41 erebus unix:  done
+Jun  5 08:39:41 erebus unix:  1938 static and sysmap kernel pages
+Jun  5 08:39:41 erebus unix:    82 dynamic kernel data pages
+Jun  5 08:39:41 erebus unix:    60 kernel-pageable pages
+Jun  5 08:39:41 erebus unix:     0 segkmap kernel pages
+Jun  5 08:39:41 erebus unix:     0 segvn kernel pages
+Jun  5 08:39:41 erebus unix:     0 current user process pages
+Jun  5 08:39:41 erebus unix:  2080 total pages (2080 chunks)
+Jun  5 08:39:41 erebus unix: dumping to vp ff3a2e80, offset 24296
+Jun  5 08:39:41 erebus unix:  0 total pages, dump failed: error -1
+Jun  5 08:39:41 erebus unix: rebooting...
+Jun  5 08:39:44 erebus unix:  SunOS Release 5.5.1 Version Generic [UNIX(R) System V Release 4.0]
+Jun  5 08:39:44 erebus unix: Copyright (c) 1983-1996, Sun Microsystems, Inc.
+Jun  5 08:39:44 erebus unix: mem = 40960K (0x2800000)
+Jun  5 08:39:44 erebus unix: avail mem = 37822464
+Jun  5 08:39:44 erebus unix: Ethernet address = 8:0:20:4:9:56
+Jun  5 08:39:44 erebus unix: root nexus = SUNW,Sun 4_25
+Jun  5 08:39:44 erebus unix: sbus0 at root: obio 0xf8000000
+Jun  5 08:39:44 erebus unix: dma0 at sbus0: SBus slot 0 0x400000
+Jun  5 08:39:44 erebus unix: esp0 at sbus0: SBus slot 0 0x800000 SBus level 3 sparc ipl 3
+Jun  5 08:39:44 erebus unix: sd0 at esp0: target 0 lun 0
+Jun  5 08:39:44 erebus unix: sd0 is /sbus@1,f8000000/esp@0,800000/sd@0,0
+Jun  5 08:39:44 erebus unix: 	<MAXTOR 120MB cyl 648 alt 2 hd 7 sec 43> 
+Jun  5 08:39:44 erebus unix: sd3 at esp0: target 3 lun 0
+Jun  5 08:39:44 erebus unix: sd3 is /sbus@1,f8000000/esp@0,800000/sd@3,0
+Jun  5 08:39:44 erebus unix: 	<Maxtor 7120S 120MB cyl 648 alt 2 hd 7 sec 43> 
+Jun  5 08:39:44 erebus unix: sd6 at esp0: target 6 lun 0
+Jun  5 08:39:44 erebus unix: sd6 is /sbus@1,f8000000/esp@0,800000/sd@6,0
+Jun  5 08:39:44 erebus unix: 	<CD-ROM Disc for SunOS Solaris_2.5.1 Installation    > 
+Jun  5 08:39:44 erebus unix: root on /sbus@1,f8000000/esp@0,800000/sd@3,0:a fstype ufs
+Jun  5 08:39:44 erebus unix: zs0 at root: obio 0xf1000000 sparc ipl 12
+Jun  5 08:39:44 erebus unix: zs0 is /zs@1,f1000000
+Jun  5 08:39:44 erebus unix: zs1 at root: obio 0xf0000000 sparc ipl 12
+Jun  5 08:39:44 erebus unix: zs1 is /zs@1,f0000000
+Jun  5 08:39:44 erebus unix: bwtwo0 at sbus0: SBus slot 3 0x0 SBus level 5 sparc ipl 7
+Jun  5 08:39:44 erebus unix: bwtwo0 is /sbus@1,f8000000/bwtwo@3,0
+Jun  5 08:39:48 erebus unix: bwtwo0: resolution 1152 x 900
+Jun  5 08:39:48 erebus unix: le0 at sbus0: SBus slot 0 0xc00000 SBus level 4 sparc ipl 5
+Jun  5 08:39:48 erebus unix: le0 is /sbus@1,f8000000/le@0,c00000
+Jun  5 08:39:48 erebus unix: dump on /swap1 size 20468K
+Jun  5 15:54:27 erebus unix: NOTICE: zs0:ring buffer overflow 
+Jun  5 15:54:27 erebus unix: WARNING: zs0: message lost 
+Jun  5 15:54:28 erebus unix: NOTICE: zs0:ring buffer overflow 
+Jun  5 15:54:28 erebus unix: NOTICE: zs0:ring buffer overflow 
+Jun  5 15:54:28 erebus unix: WARNING: zs0: message lost 
+Jun  5 15:54:28 erebus unix: NOTICE: zs0:ring buffer overflow 
+Jun  5 15:54:28 erebus unix: WARNING: zs0: message lost 
+Jun  5 15:54:28 erebus unix: NOTICE: zs0:ring buffer overflow 
+Jun  5 15:54:28 erebus unix: WARNING: zs0: message lost 
+Jun  5 15:54:28 erebus unix: WARNING: zs0: message lost 
+Jun  5 15:54:28 erebus unix: NOTICE: zs0:ring buffer overflow 
+Jun  5 15:54:28 erebus unix: NOTICE: zs0:ring buffer overflow 
+Jun  5 15:54:28 erebus unix: WARNING: zs0: message lost 
+Jun  5 15:54:28 erebus unix: NOTICE: zs0:ring buffer overflow 
+Jun  5 15:54:28 erebus unix: NOTICE: zs0:ring buffer overflow 
+Jun  5 15:54:28 erebus unix: WARNING: zs0: message lost 
+Jun  5 15:54:28 erebus unix: NOTICE: zs0:ring buffer overflow 
+Jun  5 15:54:28 erebus unix: WARNING: zs0: message lost 
+Jun  5 15:54:28 erebus unix: NOTICE: zs0:ring buffer overflow 
+Jun  5 15:54:28 erebus unix: NOTICE: zs0:ring buffer overflow 
+Jun  5 15:54:28 erebus unix: WARNING: zs0: message lost 
+Jun  5 15:54:29 erebus unix: NOTICE: zs0:ring buffer overflow 
+Jun  5 15:54:29 erebus last message repeated 2 times
+Jun  5 15:54:29 erebus unix: WARNING: zs0: message lost 
+Jun  5 15:54:29 erebus unix: NOTICE: zs0:ring buffer overflow 
+Jun  5 15:54:29 erebus unix: WARNING: zs0: message lost 
+Jun  5 15:54:29 erebus unix: NOTICE: zs0:ring buffer overflow 
+Jun  5 15:54:29 erebus unix: NOTICE: zs0:ring buffer overflow 
+Jun  5 15:54:29 erebus unix: WARNING: zs0: message lost 
+Jun  5 15:54:29 erebus unix: NOTICE: zs0:ring buffer overflow 
+Jun  5 15:54:29 erebus unix: NOTICE: zs0:ring buffer overflow 
+Jun  5 15:54:29 erebus unix: WARNING: zs0: message lost 
+Jun  5 15:54:29 erebus unix: NOTICE: zs0:ring buffer overflow 
+Jun  5 15:54:29 erebus unix: NOTICE: zs0:ring buffer overflow 
+Jun  5 15:54:29 erebus unix: WARNING: zs0: message lost 
+Jun  5 15:54:29 erebus unix: NOTICE: zs0:ring buffer overflow 
+Jun  5 15:54:29 erebus unix: NOTICE: zs0:ring buffer overflow 
+Jun  5 15:54:29 erebus unix: WARNING: zs0: message lost 
+Jun  5 15:54:29 erebus unix: NOTICE: zs0:ring buffer overflow 
+Jun  5 15:54:30 erebus unix: NOTICE: zs0:ring buffer overflow 
+Jun  5 15:54:30 erebus unix: WARNING: zs0: message lost 
+Jun  5 15:54:30 erebus unix: NOTICE: zs0:ring buffer overflow 
+Jun  5 15:54:30 erebus unix: WARNING: zs0: message lost 
+Jun  5 15:54:30 erebus unix: NOTICE: zs0:ring buffer overflow 
+Jun  5 15:54:30 erebus unix: WARNING: zs0: message lost 
+Jun  5 15:54:30 erebus unix: WARNING: zs0: message lost 
+Jun  5 15:54:30 erebus unix: NOTICE: zs0:ring buffer overflow 
+Jun  5 15:54:30 erebus unix: NOTICE: zs0:ring buffer overflow 
+Jun  5 15:54:30 erebus unix: WARNING: zs0: message lost 
+Jun  5 15:54:30 erebus unix: NOTICE: zs0:ring buffer overflow 
+Jun  5 15:54:30 erebus unix: NOTICE: zs0:ring buffer overflow 
+Jun  5 15:54:30 erebus unix: WARNING: zs0: message lost 
+Jun  5 15:54:30 erebus unix: NOTICE: zs0:ring buffer overflow 
+Jun  5 15:54:30 erebus unix: WARNING: zs0: message lost 
+Jun  5 15:54:30 erebus unix: NOTICE: zs0:ring buffer overflow 
+Jun  5 15:54:30 erebus unix: WARNING: zs0: message lost 
+Jun  5 15:54:30 erebus unix: NOTICE: zs0:ring buffer overflow 
+Jun  5 15:54:30 erebus unix: NOTICE: zs0:ring buffer overflow 
+Jun  5 15:54:30 erebus unix: WARNING: zs0: message lost 
+Jun  5 15:54:31 erebus unix: NOTICE: zs0:ring buffer overflow 
+Jun  5 15:54:31 erebus unix: WARNING: zs0: message lost 
+Jun  5 15:54:31 erebus unix: NOTICE: zs0:ring buffer overflow 
+Jun  5 15:54:31 erebus unix: WARNING: zs0: message lost 
+Jun  5 15:54:31 erebus unix: NOTICE: zs0:ring buffer overflow 
+Jun  5 15:54:31 erebus last message repeated 2 times
+Jun  5 15:54:31 erebus unix: WARNING: zs0: message lost 
+Jun  5 15:54:31 erebus unix: NOTICE: zs0:ring buffer overflow 
+Jun  5 15:54:31 erebus unix: WARNING: zs0: message lost 
+Jun  5 15:54:31 erebus unix: NOTICE: zs0:ring buffer overflow 
+Jun  5 15:54:31 erebus unix: NOTICE: zs0:ring buffer overflow 
+Jun  5 15:54:31 erebus unix: WARNING: zs0: message lost 
+Jun  5 15:54:31 erebus unix: NOTICE: zs0:ring buffer overflow 
+Jun  5 15:54:31 erebus unix: WARNING: zs0: message lost 
+Jun  5 15:54:31 erebus unix: NOTICE: zs0:ring buffer overflow 
+Jun  5 15:54:31 erebus unix: NOTICE: zs0:ring buffer overflow 
+Jun  5 15:54:31 erebus unix: WARNING: zs0: message lost 
+Jun  5 15:54:31 erebus unix: NOTICE: zs0:ring buffer overflow 
+Jun  5 15:54:31 erebus unix: NOTICE: zs0:ring buffer overflow 
+Jun  5 15:54:31 erebus unix: WARNING: zs0: message lost 
+Jun  5 15:54:32 erebus unix: NOTICE: zs0:ring buffer overflow 
+Jun  5 15:54:32 erebus unix: WARNING: zs0: message lost 
+Jun  5 15:54:32 erebus unix: WARNING: zs0: message lost 
+Jun  5 15:54:32 erebus unix: NOTICE: zs0:ring buffer overflow 
+Jun  5 15:54:32 erebus unix: NOTICE: zs0:ring buffer overflow 
+Jun  5 15:54:32 erebus unix: WARNING: zs0: message lost 
+Jun  5 15:54:32 erebus unix: NOTICE: zs0:ring buffer overflow 
+Jun  5 15:54:32 erebus unix: WARNING: zs0: message lost 
+Jun  5 15:54:32 erebus unix: WARNING: zs0: message lost 
+Jun  5 15:54:32 erebus unix: NOTICE: zs0:ring buffer overflow 
+Jun  5 15:54:32 erebus unix: NOTICE: zs0:ring buffer overflow 
+Jun  5 15:54:32 erebus unix: WARNING: zs0: message lost 
+Jun  5 15:54:32 erebus unix: NOTICE: zs0:ring buffer overflow 
+Jun  5 15:54:32 erebus unix: NOTICE: zs0:ring buffer overflow 
+Jun  5 15:54:32 erebus unix: WARNING: zs0: message lost 
+Jun  5 15:54:32 erebus unix: NOTICE: zs0:ring buffer overflow 
+Jun  5 15:54:32 erebus unix: WARNING: zs0: message lost 
+Jun  5 15:54:32 erebus unix: WARNING: zs0: message lost 
+Jun  5 15:54:32 erebus unix: NOTICE: zs0:ring buffer overflow 
+Jun  5 15:54:33 erebus unix: NOTICE: zs0:ring buffer overflow 
+Jun  5 15:54:33 erebus unix: WARNING: zs0: message lost 
+Jun  5 15:54:33 erebus unix: NOTICE: zs0:ring buffer overflow 
+Jun  5 15:54:33 erebus unix: WARNING: zs0: message lost 
+Jun  5 15:54:33 erebus unix: NOTICE: zs0:ring buffer overflow 
+Jun  5 15:54:33 erebus unix: WARNING: zs0: message lost 
+Jun  5 15:54:33 erebus unix: NOTICE: zs0:ring buffer overflow 
+Jun  5 15:54:33 erebus unix: WARNING: zs0: message lost 
+Jun  6 09:14:52 erebus unix:  SunOS Release 5.5.1 Version Generic [UNIX(R) System V Release 4.0]
+Jun  6 09:14:52 erebus unix: Copyright (c) 1983-1996, Sun Microsystems, Inc.
+Jun  6 09:14:52 erebus unix: mem = 40960K (0x2800000)
+Jun  6 09:14:52 erebus unix: avail mem = 37814272
+Jun  6 09:14:52 erebus unix: Ethernet address = 8:0:20:4:9:56
+Jun  6 09:14:52 erebus unix: root nexus = SUNW,Sun 4_25
+Jun  6 09:14:52 erebus unix: sbus0 at root: obio 0xf8000000
+Jun  6 09:14:52 erebus unix: dma0 at sbus0: SBus slot 0 0x400000
+Jun  6 09:14:52 erebus unix: esp0 at sbus0: SBus slot 0 0x800000 SBus level 3 sparc ipl 3
+Jun  6 09:14:52 erebus unix: sd0 at esp0: target 0 lun 0
+Jun  6 09:14:52 erebus unix: sd0 is /sbus@1,f8000000/esp@0,800000/sd@0,0
+Jun  6 09:14:52 erebus unix: 	<MAXTOR 120MB cyl 648 alt 2 hd 7 sec 43> 
+Jun  6 09:14:52 erebus unix: sd3 at esp0: target 3 lun 0
+Jun  6 09:14:52 erebus unix: sd3 is /sbus@1,f8000000/esp@0,800000/sd@3,0
+Jun  6 09:14:52 erebus unix: 	<Maxtor 7120S 120MB cyl 648 alt 2 hd 7 sec 43> 
+Jun  6 09:14:52 erebus unix: sd6 at esp0: target 6 lun 0
+Jun  6 09:14:52 erebus unix: sd6 is /sbus@1,f8000000/esp@0,800000/sd@6,0
+Jun  6 09:14:52 erebus unix: 	<CD-ROM Disc for SunOS Solaris_2.5.1 Installation    > 
+Jun  6 09:14:52 erebus unix: root on /sbus@1,f8000000/esp@0,800000/sd@3,0:a fstype ufs
+Jun  6 09:14:52 erebus unix: zs0 at root: obio 0xf1000000 sparc ipl 12
+Jun  6 09:14:52 erebus unix: zs0 is /zs@1,f1000000
+Jun  6 09:14:52 erebus unix: zs1 at root: obio 0xf0000000 sparc ipl 12
+Jun  6 09:14:52 erebus unix: zs1 is /zs@1,f0000000
+Jun  6 09:14:52 erebus unix: bwtwo0 at sbus0: SBus slot 3 0x0 SBus level 5 sparc ipl 7
+Jun  6 09:14:52 erebus unix: bwtwo0 is /sbus@1,f8000000/bwtwo@3,0
+Jun  6 09:14:56 erebus unix: bwtwo0: resolution 1152 x 900
+Jun  6 09:14:56 erebus unix: le0 at sbus0: SBus slot 0 0xc00000 SBus level 4 sparc ipl 5
+Jun  6 09:14:56 erebus unix: le0 is /sbus@1,f8000000/le@0,c00000
+Jun  6 09:14:56 erebus unix: dump on /swap1 size 20468K
+Jun  6 09:14:56 erebus unix: panic: zero
+Jun  6 09:14:56 erebus unix: syncing file systems...WARNING: zs0: message lost 
+Jun  6 09:14:56 erebus unix: WARNING: zs0: message lost 
+Jun  6 09:14:56 erebus last message repeated 16 times
+Jun  6 09:14:56 erebus unix:  done
+Jun  6 09:14:56 erebus unix:  1938 static and sysmap kernel pages
+Jun  6 09:14:56 erebus unix:    82 dynamic kernel data pages
+Jun  6 09:14:56 erebus unix:    60 kernel-pageable pages
+Jun  6 09:14:56 erebus unix:     0 segkmap kernel pages
+Jun  6 09:14:56 erebus unix:     0 segvn kernel pages
+Jun  6 09:14:56 erebus unix:     0 current user process pages
+Jun  6 09:14:56 erebus unix:  2080 total pages (2080 chunks)
+Jun  6 09:14:56 erebus unix: dumping to vp ff3a2e80, offset 24296
+Jun  6 09:14:56 erebus unix:  0 total pages, dump failed: error -1
+Jun  6 09:14:56 erebus unix: rebooting...
+Jun  6 09:14:59 erebus unix:  SunOS Release 5.5.1 Version Generic [UNIX(R) System V Release 4.0]
+Jun  6 09:14:59 erebus unix: Copyright (c) 1983-1996, Sun Microsystems, Inc.
+Jun  6 09:14:59 erebus unix: mem = 40960K (0x2800000)
+Jun  6 09:14:59 erebus unix: avail mem = 37822464
+Jun  6 09:14:59 erebus unix: Ethernet address = 8:0:20:4:9:56
+Jun  6 09:14:59 erebus unix: root nexus = SUNW,Sun 4_25
+Jun  6 09:14:59 erebus unix: sbus0 at root: obio 0xf8000000
+Jun  6 09:14:59 erebus unix: dma0 at sbus0: SBus slot 0 0x400000
+Jun  6 09:14:59 erebus unix: esp0 at sbus0: SBus slot 0 0x800000 SBus level 3 sparc ipl 3
+Jun  6 09:14:59 erebus unix: sd0 at esp0: target 0 lun 0
+Jun  6 09:14:59 erebus unix: sd0 is /sbus@1,f8000000/esp@0,800000/sd@0,0
+Jun  6 09:14:59 erebus unix: 	<MAXTOR 120MB cyl 648 alt 2 hd 7 sec 43> 
+Jun  6 09:14:59 erebus unix: sd3 at esp0: target 3 lun 0
+Jun  6 09:14:59 erebus unix: sd3 is /sbus@1,f8000000/esp@0,800000/sd@3,0
+Jun  6 09:14:59 erebus unix: 	<Maxtor 7120S 120MB cyl 648 alt 2 hd 7 sec 43> 
+Jun  6 09:14:59 erebus unix: sd6 at esp0: target 6 lun 0
+Jun  6 09:14:59 erebus unix: sd6 is /sbus@1,f8000000/esp@0,800000/sd@6,0
+Jun  6 09:14:59 erebus unix: 	<CD-ROM Disc for SunOS Solaris_2.5.1 Installation    > 
+Jun  6 09:14:59 erebus unix: root on /sbus@1,f8000000/esp@0,800000/sd@3,0:a fstype ufs
+Jun  6 09:14:59 erebus unix: zs0 at root: obio 0xf1000000 sparc ipl 12
+Jun  6 09:14:59 erebus unix: zs0 is /zs@1,f1000000
+Jun  6 09:14:59 erebus unix: zs1 at root: obio 0xf0000000 sparc ipl 12
+Jun  6 09:14:59 erebus unix: zs1 is /zs@1,f0000000
+Jun  6 09:14:59 erebus unix: bwtwo0 at sbus0: SBus slot 3 0x0 SBus level 5 sparc ipl 7
+Jun  6 09:14:59 erebus unix: bwtwo0 is /sbus@1,f8000000/bwtwo@3,0
+Jun  6 09:15:01 erebus unix: bwtwo0: resolution 1152 x 900
+Jun  6 09:15:01 erebus unix: le0 at sbus0: SBus slot 0 0xc00000 SBus level 4 sparc ipl 5
+Jun  6 09:15:01 erebus unix: le0 is /sbus@1,f8000000/le@0,c00000
+Jun  6 09:15:01 erebus unix: dump on /swap1 size 20468K
+Jun  6 09:15:01 erebus unix: panic: zero
+Jun  6 09:15:01 erebus unix: syncing file systems...WARNING: zs0: message lost 
+Jun  6 09:15:01 erebus unix: WARNING: zs0: message lost 
+Jun  6 09:15:01 erebus last message repeated 12 times
+Jun  6 09:15:01 erebus unix:  1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 done
+Jun  6 09:15:01 erebus unix:  2164 static and sysmap kernel pages
+Jun  6 09:15:01 erebus unix:    82 dynamic kernel data pages
+Jun  6 09:15:01 erebus unix:   344 kernel-pageable pages
+Jun  6 09:15:01 erebus unix:     0 segkmap kernel pages
+Jun  6 09:15:01 erebus unix:     0 segvn kernel pages
+Jun  6 09:15:01 erebus unix:     0 current user process pages
+Jun  6 09:15:01 erebus unix:  2590 total pages (2590 chunks)
+Jun  6 09:15:01 erebus unix: dumping to vp ff380960, offset 20216
+Jun  6 09:15:01 erebus unix:  0 total pages, dump failed: error -1
+Jun  6 09:15:01 erebus unix: rebooting...
+Jun  6 09:15:01 erebus unix:  SunOS Release 5.5.1 Version Generic [UNIX(R) System V Release 4.0]
+Jun  6 09:15:02 erebus unix: Copyright (c) 1983-1996, Sun Microsystems, Inc.
+Jun  6 09:15:02 erebus unix: mem = 40960K (0x2800000)
+Jun  6 09:15:02 erebus unix: avail mem = 37822464
+Jun  6 09:15:02 erebus unix: Ethernet address = 8:0:20:4:9:56
+Jun  6 09:15:02 erebus unix: root nexus = SUNW,Sun 4_25
+Jun  6 09:15:02 erebus unix: sbus0 at root: obio 0xf8000000
+Jun  6 09:15:02 erebus unix: dma0 at sbus0: SBus slot 0 0x400000
+Jun  6 09:15:02 erebus unix: esp0 at sbus0: SBus slot 0 0x800000 SBus level 3 sparc ipl 3
+Jun  6 09:15:02 erebus unix: sd0 at esp0: target 0 lun 0
+Jun  6 09:15:02 erebus unix: sd0 is /sbus@1,f8000000/esp@0,800000/sd@0,0
+Jun  6 09:15:02 erebus unix: 	<MAXTOR 120MB cyl 648 alt 2 hd 7 sec 43> 
+Jun  6 09:15:02 erebus unix: sd3 at esp0: target 3 lun 0
+Jun  6 09:15:02 erebus unix: sd3 is /sbus@1,f8000000/esp@0,800000/sd@3,0
+Jun  6 09:15:02 erebus unix: 	<Maxtor 7120S 120MB cyl 648 alt 2 hd 7 sec 43> 
+Jun  6 09:15:02 erebus unix: sd6 at esp0: target 6 lun 0
+Jun  6 09:15:02 erebus unix: sd6 is /sbus@1,f8000000/esp@0,800000/sd@6,0
+Jun  6 09:15:02 erebus unix: 	<CD-ROM Disc for SunOS Solaris_2.5.1 Installation    > 
+Jun  6 09:15:02 erebus unix: root on /sbus@1,f8000000/esp@0,800000/sd@3,0:a fstype ufs
+Jun  6 09:15:02 erebus unix: zs0 at root: obio 0xf1000000 sparc ipl 12
+Jun  6 09:15:02 erebus unix: zs0 is /zs@1,f1000000
+Jun  6 09:15:02 erebus unix: zs1 at root: obio 0xf0000000 sparc ipl 12
+Jun  6 09:15:02 erebus unix: zs1 is /zs@1,f0000000
+Jun  6 09:15:02 erebus unix: bwtwo0 at sbus0: SBus slot 3 0x0 SBus level 5 sparc ipl 7
+Jun  6 09:15:02 erebus unix: bwtwo0 is /sbus@1,f8000000/bwtwo@3,0
+Jun  6 09:15:02 erebus unix: bwtwo0: resolution 1152 x 900
+Jun  6 09:15:02 erebus unix: le0 at sbus0: SBus slot 0 0xc00000 SBus level 4 sparc ipl 5
+Jun  6 09:15:05 erebus unix: le0 is /sbus@1,f8000000/le@0,c00000
+Jun  6 09:15:05 erebus unix: dump on /swap1 size 20468K

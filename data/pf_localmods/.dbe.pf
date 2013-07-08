@@ -1,0 +1,184 @@
+
+dbrecenteqs1.0 &Arr{
+    edit	&Arr{
+        instrument	Edit_text  db_textedit -
+        stage	Edit_text  db_textedit -
+    	origin	&Tbl{
+    		Update tcsh -c "aeic_update_location -"
+    		Release tcsh -c "aeic_respond -"
+    		}
+    	event	&Tbl{
+    		Update tcsh -c "aeic_update_location -"
+    		Release tcsh -c "aeic_respond -"
+    		}
+    }
+    graphics &Arr{
+	webmaps &Tbl{
+		Image db_xvimage -
+		Url db_showurl -
+	}
+	mapstock Image db_xvimage -
+        fkgrid	"FK grid" dbshowfk -
+        instrument	Response  dberesp -
+        origin	Hypocenters dbmaporigins -
+        site	Stations  dbmapstations -
+        stage	Response  dberesp -
+        wfdisc	Waveforms trdisp -
+    }
+}
+iceworm1.3	&Arr{
+Ignore_fields		lddate commid wfid chanid endtime jdate grn srn depdp etype dtype mbid msid mlid
+# wfdisc			sta chan time calib instype segtype 
+graphics	&Arr{
+    wfdisc	Waveforms trdisp -
+    instrument  Response  dberesp -
+    stage       Response  dberesp -
+    origin	Hypocenters dbmaporigins -
+    site	Stations  dbmapstations -
+    fkgrid	"FK grid" dbshowfk -
+    }
+
+edit		&Arr{
+    instrument  Edit_text  db_textedit -
+    stage	Edit_text  db_textedit -
+    origin	&Tbl{
+    		Update tcsh -c "aeic_update_location -"
+    		Release tcsh -c "aeic_respond -"
+    		}
+    event	&Tbl{
+    		Update tcsh -c "aeic_update_location -"
+    		Release tcsh -c "aeic_respond -"
+    		}
+    }
+}
+
+
+iceworm1.2	&Arr{
+Ignore_fields		lddate commid wfid chanid endtime jdate grn srn depdp etype dtype mbid msid mlid
+# wfdisc			sta chan time calib instype segtype 
+graphics	&Arr{
+    wfdisc	Waveforms trdisp -
+    instrument  Response  dberesp -
+    stage       Response  dberesp -
+    origin	Hypocenters dbmaporigins -
+    site	Stations  dbmapstations -
+    fkgrid	"FK grid" dbshowfk -
+    }
+
+edit		&Arr{
+    instrument  Edit_text  db_textedit -
+    stage	Edit_text  db_textedit -
+    origin	&Tbl{
+    		Update tcsh -c "aeic_update_location -"
+    		Release tcsh -c "aeic_respond -"
+    		}
+    event	&Tbl{
+    		Update tcsh -c "aeic_update_location -"
+    		Release tcsh -c "aeic_respond -"
+    		}
+    }
+}
+
+css3.0		&Arr{
+Ignore_fields		lddate commid wfid chanid endtime jdate grn srn depdp etype dtype mbid msid mlid
+# wfdisc			sta chan time calib instype segtype 
+graphics	&Arr{
+    wfdisc	Waveforms trdisp -
+    instrument  Response  dberesp -
+    stage       Response  dberesp -
+    origin	Hypocenters dbmaporigins -
+    site	Stations  dbmapstations -
+    fkgrid	"FK grid" dbshowfk -
+    }
+
+edit		&Arr{
+    instrument  Edit_text  db_textedit -
+    stage	Edit_text  db_textedit -
+    origin	&Tbl{
+    		Update tcsh -c "aeic_update_location -"
+    		Release tcsh -c "aeic_respond -"
+    		}
+    event	&Tbl{
+    		Update tcsh -c "aeic_update_location -"
+    		Release tcsh -c "aeic_respond -"
+    		}
+    }
+
+}
+
+rt1.0		&Arr{
+Ignore_fields		lddate commid wfid chanid endtime jdate grn srn depdp etype dtype mbid msid mlid
+# wfdisc			sta chan time calib instype segtype 
+graphics	&Arr{
+    wfdisc	Waveforms trdisp -
+    instrument  Response  dberesp -
+    stage       Response  dberesp -
+    origin	Hypocenters dbmaporigins -
+    site	Stations  dbmapstations -
+    fkgrid	"FK grid" dbshowfk -
+    }
+
+edit		&Arr{
+    instrument  Edit_text  db_textedit -
+    stage	Edit_text  db_textedit -
+    origin	&Tbl{
+    		Update tcsh -c "aeic_update_location -"
+    		Release tcsh -c "aeic_respond -"
+    		}
+    event	&Tbl{
+    		Update tcsh -c "aeic_update_location -"
+    		Release tcsh -c "aeic_respond -"
+    		}
+    }
+}
+
+places1.0 	&Arr{
+Ignore_fields	lddate
+}
+
+places1.1 	&Arr{
+Ignore_fields	lddate
+}
+
+places1.2 	&Arr{
+Ignore_fields	lddate
+}
+
+track_processing1.0     &Arr{
+Ignore_fields           lddate endtime
+}
+
+active_color HotPink
+symbol_colors   &Tbl{
+    black
+    white
+    red
+    orange
+    yellow
+    green
+    blue
+    violet
+    }
+symbol_sizes &Tbl{
+    0.1
+    0.2
+    0.4
+    0.6
+    0.8
+    1.0
+    1.2
+    1.4
+    1.6
+    2.0
+    }
+postscript_sizes &Tbl{
+    6.5 x 9
+    4 x 4
+    2 x 2
+    9 x 6.5
+    9 x 12
+    12 x 9
+    }
+
+
+pf_revision_time 985931136

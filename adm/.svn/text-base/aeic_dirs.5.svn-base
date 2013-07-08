@@ -1,0 +1,253 @@
+.\" @(#)manpage_template        1.4 $Date: 2009-01-29 01:11:27 $
+.TH AEIC_DIRS 5 "$Date: 2009-01-29 01:11:27 $"
+.SH NAME
+aeic_dirs \- Directory structure for AEIC computer system
+.SH DESCRIPTION
+Real-time (and some off-line) processing software for AEIC system is pointed to by an
+automount table /opt/local/aeic. The Datascope/Antelope software is in /opt/antelope.
+
+/opt/local/aeic directory contains the subdirectories for different release versions. Each release contains following directories:
+.ft CW
+.in 2c
+.nf
+.ne 6
+
+	bin
+	data
+	include	
+	lib
+	man 
+	src
+	static  
+.fi
+.in
+.ft R
+
+There are four independent real-time processing systems the primary purpose of which is to produce real-time earthquake locations and magnitudes: op - Operational, bak - Backup, mig - Migration, and sum - Summary. Currently Operation system resides on earlybird computer, Backup on ice, Migration on energy, and Summary on kobuk. The primary purpose of sum system is to generate summary event database that contains automatic and reviewed event locaitons. Automatic event locations and magnitudes are supplied by either op and bak system through obxchange module. mig system is used for testing purposes. 
+The Backup and Migration systems have their own copies of the source code identical to the one
+in the Operation directory, with the bin and lib directories containing executables
+compiled to run from the Backup directory.   
+
+There is an automount table for each system:
+.ft CW
+.in 2c
+.nf
+.ne 5
+
+        /iwrun/op
+        /iwrun/bak
+        /iwrun/mig
+        /iwrun/sum
+
+.fi
+.in
+.ft R
+for the operation, backup, migration, and summary run directories. Each
+automount table has at least the following entries (some are Iceworm legacy):
+.ft CW
+.in 2c
+.nf
+.ne 8
+
+	archive_wf
+	db
+	log
+	params 
+	run
+	seg_wf
+	tank 
+
+.fi
+.in
+.ft R
+pointing to the disk partitions/directories for those respective inputs and outputs. run has been added with the incorporation of the Antelope system.
+
+It contains a number of subdirectories, including:
+.ft CW
+.in 2c
+.nf
+.ne 11
+
+        bin
+        db -> /iwrun/op/db/archive/
+        dbdiag -> /iwrun/op/db/diagnostic/
+        dbmaster -> /iwrun/op/params/Stations
+        dbseg -> /iwrun/op/db/seg/
+        logs
+        orb -> /export/orb/tank
+        pf -> /iwrun/op/params/
+        rtsys
+        state
+
+.fi
+.in
+.ft R
+using op as the example system to show the links.
+
+One of the goals here is to make sure the operating and backup systems
+have everything they need to run, even standalone. Also, they should be
+protected from incoming new software updates.
+
+The real-time databases are in:
+.ft CW
+.in 2c
+.nf
+.ne 8
+
+        /iwrun/{op,bak,mig}/db/archive/archive -> 
+                continous waveforms 
+.fi
+.in
+.ft R
+		
+and  
+
+.ft CW
+.in 2c
+.nf
+.ne 8
+        /iwrun/{op,bak,mig}/run/dbseg/quakes ->
+                earthquake parametric info
+.fi
+.in
+.ft R
+
+
+Currently these tables are set up to hold 7 days of earthquake parametric data and 2 days of waveform data. Real-time databases are segmented daily into daily database volumes. The waveforms are located in:
+.ft CW
+.in 2c
+.nf
+.ne 8
+       /iwrun/{op,bak}/db/archive/archive_YEAR_MO_DA
+
+.fi
+.in
+.ft R
+
+The earthquake parametric info is in:
+
+.ft CW
+.in 2c
+.nf
+.ne 8
+
+        /iwrun/{op,bak}/run/dbseg/Quakes_YEAR_MO_DA 
+.fi
+.in
+.ft R
+
+Summary system is organized a little different. Its run directory has additional partitions dbsum and dbsub. The former contains a summary database dbsum of automatic and reviewed event locations for the past 2 weeks and daily earthquake tables Quakes_YEAR_MO_DA. The latter contains various subset databases for client modules. 
+
+A number of other real-time processes run off the sumdb, such as ShakeMap, EOC, submissions to QDDS system, pipeline monitoring, etc.  ShakeMap resides on a separate computer (bedrock) and has home in /home/shake. It has its own run directory.   
+
+Separate systems provides support to the waveform data acquisition functions. It resides on computer fk in /home/bbanddat/run, on computer cdvaeic in/iwrun/acq/run, and on aeicpipe in /iwrun/acq/run.
+
+Routine earthquake data processing is organized by daily volumes. Each analyst has its own processing directory:
+.ft CW
+.in 2c
+.nf
+.ne 8
+
+        /home/YOU/process/YEAR_MO_DA/process_YEAR_MO_DA
+.fi
+.in
+.ft R
+
+Once processing of the day is completed, processed data is deposited into:
+.ft CW
+.in 2c
+.nf
+.ne 8
+
+        /Seis/processing/analyzed/YEAR_MO/analyzed_YEAR_MO_DA
+.fi
+.in
+.ft R
+
+and segmented waveforms are saved into:
+.ft CW
+.in 2c
+.nf
+.ne 8
+
+       /Seis/seg/wf
+.fi
+.in
+.ft R
+
+Within few days, the analyst-processed data is QC'ed and these tables are replaced with the QCed data. At this time focal mehcanisms for M>=3.5 and moment tensors for M>=4.0 are computed and fplane and moment tables are added to analyzed_YEAR_MO_DA database.
+
+Weekly and monthly earthquake reports and monthly catalogs are located in:
+
+.ft CW
+.in 2c
+.nf
+.ne 8
+        /Seis/reports/weekly/YEAR/week_YEAR_DA
+        /Seis/reports/monthly/YEAR_MO
+        /Seis/reports/catalogs/YEAR_MO
+.fi
+.in
+.ft R
+
+Static catalogs of earthquake parametric data are in /Seis/catalogs
+with subdirectories:
+.ft CW
+.in 2c
+.nf
+.ne 8
+
+        /aeic/YEAR_MO/aeic_YEAR_MO -> monthly volumes of final QCed, 
+                                     PDE-veryfied AEIC earthquake catalogs
+        /aeic/Total -> total AEIC earthquake database (no assoc and arrival tables, too big)
+        /aeic/Total/aeic_YEAR -> yearly volumes of AEIC earthquake catalogs
+        /pde -> PDE catalogs for past and current years
+        /cmt
+        /reb
+        /avo
+        /iceworm
+.fi
+.in
+.ft R
+
+The databases in these directories, sometimes stored in subdirectories,
+are prefaced by the source name, followed by the time coverage. Year-long
+databases have years with all four digits, i.e. YYYY, to avoid Y2K problems.
+Month subsets are in YYYY_MM. In some cases, Raw-format information is
+kept in subdirectories called Raw.
+
+Quasi-static, non-earthquake information such as site locations and
+parameters, (the site database), place names and locations, people
+to call for large earthquakes, people to call in making a felt-report
+list, etc. are in subdirectories of /Seis/databases. This is a dangerous
+name because it is so generic. However, it is also easy to find. It
+will not contain processing results, information about individual
+earthquakes, etc. Nor do we want it to become a landfill. The current
+contents are
+.ft CW
+.in 2c
+.nf
+
+        dbbuild/
+        dbcentral/
+        duty/
+        notify/
+        places/
+        regions/
+        station_name_translations/
+        stations/
+        wfrecords/
+
+.fi
+.in
+.ft R
+Run dbcentral to see some of the above mentioned databases.
+.SH "SEE ALSO"
+.nf
+dbcentral, aeic_datascope(1)
+.fi
+.SH "BUGS AND CAVEATS"
+The system is more complex then what is laid out in this document. Pick Mitch's brains for more detailed info.
+.SH AUTHOR
+Original by Kent Lindquist and Mitch Robinson. 
+Last updated by N. Ruppert, January 2009.

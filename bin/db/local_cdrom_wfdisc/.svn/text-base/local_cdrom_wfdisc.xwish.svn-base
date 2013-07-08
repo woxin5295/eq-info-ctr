@@ -1,0 +1,99 @@
+# Copy cdrom wfdisc to current directory from CDROM, changing dir path
+# so it refers to CDROM waveform locations and adding a descriptor 
+# to the rest of the CDROM tables. 
+#
+# Probably needs an option for wfdisc subsetting
+#
+# Kent Lindquist
+# Geophysical Institute
+# University of Alaska
+# 9/97
+ 
+lappend auto_path $env(ANTELOPE)/data/tcl/library
+
+set Program $argv0
+
+proc bracket_dbname { dbname } {
+ 
+        regsub {[^/][a-zA-Z0-9-_]*$} $dbname {{&}} bracketed
+ 
+        if { ! [regexp {^/} $bracketed] } { set bracketed "./$bracketed" }
+ 
+        return $bracketed
+}
+
+proc run {} {
+	global local_target_db cdrom_path cdrom_db subset bracketed_sitedb
+
+	set descriptor "css3.0\n./\{$local_target_db\}"
+	if { $bracketed_sitedb != "" } {
+		set descriptor "$descriptor:$bracketed_sitedb"
+	}
+	set descriptor "$descriptor:$cdrom_path/\{$cdrom_db\}"
+	
+	if { $subset == "" } {
+		exec cp $cdrom_path/$cdrom_db.wfdisc $local_target_db.wfdisc
+	} else {
+		echo subset is $subset
+		set cmd "dbsubset $cdrom_path/$cdrom_db.wfdisc '$subset' | dbselect - > $local_target_db.wfdisc"
+		exec tcsh -c $cmd
+	}
+	exec dbset $local_target_db.wfdisc dir '*' patsub(dir,"./","$cdrom_path/")
+
+	if { [file exists $cdrom_path/$cdrom_db.instrument] } {
+		exec cp $cdrom_path/$cdrom_db.instrument $local_target_db.instrument
+		exec dbset $local_target_db.instrument dir '*' patsub(dir,"./","$cdrom_path/")
+	}
+
+	exec echo $descriptor | cat > $local_target_db
+}
+
+proc choose_cdrom {} {
+	global Program cdrom_path cdrom_db
+
+	set types {
+		{{Wfdisc Files} {.wfdisc} }
+		{{All Files}    *         }
+	}
+	set chosen [tk_getOpenFile -initialdir /cdrom \
+				   -title "$Program: Select cdrom" \
+				   -filetypes $types] 
+	if {$chosen == "" } {
+		exit
+	}
+
+	set cdrom_path [exec dirname $chosen]
+	set cdrom_db [exec sh -c "basename $chosen | sed -e 's/.wfdisc//'"]
+
+}
+
+proc choose_target {} {
+	global cdrom_db local_target_db subset
+
+	set local_target_db $cdrom_db
+
+	LblEntry .sub -label "Database Subsetting Expression:" \
+		-textvariable subset
+	pack .sub -fill x -side top
+
+	LblEntry .le -label "Target Database Name:" \
+		-textvariable local_target_db
+	pack .le -fill x -side top
+
+	frame .buttons 
+	pack .buttons -fill x -side top
+	button .buttons.cancel -text Cancel -command {destroy .}
+	button .buttons.ok -text OK -command {run; exit}
+	pack .buttons.cancel -side left
+	pack .buttons.ok -side left
+	wm deiconify .
+}
+
+if { $argc == 1 && [lindex $argv 0] == "-sd" && [info exists env(SITE_DB)] } {
+	set bracketed_sitedb [bracket_dbname $env(SITE_DB)]
+} else {
+	set bracketed_sitedb ""
+}
+wm iconify .
+choose_cdrom
+choose_target

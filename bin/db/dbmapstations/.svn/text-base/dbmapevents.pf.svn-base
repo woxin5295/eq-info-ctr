@@ -1,0 +1,29 @@
+center 62.4:-150.3
+range 5
+istaplt 1
+istnam 1
+ipdeplt 0
+ipdepth 0
+iporid 0
+icities 1
+ipipe 1
+iblue 0
+ipmag 0
+idcirc 0
+ititl 1
+iflt 1
+ipumps 0
+icol 1
+itran 0
+title Seismic Stations
+label_files  &Tbl{
+country
+faults
+oceans
+pipeline
+volcanoes
+}
+boilerplate_files  &Tbl{
+aeic
+aeic_vol
+}

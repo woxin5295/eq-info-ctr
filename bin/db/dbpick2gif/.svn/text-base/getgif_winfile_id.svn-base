@@ -1,0 +1,3 @@
+#! /usr/bin/tcsh
+
+sdtimage -f -snapshot -window `cat $argv[1]` -out ${argv[2]} -outType gif

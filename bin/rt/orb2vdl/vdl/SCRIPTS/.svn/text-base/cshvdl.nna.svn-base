@@ -1,0 +1,5 @@
+cd /usr/nrts/neic/vdl
+vdlmom
+Mail -s "page ketchum" pagemail@nsn4.cr.usgs.gov </usr/nrts/neic/vdl/vdl.mail
+Mail -s "Gldfs::vdlmom down" ketchum@gldfs.cr.usgs.gov </usr/nrts/neic/vdl/vdl.mail
+echo "Mail sent to GLDFS."

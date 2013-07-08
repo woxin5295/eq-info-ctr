@@ -1,0 +1,32 @@
+# Sample makefile for nrts_tap based client
+
+CC     = cc 
+BIN    = orb2vdl
+INCDIR = $(ANTELOPE)/include
+INCDIR2 =  ../STEIM123
+BINDIR = ../bin/$(PLATFORM)
+LIBDIR = ../vdl
+OPTMIZ = -O
+INCS   = -I$(INCDIR) -I$(INCDIR2)
+OSNAME = SOLARIS
+OSNAME2 = SOLARIS2
+cflags = $(OPTMIZ) $(INCS) -L$(dLIBDIR) -D$(OSNAME) -D$(OSNAME2) 
+# -DDEBUG_PRINT 
+#cflags = $(OPTMIZ) $(INCS) -L$(LIBDIR) -D$(OSNAME) -D$(OSNAME2) -ansi
+# Mitch Robinson 3-6-2002
+#ldlibs = -lpkt -lorb $(TRLIBS) $(SVR4LIBS)
+ldlibs = -lPkt -lorb $(TRLIBS) $(SVR4LIBS)
+
+
+OBJS = vdl.o vdltrg.o vdlput.o vdlqsub.o ifft512.o ifft1024.o ifft256.o \
+	fftlib.o cmprs.o vdlfilt.o filt5.o filtheli.o filt2.o filt10.o datetime.o\
+	feedme_orb.o feedme_test_null.o vdltcp_nopass.o vdlmath.o
+
+include $(ANTELOPEMAKE)
+include SCRIPTS/makefile.modules
+
+#*
+#*	VDL From an ORBSERVER
+#*
+$(BIN) : $(OBJS) 
+	$(CC) $(CFLAGS) $(OBJS) -o $(BIN) $(LDFLAGS) $(LDLIBS) 

@@ -1,0 +1,1 @@
+nohup csh /export/home/decipc/ketchum/vdl/cshvdl >/export/home/decipc/ketchum/vdl/vdl.log &

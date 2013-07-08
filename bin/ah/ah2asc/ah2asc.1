@@ -1,0 +1,18 @@
+.TH AH2ASC 1 "$Date: 2002-02-07 01:56:23 $"
+.SH NAME
+ah2asc \- Dump an Alaskan (non-XDR) AH file in ASCII format
+.SH SYNOPSIS
+.nf
+\fBah2asc \fP[-n] [-s] [-t] \fIah_file\fP
+.fi
+.SH DESCRIPTION
+\fBah2asc\fP dumps a non-XDR format AH file of waveform data in ASCII text format.
+.SH OPTIONS
+-n skips trace-data listing
+
+-s also skips calibration listing
+
+-t also skips cal but lists one data value per buffer.
+.SH AUTHOR
+Unknown. Added to source-code distribution by Kent Lindquist
+.\" $Id: ah2asc.1,v 1.2 2002-02-07 01:56:23 kent Exp $

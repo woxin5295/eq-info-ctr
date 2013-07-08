@@ -1,0 +1,9 @@
+shakemap_url	http://www.aeic.alaska.edu/~shake/shake
+cat_url		/usr/local/aeic/5.2-64/bin/cat_url
+html_tmpfile	/tmp/shakemap_archive.html
+#user		shake
+#pass		shake
+#prompt		Enter username and password for "ShakeMap" at http://www.aeic.alaska.edu/~shake/shake
+shakemapdir	/net/inverse/export/inverse/fema/run_eocmirror/cache/shakemaps
+
+pf_revision_time 1195596401

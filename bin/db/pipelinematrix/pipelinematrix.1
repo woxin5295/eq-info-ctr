@@ -1,0 +1,135 @@
+.TH PIPELINEMATRIX 1 "$Date: 2008-09-02 21:26:16 $"
+.SH NAME
+pipelinematrix \- Pipelinematrix monitors datalogger status packet, orbtm threshold db packets, and
+	user defined message packets. Data latency, clock latency, and sensor voltage is monitored from
+	the datalogger status packets. Low, medium, and high thresholds values are set from the threshold
+	orbtm db packets. Matrix bits can be set with user defined messages. A parameter file is used 
+	to configure pipelinematrix program. The program updates the Antelope a_dlinfo and a_matrix database
+	tables contained in the pipelinetag1.0 schema. The mysql occ_display matrix table is also updated. 
+
+	 
+	  
+.SH SYNOPSIS
+pipelinematrix [-pf parameter_file] [-S state_file] [-debug] 
+.LP
+.LP
+.nf
+-pf parameter_file ,specify parameter file 
+-S state_file ,use state file to keep track of current orb location
+-debug ,turn on debugging
+.fi
+.ft CW
+.RS .2i
+.RE
+.ft R
+.nf
+.fi
+.SS "Example User Defined Messages"
+.nf
+Message to activate bit conditions -
+orblog -s pipelinemsg aeicpipe:6510 "Maintain ALL on"
+orblog -s pipelinemsg aeicpipe:6510 "Maintain PS11 on"
+orblog -s pipelinemsg aeicpipe:6510 "Test PS11 on"
+orblog -s pipelinemsg aeicpipe:6510 "Fault PS11 on"
+
+Message to de-activate bit conditions -
+orblog -s pipelinemsg aeicpipe:6510 "Maintain ALL off"
+orblog -s pipelinemsg aeicpipe:6510 "Maintain PS11 off"
+orblog -s pipelinemsg aeicpipe:6510 "Fault PS11 off"
+
+Send Heartbeat, this will force dump of antelope and mysql matrix tables -
+orblog -s pipelinemsg aeicpipe:6510 "Heartbeat"
+
+Send Cleanup, this will cause cleanup of a_dlinfo table-
+orblog -s pipelinemsg aeicpipe:6510 "Cleanup"
+
+
+.fi
+.SS "Example Parameter File"
+.nf
+orbname aeicpipe:6510 	# orb to monitor	
+match /db/tm|taps/pf/st|aeicpipe/ch/pipelinemsg	# packets to match from orb
+dlsrcname taps/pf/st	# source name of datalogger status packets 
+tmsrcname /db/tm	# source name of thresholds packets
+msgsrcname aeicpipe/ch/pipelinemsg # source name of message packets 
+outpffile /tmp/dbpipetag.pf	# storage of retrieved orb pf packet
+dlttime 20 # time period in seconds required to trigger data latency flag, default 5 seconds
+clttime 172800 # time period in seconds required to trigger clock latency flag, default 2 days
+low_dv 10.0 # mininum sensor low voltage condition, default 10 volts
+
+low_cutoff_time 60    # time period until low threshold is turned off, default 60 seconds
+		      # set to 0 seconds and cutoff time is set in orbtm thresholds packets only  
+
+medium_cutoff_time 90 # time period until medium threshold is turned off, default 90 seconds  
+		      # set to 0 seconds and cutoff time is set in orbtm thresholds packets only  
+
+high_cutoff_time 120  # time period until high threshold is turned off, default 120 seconds
+		      # set to 0 seconds and cutoff time is set orbtm thresholds packets only 
+ 
+
+clean_time_period 1209600 # two weeks, time period to remove from database 
+			  # when a Clean Message is sent, also ignore packets with older time 
+			  # period, clean_time_period 0 is default implies do not clean
+
+# database to store matrix information
+dbname /iwrun/acq/run/dbmatrix/pipedb
+
+# pipeevent program additional pf information 
+eventdb /iwrun/acq/run/dbevent/dbpipeline # database used to store pipeline events
+eventtimeout 300 # time period to keep event bit active
+watchdog_sec 5 # period of watchdog updates, default 5 seconds
+no_alarm_state_off 0 # use alarm state off from tm packet
+		     # if 1 do not use alarm state off from tm orb packet 
+# mysql information 
+mysql_hosts localhost
+mysql_user pipe
+mysql_pass ++++++++++
+mysql_database pipeline
+
+
+# debugging settings
+debug 0 # debugging print statements off
+orboldest 0 # used for debugging if 1 get oldest orb packets first
+	  # if 0 get newest orb packet or packet pointed to by state file -S option
+#outdbfile /tmp/dbpipetag.db	# storage of retrieved orb db packets
+
+# sta_list
+sta_list &Arr{ 
+	PS01 &Arr{ 
+		tagid 1
+	}
+	PS04 &Arr{ 
+		tagid 4
+	}
+	PS05 &Arr{ 
+		tagid 5
+	}
+	PS06 &Arr{ 
+		tagid 6
+	}
+	PS07 &Arr{ 
+		tagid 7
+	}
+	PS08 &Arr{ 
+		tagid 8
+	}
+	PS09 &Arr{ 
+		tagid 9
+	}
+	PS10 &Arr{ 
+		tagid 10
+	}
+	PS11 &Arr{ 
+		tagid 11
+	}
+	PS12 &Arr{ 
+		tagid 12
+	}
+	VMT &Arr{ 
+		tagid 13
+	}
+}
+.fi
+
+.SH AUTHOR
+Mitch Robinson Mon Mar 31 16:29:30 AKDT 2008.

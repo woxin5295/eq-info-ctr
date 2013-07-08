@@ -1,0 +1,24 @@
+'\" te
+.TH WATCH_DLCALWF 1 "$Date: 2008-11-07 00:45:31 $"
+.SH NAME
+watch_dlcalwf \- watch for new rows in dlcalwf, and call dbcalibrateWrapper and displayscal_aeic
+.SH SYNOPSIS
+.nf
+watch_dlcalwf dbin dbtemp
+.fi
+.SH DESCRIPTION
+\fBwatch_dlcalwf\fP watches a dlcalwf table, and when a new row is created, 
+it tries to find the first matching calibration sequence for that station, channel and duration.
+It then calls dbcalibrateWrapper, which compares those two calibration sequences. 
+Finally it calls displayscal_aeic to produce a postscript file, which is converted to PDF.
+The internal webpage link "station autocalibrations" is an interface to these PDF files.
+.SH COMMAND LINE ARGUMENTS
+.IP DBIN
+	The input database, which must containing a dlcalwf table.
+.IP DBTEMP
+	The temporary database, which will be created prior to dbcalibrate being called, and removed afterwards.
+.SH SEE ALSO
+	DBCALIBRATE, DISPLAYSCAL, DBCALIBRATEWRAPPER, DISPLAYSCAL_AEIC, STATIONCALIBRATE, DLCMD, Q3302ORB
+.SH AUTHOR
+Glenn Thompson (glenn@giseis.alaska.edu)
+.\" $Id: watch_dlcalwf.1,v 1.1.1.1 2008-11-07 00:45:31 glenn Exp $

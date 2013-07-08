@@ -1,0 +1,201 @@
+# Discriminator change script for Iceworm
+# 
+# K. Lindquist
+# December, 1998
+# Geophysical Institute
+# University of Alaska, Fairbanks
+
+package require Tclx
+
+lappend auto_path $env(ANTELOPE)/data/tcl/library
+
+proc submit {} {
+	global Sta Chan Discno 
+	global Databases Database_status Dbptrs
+
+
+	if { $Database_status == "unchecked" } {
+		check_databases
+		open_databases
+	} 
+
+	if { [regexp {^ *$} $Sta] } { set Sta "-" }
+	if { [regexp {^ *$} $Chan] } { set Chan "-" }
+	if { $Sta == "NULL" } { set Sta "-" }
+	if { $Chan == "NULL" } { set Chan "-" }
+
+	if { [regexp {[a-z]} $Sta] } {
+		tkdialog .badcase "Lowercase problem" \
+			"Station $Sta shouldn't be lowercase\n" Ok
+		return
+	}
+
+	if { [regexp {[a-z]} $Chan] } {
+		tkdialog .badcase "Lowercase problem" \
+			"Channel $Chan shouldn't be lowercase\n" Ok
+		return
+	}
+
+	if { $Discno < 0 } {
+		tkdialog .badno Warning "discriminator number must be > 0" ok
+		return
+	}
+
+	start_report
+
+	foreach dbname $Databases {
+
+		append_report "\nDatabase $dbname:\n\n"
+
+		clear_old_discnos $dbname $Sta $Chan
+
+		set db $Dbptrs($dbname)
+		set dbscratch [dblookup $db 0 0 0 dbSCRATCH]
+		dbputv $db 0 dbSCRATCH discno $Discno
+		set recno [dbmatches $dbscratch $db discnohook discno]
+
+		if { $recno < 0 } { 
+			append_report \
+				"\tdiscriminator $Discno not found, skipping\n"
+			continue
+		}
+
+		set oldsta [dbgetv $db 0 $recno sta]
+		set oldchan [dbgetv $db 0 $recno chan]
+
+		if { $oldsta == "-" } { set oldsta "<NULL>" }
+		if { $oldchan == "-" } { set oldchan "<NULL>" }
+
+		dbputv $db 0 $recno sta $Sta chan $Chan
+
+		append_report "\tdiscriminator $Discno was $oldsta:$oldchan\n"
+
+		append_report "\tdiscriminator $Discno is now $Sta:$Chan\n"
+		
+	}
+
+	issue_report
+}
+
+proc clear_old_discnos { dbname sta chan } {
+	global Dbptrs
+
+	set db $Dbptrs($dbname)
+	set dbscratch [dblookup $db 0 0 0 dbSCRATCH]
+
+	dbputv $db 0 dbSCRATCH sta $sta chan $chan
+
+	set rows [dbmatches $dbscratch $db stachanhook sta chan]
+	foreach recno $rows {
+		set old_discno [dbgetv $db 0 $recno discno]
+		append_report \
+		"\tclearing $sta:$chan from discriminator $old_discno\n"
+		dbputv $db 0 $recno sta "-" chan "-"
+	}
+}
+
+proc start_report {} {
+	global Report Report_width
+
+	set Report "Results of discriminator change:\n\n"
+	set Report_width [clength $Report]
+}
+
+proc append_report { rpt } {
+	global Report Report_width
+
+	append Report $rpt
+	set Report_width [max $Report_width [clength $rpt]]
+}
+
+proc issue_report {} {
+	global Report Report_width
+
+	set r [unique_window .]
+	toplevel $r
+	wm title $r "Database change report"
+	append Report_width c
+	message $r.msg -text $Report -width $Report_width
+	pack $r.msg -side top -fill x
+	button $r.dismiss -text Dismiss -command "focus .;destroy $r"
+	pack $r.dismiss
+	focus $r
+}
+
+proc init_globals {} {
+	global Pfname 
+	set Pfname aeic_rtsys
+
+	pfgetarr processing_systems %$Pfname#processing_systems
+	set systems [array names processing_systems]
+
+	global Databases
+	foreach system $systems {
+		pfgetarr myarr %${Pfname}#processing_systems#$system
+		lappend Databases $myarr(site_database)
+	}
+
+	global Database_status
+	set Database_status unchecked
+
+	global Report 
+	set Report ""
+
+	global Report_width
+	set Report_width 0
+}
+
+proc check_databases {} {
+	global Databases Database_status
+
+	foreach db $Databases {
+		set ewanalog_table "$db.ewanalog"
+		set yes [file exists $ewanalog_table]
+		if { ! $yes } {
+			tkdialog .die Error \
+				"Fatal error: Database table $ewanalog_table, \
+specified in aeic_rtsys.pf, doesnt exist" Ok
+			exit 1
+		}
+		set yes [file writable $ewanalog_table]
+		if { ! $yes } {
+			tkdialog .die Error \
+				"Fatal error: Database table $ewanalog_table, \
+specified in aeic_rtsys.pf, exists but is not writable by you" Ok
+			exit 1
+		}
+	}
+
+	set Database_status "ok"
+}
+
+proc open_databases {} {
+	global Databases
+	global Dbptrs 
+
+	foreach dbname $Databases {
+		set db [dbopen_table $dbname.ewanalog r+]
+		set Dbptrs($dbname) $db
+	}
+}
+
+proc init_windows {} {
+	global Sta Chan Discno
+
+	LblEntry .discno -label "Discriminator number" -textvariable Discno
+	LblEntry .sta -label "New station" -textvariable Sta
+	LblEntry .chan -label "New channel" -textvariable Chan
+
+	button .submit -text "Submit" -command submit
+	button .quit -text "Quit" -bg red -command {destroy .}
+	
+	pack .discno -side top -fill x
+	pack .sta -side top -fill x
+	pack .chan -side top -fill x
+	pack .submit -side top -fill x
+	pack .quit -side top -fill x
+}
+
+init_globals
+
+init_windows

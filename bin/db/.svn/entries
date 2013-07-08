@@ -1,0 +1,221 @@
+10
+
+dir
+8
+svn+ssh://svnaeic@deep.giseis.alaska.edu/usr/local/aeic/5.2-64SRCrep/bin/db
+svn+ssh://svnaeic@deep.giseis.alaska.edu/usr/local/aeic/5.2-64SRCrep
+
+
+
+2012-08-06T22:30:36.407503Z
+5
+svnaeic
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+bb126f95-807d-4900-834b-9c3c7183fc7c
+
+db2hypodd
+dir
+
+dbtmwfextractor
+dir
+
+hypodd2db
+dir
+
+fktools
+dir
+
+db2qdds
+dir
+
+dlcmd_wrapper
+dir
+
+dbscreen
+dir
+
+db2evt
+dir
+
+mapset
+dir
+
+db2ewpg
+dir
+
+aeic_dbevents
+dir
+
+dbcalibrateWrapper
+dir
+
+smartpick
+dir
+
+aeic_dbconcat_event
+dir
+
+dbsubset2orb
+dir
+
+aeic_dbaddema
+dir
+
+create_event_pairs
+dir
+
+aeic_db2monthly
+dir
+
+db2dbsubset
+dir
+
+dbpick2gif
+dir
+
+aeic_dberrchk
+dir
+
+netmag2eventtable
+dir
+
+dbshowfk
+dir
+
+create_ccfile
+dir
+
+aeic_db2weekly
+dir
+
+netmagselect
+dir
+
+db2kml
+dir
+
+Makefile
+file
+
+
+
+
+2012-10-01T22:05:21.000000Z
+41f768a728f596857596fc0d4effa5ae
+2012-08-02T19:50:54.989993Z
+1
+svnaeic
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+20
+
+dbicepick
+dir
+
+aeic_smartpick
+dir
+
+dbrecenteqs_aeic
+dir
+
+pick_counts
+dir
+
+shakemysqlversionextract
+dir
+
+aeic_db2catalog
+dir
+
+ak_dbmapevents
+dir
+
+dbcorrelate
+dir
+
+aeic_dbap
+dir
+
+db2ewpg_wrapper
+dir
+
+pipelinematrix
+dir
+
+dbevents_aeic
+dir
+
+aeic_dbchecker
+dir
+
+monitordlinfotable
+dir
+
+aeic_dbml
+dir
+
+db2catalog
+dir
+
+dbstats
+dir
+
+dbmapstations
+dir
+
+aeic_dbclean
+dir
+
+beampat
+dir
+
+tkedit_ml
+dir
+
+aeic_dbplotcov
+dir
+
+local_cdrom_wfdisc
+dir
+
+dbmaporigins
+dir
+
+dbfpfit
+dir
+
+pipelinedb2xml
+dir
+

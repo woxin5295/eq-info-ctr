@@ -1,0 +1,65 @@
+# 
+#	Master makefile for all VDL related sites.  Each site will have a 
+#	separate makefile in SCRIPTS/makefile.?????.  This will contain the
+#	site specific definitions of CC or for source/dependancies.  This 
+#	makefile just dispatches the correct makefile for all images related
+#	to vdl for a site (like vdlmom or vdlpass).  The file 
+#	SCRIPTS/makefile.modules contains common depenencies (source/headers) and
+#	relates like how to link a vdlmom or vdlpass.
+#
+#	D.C. Ketchum Dec 1998
+#
+
+vdlasl: datetime.h
+	make vdlasl vdlmom -f SCRIPTS/makefile.asl
+
+vdlgtsn: datetime.h
+	make vdlgtsn vdlmom -f SCRIPTS/makefile.aslgtsn
+
+vdlucb: datetime.h
+	make vdlucb vdlmom -f SCRIPTS/makefile.ucb
+
+vdlnev: datetime.h
+	make vdlnev vdlmom vdlpass -f SCRIPTS/makefile.nev
+
+vdlnevtcp: datetime.h
+	make vdlnevtcp vdlmom -f SCRIPTS/makefile.nevtcp
+
+vdlew: datetime.h
+	make vdlew -f SCRIPTS/makefile.solew
+
+orb2vdl: datetime.h
+	/usr/ccs/bin/make orb2vdl -f SCRIPTS/makefile.orb
+
+vdlorbcc: datetime.h
+	/usr/ccs/bin/make vdlorb -f SCRIPTS/makefile.orbcc
+
+vdlidatap: datetime.h
+	make vdlidatap vdlmom -f SCRIPTS/makefile.idatap
+vdlidatapcc: datetime.h
+	make vdlidatap vdlmom -f SCRIPTS/makefile.idatapcc
+vdlidatap_intel: datetime.h
+	make vdlidatap_intel vdlmom -f SCRIPTS/makefile.idatap_intel
+#
+#	This causes the datetime.h to be built.  It will be compiled inside
+#	the program specific files
+#
+datetime.h:
+	./makedate
+
+makedate.o: makedate.c
+
+makedategcc: 
+	gcc makedate.c -c
+	gcc makedate.o -o makedate
+
+makedate: makedate.o
+	$(CC) $(CFLAGS) makedate.o -o makedate
+
+#
+#	Misc test stuff
+#
+tstunavco: tstunavco.o safetcp.o
+	$(CC) tstunavco.o safetcp.o -o tstunavco -lm -lnsl -lsocket
+tstunavco.o : tstunavco.c safetcp.h
+	$(CC) tstunavco.c -c

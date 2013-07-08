@@ -1,0 +1,13 @@
+alias sit 'telnet 192.168.7.230'
+
+# set up the earthworm environment
+alias   cdp  'cd /home/earthworm/run/params'
+alias   cdg  'cd /home/earthworm/run/log'
+alias   cdpm 'cd /home/earthworm/run_memphis/params'
+alias   cdgm 'cd /home/earthworm/run_memphis/log'
+alias   cdpu 'cd /home/earthworm/run_utah/params'
+alias   cdgu 'cd /home/earthworm/run_utah/log'
+alias   cds  'cd /home/earthworm/working/src'
+alias   cdb  'cd /home/earthworm/working/bin'
+alias   cdi  'cd /home/earthworm/working/include'
+alias   cdl  'cd /home/earthworm/working/lib'

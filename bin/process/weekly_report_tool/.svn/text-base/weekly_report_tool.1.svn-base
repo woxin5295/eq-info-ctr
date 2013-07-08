@@ -1,0 +1,63 @@
+.TH WEEKLY_REPORT_TOOL "$Date: 2006-03-08 22:25:08 $"
+.SH NAME
+\fBweekly_report_tool\fR \-  Graphical driver used to produce an AEIC weekly report. 
+.SH SYNOPSIS
+weekly_report_tool &
+.LP
+.SH DESCRIPTION
+\fBweekly_report_tool\fR is a graphical-user-interface driver for db2weekly.
+It is intended to assist in the production of an AEIC weekly report.
+
+The graphical interface contains 3 dialog boxes and 14 colored buttons. The dialog boxes allow
+the user to enter a start time, end time and minimum magnitude. The buttons are described in descending order.
+
+Button 1, green, runs the program aeic_dbconcat_events on the range of daily databases specified by the start and end times. The location of these databases should be specified in the parameter file.
+
+Button 2, green, allows the user to view the concatenated database with dbe.
+
+Button 3, pink, runs db2weekly on concatenated database. The minimum magnitude must be given.
+
+Button 4, pink, allows user to create weekly_highlights PDF document. 
+
+Button 5, white, allows user to print seismicity maps on printer specified in the parameter file.
+
+Button 6, light blue, updates AEIC website with highlights, listing and maps. 
+
+Button 7, light blue, updates the weeks table of the AEIC tracking database.  
+
+Button 8, orange, runs dbstats on concatenated database. 
+
+Button 9, orange, shows user dbstats output. 
+
+Button 10, orange, allows user the option of printing dbstats output on the printer given in the parameter file. 
+
+Button 11, red, quits weekly_report_tool. 
+
+.SH OPTIONS
+.SH FILES
+See db2weekly and dbstats for descrition of the output files.
+.SH ENVIRONMENT
+weekly_report_tool expects the ANTELOPE environment variable to be set correctly.
+.SH PARAMETER FILE
+weekly_report_tool expects the parameter file weekly_report_tool.pf.
+An example parameter file can be found at $ANTELOPE/data/pf/weekly_report_tool.pf.
+
+
+.SH EXAMPLE
+tele% weekly_report_tool &
+.fi
+.ft CW
+.RS .2i
+.RE
+.ft R
+.SH RETURN VALUES
+.SH LIBRARY
+.SH DIAGNOSTICS
+.SH "SEE ALSO"
+aeic_dbconcat_events, dbe, dberrchk, dbstats, updateweb, weekly2db 
+.nf
+.fi
+.SH "BUGS AND CAVEATS"
+Button 1 would not work if an output database for aeic_dbconcat_event already exist in a working directory. If this is the case, all database tables should be removed prior to running aeic_dbconcat_event.
+.SH AUTHOR
+Original by Dan McNamara.  Last updated G.Thompson, 10/2012.

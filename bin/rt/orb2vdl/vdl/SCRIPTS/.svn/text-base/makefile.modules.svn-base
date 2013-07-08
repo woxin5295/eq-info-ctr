@@ -1,0 +1,74 @@
+vdl.o: vdl.c vdl.h vdlgbl.h cmprs.h ifft.h vdlqsub.h vdlfilt.h 
+
+vdltrg.o: vdltrg.c vdl.h vdlgbl.h cmprs.h ifft.h vdlqsub.h
+
+vdlput.o: vdlput.c vdl.h vdlgbl.h cmprs.h ifft.h vdlqsub.h
+
+vdlqsub.o: vdlqsub.c vdl.h vdlqsub.h vdlgbl.h
+
+vdltcp.o: vdltcp.c vdlgbl.h vdl.h
+
+vdltcp_nopass.o: vdltcp_nopass.c vdlgbl.h vdl.h
+
+feedme_test_null.o: feedme_test_null.c vdl.h 
+
+feedme.o: feedme.c vdl.h datasock_codes.h $(INCDIR)/qlib.h
+
+feedme_gtsn.o: feedme_gtsn.c vdl.h datasock_codes.h $(INCDIR)/qlib.h
+
+feedme_orb.o: feedme_orb.c vdl.h $(INCDIR)/db.h $(INCDIR)/Pkt.h $(INCDIR)/orb.h
+
+ifft256.o: ifft256.c ifft.h
+
+ifft512.o: ifft512.c ifft.h
+
+ifft1024.o: ifft1024.c ifft.h
+
+fftlib.o: fftlib.c ifft.h
+
+vdlmath.o: vdlmath.c
+
+cmprs.o: cmprs.c cmprs.h
+
+vdlfilt.o: vdlfilt.c vdlfilt.h
+
+filt2.o: filt2.c
+
+filt10.o: filt10.c
+
+filt5.o: filt5.c
+
+filtheli.o: filtheli.c
+
+#
+# VDLMOM - Make VDLMOM using callers parameters
+#
+vdlmom: vdlmom.o
+	$(CC) $(CFLAGS) vdlmom.o -o vdlmom -lm
+vdlmom.o: vdlmom.c
+
+#
+#	makedate - program which makes up datetime file.
+#
+datetime.h: makedate
+	./makedate
+
+datetime.o: datetime.h datetime.c
+	$(CC) $(CFLAGS) datetime.c -c
+	rm datetime.h
+#	rm makedate
+#
+#	vdlpass - Handle a serial port with USNSN protocol
+#
+vdlpass: vdlpass.o nsnrcvtt.o vdltcp.o
+	$(CC) $(CFLAGS) vdlpass.o nsnrcvtt.o vdltcp.o -o vdlpass -lnsl -lm -lsocket
+vdlpass.o: vdlpass.c vdl.h
+
+nsnrcvtt.o: nsnrcvtt.c rcv.h
+
+#
+# tstnsnrcv
+#
+tstnsnrcv: nsnrcvtt.o rcv.h 
+	$(CC) $(CFLAGS) -DMAIN -c nsnrcvtt.c
+	$(CC) $(CFLAGS) $(LDFLAGS) nsnrcvtt.o -o tstnsnrcv -lnsl -lm 

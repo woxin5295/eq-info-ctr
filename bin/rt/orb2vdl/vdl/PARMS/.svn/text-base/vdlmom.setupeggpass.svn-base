@@ -1,0 +1,5 @@
+vdlpass -pass! -passout /dev/ttyb -passlog
+vdlnev -H sandia.egg.nv.doe.gov -P 20011 -S DAC -C BHZ,BHN,BHE,LHZ,LHN,LHE -host PASS_SOCKET -t 1 -n 1 -s 80 -c 1 -f 40 -i dac -k 0 -l 0
+vdlnev -H sandia.egg.nv.doe.gov -P 20021 -S MVU -C BHZ,BHN,BHE,LHZ,LHN,LHE -host PASS_SOCKET -t 1 -n 1 -s 81 -c 0 -f 40 -i mvu -k 0 -l 0
+vdlnev -H sandia.egg.nv.doe.gov -P 20031 -S TPH -C BHZ,BHN,BHE,LHZ,LHN,LHE -host PASS_SOCKET -t 1 -n 1 -s 82 -c 0 -f 40 -i tph -k 0 -l 0
+vdlnev -H sandia.egg.nv.doe.gov -P 20041 -S BMN -C BHZ,BHN,BHE,LHZ,LHN,LHE -host PASS_SOCKET -t 1 -n 1 -s 83 -c 1 -f 40 -i bmn -k 0 -l 0

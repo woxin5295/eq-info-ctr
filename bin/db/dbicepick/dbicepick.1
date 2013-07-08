@@ -1,0 +1,27 @@
+.TH DBICEPICK 1 "$Date: 2002-02-07 01:56:27 $"
+.SH NAME
+dbicepick, gui_dbicepick \- utility for tuning picking parameters of icepick
+.SH SYNOPSIS
+.nf
+\fBdbicepick \fP-begin \fItime\fP -end \fItime\fP -db \fIdbname\fP \\[\fIexpr\fP\\]
+\fBgui_dbicepick \fP\\[-begin \fItime\fP\\] \\[-end \fItime\fP\\] -db \fIdbname\fP
+.fi
+.SH DESCRIPTION
+Dbicepick applies the Earthworm version of the Rex-Allen picking algorithm to waveform data in a
+CSS database. Gui_dbicepick is a graphical front-end for dbicepick. A time-period may be specified,
+as well as an expression describing a subset of stations to be picked.
+
+The database specified must be in iceworm1.3 format and contain a picker table and waveforms. Usually
+this is accomplished by creating a local copy of the picker table for modification (do not do
+tuning experiments on the running system!!), then using the descriptor file to refer to the site database
+and continuous waveform data.
+.SH EXAMPLE
+%\fB dbicepick -begin "08/23/2000 13:30:00" -end "08/23/2000 13:33:00" -db pickerdb/pickerdb 'sta =~ /W.*/'\fP
+%\fB \fP
+.SH "SEE ALSO"
+.nf
+icepick(1), dbpick(1)
+.fi
+.SH AUTHOR
+Mitch Robinson
+.\" $Id: dbicepick.1,v 1.2 2002-02-07 01:56:27 kent Exp $

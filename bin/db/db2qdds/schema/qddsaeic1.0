@@ -1,0 +1,96 @@
+Schema qddsaeic1.0
+	Description ( "AEIC QDDS submission database" )
+	Detail {
+		AEIC QDDS database is used to keep track of
+		automatic, alarmed, and processed envents
+		submitted to NEIC.
+		}
+		Timedate lddate
+		;
+
+Attribute qtype
+	String (2)
+	Format ( "%-2s" )
+	Null ( "-" )
+	Range ( "qtype =~ /ev|rv|dl/" )
+	Description ( "Version type of QDDS submission" )
+	Detail {
+		This attribute specifies the type 
+		of QDDS data submitted.
+
+		au	Automatec Event = 1
+		rv	Reviewed Event > 1
+		dl	Delete Event = any
+	}
+	;
+
+Attribute psent 
+	String (1)
+	Format ( "%-1s" )
+	Null ( "-" )
+	Range ( "qtype =~ /y|n/" )
+	Description ( "polldir file created" )
+	Detail {
+		After a polldir file is created this value
+		is set to y. Set this value to n to resubmit
+		polldir file.	
+	}
+	;
+
+Attribute vernum
+	Integer (8)
+	Format ( "%8ld" )
+	Null ( "-1" )
+	Range ( "vernum > 0" )
+	Description ( "QDDS database version number" )
+	Detail {
+		QDDS database version number
+	}
+	;
+
+Attribute qddscube
+	String (80)
+	Format ( "%-80s" )
+	Null ( "-" )
+	Description ( "Submitted QDDS Cube" )
+	Detail {
+		Cube Format
+TpEidnumbrSoVYearMoDyHrMnSecLatddddLongddddDeptMgNstNphDminRmssErhoErzzGpMNmEmLC
+      a2   Tp   = Message type = "E " (seismic event)
+      a8   Eid  = Event identification number  (any string)
+      a2   So   = Data Source =  regional network designation
+      a1   V    = Event Version     (ASCII char, except [,])
+      i4   Year = Calendar year                (GMT) (-999-6070)
+      i2   Mo   = Month of the year            (GMT) (1-12)
+      i2   Dy   = Day of the month             (GMT) (1-31)
+      i2   Hr   = Hours since midnight         (GMT) (0-23)
+      i2   Mn   = Minutes past the hour        (GMT) (0-59)
+      i3   Sec  = Seconds past the minute * 10 (GMT) (0-599)
+      i7   Lat  = Latitude:  signed decimal degrees*10000 north>0
+      i8   Long = Longitude: signed decimal degrees*10000 west <0
+      i4   Dept = Depth below sea level, kilometers * 10
+      i2   Mg   = Magnitude * 10
+      i3   Nst  = Number of stations used for location
+      i3   Nph  = Number of phases used for location
+      i4   Dmin = Distance to 1st station,   kilometers * 10
+      i4   Rmss = Rms time error, sec * 100
+      i4   Erho = Horizontal standard error, kilometers * 10
+      i4   Erzz = Vertical standard error,   kilometers * 10
+      i2   Gp   = Azimuthal gap, percent of circle, degrees/3.6
+      a1   M    = Magnitude type
+      i2   Nm   = Number of stations for magnitude determination
+      i2   Em   = Standard error of the magnitude * 10
+      a1   L    = Location method
+      a1   C    = Menlo Park check character
+	}
+	;
+
+Relation qdds
+	Fields ( evid orid auth jdate qtype vernum qddscube psent lddate )
+	Primary ( evid orid jdate qtype )
+	Description ( "AEIC QDDS database submission table" )
+	Detail {
+		AEIC database table used to store QDDS
+		submission information
+	}
+	;

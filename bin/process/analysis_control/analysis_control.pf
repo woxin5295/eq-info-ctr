@@ -1,0 +1,10 @@
+master_site_database 		/Seis/databases/stations/master_stations
+analysis_control_database 	/Seis/processing/tracking_database/aeic_analysis
+analyzed_events_database 	/Seis/processing/analyzed/%Y_%m/analyzed_%Y_%m_%d
+archive_database 		/iwrun/op/db/archive/archive_%Y/archive_%Y_%m_%d
+archive_database_2003 		/iwrun/op/db/archive/archive_2003/archive_%Y_%m_%d
+quakes_database			/iwrun/sum/run/dbsum/Quakes_%Y_%m_%d
+quakes_database_prelim		/Seis/processing/prelim/%Y_%m_prelim/Quakes_%Y_%m_%d
+segmented_waveform_database 	/Seis/seg/%Y/%Y_%m_%d
+wf_pattern 			/Seis/seg/wf/%Y/%m/%d/%{sta}.%{chan}.%Y:%j:%H:%M:%S
+summary_database 		/iwrun/sum/db/dbprocess/processed_quakes

@@ -1,0 +1,2 @@
+set path = (. ~ ~/bin /util/gnu/bin /usr/local /usr/local/bin /usr/lang /usr/ucb /usr/bin /bin /usr/sunlink/vt100 /usr/games /usr/ccs/bin /export/home0/comserv/comserv.971126/bin /export/home0/netscape)
+set path=($OPENWINHOME/bin $OPENWINHOME/bin/xview $path)

@@ -1,0 +1,65 @@
+.\" $Name $Revision: 1.2 $ $Date: 2002-02-07 01:56:26 $
+
+.ds ]W DSAP CSS database programs
+.TH DBPLOTCOV 1 "$Date: 2002-02-07 01:56:26 $"
+.SH NAME
+dbplotcov \- Make a plot and listing of waveform coverage from a database
+.SH SYNOPSIS
+.B dbplotcov database sta:chan tstart tend [-h[scale]] [-wftar]
+.SH DESCRIPTION
+.B dbplotcov
+reads the \fBwfdisc\fP table from the specified \fIdatabase\fP,
+determines the periods of time for which waveform segments exist
+for each station-channel and prints and plots this information.
+A PostScript version of the coverage plot, named \fIdbplotcov.ps\fP,
+is created in the current directory.
+.LP
+Only station channel pairs specified by the \fIsta:chan\fP
+sift key are displayed.  To select all station channel pairs,
+specify '*'.  Otherwise, specify a comma separated list, each element
+of which is one pair.  Either sta or chan may be '*' to select all
+possibilities, or either may be specified using UNIX regular expressions.
+(see ed (1))
+.LP
+Examples:
+.IP 'AAK:BHZ,KKL:HHZ'
+.br
+station AAK, channel BHZ, and station KKL, channel HHZ
+.IP 'AAK:*'
+.br
+all channels for station AAK
+.IP '*:HHZ'
+.br
+all stations with channel HHZ
+.IP 'A..:..Z'
+.br
+all 3 character stations starting with 'A' with channels ending in 'Z'
+.LP
+Note that the shell attempts to expand strings which contain *,
+so this argument must usually be placed between single quotes.
+.LP
+The starting time \fItstart\fP and ending time \fItend\fP
+may be specified in any of the formats described in str2epoch(3).
+.SH OPTIONS
+.IP -nodisplay The program will generate a postscript file only, without
+attempting to connect to an X-windows display.
+.IP "-h [scale]"
+.br
+For triggered data, a plot of data availability is less useful, so
+this option plots a bar for each day, with the height of the
+bar indicating the number of triggers.  You may specify a maximum
+value (scale) for the number of triggers; the default is 10.
+.IP "-wftar"
+The program will optionally read the wftar table rather than the
+wfdisc table.
+.SH "SEE ALSO"
+.nf
+dbpick(1)
+trdisp(1)
+Plot coverage charts may also be generated with these programs,
+but these charts can not be printed.
+.fi
+.SH AUTHOR
+Danny Harvey
+
+.\" $Id: aeic_dbplotcov.1,v 1.2 2002-02-07 01:56:26 kent Exp $

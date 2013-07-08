@@ -1,0 +1,17 @@
+ringsize                20000000        # total size of the file which holds the actual packets
+minimum_packet_size     28             # used to calculate the number of records in the index file
+maximum_packet_size     4096            # just used to check that the ringsize is big enough to hold a few packets
+maximum_time_difference 86400           # maximum time delay allowed
+valid_srcname_chars     _/ 0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz
+valid_ip_addresses      &Tbl{
+# ip-address        mask
+137.229.32.0    255.255.255.0
+127.0.0.1       255.255.255.255
+}
+concurrency             5               # probably not necessary
+pktbuffer               pktbuf          # the name of the file where the packets are kept
+pktindex                pktindex        # the name of the file which indexes the packets in the packet buff er
+srcindex                srcindex        # the name of the file which indexes the sources
+maximum_srcid           1000            # used to size the source index file, currently fixed in size after creation.
+read_priority           10              # These probably don't matter, as reader/writer locks are used in the server.
+write_priority          100

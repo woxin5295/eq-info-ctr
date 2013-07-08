@@ -1,0 +1,61 @@
+.\" $Name: not supported by cvs2svn $ $Date: 2002-02-07 01:56:26 $
+.TH AK_DBMAPEVENTS 1 "$Date: 2002-02-07 01:56:26 $"
+.SH NAME
+ak_dbmapevents \- Alaskan version of Datascope dbmapevents program
+.SH SYNOPSIS
+.nf
+\fBsame \fP\fIas\fP \fIdbmapevents\fP(1)
+.fi
+.SH DESCRIPTION
+ak_dbmapevents is the Alaskan version of \fIdbmapevents\fP. ak_dbmapevents expects
+to find a parameter file called \fIdbmapevents\fP.pf.
+.SH OPTIONS
+-o outfile  specify the name of the output ps file, instead of ak_dbmapevents.ps
+-p          use existing profile.pf parameter file in non-interactive mode
+.SH PARAMETER FILE
+.ft CW
+.in 2c
+.nf
+
+nordic% cat \fIdbmapevents\fP.pf
+center CUT
+range 5
+istaplt 0
+istnam 0
+ipdeplt 0
+ipdepth 1
+iporid 0
+icities 1
+ipipe 1
+iblue 1
+ipmag 1
+idcirc 0
+ititl 1
+iflt 1
+ipumps 0
+icol 1
+itran 0
+title AEIC Weekly Report
+label_files  &Tbl{
+country
+faults
+oceans
+pipeline
+volcanoes
+}
+boilerplate_files  &Tbl{
+aeic
+aeic_vol
+}
+nordic%
+
+.fi
+.in
+.ft R
+.SH "SEE ALSO"
+.nf
+dbmapevents(1),mapset(1),pf(3)
+.fi
+.SH AUTHOR
+Roger Hansen, Danny Harvey (dbmapevents original), Kent Lindquist (small parts of
+ak_dbmapevents)

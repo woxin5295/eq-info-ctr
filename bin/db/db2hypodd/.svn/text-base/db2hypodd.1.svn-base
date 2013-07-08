@@ -1,0 +1,49 @@
+.TH DB2HYPODD 1 "$Date: 2009-05-28 22:26:00 $"
+.SH NAME
+db2hypodd \- convert css database into phase file for hypoDD
+.SH SYNOPSIS
+.nf
+\fBdb2hypodd \fP\ \fIdbname\fP
+.fi
+.SH DESCRIPTION
+\fBdb2hypodd\fP converts css database into phase file for hypoDD program.
+.SH INPUT
+.nf
+Input database [\fIdbname\fP]. Required tables: origin, assoc, arrival. 
+.fi
+.SH OUTPUT
+.nf
+phase.dat file
+.fi
+.SH EXAMPLE
+.ft CW
+.in 2c
+.nf
+
+%\fB db2hypodd dbin\fP
+#     2008 12 22 00 10 05.157   59.821 -150.631  30.96    1.5 0.0 0.0 0.0    83828
+#     2008 12 22 00 13 30.535   59.941 -153.039 116.91    2.2 0.0 0.0 0.0    83823
+#     2008 12 22 00 14 47.128   64.993 -147.335   0.00    1.2 0.0 0.0 0.0    83826
+#     2008 12 22 00 20 39.921   52.212 -170.539  23.57    2.7 0.0 0.0 0.0    83832
+
+
+%\fB \fP
+
+.fi
+.in
+.ft R
+.SH "SEE ALSO"
+.nf
+.fi
+.SH CAVEATS
+.nf
+All events and phases that exist in the database are saved in the phase.dat file. The program does not subset origins or phases. All subsets and selections have to be done prior to running db2hypodd. Phase weight parameter in phase.pha is deltim parameter from arrival table.
+.fi
+.SH AUTHOR
+.nf
+Natalia Ruppert
+Geophysical Institute
+Fairbanks, Alaska
+February, 2003
+.fi
+.\" $Id: db2hypodd.1,v 1.2 2009-05-28 22:26:00 mitch Exp $

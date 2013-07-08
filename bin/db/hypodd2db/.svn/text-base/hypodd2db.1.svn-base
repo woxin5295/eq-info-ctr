@@ -1,0 +1,51 @@
+.TH HYPODD2DB 1 "$Date: 2009-01-15 20:27:01 $"
+.SH NAME
+hypodd2db \- converts hypoDD output file into origin table
+.SH SYNOPSIS
+.nf
+\fBhypodd2db \fP\ \fIhypoddfile\fP \fIdbout\fP
+.fi
+.SH DESCRIPTION
+\fBhypodd2db\fP converts hypoDD output file into origin table
+.SH INPUT
+.nf
+hypoDD file hypodd.reloc 
+.fi
+.SH OUTPUT
+.nf
+dbout.origin 
+.fi
+.SH EXAMPLE
+.ft CW
+.in 2c
+.nf
+
+%\fB hypodd2db hypoDD.reloc dbout\fP
+hypoDD.reloc
+dbout
+# events processed =     100
+# events processed =     200
+# events processed =     300
+# events processed =     400
+# events processed =     500
+# events processed =     600
+total # events processed =     652
+%\fB \fP
+
+.fi
+.in
+.ft R
+.SH "SEE ALSO"
+.nf
+.fi
+.SH CAVEATS
+.nf
+.fi
+.SH AUTHOR
+.nf
+Natalia Ruppert
+Geophysical Institute
+Fairbanks, Alaska
+February, 2003
+.fi
+.\" $Id: hypodd2db.1,v 1.1 2009-01-15 20:27:01 natasha Exp $

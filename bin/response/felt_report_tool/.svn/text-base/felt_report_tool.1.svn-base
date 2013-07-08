@@ -1,0 +1,66 @@
+.TH TITLE 1 "$Date: 2003-02-27 19:50:30 $"
+.SH FELT_REPORT_TOOL
+felt_report_tool \- GUI interface for reporting felt information
+.SH SYNOPSIS
+.nf
+\fBfelt_report_tool \fP\fIdbname\fP
+.fi
+.SH DESCRIPTION
+\fBfelt_report_tool\fP is a GUI interface which allows the user to
+get a convenient list of phone numbers from a database, call them
+to find out if an earthquake was felt, and edit a few sentences
+describing the felt reports. This tool, although accessible from
+the command line, is intended to be launched from a script as
+part of a larger package.
+
+The \fIdbname\fP specified on the command line must contain a single origin
+row.
+row for the
+.SH PARAMETER FILE
+The parameter file for \fBfelt_report_tool\fP is aeic_release.pf
+.ft CW
+.in 2c
+.nf
+
+.ne 7
+
+# Where to get necessary information and templates
+#########################################################################
+
+place_database /Seis/databases/places/cities
+common_place_database /Seis/databases/places/wellknown_alaskan_cities
+contact_database /Seis/databases/places/cities
+calldown_database /Seis/databases/notify/contacts
+region_phrases_database /Seis/databases/regions/alaska_region_phrases
+cellphone_reference_cities /Seis/databases/places/cellphone_cities
+maker_template /usr/local/aeic/4.4/data/response/aeic_response_template.fm
+
+number_of_contacts 40	# How many contacts to show for felt report investigation
+
+# What the output should look like
+#########################################################################
+
+num_nearest 8		# Number of nearest cities shown
+map_range 4		# Range of map in degrees
+
+stock_felt_report &Literal{
+No reports of this event being felt or causing damage
+have been received at this time.
+}
+
+# Who to harass with problems
+#########################################################################
+
+maintainer natasha@giseis.alaska.edu
+
+.fi
+.in
+.ft R
+.SH AUTHOR
+.nf
+Kent Lindquist
+Geophysical Institute
+University of Alaska, Fairbanks
+February, 1999
+.fi
+.\" $Id: felt_report_tool.1,v 1.4 2003-02-27 19:50:30 natasha Exp $

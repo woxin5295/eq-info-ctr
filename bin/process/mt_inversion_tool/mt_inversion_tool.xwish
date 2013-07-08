@@ -1,0 +1,1200 @@
+#!/bin/sh
+# \
+exec $ANTELOPE/bin/awish $0 -- "$@"
+package require Datascope
+
+package require Tclx
+load /usr/local/lib/libqwm.so.3
+
+lappend auto_path $env(ANTELOPE)/data/tcl/library
+
+# parameter file name
+set param_file "mt_inversion_tool"
+
+# these paths are reset by values from the parameter file
+set entry_db "/home/shake/run/db/quakes"  
+#set entry_db "/home/natasha/ppicker/backup_quakes"
+#set redi_path "/home/natasha/bin/redi_sched"
+#set redi_path "/home/natasha/dreger/BERKELEYMT/MTCODE/BIN/tdmt_redi_sched"
+#set prog_path "/iwrun/op/run/bin/moment_tensors"
+#set prog_path2 "/home/natasha/automt"
+#set prog_path2 "."
+#set website_path "/usr/local/mosaic/Seis/moment_tensors/current_year"
+set website_path "./website"
+set data_path "."
+set entry_orid ""
+
+# butons on the left hand side of the program window
+set buttons_list [list 10_dbe 20_ew 30_cw 40_upd 50_ri 60_ris 70_dvg 80_mm 90_uw 100_umt 110_pwf 120_pm 130_pr]
+
+# name on the button, command associated with buttons, background and foreground colors for each button
+array set buttons {
+	10_dbe,name	"open db with earthquake info" 
+	10_dbe,command	"dbe $entry_db " 
+	10_dbe,bgcolor	#CCCCFF 
+	10_dbe,fgcolor	black 
+	20_ew,name "extract waveforms"	
+	20_ew,command "if { [change_dir $data_path $entry_db $entry_orid] } {extract_waveforms $entry_db $entry_orid}"	
+	20_ew,bgcolor #CCCCFF	
+	20_ew,fgcolor black
+	30_cw,name "check waveforms"	
+	30_cw,command "if { [change_dir $data_path $entry_db  $entry_orid] } {dbe dbout_sac.wfdisc}"	
+	30_cw,bgcolor #CCCCFF	
+	30_cw,fgcolor	black 
+	40_upd,name "update origin parameters"	
+	40_upd,command "if { [change_dir $data_path $entry_db  $entry_orid] } {update_origins $entry_db $entry_orid}"	
+	40_upd,bgcolor #CCCCFF	
+	40_upd,fgcolor	black 
+	50_ri,name "run inversion for all depths (tdmt_redi_sched)"	
+	50_ri,command "if {$entries(iso,var)==no} {if { [change_dir $data_path $entry_db  $entry_orid] } {run_inversion $helpers(psigl) $helpers(redi_path) $entry_db $entry_orid} } else {run_inversion_iso $helpers(tdmtiso_invc) $helpers(psigl) $data_path_iso }"	
+	50_ri,bgcolor #000077	
+	50_ri,fgcolor	white 
+	60_ris,name "run inversion for single depth (tdmt_invc)"	
+	60_ris,command "if {[change_dir $data_path $entry_db  $entry_orid]} {run_inv_single_depth $helpers(tdmt_invc) $helpers(psigl)}"	
+	60_ris,bgcolor #000077	
+	60_ris,fgcolor	white 
+	70_dvg,name "depth vs goodness of fit graph"	
+	70_dvg,command "if {[change_dir $data_path $entry_db  $entry_orid]} {dg_graph $helpers(plot_var_depth)}"	
+	70_dvg,bgcolor #7777BB	
+	70_dvg,fgcolor	white
+	80_mm,name "make maps"	
+	80_mm,command "if {[change_dir $data_path $entry_db  $entry_orid]} {make_maps $helpers(map_nonDC) $helpers(bb_plot_nonDC)}"	
+	80_mm,bgcolor #7777BB	
+	80_mm,fgcolor	white
+	90_uw,name "update website"	
+	90_uw,command "if {[change_dir $data_path $entry_db  $entry_orid]} {update_website $website_path $entry_db $entry_orid}"	
+	90_uw,bgcolor #0000AA	
+	90_uw,fgcolor	white
+	100_umt,name "update moment table"	
+	100_umt,command "if {[change_dir $data_path $entry_db  $entry_orid]} {update_moment_table $entry_db}"	
+	100_umt,bgcolor #0000AA	
+	100_umt,fgcolor	white
+	110_pwf,name "print waveforms"	
+	110_pwf,command "if {$entries(iso,var)==no} {if {[change_dir $data_path $entry_db  $entry_orid]} {print_waveforms $entry_db $entry_orid} } else {print_waveforms_iso $data_path_iso}"	
+	110_pwf,bgcolor #333366	
+	110_pwf,fgcolor	white
+	120_pm,name "print map"	
+	120_pm,command "if {[change_dir $data_path $entry_db  $entry_orid]} {print_map}"	
+	120_pm,bgcolor #333366	
+	120_pm,fgcolor	white
+	130_pr,name "send a problem report"	
+	130_pr,command "report_problem "	
+	130_pr,bgcolor #663333	
+	130_pr,fgcolor	white
+}
+
+# entries on the right side of the window
+set entries_list [list waveform min_dist max_dist max_st iso velocity_mod depth]
+# name, type and value of each entry
+array set entries {
+	waveform,name "waveforms" 
+	waveform,type 3radio
+	waveform,var "op"
+	min_dist,name "minimum distance, km" 
+	min_dist,type entry
+	min_dist,var 30
+	max_dist,name "maximum distance, km" 
+	max_dist,type entry
+	max_dist,var "500"
+	max_st,name "max # of stations" 
+	max_st,type entry
+	max_st,var 20
+	iso,name "allow isotropic" 
+	iso,type radiobutton 
+	iso,var "no"
+	velocity_mod,name "velocity model" 
+	velocity_mod,type entry
+	velocity_mod,var auto
+	depth,name "depth for tdmt_invc, km" 
+	depth,type entry
+	depth,var ""
+}
+# output window buttons at the bottom of the window
+set log_buttons_list [list 10 20 30 40]
+
+# name, command, colors for each button at the bottom of the window
+array set log_buttons {
+	10,name	"minimize output window" 
+	10,command	"minimize_log " 
+	10,bgcolor	#555555 
+	10,fgcolor	white 
+	20,name	"maximize output window" 
+	20,command	"maximize_log " 
+	20,bgcolor	#555555 
+	20,fgcolor	white 
+	30,name	"create output window" 
+	30,command	"create_log " 
+	30,bgcolor	#555555
+	30,fgcolor	white 
+	40,name	"  Quit  " 
+	40,command	"quit" 
+	40,bgcolor	black
+	40,fgcolor	white 
+}
+
+# create all the buttons and entries
+proc create_interface { } {
+	global buttons buttons_list
+	global log_buttons log_buttons_list
+	global entries entries_list
+	global entry_db entry_orid
+	set left_frame_color #CCDDEE
+	set right_frame_color #FFFFCC
+	set top_frame_color #FFAA55
+	set bottom_frame_color #AAAAAA
+	# create main frames
+	frame .top_frame   -padx 2 -pady 2 -background $top_frame_color 	
+	frame .left_frame -padx 2 -pady 2 -background $left_frame_color
+	frame .right_frame  -padx 2 -pady 2  -background $right_frame_color
+	frame .bottom_frame  -padx 2 -pady 2  -background $bottom_frame_color
+	# database and origin entry fields
+	label .top_frame.db_caption -text "database"  -background $top_frame_color
+	entry .db_name -width 20 -textvariable entry_db -background white
+	label .origin_caption -text "origin"  -background $top_frame_color
+	entry .orid -width 7  -textvariable entry_orid -background white
+	
+	grid .top_frame.db_caption -in .top_frame -row 0 -column 0 -sticky nsew -padx 2  
+	grid .db_name -in .top_frame -row 0 -column 1 -sticky nsew -padx 2
+	grid .origin_caption -in .top_frame  -row 0 -column 2  -padx 2
+	grid .orid -in .top_frame  -row 0 -column 3 -sticky nsew -padx 2
+	grid columnconfigure .top_frame 1 -weight 1
+	
+	
+	grid .top_frame -row 0  -columnspan 2  -sticky nsew
+	grid .left_frame -row 1 -column 0 -sticky nwse	
+	grid .right_frame -row 1 -column 1  -sticky enws
+	grid .bottom_frame -row 2 -columnspan 2  -sticky enws
+	
+	# X-resize is done by the entry column
+	grid columnconfigure . 0 -weight 1
+	grid columnconfigure . 1 -weight 1
+	
+	#  Y-resize should be at the bottom...
+	grid rowconfigure . 1 -weight 1
+	
+	# lay buttons
+	foreach i $buttons_list {
+		button .but($i) -text $buttons($i,name) -command $buttons($i,command) -background $buttons($i,bgcolor) -foreground $buttons($i,fgcolor)
+		grid .but($i) -in .left_frame -sticky nwes 
+	}
+	# lay entries
+	set row 0
+	foreach i $entries_list {
+		label .lab($i) -text $entries($i,name) -background $right_frame_color
+		grid .lab($i)  -in .right_frame -sticky ne -column 0 -row $row 
+		if { $entries($i,type)=="radiobutton"  } {
+			radiobutton .rad($i,yes) -variable entries($i,var) -value "yes" -text "yes" -background $right_frame_color -command disable_non_iso
+			radiobutton .rad($i,no) -variable entries($i,var) -value "no" -text "no" -background $right_frame_color -command enable_all
+			grid .rad($i,yes)  -in .right_frame  -column 2 -row $row 
+			grid .rad($i,no)   -in .right_frame  -column 3 -row $row 
+		} elseif {$entries($i,type)=="entry" } {
+			entry .ent($i) -width 10 -textvariable entries($i,var) -background white 
+			grid .ent($i)  -in .right_frame -sticky ne -column 1 -row $row -columnspan 3
+		} else {
+			radiobutton .rad($i,op) -variable entries($i,var) -value "op" -text "op" -background $right_frame_color 
+			radiobutton .rad($i,bak) -variable entries($i,var) -value "bak" -text "bak" -background $right_frame_color
+			radiobutton .rad($i,mig) -variable entries($i,var) -value "mig" -text "mig" -background $right_frame_color
+			grid .rad($i,op)  -in .right_frame  -column 1 -row $row 
+			grid .rad($i,bak)   -in .right_frame  -column 2 -row $row 
+			grid .rad($i,mig)   -in .right_frame  -column 3 -row $row 
+		}
+		set row [incr row]
+	}
+	# log buttons
+	foreach i $log_buttons_list {
+		button .lbut($i) -text $log_buttons($i,name) -command $log_buttons($i,command) -background $log_buttons($i,bgcolor) -foreground $log_buttons($i,fgcolor)
+		pack .lbut($i) -in .bottom_frame -side left -fill both 
+	}
+	# create the output window
+	create_log
+	#sleep 1
+}
+
+# if allow isotropic is set to 'yes', disable all buttons except 'send a problem report', 'run inversion for all depths', 'print waveforms' 
+proc disable_non_iso {} {
+	global buttons_list 
+	# disable all buttons
+	foreach i $buttons_list {
+		.but($i) configure -state disabled 
+	}
+	# enable 3 of them 
+	.but(50_ri) configure -state normal
+	.but(110_pwf) configure -state normal 
+	.but(130_pr) configure -state normal 
+}
+# if allow isotropic is set to 'no', enable all buttons
+proc enable_all {} {
+	global buttons_list 
+	# enable all buttons
+	foreach i $buttons_list {
+		.but($i) configure -state normal 
+	}
+}
+
+# call dbe 
+proc dbe {db} {
+	makeLine
+	if { $db!="" } {
+		exec  dbe  $db &
+		Log "Starting dbe $db"
+	}
+}
+
+proc minimize_log {} {
+	global out
+	send MT_log "wm iconify ."
+	
+}
+proc maximize_log {} {
+	global out
+	send MT_log "wm deiconify ."
+	send MT_log "focus ."
+	send MT_log "raise ."
+	
+}
+# creates the output window
+proc create_log {} {
+	if { [catch {send MT_log ""} result] } {
+		global out
+		set out [open "| awish  " w+]
+		#	puts $out "toplevel .log\n"
+		puts $out "package require Tclx "
+		puts $out {set log [text .log -width 80 -height 40 -borderwidth 2 -relief raised -setgrid true -yscrollcommand {.scro set}]  }
+		puts $out "scrollbar .scro -command {.log yview} "
+		puts $out "pack .scro -side right -fill y "
+		puts $out "pack .log -side left -fill both -expand true "
+		puts $out {wm title . "TDMT inversion tool output window" }
+		puts $out {tk appname "MT_log" }
+		flush $out
+		sleep 1
+	} else {
+		Log "Output window already exists"
+		maximize_log
+	}
+}
+# send the line of text to the output window
+proc Log { var } {
+	global out
+	regsub -all {"} $var {\"} var
+	catch {
+		send MT_log ".log insert end \"$var\n\""
+		send MT_log ".log see end"
+	} result
+}
+#"
+
+# send contents of the file to the output window
+proc LogFile { fn } {
+	set fid [open $fn r]
+	catch {
+		while {![eof $fid]} {
+			set var [read $fid 1000]
+			send MT_log ".log insert end \"$var\""
+		}
+		close $fid
+		send MT_log ".log see end"
+	} result
+}
+# redirect data from the pipe to the output window
+proc LogPipe { fid } {
+	while { [gets $fid line] } {
+		if { $line == ">>showpage, press <return> to continue<<" } { break  }
+		send MT_log ".log insert end \"$line\n\""
+		if { [eof $fid] } { break }
+	}
+	send MT_log ".log see end"
+}
+
+# send a horizontal line to the output window
+proc makeLine {} {
+	Log "===================================="
+	
+}
+
+# delete old files, call trexcerpt
+proc extract_waveforms {db orid} {
+	global descr_templ entries
+	makeLine
+	if { $orid == "" || $db == "" } {
+		#complain
+		Log "Cannot extract waveforms: no database or orid."
+	} else { 
+		Log "Starting extract waveforms:" 
+		Log "exract date from the origin table"
+		set orid_data [exec  dbsubset $db.origin "orid==$orid" | dbselect - evid time]
+		if { [llength $orid_data] == 0 } {
+			if { [file exist $db] } {
+				tk_messageBox -message "Origin '$orid' does not exist in the database '$db'"
+				Log "Origin '$orid' does not exist "
+			} else {
+				tk_messageBox -message "Database '$db' does not exist "
+				Log "Database '$db' does not exist "
+			}
+			return
+		}
+		set evid [lindex $orid_data 0]
+		set etime [lindex $orid_data 1]
+		set date [epoch2str $etime  %Y_%m_%d  ]
+		set tr_time [epoch2str $etime  "%Y (%j) %H:%M:00" ]
+		#		puts $tr_time
+		if { $date == "" } {
+			Log "No such record"
+		} else {
+			# create a descriptor file
+			
+			# make curly braces around database name
+			set dbpath [string range $db 0 [expr [string last "/" $db]]]
+			set dbname [string range $db [expr [string last "/" $db] + 1] [string length $db] ]
+			
+			set waveforms $entries(waveform,var)
+			set output [subst $descr_templ(dbextract_data)] 
+			set fhandle [open "dbextract_data" w]
+			puts $fhandle $output
+			close $fhandle
+			# delete old files
+			set year [string range $date 0 [expr [string first "_" $date] - 1]]
+			set file_list [glob -nocomplain $year* dbout dbout.* dbout_sac*]
+			set cancel 0
+			if { $file_list == "" } {
+				Log "No old waveform files in current directory\n"
+			} else {
+				set nfile_list [join  $file_list "\n"]
+				Log "Old waveform files list:"
+				Log $nfile_list
+				#ask user
+				set cancel [tk_dialog .del_files "Delete old files?" "Do you want to delete old files? (See log for a list.)" \
+				questhead 0 Yes "Cancel 'extract waveforms'"]
+				if { $cancel == 0 } { # 
+					Log "delete files"
+					foreach file $file_list {
+						file delete $file
+					}
+				}
+			}
+			if {$cancel != 1} { #user did hit ok
+				Log "run extraction command" 
+				#puts "trexcerpt -vv -E -o sc -m event -c 'chan=~/BH./'  -s 'evid==$evid' -j 'distance(lat,lon,site.lat,site.lon)<=5' dbextract_data dbout '$tr_time' 00:05:00"
+				#TODO fix this 
+				catch { exec trexcerpt -vv  -E -o sc -m event -c "chan=~/BH./" -w %Y%m%d%H%M%S.%\{sta\}.%\{chan\} -s "evid==$evid" -j "distance(lat,lon,site.lat,site.lon)<=4.5" dbextract_data dbout "$tr_time" 00:05:00  } data 
+				#convert seed into sac
+				Log $data
+				Log "after texcerpt"
+				Log "create dbout"
+				#set output "css3.0\n/Seis/databases/stations/{master_stations}" 
+				set output [subst $descr_templ(dbout)] 
+				set fhandle [open "dbout" w]
+				puts $fhandle $output
+				close $fhandle
+				#todo send errors to some other window or log
+				Log "run db2sac"
+				catch { exec db2sac -w ./ dbout dbout_sac } data
+				Log $data
+				#rename sac files to get rid of nonzero fractional seconds
+				set file_list [glob -nocomplain $year*.??.*.*]
+				foreach fname $file_list {
+					regsub {\.[0-9][0-9]\.} $fname .00. newname
+					file copy -force $fname $newname 
+				}
+				Log "done"
+			} else {
+				Log "Cancelled"
+			}
+		}
+		
+	}
+}  
+
+# update origins file
+proc update_origins {db orid} {
+	makeLine
+	if { $orid == "" || $db == "" } {
+		#complain
+		Log "Cannot update origins: no database or orid."
+	} else { #extract waveforms
+		Log "Starting update origins"
+		Log "exract data from the origin table"
+		set orid_data [exec  dbsubset $db.origin "orid==$orid" | dbselect - time lat lon depth ml orid]
+		if { $orid_data=="" } {
+			tk_messageBox -message "Origin does not exist"
+		} else {
+			set time [lindex $orid_data 0]
+			set lat [lindex $orid_data 1]
+			set lon [lindex $orid_data 2]
+			set depth [lindex $orid_data 3]
+			set ml [lindex $orid_data 4]
+			set orid [lindex $orid_data 5]
+			set date [epoch2str $time  "%Y %j %H %M"  ]
+			set output "tdmt.config $date 0.0 $lat $lon $depth $ml $orid"
+			set cancel 0
+			set fname "tdmt_redi_sched.in"
+			if { [file exists $fname] } {
+				set cancel [tk_dialog .overwrite "Overwrite?" "File $fname already exists. Do you want to overwrite it?" \
+				questhead 0 Yes "Cancel 'update origin parameters'"]
+			}
+			if { $cancel != 1 } {
+				Log "write tdmt_redi_shed.in"
+				Log "Writing: $output"
+				set fhandle [open $fname w]
+				puts $fhandle $output
+				close $fhandle
+				Log "done"
+			}
+			
+			
+		}
+		
+	}		
+}
+
+# called when stations selection window is closed in 'run inversion'
+# all entered data is stored in global variables, window is destroyed
+proc close_newwin { } {
+	global st_arr lat_arr lon_arr srate_arr
+	global st_list lat_list lon_list srate_list
+	set st_list ""
+	set lat_list ""
+	set lon_list ""
+	set srate_list ""
+	foreach {name val } [array get st_arr] {
+		if {$st_arr($name)} {
+			append st_list " $name"
+			append lat_list " $lat_arr($name)"
+			append lon_list " $lon_arr($name)"
+			append srate_list " $srate_arr($name)"
+		}
+	}
+	destroy .newwin
+	return $st_list
+}
+
+# creates station selection window
+proc select_stations_window { st_list } {
+	global st_arr lat_arr lon_arr srate_arr cancel_sel_st
+	set cancel_sel_st 0;
+	toplevel .newwin
+	wm title .newwin "Select stations" 
+	frame .newwin.top
+	grid .newwin.top -sticky ewsn -row 0 -column 0
+	label .newwin.top.left -text STATION  -font {Helvetica 12 bold}
+	label .newwin.top.right -text " DISTANCE(km)"  -font {Helvetica 12 bold}
+	label .newwin.top.rightright -text "AZIMUTH" -font {Helvetica 12 bold}
+	pack .newwin.top.left -side left
+	pack .newwin.top.right -side left
+	pack .newwin.top.rightright -side right
+	set r 1
+	set col 0
+	#array set old_st_arr [array get st_arr]
+	array set old_st_arr [array get st_arr]
+	array unset st_arr * 	
+	foreach {dist lat lon srate sta azi} $st_list {
+		#set dist [lindex $line 0]
+		#set sta [lindex $line 1]
+		frame .newwin.s_$sta
+		grid .newwin.s_$sta -sticky ewsn -row $r -column $col
+		checkbutton .newwin.s_$sta.b -variable st_arr($sta) -relief sunken
+		if { [info exists old_st_arr($sta)] } { set st_arr($sta) $old_st_arr($sta) }
+		set lat_arr($sta) $lat
+		set lon_arr($sta) $lon
+		set srate_arr($sta) $srate
+		#set st_arr($sta) 1 mark all the stations checked
+		pack .newwin.s_$sta.b  -side left
+		label .newwin.s_$sta.l -text [ format "%s \t %.1f \t %.2f" $sta  $dist $azi]
+		pack .newwin.s_$sta.l  -side left
+		set r [expr $r+1]
+		if { $r==40 } {
+			set r 1
+			set col [expr $col+1]
+			frame .newwin.top$col
+			grid .newwin.top$col -sticky ewsn -row 0 -column $col
+			label .newwin.top$col.left -text STATION  -font {Helvetica 12 bold}
+			label .newwin.top$col.right -text " DISTANCE(km)"  -font {Helvetica 12 bold}
+			label .newwin.top$col.rightright -text "AZIMUTH" -font {Helvetica 12 bold}
+			pack .newwin.top$col.left -side left
+			pack .newwin.top$col.right -side left
+			pack .newwin.top$col.rightright -side right
+		}
+	}
+	frame .newwin.but 
+	grid .newwin.but -columnspan [expr $col+1]
+	# if user hits 'ok', close_newwin is called 
+	button .newwin.ok -text "Ok" -command close_newwin -background #BBBBBB -font {Helvetica 12 bold}
+	button .newwin.cancel -text "Cancel" -command {set cancel_sel_st 1; destroy .newwin}  -background #BBBBBB -font {Helvetica 12 bold}
+	
+	pack .newwin.ok -in .newwin.but  -side left
+	pack .newwin.cancel -in .newwin.but -side right 
+	#grid .newwin.cancel -columnspan [expr $col+1]
+	
+}
+
+# generates a line with setenv commands to  be executed before tdmt_redi_sched
+# list of stations, number of stations, lat/lon, sampling rate
+proc get_station_vars { db orid } {
+	global st_list lat_list lon_list srate_list entries cancel_sel_st helpers
+	Log "Select stations"
+	set orid_data [exec  dbsubset $db.origin "orid==$orid" | dbselect - lat lon]
+	set lat [lindex $orid_data 0]
+	set lon [lindex $orid_data 1]
+	set min_dst $entries(min_dist,var)
+	set max_dst $entries(max_dist,var)
+	set max_st $entries(max_st,var)
+	set stations [exec dbjoin dbout.site dbout.calibration dbout.wfdisc  | dbsort -  "distance($lat,$lon,site.lat,site.lon)" | dbsubset - "(deg2km(distance($lat,$lon,site.lat,site.lon))<$max_dst) && (deg2km(distance($lat,$lon,site.lat,site.lon))>$min_dst)" | dbselect - "deg2km(distance ($lat, $lon, site.lat, site.lon))" site.lat site.lon calibration.samprate sta "azimuth($lat, $lon, site.lat, site.lon)" | uniq -f 4 - | head -$max_st]
+	# create select stations window and wait	
+	select_stations_window $stations
+	tkwait window .newwin
+	
+	if { $cancel_sel_st == 1 || [llength $st_list] == 0 } {
+		return "";
+	}
+	Log "Stations:   $st_list"
+	Log "Number of stations  [llength $st_list]"
+	return "setenv REDI_MT_PROG1_STATLIST	\"$st_list\"; setenv REDI_MT_PROG1_NSTAT  [llength $st_list]; setenv REDI_MT_LAT	\"$lat_list\"; setenv REDI_MT_LON	\"$lon_list\"; setenv REDI_MT_SRATE	\"$srate_list\"; "
+}
+
+# run inversion for all depths
+proc run_inversion { psigl_path rpath db orid } {
+	global tdmt_config entries entry_db 
+	makeLine
+	Log "Start run inversion"
+	#delete old files
+	if { [file exists "pager.file"]  } {
+		file delete "pager.file"
+	}
+	if { [file exists "mt_inv_redi.out" ] } {
+		file delete "mt_inv_redi.out"
+	}
+	if { [file exists "mt_vardepth.dat" ] } {
+		file delete "mt_vardepth.dat"
+	}
+	# set environment variables from tdmt_config
+	set exec_line ""
+	foreach var [array names tdmt_config] {
+		append exec_line "setenv REDI_MT_$var	$tdmt_config($var);" 
+	}
+	# create select stations window
+	set st_line [get_station_vars $db $orid]
+	if { $st_line == "" } {
+		return "" 
+	}
+	append exec_line $st_line
+	append exec_line "setenv REDI_MT_MINDIST $entries(min_dist,var);"
+	append exec_line "setenv REDI_MT_MAXDIST $entries(max_dist,var);"
+	append exec_line "setenv REDI_MT_VELOCITYMOD $entries(velocity_mod,var);"
+	append exec_line "setenv REDI_MT_DATABASE $entry_db;"
+	
+	Log $exec_line
+	# run tdmt_redi_sched	
+	Log "RUN $rpath"
+	catch {  exec csh -c "$exec_line $rpath " } result
+	Log $result
+	Log "convert results to ps"
+	set fname "pager.file"
+	set fhandle [open $fname r]
+	gets $fhandle line
+	close $fhandle
+	set mdepth [lindex $line 9]
+	Log "best depth: $mdepth"
+	if { $mdepth> 100000000} {
+		Log "best depth is invalid"
+		tk_messageBox -message "Best depth is invalid"
+		return ""
+	}
+	set plot_file "plot_d$mdepth"
+	set orid_time [exec  dbsubset $db.origin "orid==$orid" | dbselect - time | epoch +%Y%m%d%H%M%S]
+	set ps_file "$orid_time"
+	append ps_file "_mt.ps"
+	catch {exec "$psigl_path" <$plot_file >$ps_file } result
+	#puts $result
+	#Log $result
+	Log "Psigl: $result"
+	Log "show results"
+	catch {exec ghostview -landscape $ps_file >&errors & } result
+	Log $result
+	LogFile errors
+	Log "done"
+}
+
+# runs the isotropic inversion example
+proc run_inversion_iso { invc psigl path} {
+	makeLine
+	Log "Start run inversion, allow isotropic"
+	Log "cd $path"
+	cd $path
+	catch { exec "$invc" > plot  } result
+	Log "Start tdmtiso_invc"
+	Log $result
+	catch { exec "$psigl" <plot > plot.ps } result
+	Log "Start psigl"
+	Log $result
+	catch {exec ghostview -landscape plot.ps >&errors & } result
+	Log $result
+	Log "done"
+}
+
+# creates select stations window for 'run inversion for single depth' 
+proc select_stations_window_single_depth { st_list } {
+	global st_arr1 cancel_sel_st st_offsets1
+	set cancel_sel_st 0
+	toplevel .newwin
+	wm title .newwin "Select stations" 
+	#frame .newwin.top
+	#grid .newwin.top -sticky ewsn -row 0 -column 0
+	label .newwin.top_left -text STATION  -font {Helvetica 12 bold}
+	label .newwin.top_right -text " DISTANCE(km)"  -font {Helvetica 12 bold}
+	label .newwin.top_rightright -text "AZIMUTH" -font {Helvetica 12 bold}
+	label .newwin.top_rightright2 -text "OFFSET" -font {Helvetica 12 bold}
+	grid .newwin.top_left -row 0 -column 0 -columnspan 2
+	grid .newwin.top_right -row 0 -column 2 
+	grid .newwin.top_rightright -row 0 -column 3 
+	grid .newwin.top_rightright2 -row 0 -column 4  
+	set r 1
+	set col 0
+	#array set old_st_arr [array get st_arr]
+	array set old_st_arr1 [array get st_arr1]
+	array unset st_arr1 * 	
+	set cnt 1
+	foreach {sta dist azi off} $st_list {
+		#frame .newwin.s_$sta
+		#grid .newwin.s_$sta -sticky ewsn -row $r -column $col -columnspan 4
+		#frame .newwin.s_$sta{cb}
+		#grid .newwin.s_$sta{cb} -sticky ewsn 
+		checkbutton .newwin.s_$sta{b} -variable st_arr1($cnt) -relief sunken
+		set st_arr1($cnt) 1
+		grid .newwin.s_$sta{b}  -row $r -column $col 
+		label .newwin.s_$sta{sta} -text $sta
+		grid .newwin.s_$sta{sta}  -row $r -column [expr $col+1]
+		label .newwin.s_$sta{l} -text  $dist
+		grid .newwin.s_$sta{l}  -row $r -column [expr $col+2]
+		label .newwin.s_$sta{l2} -text $azi
+		grid .newwin.s_$sta{l2}  -row $r -column [expr $col+3]
+		set st_offsets1($cnt) $off
+		entry .newwin.s_$sta{off}  -width 3 -textvariable st_offsets1($cnt)
+		grid .newwin.s_$sta{off}  -row $r -column [expr $col+4]
+		set r [expr $r+1]
+		if { $r==40 } {
+			set r 1
+			set col [expr $col+4]
+			#frame .newwin.top$col
+			#grid .newwin.top$col -sticky ewsn -row 0 -column $col
+			label .newwin.top$col{_left} -text STATION  -font {Helvetica 12 bold}
+			label .newwin.top$col{_right} -text " DISTANCE(km)"  -font {Helvetica 12 bold}
+			label .newwin.top$col{_rightright} -text "AZIMUTH" -font {Helvetica 12 bold}
+			label .newwin.top$col{_rightright2} -text "OFFSET" -font {Helvetica 12 bold}
+			grid .newwin.top_left -row 0 -column $col -columnspan 2
+			grid .newwin.top_right -row 0 -column  [expr $col+2]
+			grid .newwin.top_rightright -row 0 -column  [expr $col+3]
+			grid .newwin.top_rightright2 -row 0 -column  [expr $col+4]
+		}
+		incr cnt
+	}
+	for {set i 0} {$i<$col+4} {incr i} {
+		grid columnconfigure .newwin  $i -weight 0
+	}
+	frame .newwin.but 
+	grid .newwin.but -columnspan [expr $col+4]
+	button .newwin.ok -text "Ok" -command close_newwin -background #BBBBBB -font {Helvetica 12 bold}
+	button .newwin.cancel -text "Cancel" -command {set cancel_sel_st 1; destroy .newwin}  -background #BBBBBB -font {Helvetica 12 bold}
+	
+	pack .newwin.ok -in .newwin.but  -side left
+	pack .newwin.cancel -in .newwin.but -side right 
+	#grid .newwin.cancel -columnspan [expr $col+1]
+	
+}
+
+# run inversion for single depth
+proc run_inv_single_depth { tdmt_invc psigl_path } {
+	global entries st_arr1 cancel_sel_st st_offsets1
+	makeLine 
+	Log "Starting run inversion for a single depth"
+	set depth  $entries(depth,var)
+	if { $depth == "" } {
+		tk_messageBox -message "Depth is not set"
+		return
+	}
+	# check the depth entered by user 
+	if { ![file exists "plot_d$depth"]} {
+		if { [catch {set file_list [glob plot_d*]} ] } {
+			tk_messageBox -message "Error listing available depths. Please run  'run inversion for all depths' first."
+			return
+		}
+		regsub -all plot_d $file_list " " file_list 
+		tk_messageBox -message "Depth must be one of the following: $file_list."
+		return
+	}
+	Log "Getting the list of stations from mt_inv.in"
+	set fname "mt_inv.in"
+	if { ![file exist $fname] } {
+		tk_messageBox -message "File $fname does not exist, please run 'run inversion for all depths' first."
+		return
+	}
+	#  Slurp up the data file
+	set fp [open $fname r]
+	set data [read $fp]
+	close $fp
+	set data [split $data "\n"]
+	set first_line [lindex $data 0]
+	set first_line [split $first_line " "]
+	set nstat  [lindex $first_line 0]
+	set st_list ""
+	#make a list with station data for 'select stations window' procedure
+	for {set i 1} {$i<=$nstat} {incr i} {
+		
+		set line [lindex $data $i]
+		if {$line == ""} {
+			tk_messageBox -message "File $fname is corrupted"
+			return
+		}
+		set split_line [split $line " \t"] 
+		set station [lindex $split_line 0]
+		set station [string range $station 0 [expr [string first "_" $station ]-1 ]]
+		# add name, distance, azimuth to the list of stations
+		# add offset
+		lappend st_list $station
+		set j 1
+		while { [lindex $split_line $j]=="" } { incr j }
+		lappend st_list [lindex $split_line $j]
+		incr j
+		while { [lindex $split_line $j]=="" } { incr j }
+		lappend st_list [lindex $split_line $j] 
+		incr j
+		while { [lindex $split_line $j]=="" } { incr j }
+		lappend st_list [lindex $split_line $j] 
+	}
+	#select stations window
+	select_stations_window_single_depth $st_list  
+	tkwait window .newwin
+	
+	if { $cancel_sel_st == 1 || [llength $st_list] == 0 } {
+		return "";
+	}	
+	Log "Changing mt_inv.in "
+	set old_depth [lindex $first_line 1]
+	set first_line [lreplace $first_line 1 1 $depth]
+	set first_line [join $first_line]
+	set data [lreplace $data 0 0 $first_line]
+	regsub -all "d$old_depth" $data "d$depth" newdata
+	#write back to the file
+	set fp [open $fname "w"]
+	set new_nstat 0
+	for {set i 1} {$i<=$nstat} {incr i} {
+		if { $st_arr1($i) } {
+			incr new_nstat
+		}
+	}
+	puts  $fp [lreplace  $first_line 0 0 $new_nstat]
+	for {set i 1} {$i<=$nstat} {incr i} {
+		if { $st_arr1($i) } {
+			set newdata_split [split [lindex $newdata $i] " \t"]
+			set j 0
+			set real 0
+			while { $real < 3 } {
+				incr j
+				while {[lindex $newdata_split $j] == ""} {incr j}
+				incr real
+			}
+			if {$st_offsets1($i)!="" } {
+				set newdata_split [lreplace $newdata_split $j $j $st_offsets1($i)];
+			}
+			puts  $fp [join $newdata_split]
+		}
+	}
+	for {set i 1} {$i<=$nstat} {incr i} {
+		if { $st_arr1($i) } {
+			puts  $fp [lindex $newdata [expr $nstat+$i]]
+		}
+	}
+	close $fp
+	
+	Log "Run tdmt_invc"
+	catch {exec $tdmt_invc > plot } result
+	Log $result
+	Log "Convert to ps"
+	catch {exec "$psigl_path" <plot >plot.ps } result
+	Log $result
+	Log "show results"
+	catch {exec ghostview -landscape plot.ps >&errors & } result
+	Log $result
+	Log "done"
+}
+
+proc do_nothing {} {
+	tk_messageBox -message "I do nothing"
+}
+
+# depth vs goodness graph
+proc dg_graph { plot_var_depth } {
+	global helpers
+	makeLine
+	Log "Starting depth vs goodness graph"
+	set pump [open "|cat" w+]
+	catch {
+		# call the script
+		set in [open  "|$plot_var_depth >&@ $pump " w]  
+	} result
+	puts $in "\n"
+	# log results 
+	fileevent $in writable [LogPipe $pump; puts $pump EOF]
+	Log "done"
+	#exec "$ppath/bb_plot_nonDC.gmt"  &
+}
+
+#create maps
+proc make_maps { map bb } {
+	global helpers
+	makeLine
+	Log "Starting make maps"
+	# call the script
+	exec echo \n | "$map" >&errors
+	# log results
+	LogFile errors
+	# call the script
+	exec "$bb" >&errors   
+	# log results
+	LogFile errors
+	Log "done"
+}
+
+# update website
+proc update_website { wpath db orid } {
+	makeLine
+	Log "Starting update website"
+	set orid_time [exec  dbsubset $db.origin "orid==$orid" | dbselect - time | epoch +%Y%m%d%H%M%S]
+	Log "convert ps to gif"
+	set s1 "_mt.ps"
+	if { [catch { exec alchemy $orid_time$s1 -g -Zc1 -Zmo -Zr270 -Zo 1000p -Z+ -o } result] } {
+		Log "converting ps to gif: $result"
+	}
+	Log "copy files"
+	
+	# get the working directory name in form 'YmdHMS' for given origin
+	set path [get_dir_name $wpath $orid_time [string range $orid_time 0 1]]
+	# extract the date part out of the path
+	set found_time [string range $path [expr [string last "/" $path]+1] [string length $path] ]
+	
+	if { ![file exists $path]} {
+		exec mkdir $path 
+	}
+	#copy files
+	exec touch $path.tmp
+	
+	set s1 "_mt.gif"
+	set mt_name $found_time$s1
+	
+	if { ![file exists $path/$mt_name]} {
+		set flist [glob -nocomplain -directory $path -tails  *_mt.gif]
+		if {![lempty $flist]} {
+			set name1 [lindex $flist 0]
+			#puts $name1
+			set name1 [string range $name1 0 [expr [string first "_" $name1 ]-1 ] ]
+			set found_time $name1
+			set mt_name $found_time$s1 			
+		}
+	}
+	
+	exec cp $orid_time$s1 $path/$mt_name
+	set s1 "_map.gif"
+	exec cp map.gif $path/$found_time$s1
+	
+	set fname "pager.file"
+	set fhandle [open $fname r]
+	gets $fhandle line
+	close $fhandle
+	set mdepth [lindex $line 9]
+	set info_file "mt_summary_d$mdepth.html"
+	
+	set s1 "_info.html"
+	exec cp $info_file $path/$found_time$s1
+	
+	exec cp bb_plot.gif $path/
+	Log "done"
+	
+}
+
+# called before calling any procedure using or creating files
+# change_dir finds the directory in format YmdHMS for the given origin
+# if there is no directory within 10 seconds of the origin, it is created
+# then 'cd path' is called   
+proc change_dir { dpath db orid } {
+	if {$orid=="" || $db==""} {
+		tk_messageBox -message "Please enter database name and origin id"
+		Log "No database or origin"
+		return 0
+	}
+	set orid_data [exec  dbsubset $db.origin "orid==$orid" | dbselect - time]
+	if { [llength $orid_data] == 0 } {
+		if { [file exist $db] } {
+			tk_messageBox -message "Origin '$orid' does not exist in the database '$db'"
+			Log "Origin '$orid' does not exist "
+		} else {
+			tk_messageBox -message "Database '$db' does not exist "
+			Log "Database '$db' does not exist "
+		}
+		return 0
+	}
+	set etime [lindex $orid_data 0]
+	set orid_time [epoch2str $etime %Y%m%d%H%M%S]
+	
+	if { [catch {set file_list [glob -nocomplain $dpath/*]} ] } {
+	}
+	set path [get_dir_name $dpath $orid_time [string range $orid_time 0 1]] 
+	Log "======== Change dir $path ========"
+	cd $path
+	return 1
+}
+
+# extract date parts form the string containing the date
+# returns time in epoch format
+proc convert_time { time_string  } {
+	set yr [string range $time_string 0 1]
+	set mo [string range $time_string 2 3]
+	set dy [string range $time_string 4 5]
+	set hr [string range $time_string 6 7]
+	set mi [string range $time_string 8 9]
+	set se [string range $time_string 10 11]
+	return [str2epoch "$mo/$dy/$yr $hr:$mi:$se"]
+}
+
+# used in change_dir and update_website
+# find a folder within 10 seconds of given time, if such
+# folder does not exist, create a new one
+#
+# time_str -- string containing time
+# pre -- prefix in time_str
+# time_str is expected to have two characters for year, month, date, hour ...
+# in case when there is something in from of this sting, prefix 'pre' is nonempty
+# This was done so that the same procedure can be used for 4-digit and 2-digit years.
+# Now 2-digit years are not used anymore, but I decided not to redo it.
+# So, the procedures calling 'get_dir_name' pass to it first two symbols (usually "20") of
+# the time string  (for example 20070101120100) as the prefix 
+proc get_dir_name { path time_str pre } {
+	set start [string length $pre]
+	set time [convert_time [string range $time_str $start [expr $start+11]  ] ]  
+	# get a list of files in path
+	set found_dir ""
+	set file_list [glob -nocomplain -directory $path -tails -types d  $pre*]
+	foreach time1 $file_list {
+		if { [regexp {^[0-9]+$} $time1] } {
+			set etime [convert_time [string range $time1 $start [expr $start+11] ] ] 
+			if { [expr abs($etime - $time)]<10 } {
+				set found_dir $time1
+			}		
+		}
+	}
+	# find the one within 10 sec from 'time'
+	if {$found_dir == ""} {
+		exec mkdir $path/$time_str 
+		return $path/$time_str
+	} else {
+		return "$path/$found_dir"
+	}
+}
+
+# update table $db.moment
+proc update_moment_table { db } {
+	makeLine
+	Log "Starting update moment table"
+	set fname "pager.file"
+	set fhandle [open $fname r]
+	gets $fhandle line
+	close $fhandle
+	set mdepth [lindex $line 9]
+	set append 0
+	# ask user if he wants to append or overwrite
+	if { [file exists $db.moment] } {
+		set append [tk_dialog .del_files "" "Moment table already exists. Append or overwrite?" \
+		questhead 0 Append "Overwrite"]
+	} else {
+	}
+	if {$append == 0 } { #append
+		Log "exec cat mt_table_d$mdepth.moment >> $db.moment"
+		exec cat mt_table_d$mdepth.moment >> $db.moment
+	} else { #overwrite
+		Log "exec cp -f mt_table_d$mdepth.moment  $db.moment"
+		exec cp -f mt_table_d$mdepth.moment  $db.moment
+		
+	}
+	Log "done"
+}
+
+# send the ps file with results to a postscript printer
+proc print_waveforms { db orid } {
+	makeLine
+	Log "Starting print waveforms"
+	set orid_time [exec  dbsubset $db.origin "orid==$orid" | dbselect - time | epoch +%Y%m%d%H%M%S]
+	set ps_file "$orid_time"
+	append ps_file "_mt.ps"
+	Log "printing $ps_file"
+	exec lpr $ps_file
+	tk_messageBox -message "Printed"
+	Log "done"
+}
+
+# send the ps file with results to a postscript printer; isotropic version
+proc print_waveforms_iso { path } {
+	makeLine
+	Log "Starting print waveforms"
+	cd $path
+	set ps_file "plot.ps"
+	Log "printing $ps_file"
+	exec lpr $ps_file
+	tk_messageBox -message "Printed"
+	Log "done"
+}
+
+# send ps file with map to a postscript printer
+proc print_map {  } {
+	makeLine
+	Log "Starting print map"
+	Log "printing map.ps"
+	exec lpr map.ps
+	tk_messageBox -message "Printed"
+	Log "done"
+}
+
+# load parameters from pf file and set global variables
+# file name is defined at the top of this file in param_file variable
+proc load_param_file { pf } {
+	global param_file helpers entries Maintainer
+	makeLine
+	Log "Start load parameter file"
+	
+	if { [catch { set Maintainer [pfget $param_file Maintainer] } result] } {
+		Log "There was an error reading parameter file (Maintainer)"
+	}
+	
+	#puts $Maintainer
+	
+	if { [catch { pfgetarr paths @$param_file#Paths } result] } {
+		Log "There was an error reading parameter file (Paths)"
+	} 
+	foreach var [array names paths] {
+		global $var
+		set $var $paths($var)
+		
+	}
+	if { [catch { pfgetarr helpers @$param_file#Helpers } result] } {
+		Log "There was an error reading parameter file (Helpers)"
+	} 
+	global tdmt_config
+	if { [catch { pfgetarr tdmt_config @$param_file#tdmt.config } result] } {
+		Log "There was an error reading parameter file (tdmt.config)"
+	} 
+	global descr_templ
+	if { [catch { pfgetarr descr_templ @$param_file#descr_templ } result] } {
+		Log "There was an error reading parameter file (templates)"
+	}  
+	
+	global entries entries_list
+	if { [catch { 
+			pfgetarr default_entries @$param_file#default_entries 
+			
+	} result] } {
+		Log "There was an error reading parameter file (default entries)"
+	}
+	
+	#set cnt 0;
+	foreach var [array names default_entries]  {
+		set entries($var,var) $default_entries($var)
+		#puts $default_entries($var)
+		#set cnt [expr $cnt+1]
+	}
+	Log "done"
+}
+
+# called on exit
+# deletes the program window and the log window
+proc quit {} {
+		catch {send MT_log "destroy ."}
+		destroy .
+		exit
+}
+	
+# Sends an e-mail to maintainer
+# based on felt_report_tool from aeic/response
+proc report_problem {} {
+		makeLine
+		Log "Start report a problem"
+		
+		global Maintainer
+		global Problem_report
+		global Submit
+		
+		catch {destroy .rep}
+		toplevel .rep -class Dialog
+		wm title .rep "Report a problem to $Maintainer"
+		
+		frame .rep.enter
+		pack .rep.enter -side top -fill x
+		
+		label .rep.enter.l -text "Describe Problem:" 
+		pack .rep.enter.l -side top -anchor n
+		
+		frame .rep.enter.f
+		pack .rep.enter.f -side bottom
+		
+		#wm minsize . 0 0
+		#text .text
+		#pack append . .text {fill expand}
+		
+		set Problem_report ""
+		text .rep.enter.f.e \
+		-width 40 -height 10 -yscrollcommand ".rep.enter.f.s set"
+		pack .rep.enter.f.e -side left 
+		
+		
+		scrollbar .rep.enter.f.s -orient vertical -command ".rep.enter.f.e yview"
+		pack .rep.enter.f.s -side right -fill y
+		
+		frame .rep.f
+		pack .rep.f -side right -fill both -expand yes
+		
+		set Submit 0
+		set text ""
+		button .rep.f.submit -text "Submit" -bg #337733 -command {
+			global Submit
+			set Submit 1
+			set Problem_report [.rep.enter.f.e get 1.0 end]
+			#puts $text
+			destroy .rep
+	}
+	pack .rep.f.submit -side top -fill x
+	
+	button .rep.f.cancel -text "Cancel" -bg #993333 -command {
+		global Submit
+		destroy .rep
+	}
+	pack .rep.f.cancel -side top -fill x
+	
+	grab set .rep
+	tkwait window .rep
+	grab release .rep
+	
+	if { $Submit } {
+		set mail [open \
+		"|rtmail -s \"MT_inversion_tool problem\" $Maintainer" w]
+		puts $mail $Problem_report
+		
+		close $mail
+		Log "mail sent"
+	}
+	Log "done"
+}
+	
+	
+create_interface
+load_param_file { $param_file }
+#check argument, if present -- set db and orid
+if { $argc >= 1 } {
+	set tmp [lindex  $argv 0]
+	if { $tmp!="" } {
+		set entry_db $tmp
+	}
+}
+if {$argc ==2 } {	
+	set tmp [lindex  $argv 1]
+	if { $tmp!="" } {
+		set entry_orid $tmp
+	}
+} 
+wm protocol . WM_DELETE_WINDOW {
+		quit
+}

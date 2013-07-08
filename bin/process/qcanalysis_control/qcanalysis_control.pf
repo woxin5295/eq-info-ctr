@@ -1,0 +1,5 @@
+master_site_database 		/Seis/databases/stations/master_stations
+analysis_control_database 	/Seis/processing/tracking_database/aeic_analysis
+analyzed_events_database 	/Seis/processing/analyzed/%Y_%m/analyzed_%Y_%m_%d
+archive_database 		/iwrun/op/db/archive/archive_%Y/archive_%Y_%m_%d
+summary_database 		/iwrun/sum/db/dbqc/qc_quakes

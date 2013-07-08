@@ -1,0 +1,24 @@
+
+water_color	\#c0c0ff
+
+origin_symbol	star
+origin_color	\#001cff
+origin_size	10
+
+other_origin_symbol circle
+other_origin_color	\#4d61ff 
+other_origin_size	6
+
+site_symbol	triangle
+site_color	black
+site_size	4
+
+# overlays is a list of database tables which can optionally be displayed on the map
+# each such table must have the lat and lon fields, and may optionally have a label field
+overlays &Arr{
+#name	database-table color symbol size label-field
+#anza 	anza.site      magenta square 10 staname
+stations_open /Seis/databases/stations/master_stations_open.site magenta triangle 10 staname
+}
+
+pf_revision_time 1273803352

@@ -1,0 +1,96 @@
+#
+# neic2db
+#
+# Geophysical Institute
+# University of Alaska, Fairbanks
+# Sept., 1998
+
+set auto_path [linsert $auto_path 0 $env(ANTELOPE)/data/tcl/library]
+
+
+proc init_globals {} {
+
+	global argv0 argc argv
+	global progname
+        set progname [exec basename $argv0]
+	global dbout
+	global chosen_event
+
+	if { $argc < 1 } {
+                puts stderr "Usage: $argv0 dbname"
+		puts "Scans the users email file for the NEIC solution,
+then concatenates a new origin row to dbname."
+                exit -1
+	} else {
+	  	set dbout [lindex $argv 0]
+	}
+
+}
+
+proc choose_neic_event {} {
+
+	global dbout chosen_event
+
+	set events [exec grep Creating email.out]
+
+	set maxwidth 50
+	set chosen_event [lindex $events 0]
+
+	frame .choose
+	pack .choose -fill x
+        listbox .choose.l -width $maxwidth -selectmode single -yscrollcommand ".choose.sc set"
+        foreach event $events {
+		if {[string match Creating $event] == 0} {
+                   .choose.l insert end $event
+		}
+        }
+        .choose.l selection set 0
+        pack .choose.l -side left -fill x
+	scrollbar .choose.sc -command ".choose.l yview"
+	pack .choose.sc -side right -fill y
+
+	frame .controls
+	pack .controls -fill x
+        button .controls.ch -text Choose -command {
+                set index [.choose.l curselection]
+                set chosen_event [.choose.l get $index]
+                destroy .choose
+        }
+        pack .controls.ch -side top -fill x
+        button .controls.dis -text Dismiss -command {
+                set chosen_event ""
+                destroy .choose
+                exit -1
+        }
+        pack .controls.dis -side top -fill x
+
+	tkwait variable chosen_event
+
+	return
+}
+
+init_globals
+
+global dbout
+
+
+catch "exec email2pick.script > email.out"
+
+choose_neic_event
+
+#echo pick2db $chosen_event pickdb
+catch "exec pick2db $chosen_event pickdb"
+
+catch "exec aeic_dbconcat_event $dbout pickdb concatdb"
+
+# explicitly copy descriptor file
+exec /bin/mv $dbout tmpfile
+exec dbcp concatdb $dbout
+exec /bin/mv tmpfile $dbout
+
+exec /bin/rm pickdb pickdb.event pickdb.lastid pickdb.origerr pickdb.origin
+exec /bin/rm concatdb.arrival concatdb.assoc concatdb.event concatdb.netmag
+exec /bin/rm concatdb.origerr concatdb.origin concatdb.stamag concatdb.wfmeas
+exec /bin/rm email.out
+
+exit

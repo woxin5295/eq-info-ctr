@@ -1,0 +1,63 @@
+.TH delete_event 1 2007/09/28 "Glenn Thompson, AEIC" "User Commands"
+.SH NAME
+delete_event - delete an event from a database, and/or from systems including EOC, QDDS, recenteqs and ShakeMap
+.SH SYNOPSIS
+.nf
+delete_event [-adeqrst] [-p parameter_file] database evid [evtime]
+.fi
+.SH DESCRIPTION
+\fBdelete_event\fP will remove an event database or a downstream system depending on the command line options given, and the parameters in the parameter file. If -q, -s or -e switches are given, the event is also deleted from QDDS, ShakeMap or EOC systems respectively. 
+If there is no match on evid - for example if this is a database with different ids to the AEIC summary event database - then the event time can be provided in epoch format as the optional evtime command line argument.
+ 
+The -t switch specifies that \fBdelete_event\fP be run in test mode, in which case no deletes will take place.
+.LP
+.SH COMMAND LINE ARGUMENTS
+These are:
+.IP -a 
+Add a row to the ignore table marking this event for removal from the *all* systems (including the QDDS system and the recenteqs database). db2xml is also called to convert the ignoredb table to an xml file.
+.IP -d
+Remove this event from the database given on the command line. Do not do this with the summary database!
+.IP -e
+Send a delete message to the EOC orbserver marking this event for removal from the EOC system. It is then processed by the program 'process_delete_messages'.
+.IP "-p parameter_file"
+Specify the path of a parameter file to use. Without a parameter file it is only possible to delete from a database. No downstream systems can be affected.
+.IP -q 
+Add a row to the ignore table marking this event for removal from the QDDS system. Note: Due to a problem with the ignore database, option q is now deprecated, and replaced with option a. If use_ignore_table is set to 0, the old QDDS interface can still be invoked with the -q option.
+.IP -r 
+Add a row to the ignore table marking this event for removal from the recenteqs database. Note: Due to a problem with the ignore database, option q is now deprecated, and replaced with option a.
+.IP -s
+Delete the event from the ShakeMap system (if a ShakeMap was generated). This option is now deprecated - a decision was made in Feb2008 not to propagate manual deletes to the ShakeMap system.
+.IP -t
+test mode on (no deletes will be made)
+.IP database
+The path of the database containing this event
+.IP evid
+The event id
+.IP evtime
+The event time in epoch format (optional)
+.LP
+.SH "PARAMETER FILE"
+.IP use_ignore_table
+Set to 1 to enable adding rows to the ignore table. If this is omitted, or set to any value other than 1, legacy mode is invoked in which the program will attempt to delete the event from QDDS using the old Antelope-QDDS interface (providing -q or -a command line option is given).
+.IP ignoredb
+The path of the ignore database.
+.IP create_ignore_row
+The path to the create_ignore_row program, e.g.:
+create_ignore_row /usr/local/aeic/4.9/bin/create_ignore_row
+.IP qdds_delete_script
+The path to the legacy script for deleting an event from QDDS. This will only be invoked if use_ignore_table != 1
+qdds_delete_script      /usr/local/bin/QDDS/DELETE_QDDS_EVENTID
+.IP eoc_server_send
+The watch directory path to send delete messages to so that they will be detected by orbxfer2 running on the EOC observer
+.IP eoc_mode
+Either "time" or "evid". Currently, the EOC system does not maintain evids, so event matching must be done on time rather than evid.
+.IP shakemap_delete_script
+The path to the ShakeMap cancellation script
+.IP notify_by_email
+An single email (or email alias) to which to send notifications each time this program is run (don't use multiple email addresses).
+
+.SH AUTHOR
+Glenn Thompson, 2007-10-08. Last modified 2008-02-25.
+.br
+Alaska Earthquake Information Center
+

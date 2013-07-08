@@ -1,0 +1,155 @@
+: # use perl
+eval 'exec $ANTELOPE/bin/perl -S $0 "$@"'
+if 0;
+
+use lib "$ENV{ANTELOPE}/data/perl" ;
+use strict ;
+use warnings ;
+use Datascope ;
+#########################################################
+# Glenn Thompson 2008-10-24
+# This program watches a database for new dlcalwf rows, 
+# tries to find the first matching dlcalwf row, 
+# and (if there is a match) then runs dbcalibrateWrapper
+######################################################### 
+sub usage {
+	print "usage: $0 dbContainingDlcalwf nameOfTemporaryDb\n";
+}
+
+if ( $#ARGV != 1 ) {
+	usage ;
+	exit 1 ;
+}
+print "*** Starting $0 ***\n";
+print "Time is now ".`date`;
+
+our ($DBWITHCALWF, $DBTEMP) = @ARGV;
+our $AEICINTERNAL = "/usr/local/mosaic/AEIC/internal";
+our $PSDIR = "psDir";
+my @dbtop = dbopen ( $DBWITHCALWF, 'r' ) ;
+my $sleep = 60;
+my $count = 0;
+my @db = dblookup ( @dbtop, 0, 'dlcalwf', 0, 0 ) ;
+if ($db[1] == dbINVALID) {
+	die ( "Cannot find dlcalwf table in database $DBWITHCALWF\n" ) ;
+}
+my $numrows_start = dbquery ( @db, 'dbRECORD_COUNT' ) ;
+my $last_dlcalseq = ""; # There are usually 6 identical ones in a row. Only process when this is different from current
+while (1) {
+	print "$0: Time is now ".`date` if ((++$count % 60)==0);
+	@db = dblookup ( @db, 0, 'dlcalwf', 0, 0 ) ;
+	my $numrows_now = dbquery ( @db, 'dbRECORD_COUNT' ) ;
+	if ($numrows_now > $numrows_start) {
+
+		# loop over all new rows
+		for (my $rowno = $numrows_start; $rowno < $numrows_now; $rowno++) {
+			$db[3]=$rowno;
+			my ($snet, $fsta, $fchan, $time, $endtime, $dlcalseq, $dlcaltype, $dlcarerr, $dlcalinput, $dlcalchanbm, $samprate, $dlcalamp, $dlcalsettle, $dlcaltrailer) = dbgetv(@db, 
+                          qw(snet   fsta   fchan   time  endtime   dlcalseq   dlcaltype   dlcalerr   dlcalinput   dlcalchanbm   samprate   dlcalamp   dlcalsettle   dlcaltrailer));
+
+			if ($dlcalseq ne $last_dlcalseq) {
+				my $duration = $endtime - $time;
+				&printheader("$0: Processing row $rowno - $snet $fsta $fchan $dlcalseq");
+	
+				# We also need to get the dlcalseq for the first record for this channel (call this the match or reference calibration)
+				my @db2 = dbopen ( $DBWITHCALWF, 'r' ) ;
+				@db2 = dblookup ( @db2, 0, 'dlcalwf', 0, 0 ) ;
+				@db2 = dbsubset( @db2, "snet == \"$snet\" && fsta == \"$fsta\" && fchan == \"$fchan\"");
+				@db2 = dbsubset( @db2, "dlcaltype == \"$dlcaltype\" && dlcalinput == \"s\""); # s means we can use comparison mode, d means cannot
+				@db2 = dbsubset( @db2, "dlcalamp == $dlcalamp && samprate == $samprate");
+				@db2 = dbsubset( @db2, "dlcalchanbm == \"$dlcalchanbm\"");
+				@db2 = dbsubset( @db2, "endtime - time == $duration");
+				@db2 = dbsubset( @db2, "time < $time");
+				@db2 = dbsubset( @db2, "dlcalsettle == $dlcalsettle && dlcaltrailer == $dlcaltrailer");
+				my $numrows_match = &how_many_records(@db2);
+				print "$0: No. of matching rows: $numrows_match\n";
+	
+				if ($numrows_match >= 1) { 
+					$db2[3]=0;
+
+					# Get the number of rows currently in the sensorcal table
+					my @dbsc = dblookup ( @dbtop, 0, 'sensorcal', 0, 0 ) ;
+					my $rowsInSensorcalBefore = dbquery ( @dbsc, 'dbRECORD_COUNT' ) ;
+
+					# Call dbcalibrateWrapper
+					&printheader("Calling dbcalibrateWrapper");
+	
+					print "$0: row # $rowno of dlcalwf\n";
+					my ($fstamatch, $fchanmatch, $timematch, $endtimematch, $dlcalseqmatch) = dbgetv(@db2, qw(fsta fchan time endtime dlcalseq));
+					&run_cmd("bin/dbcalibrateWrapper  $DBWITHCALWF $DBTEMP $dlcalseq $dlcalseqmatch");	
+					print "$0: back from dbcalibrate\n";
+
+					# Get the number of rows now in the sensorcal table
+					@dbsc = dblookup ( @dbtop, 0, 'sensorcal', 0, 0 ) ;
+
+					my $rowsInSensorcalAfter = dbquery ( @dbsc, 'dbRECORD_COUNT' ) ;
+					printf("$0: AFTER RUNNING DBCALIBRATEWRAPPER THERE ARE %d NEW ROWS IN SENSORCAL\n", $rowsInSensorcalAfter - $rowsInSensorcalBefore);
+
+					# If new rows have been added, call displayscal
+					if ($rowsInSensorcalAfter > $rowsInSensorcalBefore) {
+
+					
+
+					   # loop over all new rows
+					   for (my $rowno = $rowsInSensorcalBefore; $rowno < $rowsInSensorcalAfter ; $rowno++) { # yes, the range here is correct
+						$dbsc[3]=$rowno;
+
+						# Run displayscal for each new row
+						&printheader("Processing row number $rowno");
+						print "$0: Calling displayscal_aeic\n";
+						#$mode = ($#calseqs == 1)? "compare" : "monitor"; # need to check dlcalseqr to estbalish if its monitor, so assume it comparison
+						my $mode = "compare";
+						my ($sta, $chan) = dbgetv(@dbsc, "sta", "chan");
+
+						&run_cmd("bin/displayscal_aeic $DBWITHCALWF $rowno");
+
+						# Process any new postscript files
+						foreach my $psfile (glob("displayscal_*.ps")) {
+							my $pdffile = "$AEICINTERNAL/stations/calpdf/$sta" . $chan . "_" . $mode . ".pdf";
+							&run_cmd("/usr/sfw/bin/ps2pdf $psfile $pdffile");
+							&run_cmd("mv $psfile $PSDIR");
+						}
+					   }
+					}
+
+
+	
+				}
+			}
+			$last_dlcalseq = $dlcalseq;
+		}
+
+	}
+	$numrows_start = $numrows_now;
+	sleep($sleep);
+
+}
+
+dbclose(@db);
+1;
+
+
+
+# subroutines
+sub run_cmd {
+	my $cmd = $_[0];
+	print "$0: $cmd\n";
+	system($cmd);
+	
+}
+
+
+sub how_many_records {
+	my @dbptr = @_;
+	my $numrecs = dbquery ( @dbptr, 'dbRECORD_COUNT' ) ;
+	print "$0: $numrecs records\n";
+	return $numrecs;
+}
+
+sub printheader {
+	my $string = $_[0];
+	print "\n\n######################################################################\n";
+	print "$0: $string\n";
+	print `date`;
+	print "######################################################################\n\n";
+}

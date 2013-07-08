@@ -1,0 +1,89 @@
+phases &Arr{
+P  &Arr{
+	travel_time_calculator ttlvz
+	velocity_model &Tbl{
+	2.3	0.0
+	2.6	2.3
+	3.4	3.0
+	5.1	4.0
+	6.3	12.0
+	8.0	47.0
+	}
+	time_distance_weight_function &Tbl{
+	0.0	1.0
+	1.5	1.0
+	5.0	0.1
+	10.0	0.0
+	360.0	0.0
+	}
+	ux_distance_weight_function &Tbl{
+        0.0     1.0
+        10.0    1.0
+        90.0    0.7
+        92.0    0.0
+        360.0   0.0
+        }
+        uy_distance_weight_function &Tbl{
+        0.0     1.0
+        10.0     1.0
+        90.0    0.7
+        92.0    0.0
+        360.0   0.0
+        }
+	default_time_uncertainty 0.2
+	default_slowness_uncertainty 0.01
+        dt_bound_factor 0.01
+        du_bound_factor 0.035
+	time_station_corrections &Tbl{
+	}
+	ux_station_corrections &Tbl{
+        }
+        uy_station_corrections &Tbl{
+        }
+}
+# Vs = Vp / sqrt(3) = Vp / 1.7321 = 0.5774*Vp
+S  &Arr{
+	travel_time_calculator ttlvz
+        velocity_model &Tbl{
+	1.28	0.0
+	1.44	2.3
+	1.89	3.0
+	2.83	4.0
+	3.54	12.0
+	4.49	47.0
+        }
+	time_distance_weight_function &Tbl{
+	0.0	1.0
+	1.5	1.0
+	5.0	0.1
+	10.0	0.0
+	360.0	0.0
+	}
+	ux_distance_weight_function &Tbl{
+        0.0     1.0
+        10.0     1.0
+        90.0    0.7
+        92.0    0.0
+        360.0   0.0
+        }
+        uy_distance_weight_function &Tbl{
+        0.0     1.0
+        10.0     1.0
+        90.0    0.7
+        92.0    0.0
+        360.0   0.0
+        }
+	default_time_uncertainty 0.5
+	default_slowness_uncertainty 0.005
+        dt_bound_factor 0.01
+        du_bound_factor 0.035
+	time_station_corrections &Tbl{
+	}
+	ux_station_corrections &Tbl{
+        }
+        uy_station_corrections &Tbl{
+        }
+}
+}
+
+# $Id: augustine.pf,v 1.3 2006-04-06 00:09:20 natasha Exp $ 

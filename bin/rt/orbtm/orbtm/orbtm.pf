@@ -1,0 +1,52 @@
+#  
+#  orbwfrms parameter file used to specify channels to process 
+#  and channel-dependent processing parameters
+#
+
+#  Following are global default parameters:
+
+calib_from_db	yes	# calib values from database?
+maxpkts		10	# maximum number of packets in time-ordered queue
+
+bands &Tbl{		# These are the processing frequency bands
+# for each channel
+	&Arr{
+		filter	BW 1.0 5 10.0 5 	# filter specification
+		tag		B2	
+		fc	    0.55		# center frequency
+		fpad	60.0		# filter transient pad
+		twin	120.0		# averaging window
+		tmin	5.0		# minimum contiguous data for ave
+		minimum_ontime 10 # minimum ontime
+		output_individual_channels	0
+		low		100.0
+		medium	500.0
+		high	1000.0
+#units   gravity
+		units   m/sec
+	}
+}
+
+#  Following are channel processing parameter templates:
+
+templates &Arr{
+	template1 &Arr{		# template number 1
+		maxpkts	10	# maximum number of packets in time-ordered queue
+	}
+}
+
+#  Following is a list of channels for processing:
+
+channels &Tbl{
+#	netstachanloc		template
+	.*_BH.		template1
+}
+
+#  Following is a list of channels to reject for processing:
+
+channels_reject &Tbl{
+	AZ_HWB_.*
+	AZ_BVDA2_.*
+}
+
+pf_revision_time 1046974037

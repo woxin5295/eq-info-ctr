@@ -1,0 +1,21 @@
+VDL distribution.  On gldfs.cr.usgs.gov in FTP area "vdl".
+
+If you get the this file via the mail save the mail message to
+parent_directory/filename. Then 
+
+cd parent_directory
+uudecode filename				! Creates the vdl.tar.Z
+
+Continue if via the mail or if you FTPed the .Z file to begin with :
+
+cd parent_directory
+uncompress vdl.tar.Z	
+tar xvf vdl.tar
+cd ../vdl
+
+Tar will create directories vdl under the current 
+directory.  There is a README in vdl with more information.
+
+Dave Ketchum
+ketchum@gldfs.cr.usgs.gov (303) 273-8479
+

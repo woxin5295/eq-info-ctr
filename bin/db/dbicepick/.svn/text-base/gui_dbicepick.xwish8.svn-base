@@ -1,0 +1,218 @@
+
+package require Tclx
+
+load /usr/local/lib/libqwm.so.3
+lappend auto_path $env(ANTELOPE)/data/tcl/library
+ 
+proc commandline {datadb begin end exp} {
+	set expsta [exec echo $exp | awk {{FS=":"}{print $1}} | sed -e "s:,:\|:g"]
+	set expchan [exec echo $exp | awk {{FS=":"}{print $2}} | sed -e "s:,:\|:g"]
+	set command "dbicepick -begin \"$begin\" -end \"$end\" -db $datadb \'sta =~ /$expsta/ && chan =~ /$expchan/\'"
+	return $command	
+}
+proc parse_command_line {} {
+	global argc argv datadb begin end exp 
+	set index [lsearch  $argv -begin]
+	set yrmtdy [exec date -u +%m/%d/%Y]
+	if {$index != -1} {
+		set begin "[lindex $argv [expr $index + 1]] [lindex $argv [expr $index + 2]]" 
+		set argv [lreplace $argv $index [expr $index + 2]]
+		incr argc -3
+	} else {
+		set begin "$yrmtdy 01:00:00"
+	}
+	set index [lsearch  $argv -end]
+	if {$index != -1} {
+		set end "[lindex $argv [expr $index + 1]] [lindex $argv [expr $index + 2]]" 
+		set argv [lreplace $argv $index [expr $index + 2]]
+		incr argc -3
+	} else {
+		set end "$yrmtdy 01:03:00"
+	}
+	set index [lsearch  $argv -db]
+	if {$index != -1} {
+		set datadb [lindex $argv [expr $index + 1]]
+		set argv [lreplace $argv $index [expr $index + 1]]
+		incr argc -2
+	} else {
+		puts stderr "Usage: gui_dbicepick -db dbname \[-begin begin_time\] \[-end end_time\]"
+		exit -1
+	}
+	if { $argc > 0 } {
+		set exp  $argv
+	} else {
+		set exp ".*:.*"
+	}
+}
+   
+proc MyLabEntry {w args} {
+	frame $w
+	global Font
+	label $w.l
+	entry $w.e -width 80 -font $Font
+	pack $w.l -side left
+	pack $w.e -side right -fill x -expand yes
+	while { ! [lempty $args] } {
+		set option [lvarpop args]
+		switch -- $option {
+			-label { set value [lvarpop args] ; 
+				$w.l config -text $value }
+			-textvariable { set value [lvarpop args] ; 
+				$w.e config -textvariable $value }
+		}
+	}
+	return $w
+}
+proc MyButEntryScale {w args} {
+	frame $w
+	global Font
+	button $w.b
+	entry $w.e -width 21 -font $Font
+	scale $w.s -orient horizontal 
+#	pack $w.b $w.e -side left  -fill x -expand yes 
+	pack $w.b $w.e -side left  -fill x 
+	pack $w.s -side right  -fill x -expand yes
+	while { ! [lempty $args] } {
+		set option [lvarpop args]
+		switch -- $option {
+			-label { set value [lvarpop args] ;
+				$w.b config -text $value -command dbpickcommands$value
+				if { $value != "expr:" } { 
+					$w.s config -from -120 -to 120 -label seconds -command scalecommands$value
+				} else {
+					$w.s config -from 1 -to 50 -label "Stations Displayed" -command scalecommands$value
+					$w.s set 30
+				}
+			} 
+			-textvariable { set value [lvarpop args] ; 
+				$w.e config -textvariable $value }
+		}
+	}
+	return $w
+}
+proc start_dbpick {} {
+	global DbpickWinName WinfileCommand DbpickCommandWindow datadb env
+	global ComoutCommand DbpickCommandWindowName
+	global exp geometry begin end beginoff endoff numsta
+	set epochstart [str2epoch $begin]
+	set epochend [str2epoch $end]
+	set epochstart [expr $epochstart + $beginoff]
+	set epochend [expr $epochend + $endoff]
+	set tw [expr  $epochend - $epochstart]
+	set DbpickCommandWindowName "dbicepick_dbpick_[pid]"
+	#puts "xterm -sb -title $DbpickCommandWindowName -iconic -geometry 80x24+0-0 -e dbpick -sc $exp -ts $epochstart -tw $tw -nostarttalk $WinfileCommand -geom $geometry -appname $DbpickWinName $ComoutCommand $datadb\n"
+	exec sh -c "xterm -sb -title $DbpickCommandWindowName \
+	 -iconic -geometry 80x24+0-0 -e dbpick -sc $exp -ts $epochstart -tw $tw -nostarttalk $WinfileCommand \
+	-geom $geometry -appname $DbpickWinName $ComoutCommand $datadb " &
+	# Let the window get created!:
+	sleep 1
+        set DbpickCommandWindow [exec xwininfo -int -name $DbpickCommandWindowName | grep xwininfo]
+   	set DbpickCommandWindow [lindex $DbpickCommandWindow 3]
+	catch {send -async $DbpickWinName "cw 1 $numsta"}
+}
+proc dbpickcommands {} {
+	global DbpickWinName exp begin end beginoff endoff numsta
+	set epochstart [str2epoch $begin]
+	set epochend [str2epoch $end]
+	set epochstart [expr $epochstart + $beginoff]
+	set epochend [expr $epochend + $endoff]
+	set tw [expr  $epochend - $epochstart]
+	catch {send -async $DbpickWinName "sw off"}
+	catch {send -async $DbpickWinName "sc $exp"}
+	catch {send -async $DbpickWinName "ts $epochstart tw $tw"}
+	catch {send -async $DbpickWinName "cw 1 $numsta"}
+	catch {send -async $DbpickWinName "sw on"}
+}
+proc dbpickcommandsbegin: {} {
+	dbpickcommands
+}
+proc dbpickcommandsend: {} {
+	dbpickcommands
+}
+proc dbpickcommandsexpr: {} {
+	dbpickcommands
+}
+proc scalecommandsbegin: value  {
+	global beginoff
+	set beginoff $value  
+}
+proc scalecommandsend: value {
+	global endoff
+	set endoff $value  
+}
+proc scalecommandsexpr: value {
+	global numsta 
+	set numsta $value  
+}
+proc run_dbicepick {} { 
+	global first geometry DbpickWinName datadb begin end datadb exp
+	if { $first == 0 } { 
+		set first 1
+		set geometry 1000x700+0-0
+	} else {
+		set first 1
+		set geometry 1000x700+0-0
+		set geometry [exec xwininfo -int -name "dbpick: $datadb" | grep geometry]
+		set geometry [lindex $geometry 1]
+		catch {send $DbpickWinName "quit"}
+	}
+	exec touch $datadb.arrival 
+	exec /bin/rm $datadb.arrival 
+#	set expdbice [exec basename $exp ":.*" | sed -e "s:,:\|:g"]
+	set expsta [exec echo $exp | awk {{FS=":"}{print $1}} | sed -e "s:,:\|:g"]
+	set expchan [exec echo $exp | awk {{FS=":"}{print $2}} | sed -e "s:,:\|:g"]
+	exec dbicepick -begin "$begin" -end "$end" -db $datadb "sta =~ /$expsta/ && chan =~ /$expchan/" 
+	start_dbpick 
+}
+
+set Font -b&h-lucidatypewriter-bold-r-normal-sans-12-*-*-*-*-*-*-*
+set beginoff 0
+set endoff 0
+set numsta 30
+parse_command_line
+set command [commandline $datadb $begin $end $exp]
+set WinfileCommand "-winfile $env(HOME)/.dbicepick_dbpick"
+set DbpickWinName dbpick
+set ComoutCommand ""
+frame .f
+frame .f.t
+frame .f.b
+frame .f.b.l
+frame .f.b.r
+#pack .f.b.l .f.b.r -side left -padx 3m -pady 3m
+#pack .f.b.r -side right -padx 3m -pady 3m
+pack .f.b.l .f.b.r -side top -padx 3m -pady 3m
+pack .f.b.r -side bottom -padx 3m -pady 3m
+#pack .f.t -side top -padx 3m -pady 3m
+#pack .f.b -side bottom -padx 3m -pady 3m
+pack .f.t -side left -padx 3m -pady 3m
+pack .f.b -side right -padx 3m -pady 3m
+MyLabEntry .f.t.datadb -label "Data Database:" -textvariable datadb
+MyButEntryScale .f.b.l.begin -label "begin:" -textvariable begin 
+MyButEntryScale .f.b.r.end -label "end:" -textvariable end 
+MyButEntryScale .f.t.exp -label "expr:" -textvariable exp
+entry .f.t.command -textvariable command -font $Font 
+button .f.t.dbe -text "dbe" -command {exec sh -c "dbe -e $datadb" &}
+#button .f.t.dbpick -text "dbpick" -command "start_dbpick" 
+button .f.t.dbpickprompt -text "dbpick prompt" -command {
+	qwm deiconify $DbpickCommandWindow
+} 
+button .f.t.rundbicepick -text "run dbicepick" -command run_dbicepick 
+button .f.t.quit -text "quit" -command { 
+	catch {send $DbpickWinName "quit"}; exit}
+pack .f -side top   -fill x -pady 10
+pack .f.t.datadb  -fill x 
+pack .f.b.l.begin -fill x 
+pack .f.b.r.end  -fill x
+pack .f.t.command  -fill x 
+pack .f.t.exp -fill x 
+pack .f.t.dbe .f.t.dbpickprompt .f.t.rundbicepick .f.t.quit -side left -padx 2m -pady 2m
+bind .f.t.datadb.e <Leave> {
+	set command [commandline $datadb $begin $end $exp] 
+}
+bind .f.b.l.begin.e <Leave> {set command [commandline $datadb $begin $end $exp]}
+bind .f.b.r.end.e <Leave> {set command [commandline $datadb $begin $end $exp]}
+bind .f.t.exp.e <Leave> {set command [commandline $datadb $begin $end $exp]}
+set first 0
+bind .f.t.command <Return> run_dbicepick 
+

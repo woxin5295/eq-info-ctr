@@ -1,0 +1,30 @@
+center CUT
+range 5
+istaplt 0
+istnam 0
+ipdeplt 0
+ipdepth 4
+iporid 0
+icities 1
+ipipe 1
+iblue 1
+ipmag 1
+idcirc 0
+ititl 1
+iflt 1
+ipumps 0
+icol 1
+itran 0
+ilegnd  0
+title AEIC Weekly Report
+label_files  &Tbl{
+country
+faults
+oceans
+pipeline
+volcanoes
+}
+boilerplate_files  &Tbl{
+aeic
+aeic_vol
+}

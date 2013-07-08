@@ -1,0 +1,7 @@
+#! /usr/bin/tcsh 
+
+# Usage: pipelinedb2xml -db db -dbdown downgradeddb -dbsubset ignore_subset_expr -xmlfile filename [-days num_days] [-debug]
+./pipelinedb2xml -db testdb/dbpipeline -dbdown testdb/dbmirror -debug -xmlfile testdb/events.xml -days 34 -dbsubset '((lat>=60.0&&lat<=71.0&&lon<=-143.0&&lon>=-153.0&&ml>=3.50&&(nass>=15||origin.auth=="neic")&&time>"2000/01/01 00:00:00")||(lat>=55&&lat<=75&&lon<=-135&&lon>=-160&&ml>=5.00&&(nass>=15||origin.auth=="neic")&&time>"2000/01/01 00:00:00"))' 
+#./pipelinedb2xml -db testdb/dbpipeline -dbdown testdb/dbmirror -debug -xmlfile testdb/events.xml -dbsubset 'ml >= 3.50'
+
+

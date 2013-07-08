@@ -1,0 +1,40 @@
+.TH RETRIEVE_SAMBA_INFRASOUND 1 "$Date: 2000-09-28 08:36:37 $"
+.SH NAME
+retrieve_samba_infrasound \- periodically check samba server for dmx files
+.SH SYNOPSIS
+.nf
+retrieve_samba_infrasound orbname
+.fi
+.SH DESCRIPTION
+retrieve_samba_infrasound is a short perl script that checks a samba server
+for dmx waveform-data files (PC-SUDS format) of interest and runs dmx2orb
+on them. retrieve_samba_infrasound keeps track of the latest processed file
+by updating its parameter file, and does not process anything it sees earlier 
+than that. retrieve_samba_infrasound is designed to be run from a cron job. 
+.SH OPTIONS
+.SH FILES
+.SH ENVIRONMENT
+.SH PARAMETER FILE
+.nf
+nordic% cat retrieve_samba_infrasound.pf
+latest_time 0
+user kent%test1
+location //137.229.30.163/inf_data
+nordic%
+.fi
+.SH EXAMPLE
+.ft CW
+.RS .2i
+.RE
+.ft R
+.SH RETURN VALUES
+.SH LIBRARY
+.SH DIAGNOSTICS
+.SH "SEE ALSO"
+.nf
+dmx2orb(1), smbclient(1)
+.fi
+.SH "BUGS AND CAVEATS"
+.SH AUTHOR
+Kent Lindquist
+.\" $Id: retrieve_samba_infrasound.1,v 1.1 2000-09-28 08:36:37 kent Exp $

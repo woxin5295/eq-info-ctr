@@ -1,0 +1,15 @@
+.\" %W% $Date: 2002-02-07 01:56:20 $
+.TH AEIC 5 "$Date: 2002-02-07 01:56:20 $"
+.SH NAME
+aeic \- local setup at the Alaska Earthquake Information Center
+.SH DESCRIPTION
+This man page is an attempt to summarize the evolving documentation for
+software installation, processing tasks, and other useful local information
+about computing at the Alaska Earthquake Information Center. See the
+"See Also" section for a hopefully complete listing of relevant man pages.
+.SH "SEE ALSO"
+.nf
+aeic_dirs(5), aeic_datascope(5), aeic_monthly(5), submit_cnss(5), make_cdrom(5)
+.fi
+.SH AUTHOR
+Kent Lindquist

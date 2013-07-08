@@ -1,0 +1,21 @@
+*
+*	FRONT
+*
+front: front.r fronttrg.r frontput.r qsub.r ifft.r cmprs.r fronttt.r
+		makedate
+		cc datetime.c -gr -t=/r1
+		cc front.r fronttrg.r frontput.r qsub.r ifft.r cmprs.r fronttt.r datetime.r -f=front -m=30 -g -t=/r1
+front.r: front.c nsn.h nsngbl.h cmprs.h ifft.h qsub.h
+		cc front.c -gr -t=/r1 -k=0w
+fronttrg.r: fronttrg.c nsn.h nsngbl.h cmprs.h ifft.h qsub.h
+		cc fronttrg.c -gr -t=/r1 -k=0w
+frontput.r: frontput.c nsn.h nsngbl.h cmprs.h ifft.h qsub.h
+		cc frontput.c -gr -t=/r1 -k=0w
+qsub.r:	qsub.c nsn.h qsub.h nsngbl.h
+		cc qsub.c -gr -t=/r1 -k=0w
+cmprs.r: cmprs.c cmprs.h
+		cc cmprs.c -gr -t=/r1 -k=0w
+ifft.r:	ifft.c ifft.h
+		cc ifft.c -gr -t=/r1 -k=0w
+fronttt.r: fronttt.c nsngbl.h
+		cc fronttt.c -gr -t=/r1 -k=0w

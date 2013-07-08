@@ -1,0 +1,2 @@
+/cnmsn/bin/datasock -p 5001 BLO BHZ,BHN,BHE,LHZ,LHN,LHE >>datasock.log
+vdlucb -n 15 -s 51 -f 20 -c 1 -l 0 -i blo -S BLO -H tgpblo.geology.indiana.edu -P 5001 -C BHZ,BHN,BHE,LHZ,LHN,LHE -host nsn5.cr.usgs.gov -port 2003 -t 1 -k 0

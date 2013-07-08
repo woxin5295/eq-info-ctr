@@ -1,0 +1,27 @@
+# 0 for subsetting according to FIRST arrival time, and segment all stations at once
+# 1 for subsetting according to EACH arrival time, and segment one stations at a time 
+mode            1 # must be 1, as mode 0 has now been dropped as unreliable   
+#
+# seconds BEFORE arrival 
+pretime		240
+#
+# seconds AFTER arrival    
+posttime	240 
+#
+# channels to send to remote orb
+# need .* after BH and H. for GENC
+chansift	[BSE]H[ZNE].*
+#chansift        BH[ZNE].*|SH[ZNE]|H.[ZNE].*
+#
+# number of seconds to wait for orb2orbcopy to run before killing it
+time_to_wait	12
+#
+# path to orb2orb_copy (a copy of orb2orb, but needs a different name for killing)
+orb2orbcopy	bin/orb2orbcopy
+#
+# list of waveform orbs to use
+wforb	&Tbl{ 
+	energy:6510
+	ice:6510
+	earlybird:6510
+}	

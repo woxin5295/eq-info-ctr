@@ -1,0 +1,2 @@
+#
+f77 -C bestfit.f -g /we/src/vaxlib/vaxlib.a -o bestfit

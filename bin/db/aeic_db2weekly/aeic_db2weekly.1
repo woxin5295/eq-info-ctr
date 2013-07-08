@@ -1,0 +1,49 @@
+.\" @(#)dbml.1  1.1 07/29/99
+.TH DB2WEEKLY "$Date: 2004-11-11 23:29:44 $"
+.SH NAME
+db2weekly \-  generates the lists and figures used in the AEIC weekly report.
+.SH SYNOPSIS
+db2weekly dbin minimim_mag 
+.LP
+where:
+.LP
+dbin = input database
+.LP
+minimum_mag =  Minimum magnitude threshold for highlights
+.SH DESCRIPTION
+db2weekly assumes that the input database includes a full weeks worth of earthquakes. Given a 
+weekly database, db2weekly will generate a complete USGS style event listing, brief descriptions
+of all events that meet the minimum magnitude criterion and two maps of seismicity in Alaska. 
+.SH OPTIONS
+.IP "dbin"
+The input dabase name. Assumed to be a weekly database. This argument is required.
+.IP "minimum_mag"
+The minimum earthquake magnitude to report in the highlights. This argument is required.
+.SH FILES
+db2weekly generates the lists and figures used in the AEIC weekly report. Output files include
+a complete listing of all events in the weekly database (weekly_list), brief descriptions of
+all events that exceed the minimum manitude (weekly_highlights), a map of Alaska with all events
+in the weekly database (weekly_fig1.ps) and a map of events in south central Alaska (weekly_fig2.ps).
+The files weekly_list and weekly_highlights are ASCII format. The maps weekly_fig1.ps and weekly_fig2.ps
+are PostScript format.
+
+db2weekly will also generate a file of errors detected in the input weekly database (db2weekly.err).
+
+.SH ENVIRONMENT
+.SH EXAMPLE
+.ft CW
+.RS .2i
+.RE
+.ft R
+.SH RETURN VALUES
+.SH LIBRARY
+.SH DIAGNOSTICS
+.SH "SEE ALSO"
+ak_dbmapevents, weekly_report_tool
+.nf
+.fi
+.SH "BUGS AND CAVEATS"
+The total number of events for the southcentral map was being calculated incorrectly in ak_dbmapevents. To fix this problem a subset database for the southcentral region is saved in a separate database (southcentral.origin, southcentral.event). (N.R.)
+.SH AUTHOR
+Dan McNamara and Kent Lindquist. 
+Modifications by Natalia Ratchkovski (location uncertainty calculations (SEZ and SEH) for 68.3% error ellipse, magnitude string, memory problems, subset database for southcentral map).

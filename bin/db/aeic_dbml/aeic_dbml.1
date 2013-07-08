@@ -1,0 +1,127 @@
+
+.TH DBML 1 "$Date: 2002-02-07 01:56:26 $"
+.SH NAME
+dbml \- automatically compute local-magnitude for event(s) in CSS database
+.SH SYNOPSIS
+.nf
+\fBdbml \fP\\[-o \fIorid\fP\\] \\[-v\\] \\[-t\\] \\[-r\\] \\[-p \fIpfname\fP\\] \fIdbname\fP
+.fi
+.SH DESCRIPTION
+\fBdbml\fP computes the local-magnitude for hypocenters in a datascope CSS database.
+The arrivals for the event are found, subsetting for arrival.iphase == "P"
+or assoc.phase == "P". The relevant waveform section for this station is
+found, taking pre_p_sec before the measured P arrival out to twice the
+predicted S-P travel-time difference past the measured P arrival. The default
+is to run on all origins in the origin table, adding new information to the origin,
+netmag, stamag, and wfmeas tables. Ml information in the origins table will
+be overwritten. New magids will cause new rows to be added to the netmag and
+stamag tables, though.
+.SH OPTIONS
+-r      Read-only. No tables are modified.
+
+-v      verbose. aeic_dbml explains why it is omitting stations.
+
+-t      edit mag results with tkedit_ml
+
+-o      specifies a particular origin id (\fIorid\fP) to use. Optional.
+
+-p      specify a parameter file name
+.SH PARAMETER FILE
+.ft CW
+.in 2c
+.nf
+
+.ne 10
+nordic% cat \fBdbml\fP.pf
+nordic%
+pre_p_sec 3
+maxval 2048
+clip_thresh 0.9
+spreading 1.11
+atten 0.00189
+refdist 100
+refmag 3.0
+
+.ne 6
+WoodAndersonResponseFile /usr/local/Iceworm/Development/src/bin/local_mag/Wood_Anderson
+BandpassFilterOrder  4
+BandpassUpperCutoff  10
+BandpassLowerCutoff  0.5
+calfreq 5
+
+mag_network_name mag
+
+clipcheck_immune &Tbl{
+COLA
+KDAK
+IL01
+ILBB
+IM03
+BM03
+BC03
+TT01
+FX01
+}
+
+.fi
+.in
+.ft R
+.SH EXAMPLE
+.ft CW
+.in 2c
+.nf
+
+.ne 8
+%\fB dbml -o 4 -r Quakes_980128\fP
+Processing orid 4
+ILI SHZ: stamag Ml 2.2 885961633.736522 0.359427 84813.500000
+RDN SHZ: stamag Ml 2.1 885961627.097594 0.439302 109285.000000
+CRP SHZ: stamag Ml 2.0 885961625.939402 0.599048 96720.500000
+SWD SHZ: stamag Ml 2.2 885961643.440902 0.159746 74633.000000
+CUT SHZ: stamag Ml 2.0 885961664.536506 0.319490 28066.000000
+
+ Network magnitude 2.1 Ml for orid 4.
+
+%\fB \fP
+
+.fi
+.in
+.ft R
+.SH DIAGNOSTICS
+.ft CW
+.in 2c
+.nf
+
+.ne 7
+
+"CUT SHZ: deemed clipped"
+
+"aeic_dbml: no data"
+
+"aeic_dbml: splice failed!"
+
+.ne 6
+"aeic_dbml: origin table not writeable!"
+
+"aeic_dbml: netmag table not writeable!"
+
+"aeic_dbml: stamag table not writeable!"
+
+.ne 6
+"aeic_dbml: wfmeas table not writeable!"
+
+"aeic_dbml: Failed to open database"
+
+"aeic_dbml: 2 rows with \fIorid\fP 15. Bye!"
+
+"aeic_dbml: Couldn't stat response file /iwrun/bak/params/Wood_Anderson"
+
+.fi
+.in
+.ft R
+.SH "SEE ALSO"
+.nf
+dbmag(1), dbml(1), tkedit_ml(1)
+.fi
+.SH AUTHOR
+Kent Lindquist

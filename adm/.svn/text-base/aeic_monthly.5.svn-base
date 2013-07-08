@@ -1,0 +1,169 @@
+.\" %W% $Date: 2002-02-07 01:56:20 $
+.TH AEIC_MONTHLY 5 "$Date: 2002-02-07 01:56:20 $"
+.SH NAME
+aeic_monthly \- monthly catalog tasks at AEIC
+.SH DESCRIPTION
+Several tasks must be completed monthly at the AEIC as the catalog of earthquakes
+is completed. This man page documents these tasks.
+.LP
+1) Currently, we are still processing using xpick and hypoe. Pickfiles
+that are being worked on are in /Seis/pickfiles. Raw waveform data is stored
+in /Seis/AH1.
+.LP
+2) After processing is completed on the pickfiles, quality-control steps
+must be taken. This is currently being restructured.
+.LP
+3) After we are done processing the month's pickfiles, those pickfiles are moved
+from /Seis/pickfiles to /Seis/catalog. They are placed in a directory by month,
+with the name YYMM.
+.LP
+4) These pickfiles for the month need to be converted to a monthly css database
+of earthquakes with p2db(1). p2db must be run from the directory containing
+the pickfiles to be converted.
+These css databases are generated, for example, with
+.ft CW
+.in 2c
+.nf
+
+         nordic% mkdir /Seis/catalog/db/9702
+         nordic% cd /Seis/catalog/9702
+         nordic% p2db 970201 970231 /Seis/catalog/db/9702/db9702
+
+.fi
+.in
+.ft R
+.LP
+5) The monthly CSS database of hypocenters must be submitted to the cnss with
+submit_cnss(1), after conversion to cnss format with db2cnss(1). The
+accounts currently enabled for cnss submission are kent@nordic, roger@nordic,
+and catalog@megathrust.
+.ft CW
+.in 2c
+.nf
+
+.ne 9
+
+        megathrust% su - catalog
+        Passwd:
+        megathrust% cd /Seis/catalog/db/9702
+        megathrust% db2cnss db9702 /Seis/catalog/cnss/cnss_9702
+        megathrust% cd /Seis/catalog/cnss
+        megathrust% submit_cnss 199702 cnss_9702
+
+.fi
+.in
+.ft R
+.LP
+6) Import the pde files from the NEIC
+.ft CW
+.in 2c
+.nf
+
+.ne 9
+
+        go to ?/catalogs/pde/Raw and replace as many weekly PDE files
+        with monthly files as possible. You may have to rebuild the
+        relevant year(s) that are evolving.
+
+        get pde files in ehdf...format from gldfs.cr.usgs.gov
+        in directory pde (finished monthlies)
+        and directory weekly (weekly reports)
+
+.ne 6
+        make sure the script pdecode2css is in the path
+
+        convert the files with
+                nordic% cat > moo
+                USGS_pde1.0
+
+.ne 11
+                nordic%
+                nordic% which pdecode2css
+                nordic% /usr/tools/bin/pdecode2css
+                nordic%
+                nordic%  foreach f ( ehdf*.dat )
+                foreach? ln -s $f moo.pde
+                foreach? dbconvert -v -s css3.0 moo pde_1997_evolving.origin
+                foreach? /bin/rm -f moo.pde
+                foreach? end
+                nordic%
+
+        run the script set_pde_orids(1) on the new css database
+
+        put the new css database in ?/catalogs/pde/
+
+.fi
+.in
+.ft R
+.LP
+7) import REB files from the IDC
+.ft CW
+.in 2c
+.nf
+
+.ne 7
+
+        go to http://www.cdidc.org
+
+        download the compressed GSE files for the months which are
+        missing from ?/catalogs/reb/Raw
+
+        convert each one with reb2db
+
+.fi
+.in
+.ft R
+.SH PARAMETER FILE
+.ft CW
+.in 2c
+.nf
+
+.ne 36
+
+dbconvert parameter file for the conversion of ehdf PDE files to css:
+
+css3.0     &Arr{
+          pde  &Arr{
+              origin     &Arr{
+               input     pde
+               fields    &Arr{
+                   lat   latitude/1000.*(north=="N"?1:-1)
+                   lon   longitude/1000.*(east=="E"?1:-1)
+                   time  date2e(year, month, day, hour*3600+minute*60+second)+csec/100.
+                   depth depth/10.
+                   orid  -1
+                   evid  -1
+                   jdate yearday(date2e(year, month, day, hour*3600+minute*60+second)+csec/100.)
+                   nass  hypoarrivals
+                   ndp   ndp
+                   depdp -999.
+                   mbid  -1
+                   msid  -1
+                   mlid  -1
+                   commid -1
+                   ndef  hypoarrivals
+                   mb    mb == 0 ? -999. : mb/10.0
+                   ms    ms == 0 ? -999. : ms/10.0
+                   ml    (contrib_mag1 == 0 || contrib_type1 !~ /\\[mM\\]\\[Ll\\]/) ? ((contrib_mag2 == 0 || contrib_type2 !~ /\\[mM\\]\\[Ll\\]/) ? -999. : contrib_mag2/100.0 ) : contrib_mag1/100.0
+                   algorithm ["pdecode2css" "hypoquality" hypoquality]
+                   etype ["pdecode2css" "atectonic" atectonic]
+                   dtype ["pdecode2css" "depthquality" depthquality]
+                   srn   srn(latitude/1000.*(north=="N"?1:-1),longitude/1000.*(east=="N"?1:-1))
+                   auth  "PDE"
+                   lddate -9999999999.999
+                   }
+              }
+          }
+
+.fi
+.in
+.ft R
+.SH "SEE ALSO"
+.nf
+p2db(1), aeic_dirs(5), db2cnss(1), submit_cnss(1), set_pde_orids(1),
+pdecode2css(1), dbconvert(1), reb2db(1)
+.fi
+.SH "BUGS AND CAVEATS"
+This man page is not yet complete.
+.SH AUTHOR
+Kent Lindquist

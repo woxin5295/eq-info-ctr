@@ -1,0 +1,35 @@
+.\" %W% %G%
+.TH DB2CNSS 1 "$Date: 2007-08-08 17:16:34 $"
+.SH NAME
+db2cnss \- convert css3.0 database to CNSS Unified Single Line Catalog Format
+.SH SYNOPSIS
+.nf
+\fBdb2cnss \fP\fIdbname\fP \fIoutputfile\fP
+.fi
+.SH DESCRIPTION
+\fBdb2cnss\fP converts a css3.0 database into the CNSS (Council of the National Seismic System)
+Unified Single Line Catalog Format. \fIdbname\fP is the input database, and
+\fIoutputfile\fP specifies the name of the file for the catalog created. If the
+database contains only an origin table, all hypocenters from that table will
+be converted. If an event table is present, the output catalog will contain the
+hypocenters specified by the prefor field in the rows of the event table. In all
+cases, uncertainty information will be taken from the origerr table when present
+and folded into the output. Magnitdues are taken from netmag table and preffered magnitude order is as follows: Mw from the Global CMT Catalog (formerly Harvard), Mw from AEIC regional moment tensor inversion, mb from Global CMT Catalog, mb from NEIC (PDE catalog), Ml from AEIC, Ms from GLobal CMT Catalog, Ms from NEIC.
+.SH DIAGNOSTICS
+.ft CW
+.in 2c
+.nf
+
+No origin table present in $\fIdbname\fP
+No applicable records in $\fIdbname\fP
+
+.fi
+.in
+.ft R
+.SH "BUGS AND CAVEATS"
+The horizontal error field is filled in from origerr.smajax. It should probably be
+some combination of origerr.smajax and origerr.sminax.
+No phase, focal mechanism, moment tensor information is written into the output. 
+The data-center id number is left blank.
+.SH AUTHOR
+Original by Kent Lindquist, updated by Anna Bulanova Aug., 2007.

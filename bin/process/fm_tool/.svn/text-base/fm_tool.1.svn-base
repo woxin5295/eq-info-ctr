@@ -1,0 +1,110 @@
+.TH FM_TOOL "$Date: 2008-05-21 18:45:37 $"
+.SH NAME
+\fBfm_tool\fR \-  Graphical driver to calculate P-wave first motion focal mechanisms. 
+.SH SYNOPSIS
+fm_tool [dbname] [orid]
+.LP
+.SH OPTIONS
+where:
+.LP
+dbname - database name with origin and arrivals. This argument is optional.
+.LP
+orid - origin number of event for which focal mechanism is to be calculated. This argument is optional.
+.LP
+Alternatively, both arguments can be entered interactively throught fm_tool. If there is only one parameter in the command line, it is assumed to be the database name.
+.SH DESCRIPTION
+\fBfm_tool\fR is a graphical-user-interface driver for dbfpfit.
+It is intended to assist AEIC analysts in calculating P-wave first motion focal mechanisms.
+
+The graphical interface contains 2 dialog boxes and 13 colored buttons. The dialog boxes allow
+the user to enter database name and orid of an event for which focal mechanism is to be calculated. The buttons are described in descending order.
+
+Left column:
+
+Button 1 - open database - \fBdbe\fR is called with the path provided in \fBdatabase\fR entry field.
+
+Button 2 - save new db - selects origin, assoc, and arrival records from input \fBdatabase\fR for given \fBorid\fR and saves it as a new database in directory provided as \fBdata_path\fR in the parameter file. 
+The subset database is called dbYRMODAHOMISE.
+
+Button 3 - open dbpick - starts \fBsmartpick_classic\fR with saved subset database. This is to provide means to pick and/or correct first motions.
+
+Button 4 - calculate focal mechanism - calls \fBdbfpfit\fR and calculates focal mechanism. 
+
+Button 5 - view results - runs \fBfpplot\fR to generate postscript file with the final focal mechanism and shows it with \fBghostview\fR option.
+
+Button 6 - update fplane table - writes results into fplane table of the database provided in \fBdatabase\fR entry field. 
+
+Button 7 - print results - sends beach ball plot to default printer.  
+
+Right column:
+
+Top panel - gives an option of selecting system for the waveform display.
+
+Button 1 - gedit parameter file - change option in parameter file for dbfpfit. 
+
+Button 2 - send problem report - send e-mail to maintainer of the tool. 
+
+Buttons 3, 4, 5 - minimize, maximize, or create output window. 
+
+Button 6 - Quit - quits fm_tool. 
+
+.SH FILES
+See dbfpfit for descrition of the output files.
+.SH ENVIRONMENT
+fm_tool expects the ANTELOPE environment variable to be set correctly.
+.SH PARAMETER FILE
+fm_tool expects parameter file fm_tool.pf.
+.ft CW
+.in 2c
+.nf
+
+# parameter file for fm_tool
+
+Maintainer natasha<natasha@gi.alaska.edu>
+
+# list of paths used by the program
+
+Paths &Arr{
+ entry_db 	/Seis/processing/analyzed/2007_08/analyzed_2007_08_01	# path to input database
+ data_path 	/Seis/processing/focal_mechanisms	# data path where subset database for event is saved
+ prog_fm_path 	/usr/local/aeic/4.9/bin	# location of dbfpfit executable
+ pf_path 	/usr/local/aeic/4.9/data/pf	# location of fm_tool.pf
+}
+
+#helpers array
+Helpers &Arr{
+ prog_plot_path /usr/tools/bin/fpplot 	# location of fpplot program for plotting beach ball diagram
+ gedit		gedit
+}
+
+
+# templates for database files, used in 'save new db'
+descr_templ &Arr{
+dbextract_data	
+	css3.0
+	/Seis/databases/stations/{master_stations}:/iwrun/[waveforms]/db/archive/{archive_[date]}
+}
+
+
+.SH EXAMPLE
+asperity% fm_tool &
+.LP
+asperity% fm_tool dbtest 10
+.fi
+.ft CW
+.RS .2i
+.RE
+.ft R
+.SH RETURN VALUES
+.SH LIBRARY
+.SH DIAGNOSTICS
+If wfdisc table can not be found, an error message will be shown in output window:
+"smartpick_classic: table wfdisc not present in dbYRMODAHOMISE. Bye."
+.SH "SEE ALSO"
+dbfpfit, fpplot, aeic_dbaddema 
+.nf
+.fi
+.SH "BUGS AND CAVEATS"
+By default, waveforms are assumed to be located in /iwrun/[op,bak,mig]/run/db/archive/archive_YEAR_MO_DA. To change this setting, you can edit descriptor file of your saved subset database or change descr_temlp parameter in fm_tool.pf. Path to where it is saved is given in data_path parameter in fm_tool.pf parameter file.
+.SH AUTHOR
+Anna Bulanova and Natasha Ruppert, 08/2007.

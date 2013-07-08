@@ -1,0 +1,15 @@
+#!/bin/sh
+#
+#	Delete files in data area that are older than 4 days
+#
+date
+cd
+pwd
+cd /export/home/data/lpig
+pwd
+touch /export/home0/ketchum/rmold.file
+/usr/ucb/df
+pwd
+find . -name 'lpig*' -mtime +4 -ls -exec rm {} \;
+/usr/ucb/df
+cd

@@ -1,0 +1,18 @@
+# Old Antelope-QDDS interface parameters
+qdds_delete_script	DELETE_QDDS_EVENTID
+diffpolldelete		/home/qdds/polldirdelete
+bindir			/usr/local/bin/QDDS
+
+# EOC system parameters
+eoc_server_database	/net/inverse/export/inverse/fema/run/db/quakedb
+eoc_orbxfer_path	/net/inverse/export/inverse/fema/run/xfer2mac
+eoc_delete_mode		time
+
+# ShakeMap system parameters
+shakemap_delete_script 	/net/bedrock/export/bedrock1/ShakeMap/bin/cancel
+
+# emails
+logfile	/home/glenn/logs/delete_event_from_all_systems.log
+
+# dbevents parameter file
+dbeventspf 	/home/glenn/pf/dbevents_aeic_duty.pf

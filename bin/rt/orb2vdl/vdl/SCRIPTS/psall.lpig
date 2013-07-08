@@ -1,0 +1,4 @@
+/usr/bin/ps -A -a -o "pid ppid pcpu time vsz args" | grep vdl
+/usr/bin/ps -A -a -o "pid ppid pcpu time vsz args" | grep LPIG
+/usr/bin/ps -A -a -o "pid ppid pcpu time vsz args" | grep datasock
+/usr/bin/ps -A -a -o "pid ppid pcpu time vsz args" | grep netmon

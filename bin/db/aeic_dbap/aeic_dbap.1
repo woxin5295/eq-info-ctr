@@ -1,0 +1,849 @@
+.TH DBAP 1 "$Date: 2002-02-07 01:56:24 $"
+.SH NAME
+dbap \- array processing program
+.SH SYNOPSIS
+\fBdbap \fP\-dbin \fIdbin\fP \-recipe \fIrecipe1\fP [\fIrecipe2\fP [...]]
+[\-script script_file] [\-dbout dbout] [\-v]
+[\-ts tstart_time] [\-te end_time]
+[\-arid arid] [\-arid_t0 arid_t0] [\-arid_tw arid_tw] [\-chan chan] [\-filter
+                filter] [\-samprate samprate]
+[\-azimuth azimuth] [\-slow slow] [\-name1 value1] [\-name2 value2] [...]
+.SH DESCRIPTION
+.B dbap
+will perform a variety of array processing and display functions.
+The program is process script driven and uses recipe object descriptions
+for the parameters and individual channels that make up a processing object.
+The recipe object descriptions are specified through a parameter file
+(see \fBpfread(3)\fP) and the process script can be specified in
+a number of ways including from a file, directly from standard
+input (interactive) or through an TCL/TK IPC mechanism, tksend
+(see \fBtksend(1)\fP). An extended tcl interpretor is used to interpret
+the process script.
+This program will only work with v. 3.0 of the CSS schema.
+.SH COMMAND LINE ARGUMENTS
+.TP 15
+\fB\-dbin \fIdbin\fP\fP
+The input database name.
+This argument is required.
+.TP 15
+\fB\-recipe \fIrecipe1\fP [\fIrecipe2\fP [\fI...\fP]]\fP
+A list of one or more parameter names that will contain the recipe object
+descriptions and the process script. Note that a parameter name is the prefix
+of a parameter file name (the part before the \fI.pf\fP), so the actual recipe
+parameter file name would be something like \fIrecipe1.pf\fP. The general format
+of parameter files is described in \fBpfread(3)\fP and the specific format
+for \fBdbap\fP is described later.
+At least one recipe parameter file is required.
+.TP 15
+\fB\-script \fIscript_file\fP\fP
+A file that contains the process script. If this is not specified, then
+the process script is taken from standard input.
+.TP 15
+\fB\-dbout \fIdbout\fP\fP
+The output database name.
+This argument is optional if not specified, then
+there is no output database.
+.TP 15
+\fB\-v\fP
+Verbose flag. If specified, then there is verbose standard output.
+.TP 15
+\fB\-ts \fItstart_time\fP\fP
+A data sift start time. This argument specifies the subset of
+waveform segments that will be available for analysis. Only
+waveform segments with start time or end time later than \fItstart_time\fP will be
+used. This argument is optional and if it is not specified, then waveform
+segment times will not be subject to start time sifting. The
+start time, \fItstart_time\fP, can be specified in several different ways:
+.IP
+1. An epoch time in seconds since 00:00:00 1 Jan 1970 GMT.
+.IP
+2. A character string in `month/day/year hour:minute:second' form.
+.IP
+3.  A character string in `jdate:hour:minute:second' form.
+.TP 15
+\fB\-te \fIend_time\fP\fP
+A data sift end time. This argument specifies the subset of
+waveform segments that will be available for analysis. Only
+waveform segments with start time or end time earlier than \fItend_time\fP will be
+used. This argument is optional and if it is not specified, then waveform
+segment times will not be subject to end time sifting.
+.TP 15
+\fB\-arid \fIarid\fP\fP
+An arrival id value specifying an entry in the \fBarrival\fP table of
+the input database. The \fItime\fP field from this entry is used in
+conjunction with \fIarid_t0\fP and \fIarid_tw\fP
+for specifying a time window for processing.
+This argument is optional.
+.TP 15
+\fB\-arid_t0 \fIarid_t0\fP\fP
+A processing start time in seconds relative to the reference time specified
+through \fIarid\fP.
+This argument is optional. The default value is 0.
+.TP 15
+\fB\-arid_tw \fIarid_tw\fP\fP
+A processing time window in seconds.
+This argument is optional. The default value is 1.
+.br
+NOTE: The time window specifications, \fItstart_time\fP, \fIend_time\fP,
+\fIarid\fP, \fIarid_t0\fP and \fIarid_tw\fP, are used to define an initial
+sifting window for extracting waveforms from the input database. These values
+are all passed as tcl variables into the processing script interpretor. The
+\fBactual\fP processing windows are determined by the processing script,
+which will have access to these command line specifications.
+.TP 15
+\fB\-chan \fIchan\fP\fP
+A channel code specification that will overide channel codes in the recipe
+object descriptions. If this argument is specified, then \fIchan\fP will
+replace each channel code in the input channel specifications for each
+recipe object. The wildcard character '.' can be used in \fIchan\fP, which
+means to not replace that particular character. Thus, one can specify
+\fIchan\fP as something like 'B..' which would indicate to replace only
+the first character in all of the three character channel codes with the
+character 'B'. Note that this only changes input channel codes and not output
+channel codes, such as those for output beams.
+.TP 15
+\fB\-filter \fIfilter\fP\fP
+A filter specification that will will overide filter specifictions in the recipe
+object descriptions. If this argument is specified, then \fIfilter\fP will
+replace each filter specification in the input channel specifications for each
+recipe object. Filter specifications are described in more detail later.
+.TP 15
+\fB\-samprate \fIsamprate\fP\fP
+A sample rate in samples per second that will overide the default sample
+rates that are either specified in the recipe object descriptions or
+are determined from the input data traces. All of the input data channels
+are resampled to this sample rate before any processing occurs. Anti-aliasing is
+automatically applied whenever the sample rate is lowered. A \fIsamprate\fP
+value of 0.0 means to use the input sample rate.
+.TP 15
+\fB\-azimuth \fIazimuth\fP\fP
+An azimuth value in degrees clockwise from north that will overide azimuth values
+specified in the recipe object descriptions. If this argument is specified, then \fIazimuth\fP will
+replace the azimuth specification for each recipe object.
+.TP 15
+\fB\-slow \fIslow\fP\fP
+A slowness value in seconds per km that will overide slowness values
+specified in the recipe object descriptions. If this argument is specified, then \fIslow\fP will
+replace the slowness specification for each recipe object.
+.TP
+\fB\-name1 \fIvalue1\fP [\-name2 \fIvalue2\fP] [\fI...\fP]\fP
+An optional list of name-value pairs that are used for setting variables
+in the process script interpretor. The variables names will be \fIname1\fP,
+\fIname2\fP, etc. These can be used for passing information in a free-form
+fashion through the command line to the process script interpretor.
+.bp
+.SH RECIPE PARAMETER FILES
+One or more recipe parameter files must be specified in the command line.
+Recipe parameter files must conform to the general format rules of
+parameter files (see \fBpfread(3)\fP). Each recipe parameter file will
+have the general format shown below.
+.br
+.ft CW
+.in 2c
+.nf
+
+.ne 6
+.sp
+
+#
+#       example recipe file for dbap
+#
+
+.ne 10
+recipe_objs     &Arr{   # This section defines the recipe objects
+
+        \fIobj1\fP      &Arr{   #This identifies the first object
+                type    \fItype\fP              # This identifies the object type
+                params  \fIparameter list\fP    # The paramter list for this recipe object
+                channels &Tbl{  #This specifies the channels used in the object
+                        ...
+                }
+        }
+
+.ne 8
+        \fIobj2\fP      &Arr{   #This identifies the next object
+                type    \fItype\fP              # This identifies the object type
+                params  \fIparameter list\fP    # The paramter list for this recipe object
+                channels &Tbl{  #This specifies the channels used in the object
+                        \fI...\fP
+                }
+        }
+
+        \fI...\fP
+
+}               # This closes the recipe object descriptions
+
+.sp
+
+.fi
+.in
+.ft R
+.LP
+One or more recipe objects must be specified and their names, \fIobj1\fP, \fIobj2\fP,
+etc., must be unique. These names are used in the process script to reference
+the recipe descriptions. If more than one recipe parameter file are specified in
+the command line, then the recipe objects are
+concatentaed together in the order in which they appear in the command line.
+.bp
+.SH RECIPE OBJECT DESCRIPTIONS
+.LP
+Each recipe object defines a single array processing function and the parameters
+and input data channels that are used in that function. Time windows are not considered
+to be part of the recipe object descriptions, but are instead passed to the actual
+array processing operations at execution time when the process script is interpreted.
+Each recipe object description consists of three parts; a \fBtype\fP, which defines
+the basic type of object, \fBparams\fP, which is a list of type-specific parameters
+and \fBchannels\fP, which is a table of the input channel specifications. Recipe
+object types and the associated parameter lists are shown below.
+.TP 15
+\fBbeam\fP
+This defines a traditional time-domain beam that is computed by slant-stacking the
+input data channels. Each individual beam sample is automatically normalized by
+the numbers of channels that were stacked. The \fBparams\fP list for type \fBbeam\fP
+is as follows.
+.br
+.sp
+\fBarray\fP - The (sub)array code. This identifies the particular mix of input data channels
+that was used in the beam. This is also used as the station code when writing the beam
+to the output database.
+.br
+.sp
+\fBrefsta\fP - The reference station. This identifies the reference station for which the
+beam time shift will be zero.
+.br
+.sp
+\fBchan\fP - The beam channel code. This is the channel code that will be assigned to
+the beam and used when writing the beam to the output database. This can be overwritten
+at execution time through the \fB-bchan\fP argument of the \fBprocess\fP command.
+Wildcard substitution rules are described in the \fB-chan\fP command
+line argument description.
+.br
+.sp
+\fBazimuth\fP - The azimuth in degrees clockwise from north that is used in computing
+the plane-wave time shifts.  This can be overwritten either through the \fB-azimuth\fP
+command line argument, or
+at execution time, through the \fB-azimuth\fP argument of the \fBprocess\fP command.
+.br
+.sp
+\fBslow\fP - The slowness in seconds per km that is used in computing
+the plane-wave time shifts.  This can be overwritten either through the \fB-slow\fP
+command line argument, or
+at execution time, through the \fB-slow\fP argument of the \fBprocess\fP command.
+.br
+.sp
+\fBtpad\fP - The time pad in seconds applied at both ends of the waveforms
+to minimize transient effects from time shifting and filtering.
+.br
+.sp
+\fBsamprate\fP - The sample rate in samples per second.  All of the input data channels
+are resampled to this sample rate before any processing occurs. Anti-aliasing is
+automatically applied whenever the sample rate is lowered. A \fBsamprate\fP
+value of 0.0, or no \fBsamprate\fP specification, means to use the input sample rate.
+This can be overwritten through the \fB-samprate\fP command line argument.
+.TP 15
+\fBxygrid\fP
+This defines an east-west north-south slowness grid of normalized beam power values
+over one or more time windows that are specified at exectution time. The normalized
+beam power values at each grid node are computed by 1) form a slant-stack unnormalized beam
+(do not divide by the number of channels used) for the particular x-y slowness value,
+2) compute the mean sum squared of the unnormalized beam over the time window to get the raw beam power,
+3) compute the mean sum squared of each individual input channel over the time window
+to get a list of input channel powers, 4) sum the input channel powers, and 5) divide
+the raw beam power by the sum of the input channel powers to get a normalized beam power.
+The \fBparams\fP list for type \fBxygrid\fP is as follows.
+.br
+.sp
+\fBarray\fP - The (sub)array code. This identifies the particular mix of input data channels
+that was used in the xygrid.
+.br
+.sp
+\fBrefsta\fP - The reference station. This identifies the reference station for which the
+beam time shifts will be zero.
+.br
+.sp
+\fBnx\fP - The number of east-west slowness values in the grid.
+.br
+.sp
+\fBxmin\fP - The minimum east-west slowness grid value in sec per km.
+.br
+.sp
+\fBxmax\fP - The maximum east-west slowness grid value in sec per km.
+.br
+.sp
+\fBny\fP - The number of north-south slowness values in the grid.
+.br
+.sp
+\fBymin\fP - The minimum north-south slowness grid value in sec per km.
+.br
+.sp
+\fBymax\fP - The maximum north-south slowness grid value in sec per km.
+.br
+.sp
+\fBtpad\fP - The time pad in seconds applied at both ends of the waveforms
+to minimize transient effects from time shifting and filtering.
+.br
+.sp
+\fBsamprate\fP - The sample rate in samples per second.  All of the input data channels
+are resampled to this sample rate before any processing occurs. Anti-aliasing is
+automatically applied whenever the sample rate is lowered. A \fBsamprate\fP
+value of 0.0, or no \fBsamprate\fP specification, means to use the input sample rate.
+This can be overwritten through the \fB-samprate\fP command line argument.
+.TP 15
+\fBstgrid\fP
+This defines a slowness-time grid of normalized beam power values over a sliding time window
+that is specified at execution time. The normalized beam power values are computed
+in the same manner as for the \fBxygrid\fP object. The slowness-time grid is computed
+at a fixed azimuth. The \fBparams\fP list for type \fBstgrid\fP is as follows.
+.br
+.sp
+\fBarray\fP - The (sub)array code. This identifies the particular mix of input data channels
+that was used in the stgrid.
+.br
+.sp
+\fBrefsta\fP - The reference station. This identifies the reference station for which the
+beam time shifts will be zero.
+.br
+.sp
+\fBazimuth\fP - The constant azimuth in degrees clockwise from north that is used in computing
+the plane-wave time shifts for the slowness-time grid.  This can be overwritten either through the \fB-azimuth\fP
+command line argument, or
+at execution time, through the \fB-azimuth\fP argument of the \fBprocess\fP command.
+.br
+.sp
+\fBns\fP - The number of slowness values in the grid.
+.br
+.sp
+\fBsmin\fP - The minimum slowness grid value in sec per km.
+.br
+.sp
+\fBsmax\fP - The maximum slowness grid value in sec per km.
+.br
+.sp
+\fBtpad\fP - The time pad in seconds applied at both ends of the waveforms
+to minimize transient effects from time shifting and filtering.
+.br
+.sp
+\fBsamprate\fP - The sample rate in samples per second.  All of the input data channels
+are resampled to this sample rate before any processing occurs. Anti-aliasing is
+automatically applied whenever the sample rate is lowered. A \fBsamprate\fP
+value of 0.0, or no \fBsamprate\fP specification, means to use the input sample rate.
+This can be overwritten through the \fB-samprate\fP command line argument.
+.sp
+.LP
+A \fBchannels\fP specification for each recipe object is required. This is a table of
+input data channels and parameters. The channel table format is the same for all
+of the recipe object types. Each line consists of a single input data channel with
+the following fields.
+.br
+.sp
+\fBsta\fP - The input channel station code.
+.br
+.sp
+\fBchan\fP - The input channel channel code. This can be overwritten
+either through the command line argument, \fB-chan\fP, or at exectution
+time through the \fB-chan\fP argument of the \fBprocess\fP command.
+Wildcard substitution rules are described in the \fB-chan\fP command
+line argument description. For recipe object type \fBbeam\fP, channel
+codes must exactly match the channel codes in the input database.
+For recipe object types \fBxygrid\fP and \fBstgrid\fP, channel
+codes must either exactly match the channel codes in the input database,
+or, in the case where the last character of the channel code is 'R'
+or 'T', then there must be channel codes in the input database that
+match up to the last character with characters 'N' and 'E' instead.
+In this case, the input data is automatically rotated into radial ('R')
+and transverse ('T') components as it is read in using the fixed azimuth
+for \fBstgrid\fP objects or the \fB-azimuth\fP argument of the \fBprocess\fP command
+for \fBxygrid\fP objects.
+.br
+.sp
+\fBwt\fP - A weighting factor. This should normally be set to 1.0, but
+can be used to temporarily disable a channel (by setting to 0.0), or to
+increase or decrease the influence of individual channels. The stack normalizations
+are all done properly using the sums of the weighting factors.
+.br
+.sp
+\fBtcor\fP - A static time correction value in seconds. This is normally
+set to 0.0 unless a static time correction is known for the individual
+channels.
+.br
+.sp
+\fBgaps\fP - This must be one of three values; \fIsegment\fP, \fIinterp\fP
+or \fIzero\fP. This controls how data gaps are treated. \fIsegment\fP means
+to keep gaps as gaps which will causes gaps to appear in the processed
+results. \fIinterp\fP means to linearly interpolate through input channel
+data gaps before applying the filter. \fIzero\fP means to zero fill input channel
+data gaps before applying the filter.
+.br
+.sp
+\fBfilter\fP - This specifies a filter that is applied to the data when
+it is read in and before any array processing. If this is \fInone\fP,
+then no filtering is done. This can be overwritten
+either through the command line argument, \fB-filter\fP, or at exectution
+time through the \fB-filter\fP argument of the \fBprocess\fP command.
+A 5 pole 0.8 to 3.5 hz bandpass butterworth filter is specified as
+.br
+\fIBW 0.8 5 3.5 5\fP.
+.SH PROCESS SCRIPT
+All of the actual execution is controlled through the process script.
+When \fBdbap\fP starts, the recipe files are read, the recipe objects are
+formed using the rules described previously, the input and output databases are opened,
+the input database is scanned to make a list of available station-channel-time
+waveforms for processing, and an extended tcl interpretor is launched to
+execute the process script. The process script comes from either a file,
+or standard input, or through the tksend interface, as described previously, but
+in any case the format of the script is the same. Use of the tksend interface
+allows \fBdbap\fP to be executed in the background with another program controlling
+the execution. Anything you can do with normal tcl scripts, such as setting
+variables, evaluating expressions, logical and looping control structure, subroutines,
+writing to files, etc., can be done in a \fBdbap\fP process script. In addition,
+there are extended tcl commands to execute the array processing, to display the
+results of array processing and to write the results to the output database.
+.LP
+Before the tcl interpretor is started, a set of tcl variables are set that correspond
+to the specified command line arguments. All of the command line arguments will appear
+as tcl variables with the exception of \fB-recipe\fP.
+The input and output database names will appear as tcl
+variables \fIdbi_name\fP and \fIdbo_name\fP and the input and output database
+pointers will appear as tcl variables \fIdbi\fP and \fIdbo\fP. All of the
+other command line arguments will appear as tcl variables with names equal
+to the argument names without the '-' character.
+Within the process script these predefined tcl variables can be
+accessed as they normally would be (i.e. \fI$ts\fP, \fI$te\fP, etc.). The
+base tcl interpretor has the \fBDatascope(6)\fP extensions
+The \fBdbap\fP tcl command
+extensions for processing, displaying and writing out the array processing results
+are given below.
+.TP 15
+\fBprocess \fIargs\fP\fP
+This is the basic command that causes the array processing for one or more recipe objects
+to be executed. Upon successful completion, this command will return a string token
+that can be used to reference the processed results for display or output.
+The type of processing done is dependent upon the recipe objects that
+are specified in the argument list that is given below.
+.br
+.sp
+\fB\-recipe \fIobj_name1\fP [\fIobj_name2\fP [...]]\fP
+.br
+\fPA list of one or more valid recipe object names. At least one name must appear.
+It can be more efficient to process more than a single receip object with a single
+call to \fBprocess\fP, such as with beams.
+.br
+.sp
+\fB\-ts \fIstart_time\fP\fP
+.br
+\fPA start time for processing. The format is the same as described for the \fB-ts\fP
+command line argument.
+.br
+.sp
+\fB\-te \fIend_time\fP\fP
+.br
+\fPAn end time for processing. The format is the same as described for the \fB-te\fP
+command line argument.
+.br
+.sp
+\fB\-arid \fIarid\fP \-arid_t0 \fIarid_t0\fP \-arid_tw \fIarid_tw\fP\fP
+.br
+\fPAn arrival time based processing time window. See \fB-arid\fP, \fB-arid_t0\fP
+and \fB-arid_tw\fP command line arguments for a description. Default values
+for \fIarid_t0\fP and \fIarid_tw\fP are 0 and 1.
+.br
+\fPNOTE: There must be either a \fB-ts\fP \fB-te\fP based time specification or
+a \fB-arid\fP based time specification for \fBprocess\fP or an error will
+occur.  This defines the overall time window for a particular processing instance.
+.br
+.sp
+\fB\-grid_twin \fIgrid_twin\fP \-grid_ovlp \fIgrid_ovlp\fP \-grid_tbatch \fIgrid_tbatch\fP \-grid_tbreak \fIgrid_tbreak\fP\fP
+.br
+\fPThese set time specifications for a sliding time window. \fIgrid_twin\fP is the time
+window in seconds, \fIgrid_ovlp\fP is the overlap between adjacent windows as a fraction
+of \fIgrid_twin\fP, \fIgrid_tbatch\fP is a time window for batching the input data
+traces and \fIgrid_tbreak\fP is a breakpoint time window which controls when results are written
+to the output database. These values only have meaning for \fBxygrid\fP and \fBstgrid\fP
+objects and are ignored for \fBbeam\fP objects. \fBstgrid\fP objects require these
+specifications in order to work properly. \fBxygrid\fP objects can be set up to either
+do a single grid, in which case \fIgrid_twin\fP should be either not specified or
+set to zero, or do grids for a sliding window, in which case \fIgrid_twin\fP must be set
+to a non-zero value. The default value of \fIgrid_twin\fP is 0.0. The default value
+of \fIgrid_ovlp\fP is 0.5. The default value of \fIgrid_tbatch\fP is 600. The default
+value of \fIgrid_tbreak\fP is 600.
+.br
+.sp
+\fB\-azimuth \fIazimuth\fP \-slow \fIslow\fP\fP
+.br
+\fPAzimuth and slowness values for overiding the recipe object specifications.
+.br
+.sp
+\fB\-chan \fIchan\fP\fP
+.br
+\fPChannel code for overiding the input channel codes in the recipe object specifications.
+.br
+.sp
+\fB\-bchan \fIbchan\fP\fP
+.br
+\fPChannel code for overiding the output channel code in the recipe object specifications
+for \fBbeam\fP objects.
+.br
+.sp
+\fB\-filter \fIfilter\fP\fP
+.br
+\fPFilter specification for overiding the input channel filter specifications in the recipe object specifications.
+.TP 15
+\fBget \fIprocess_obj\fP \fIvar\fP\fP
+The command \fBget\fP will retrieve information from a specified process object
+and return the information as a character string.
+.br
+.sp
+\fIprocess_obj\fP
+.br
+The name of the process object. This is required. This would be the value
+returned by \fBprocess\fP.
+.br
+.sp
+\fIvar\fP
+.br
+This specifies the thing to be gotten. Allowable values are \fIpower\fP, to get
+the peak beam grid power, \fIazimuth\fP,
+to get the peak beam grid power azimuth, \fIslowness\fP, to get the peak beam grid power slowness,
+\fIts\fP, to get the overall processing window start time, \fIte\fP, to get the overall processing window
+end time, \fIfilter\fP, to get the filter that was used,
+\fIbest_azimuth\fP, to get the best peak beam grid power azimuth over a number of
+grids, and \fIbest_slowness\fP, to get the best peak beam grid power slowness over a number of
+grids. When more than one recipe object is processed within a single processing object, then
+\fBget\fP will return a list of values (unless one of the \fIbest_...\fP guys was specified).
+.TP 15
+\fBplot \fIprocess_obj\fP \fIargs\fP
+The command \fBplot\fP will cause a single process object to be displayed in an X11
+window and to be optionally written to a color PostScript file. Dimension specifications
+for viewports in the argument list are relative to a 8.5" by 11" piece of paper
+with 0.5" margins all around. Thus the usable plotting surface is 7.5" by 10".
+.br
+.sp
+\fIprocess_obj\fP or \fIlegend\fP or \fIclose\fP
+.br
+The name of the process object. This is required. This would be the value
+returned by \fBprocess\fP. If \fIprocess_obj\fP is specified as \fIlegend\fP,
+then a color bar legend will be displayed that shows the color to normalized
+beam power scale. In this case \fB-xdim\fP, \fB-ydim\fP, \fB-xlow\fP,
+\fB-ylow\fP arguments should be given to specify the viewport.
+If \fIprocess_obj\fP is specified as \fIclose\fP,
+then the plot is closed. Closing the plot is necessary in order to make
+a proper PostScript file.
+.br
+.sp
+The other arguments are specified below.
+.br
+.sp
+\fB\-orient {\fIportrait\fP | \fIlandscape\fP}\fP
+.br
+\fPThis determines the orientation of the X-window and the PostScript
+page. If this is \fIportrait\fP, then the largest page dimension is
+the vertical or y dimension and vice versa for \fIlandscape\fP.
+This argument is only used the first time \fBplot\fP is called.
+Once the plot page orientation is initialized, it cannot be changed.
+The default value is \fIportrait\fP.
+.br
+.sp
+\fB\-size \fIsize\fP\fP
+.br
+\fPThis specifies the physical size of the X-window relative to the
+total screen size. This has no effect on the PostScript plot.
+This argument is only used the first time \fBplot\fP is called.
+Once the X-window size is initialized, it cannot be changed.
+The default value is 0.95.
+.br
+.sp
+\fB\-psfile \fIpsfile\fP\fP
+.br
+\fPThis specifies the name of the output PostScript file. If this
+is not specified, or if \fIpsfile\fP is specified as \fInone\fP,
+then no PostScript output is produced.
+This argument is only used the first time \fBplot\fP is called.
+Once the PostScript file name has been initialized, it cannot be changed.
+.br
+.sp
+\fB\-xdim \fIxdim\fP -ydim \fIydim\fP -xlow \fIxlow\fP -ylow \fIylow\fP\fP
+.br
+\fPThis is the typical way in which a viewport for the plot is specified.
+\fIxdim\fP, \fIydim\fP are the physical x and y dimension in inches
+of the viewport. \fIxlow\fP, \fIylow\fP are the x-y coordinate of the
+lower left hand corner of the viewport relative to the lower left
+hand corner of the plot page in inches. For \fBxygrid\fP objects,
+\fIydim\fP is ignored and the y-dimension is automatically set from
+\fIxdim\fP to preserve the proper aspect ratio.
+.br
+.sp
+\fB\-ydimtr \fIydimtr\fP -ylowtr \fIylowtr\fP -ydimbm \fIydimbm\fP -ylowbm \fIylowbm\fP\fP
+.br
+\fPThese specify the y dimensions and offsets for optional trace (\fIydimtr\fP, \fIylowtr\fP)
+and beam (\fIydimbm\fP, \fIylowbm\fP) viewports associated with \fBstgrid\fP objects.
+If they are not specified or if \fIydimtr\fP and/or \fIydimbm\fP are set to 0.0,
+then these viewports are not displayed.
+.br
+.sp
+\fB\-dx \fIdx\fP -dy \fIdy\fP\fP
+.br
+\fPThese are used to determine how to manage the viewports within the
+plot window when there are more than one recipe object contained within
+a single process object. Each recipe object will produce a viewport
+and \fIdx\fP, \fIdy\fP determine how the viewports are arranged within
+the plot window. These are only used when there are more than one recipe
+object contained within a single process object. \fIdx\fP, \fIdy\fP specify
+a x-y viewport movement vector in inches. Subsequent viewports are first
+moved by \fIdx\fP inches in the x direction until they go off the plot
+page and then they are moved by \fIdy\fB inches in the y direction and
+reset to the original \fIxlow\fP value.
+.br
+.sp
+\fB\-title {\fIyes\fP | \fIno\fP} -time_label {\fIyes\fP | \fIno\fP}\fP
+.br
+\fPThese control whether or not a title and/or time labelling appear on the
+plots. Time labelling is only relevant for traces, beams and \fBstgrid\fP
+objects.
+.br
+.sp
+\fB\-time_marks "\fItime1\fP [\fItime2\fP [...]]"\fP
+.br
+\fPThis will cause one or more time marks to the plotted on trace plots.
+Note that this must appear as a single tcl list if there are more than
+one mark to be plotted.
+.br
+.sp
+\fB\-filter \fIfilter\fP\fP
+.br
+\fPIf a filter specification is given, then both the trace and beam
+displays will be filtered accordingly. Note that this only happens
+for the plot and does not effect the beam itself.
+.TP 15
+\fBwrite \fIprocess_obj\fP \fIargs\fP
+The command \fBwrite\fP will cause a single process object to be written to the
+output database as specified through the \fB-dbout\fP command line argument.
+.br
+.sp
+\fIprocess_obj\fP
+.br
+The name of the process object. This is required. This would be the value
+returned by \fBprocess\fP.
+.br
+.sp
+The other arguments are specified below.
+.br
+.sp
+\fB\-arrival \fIarid\fP\fP
+.br
+\fPThis is used only with \fBbeam\fP objects for specifying that an arrival
+should be written in addition to the beam. The new arrival will have
+the station-channel codes of the beam and the \fIazimuth\fP and
+\fBslow\fP fields will be set to those used to compute the beam. Note
+that \fBslow\fP in the CSS database schema is in seconds per degree instead
+of seconds per km. If \fIarid\fP is -1, then a new arrival is created and
+the \fItime\fP and \fIiphase\fP fields are set using the \fB-time\fP
+and \fB-phase\fP arguments described below. If \fIarid\fP is > 0, then
+the new arrival is created by copying an arrival with arid = \fIarid\fP
+from the indput database. In this case, the \fItime\fP and \fIiphase\fP fields
+are copied. If this is not specified, then no new arrival is written.
+.br
+.sp
+\fB\-time \fItime\fP\fP
+.br
+\fPThis is used when creating new arrivals for setting the \fItime\fP
+field in the \fBarrival\fP table.
+.br
+.sp
+\fB\-phase \fIphase\fP\fP
+.br
+\fPThis is used when creating new arrivals for setting the \fIiphase\fP
+field in the \fBarrival\fP table.
+.SH EXAMPLES
+Following are examples of recipe parameter files and process scripts
+and what they do.
+.LP
+In the first example we perform the following functions.
+.IP 1.
+Compute a \fBxygrid\fP whose process time window is anchored to an arrival
+(in this case a P arrival) in the input database.
+.IP 2.
+Plot the \fBxygrid\fP.
+.IP 3.
+Get the peak power azimuth and slowness from the \fBxygrid\fP.
+.IP 4.
+Compute a \fBbeam\fP using the peak power azimuth and slowness from the
+\fBxygrid\fP. The \fBbeam\fP process time window is automatically
+computed from the \fBxygrid\fP process time window.
+.IP 5.
+Plot both the filtered and unfiltered versions of the center element
+trace and the beam.
+.IP 6.
+Write out the beam along with an arrival that is copied from the
+input database.
+.LP
+In this example we make use of simple standard tcl commands, such as \fIexpr\fP
+and \fIset\fP.
+.br
+.ft CW
+.in 2c
+.nf
+
+.ne 6
+.sp
+
+#
+#       example recipe file for dbap
+#
+
+.ne 36
+recipe_objs     &Arr{   # This section defines the recipe objects
+
+        mygrid  &Arr{   #This identifies a single object
+                type    xygrid  # This identifies this object as an xy slowness grid
+                        #array  refsta  nx      xmin    xmax    ny      ymin    ymax    tpad    samprate
+                params  SAA2    A0      25      -0.30   0.30    25      -0.30   0.30    10.0    0.0
+                channels &Tbl{  #This specifies the channels used in the xy slowness grid
+                        #sta    chan    wt      tcor    gaps    filter
+                        A0      HHZ     1.0     0.0     interp  BW 0.5 5 5.0 5
+                        A1      HHZ     1.0     0.0     interp  BW 0.5 5 5.0 5
+                        A2      HHZ     1.0     0.0     interp  BW 0.5 5 5.0 5
+                        A3      HHZ     1.0     0.0     interp  BW 0.5 5 5.0 5
+                        B1      HHZ     1.0     0.0     interp  BW 0.5 5 5.0 5
+                        B2      HHZ     1.0     0.0     interp  BW 0.5 5 5.0 5
+                        B3      HHZ     1.0     0.0     interp  BW 0.5 5 5.0 5
+                        B4      HHZ     1.0     0.0     interp  BW 0.5 5 5.0 5
+                        B5      HHZ     1.0     0.0     interp  BW 0.5 5 5.0 5
+                        C1      HHZ     1.0     0.0     interp  BW 0.5 5 5.0 5
+                        C2      HHZ     1.0     0.0     interp  BW 0.5 5 5.0 5
+                        C3      HHZ     1.0     0.0     interp  BW 0.5 5 5.0 5
+                        C4      HHZ     1.0     0.0     interp  BW 0.5 5 5.0 5
+                        C5      HHZ     1.0     0.0     interp  BW 0.5 5 5.0 5
+                        C6      HHZ     1.0     0.0     interp  BW 0.5 5 5.0 5
+                        C7      HHZ     1.0     0.0     interp  BW 0.5 5 5.0 5
+                        D1      HHZ     1.0     0.0     interp  BW 0.5 5 5.0 5
+                        D2      HHZ     1.0     0.0     interp  BW 0.5 5 5.0 5
+                        D3      HHZ     1.0     0.0     interp  BW 0.5 5 5.0 5
+                        D4      HHZ     1.0     0.0     interp  BW 0.5 5 5.0 5
+                        D5      HHZ     1.0     0.0     interp  BW 0.5 5 5.0 5
+                        D6      HHZ     1.0     0.0     interp  BW 0.5 5 5.0 5
+                        D7      HHZ     1.0     0.0     interp  BW 0.5 5 5.0 5
+                        D8      HHZ     1.0     0.0     interp  BW 0.5 5 5.0 5
+                        D9      HHZ     1.0     0.0     interp  BW 0.5 5 5.0 5
+                }
+        }
+
+.ne 34
+        mybeam  &Arr{   #This identifies a single object
+                type    beam    # This identifies this object a beam
+                        #array  refsta  chan    azimuth slow    tpad    samprate
+                params  SAA2    A0      HHZ     0.0     0.0     10.0    0.0
+                channels &Tbl{  #This specifies the channels used in the xy slowness grid
+                        #sta    chan    wt      tcor    gaps    filter
+                        A0      HHZ     1.0     0.0     interp  none
+                        A1      HHZ     1.0     0.0     interp  none
+                        A2      HHZ     1.0     0.0     interp  none
+                        A3      HHZ     1.0     0.0     interp  none
+                        B1      HHZ     1.0     0.0     interp  none
+                        B2      HHZ     1.0     0.0     interp  none
+                        B3      HHZ     1.0     0.0     interp  none
+                        B4      HHZ     1.0     0.0     interp  none
+                        B5      HHZ     1.0     0.0     interp  none
+                        C1      HHZ     1.0     0.0     interp  none
+                        C2      HHZ     1.0     0.0     interp  none
+                        C3      HHZ     1.0     0.0     interp  none
+                        C4      HHZ     1.0     0.0     interp  none
+                        C5      HHZ     1.0     0.0     interp  none
+                        C6      HHZ     1.0     0.0     interp  none
+                        C7      HHZ     1.0     0.0     interp  none
+                        D1      HHZ     1.0     0.0     interp  none
+                        D2      HHZ     1.0     0.0     interp  none
+                        D3      HHZ     1.0     0.0     interp  none
+                        D4      HHZ     1.0     0.0     interp  none
+                        D5      HHZ     1.0     0.0     interp  none
+                        D6      HHZ     1.0     0.0     interp  none
+                        D7      HHZ     1.0     0.0     interp  none
+                        D8      HHZ     1.0     0.0     interp  none
+                        D9      HHZ     1.0     0.0     interp  none
+                }
+        }
+
+.ne 9
+}               # This closes the recipe object descriptions
+
+#
+#       Example process script
+#       dbap would be executed as:
+#       dbap -dbin exdb -dbout dbout -recipe ex1_recipe -script ex1_script -arid 1 -arid_tw 1
+#
+
+.ne 7
+
+# The first statement computes an xy grid using arrival info specified
+# through the command line to determine the time window. A tcl variable,
+# gr, is set to the output string from process.
+
+set gr [process -recipe mygrid -arid $arid -arid_t0 0 -arid_tw $arid_tw]
+
+.ne 6
+# We plot the xygrid
+
+plot $gr -xlow 0.5 -xdim 2.5 -ylow 1.0 -orient portrait -psfile ex1.ps
+
+# We get the peak azimuth and slowness values from the xy grid
+
+.ne 8
+set azimuth [get $gr azimuth]
+set slow [get $gr slowness]
+
+# We set the start and end time for the beam
+
+set ts [expr [get $gr ts]-2.0]
+set te [expr [get $gr ts]+15.0]
+
+.ne 6
+# Now we compute a "best" beam. Note that the azimuth and slowness
+# values in the beam recipe specification are being overwritten at
+# execution time through the process arguments.
+
+set bm [process -recipe mybeam -ts $ts -te $te -azimuth $azimuth -slow $slow]
+
+.ne 6
+# We plot the original trace and the best beam twice - once with
+# the filter used to compute the xygrid and again with no filtering.
+# Note that the beam itself is not changed by the plot filtering.
+
+# The time window used in the xygrid is used to set marks on the plots
+
+.ne 6
+set tsgrid [get $gr ts]
+set tegrid [get $gr te]
+set marks "$tsgrid $tegrid"
+
+set filter [get $gr filter]
+
+.ne 7
+plot $bm -xlow 0.5 -ylow 6.5 -ylowtr 7.5 -xdim 6.5 -ydim 1.0 -ydimtr 1.0 \\
+                -title yes -time_label no -time_marks $marks -filter $filter
+plot $bm -xlow 0.5 -ylow 4.5 -ylowtr 5.5 -xdim 6.5 -ydim 1.0 -ydimtr 1.0 \\
+                -title no -time_label yes -time_marks $marks -filter none
+
+# We add a legend to the plot for the beam power grid
+
+.ne 6
+plot legend -xdim 3.0 -ydim 0.3 -xlow 4.0 -ylow 1.0
+
+# We close the plot
+
+plot close
+
+# And we write out the beam
+
+write $bm -arrival $arid
+
+.sp
+
+.fi
+.in
+.ft R
+.LP
+.SH SEE ALSO
+pfread(3), tksend(1), Datascope(6)
+
+.\" $Id: aeic_dbap.1,v 1.2 2002-02-07 01:56:24 kent Exp $
+.SH AUTHOR
+Kent Lindquist (Seismologist)

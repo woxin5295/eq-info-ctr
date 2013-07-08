@@ -1,0 +1,34 @@
+.TH duty_delete_event 1 2007/09/28 "Glenn Thompson, AEIC" "User Commands"
+.SH NAME
+duty_delete_event - Echoes the contents of a document on a webserver to STDOUT. Similar to the Unix "cat" command.
+.SH SYNOPSIS
+.nf
+duty_delete_event [-eqst] database evid [evtime]
+.fi
+.SH DESCRIPTION
+\fBduty_delete_event\fP will remove an event evid from a database. If -q, -s or -e switches are given, the event is also deleted from QDDS, ShakeMap or EOC systems respectively. 
+If there is no match on evid - for example if this is a database with different ids to the AEIC summary event database - then the event time can be provided in epoch format as the optional evtime command line argument. 
+The -t switch specifies that \fBduty_delete_event\fP be run in test mode, in which case no deletes will take place.
+.LP
+.SH COMMAND LINE ARGUMENTS
+These are:
+.IP -e
+Delete the event from the EOC system
+.IP -q 
+Delete the event from the QDDS system
+.IP -s
+Delete the event from the ShakeMap system (if a ShakeMap was generated)
+.IP -t
+test mode on (no deletes will be made)
+.IP database
+The path of the database from which to delete event "evid" from
+.IP evid
+The event id
+.IP evtime
+The event time in epoch format (optional)
+
+.SH AUTHOR
+Glenn Thompson, 2007-10-08
+.br
+Alaska Earthquake Information Center
+

@@ -1,0 +1,6 @@
+vdlucb -S SNCC -t 1 -n 15 -s 87 -f 20 -l 0 -i sncc -k 0 -C BHZ,BHN,BHE,LHZ,LHN,LHE -H spring.gps.caltech.edu -P 21010 -host nsn5.cr.usgs.gov
+vdlucb -S VTV -t 1 -n 15 -s 88 -f 20 -l 0 -i vtv -k 0 -C BHZ,BHN,BHE,LHZ,LHN,LHE -H spring.gps.caltech.edu -P 21013 -host nsn5.cr.usgs.gov
+vdlucb -S MTP -t 1 -n 15 -s 85 -f 20 -l 0 -i mtp -k 0 -C BHZ,BHN,BHE,LHZ,LHN,LHE -H spring.gps.caltech.edu -P 21012 -host nsn5.cr.usgs.gov
+!vdlucb -S CWC -t 1 -n 15 -s 86 -f 20 -l 0 -i cwc -k 0 -C BHZ,BHN,BHE,LHZ,LHN,LHE -H spring.gps.caltech.edu -P 21014 -host nsn5.cr.usgs.gov
+vdlucb -S PAS -t 1 -n 15 -s 89 -f 20 -l 0 -i pas -k 0 -C BHZ,BHN,BHE,LHZ,LHN,LHE -H spring.gps.caltech.edu -P 21011 -host nsn5.cr.usgs.gov
+vdlucb -S ISA -t 1 -n 15 -s 102 -f 20 -l 0 -i isa -k 0 -c 1 -C BHZ,BHN,BHE,LHZ,LHN,LHE -H spring.gps.caltech.edu -P 21016 -host nsn5.cr.usgs.gov

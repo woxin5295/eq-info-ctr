@@ -1,0 +1,16 @@
+Src Copy from -
+/home/niko/orbtm/ins
+
+Test setup -
+/home/niko/pm/rtexec.pf
+/home/niko/pm/pf/orbtm.pf
+/home/niko/pm/pf/orb_alarm.pf
+
+Files are placed in -
+deposit orbtm /opt/antelope/4.9/bin
+deposit orbtm.pf /opt/antelope/4.9/data/pf
+deposit orbtm.1 /opt/antelope/4.9/man/man1
+deposit tm /opt/antelope/4.9/data/schemas/css3.0.ext
+
+Not in /usr/local/aeic/4.9
+

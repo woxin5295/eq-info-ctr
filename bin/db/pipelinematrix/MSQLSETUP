@@ -1,0 +1,166 @@
+mkdir /export/data1/mysql
+vi /etc/auto_localhost 
+	mysql localhost:/export/data1/mysql
+mkdir /export/data1/mysqlhome
+vi /etc/auto_home 
+	mysql localhost:/export/data1/mysqlhome
+create account mysql with group mysql
+cd /etc/data1
+chown -R mysql mysql mysqlhome
+chgrp -R mysql mysql mysqlhome
+su - mysql
+retrive mysql-5.0.51.tar tarball from www.sunfreeware.com and place in /home/mysql
+cd /home/mysql
+tar mysql-5.0.51.tar
+cd mysql-5.0.51
+./configure --prefix=/usr/local/mysql
+make
+make install
+su -
+cp /home/mysql/mysql-5.0.51/support-files/my-medium.cnf /etc/my.cnf
+switch back to user mysql ^d
+cd /usr/local/mysql
+bin/mysql_install_db --user=mysql
+#################  Start of output from above command ###################
+#bin/mysql_install_db: !: not found
+#Installing MySQL system tables...
+#OK
+#Filling help tables...
+#OK
+#
+#To start mysqld at boot time you have to copy
+#support-files/mysql.server to the right place for your system
+#
+#PLEASE REMEMBER TO SET A PASSWORD FOR THE MySQL root USER !
+#To do so, start the server, then issue the following commands:
+#/usr/local/mysql/bin/mysqladmin -u root password 'new-password'
+#/usr/local/mysql/bin/mysqladmin -u root -h aeicpipe password 'new-password'
+#
+#Alternatively you can run:
+#/usr/local/mysql/bin/mysql_secure_installation
+#
+#which will also give you the option of removing the test
+#databases and anonymous user created by default.  This is
+#strongly recommended for production servers.
+#
+#See the manual for more instructions.
+#
+#You can start the MySQL daemon with:
+#cd /usr/local/mysql ; /usr/local/mysql/bin/mysqld_safe &
+#
+#You can test the MySQL daemon with mysql-test-run.pl
+#cd mysql-test ; perl mysql-test-run.pl
+#
+#Please report any problems with the /usr/local/mysql/bin/mysqlbug script!
+#
+#The latest information about MySQL is available on the web at
+#http://www.mysql.com
+#Support MySQL by buying support/licenses at http://shop.mysql.com
+##################  End of output from above command ###################
+
+su -
+cd /usr/local/mysql
+chown -R root  .
+chown -R mysql var
+chgrp -R mysql .
+switch back to mysql user
+cd /usr/local/mysql
+bin/mysqld_safe --user=mysql &
+/usr/local/mysql/bin/mysqladmin -u root password 'new-password'
+/usr/local/mysql/bin/mysqladmin -u root -h aeicpipe password 'new-password'
+su -
+cd /home/mysql/mysql-5.0.51/support-files
+cp mysql.server /etc/init.d/mysql.server
+chmod 755 /etc/init.d/mysql.server
+cd /etc/rc3.d
+ln /etc/init.d/mysql.server S101mysql.server
+cd /etc/rc1.d
+ln /etc/init.d/mysql.server K101mysql.server
+
+reboot and check that mysql is started from rc scripts
+
+login as ppicker on aeicpipe
+add "alias mysql /usr/local/mysql/bin/mysql" to .tcshrc in ppicker account
+source .tcshrc
+mysql -u root -p
+Enter password:++++++++
+mysql> create database pipeline;
+Query OK, 1 row affected (0.01 sec)
+
+mysql> 	grant select,insert,update,delete,create,drop,alter 
+	on pipeline.* to pipe@localhost identified by 'pipe_account_passwd';
+mysql> quit
+
+# on aeicems give select grant access to the 10.17.0.0 subnet
+mysql -u root -p
+Enter password:++++++++
+grant select on pipeline.* to pipe@'10.17.0.0/255.255.0.0' identified by 'pipe_account_passwd';
+
+Test pipe login -
+mysql -u pipe -ppipe_account_passwd 
+Type 'help;' or '\h' for help. Type '\c' to clear the buffer.
+
+mysql> quit
+
+Create occ_display table -
+mysql -u pipe -ppipe_account_passwd
+mysql>  Create table occ_display
+    -> (
+    -> station_id int primary key,
+    -> trigger_low bit,
+    -> trigger_medium bit,
+    -> trigger_high bit,
+    -> system_status bit,
+    -> test bit,
+    -> maintenance bit
+    -> );
+Switch from bit to integer -
+mysql> use pipeline;
+mysql> drop table occ_display;
+mysql>  Create table occ_display
+    -> (
+    -> station_id int primary key,
+    -> trigger_low int,
+    -> trigger_medium int,
+    -> trigger_high int,
+    -> system_status int,
+    -> test int,
+    -> maintenance int 
+    -> );
+
+Query OK, 0 rows affected (0.06 sec)
+mysql> insert into occ_display (station_id) values (1); 
+mysql> insert into occ_display (station_id) values (4);
+mysql> insert into occ_display (station_id) values (5);
+mysql> insert into occ_display (station_id) values (6);
+mysql> insert into occ_display (station_id) values (7);
+mysql> insert into occ_display (station_id) values (8);
+mysql> insert into occ_display (station_id) values (9);
+mysql> insert into occ_display (station_id) values (10);
+mysql> insert into occ_display (station_id) values (11);
+mysql> insert into occ_display (station_id) values (12);
+mysql> insert into occ_display (station_id) values (13);
+mysql>
+mysql> update occ_display
+    -> set trigger_low = 0, trigger_medium = 0, trigger_high = 0, system_status = 1, test = 0,
+    -> maintenance = 0 ;
+
+Create events table -
+mysql -u pipe -ppipe_account_passwd
+mysql> use pipeline
+mysql>  Create table events 
+    -> (
+    -> event_detected bit,
+    -> event_watchdog int
+    -> );
+mysql>  drop table events;
+mysql>  Create table events 
+    -> (
+    -> event_detected int,
+    -> event_watchdog int
+    -> );
+    
+Query OK, 0 rows affected (0.06 sec)
+mysql> insert into events (event_detected) values (1);
+mysql> update events set event_detected = 0, event_watchdog = 0 where event_detected < 2 ;
+

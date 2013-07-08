@@ -1,0 +1,63 @@
+.TH MONTHLY_REPORT_TOOL "$Date: 2005-12-14 20:53:07 $"
+.SH NAME
+\fBmonthly_report_tool\fR \-  Graphical driver used to produce an AEIC monthly report. 
+.SH SYNOPSIS
+monthly_report_tool &
+.LP
+.SH DESCRIPTION
+\fBmonthly_report_tool\fR is a graphical-user-interface driver for db2monthly.
+It is intended to assist in the production of an AEIC monthly report.
+
+The graphical interface contains 2 dialog boxes and 13 colored buttons. The dialog boxes allow
+the user to enter a start time and the minimum magnitude for monthly highlights. The buttons are described in descending order.
+
+Button 1, yellow, runs the program aeic_dbconcat_events on a month's worth of daily databases specified by the start time. The location of these databases should be specified in the parameter file.
+
+Button 2, green, allows the user to view the concatenated databse with dbe.
+
+Button 3, pink, runs db2monthly on concatenated database. The minimum magnitude must be given.
+
+Button 4, white, opens Framemaker and allows user to modify the last_months_list.html template. The final document has to be saved as html file.
+
+Button 5, brown, allows user to edit lastmonth.jpg with StarOffice.  User must rotate the map from portrait to landscape, center the map on the page, and add text for significant and/or felt earthquakes; save the edited map as lastmonth.gif; print it exit StarOffice. 
+
+Button 6, light blue, updates AEIC website with map and last_months_list.
+
+Button 7, light blue, updates the months table of the AEIC tracking databse
+
+Button 8, orange, runs dbstats on concatenated database. 
+
+Button 9, orange, shows user dbstats output with Ghostview. 
+
+Button 10, orange, allows user the option of printing dbstats output on printer lexbw. 
+
+Button 11, red, quits monthly_report_tool. 
+
+.SH OPTIONS
+.SH FILES
+See db2monthly and dbstats for descrition of the output files.
+.SH ENVIRONMENT
+monthly_report_tool expects the ANTELOPE environment variable to be set correctly.
+.SH PARAMETER FILE
+monthly_report_tool expects the parameter file monthly_report_tool.pf.
+An example parameter file can be found in /opt/local/seis_apps/monthly_report_tool/monthly_report_tool.pf.
+
+
+.SH EXAMPLE
+tele% monthly_report_tool &
+.fi
+.ft CW
+.RS .2i
+.RE
+.ft R
+.SH RETURN VALUES
+.SH LIBRARY
+.SH DIAGNOSTICS
+.SH "SEE ALSO"
+aeic_dbconcat_events, dbe, dbstats, db2monthly, updateweb, alchemy, FrameMaker, IslandDraw   
+.nf
+.fi
+.SH "BUGS AND CAVEATS"
+Button 1 would not work if an output database for aeic_dbconcat_event already exist in a working directory. If this is the case, all database tables should be removed prior to running aeic_dbconcat_event.
+.SH AUTHOR
+Trilby Cox.

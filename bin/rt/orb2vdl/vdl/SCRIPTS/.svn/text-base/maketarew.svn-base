@@ -1,0 +1,10 @@
+tar cvf vdlew.tar *.c *.h makefile.solew 
+echo "Login as ketchum"
+echo "Then : cd /home/earthworm/working/src/vdl"
+echo "Then : ftp gldketchum"
+echo "Then : cd vdl"
+echo "then : binary "
+echo "then : get vdlew.tar"
+echo "then : quit and tar xvf vdlew.tar"
+echo "Then : make -f makefile.solew"
+telnet gldrocky.cr.usgs.gov

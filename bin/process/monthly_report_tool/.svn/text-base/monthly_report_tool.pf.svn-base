@@ -1,0 +1,22 @@
+start_date		2011_00
+min_mag			4.0
+MONTHLYDB		./monthlydb
+DAYdbs			/Seis/processing/analyzed
+#Macros			/usr/local/aeic/5.2-64/data/templates/fmMacros_monthly
+# 20121012 G. Thompson: added DATA and DATADIR to Makefile so we can have a template
+# build from this directory with make install
+#highlight_template	/usr/local/aeic/5.2-64/data/templates/last_months_list_template.html
+highlight_template	/usr/local/aeic/5.2-64/data/templates/monthly_highlights_template.txt
+#listing_template	/usr/local/aeic/5.2-64/data/templates/monthly_list_template.html
+PRINTER			lexaeic
+# 20121012: G. Thompson added convert and cupsfilter in the MacOSX version
+# convert is to convert ps to gif
+# cupsfilter is to convert html to pdf
+#sed    /usr/bin/sed
+convert     /Applications/ImageMagick-6.6.3/bin/convert
+cupsfilter  /usr/sbin/cupsfilter
+# 20121005: G. Thompson added these to simplify update_web() and allow safe testing through setting
+# baswebdir_out to a different path than basewebdir_in (normally they are the same)
+basewebdir_in   /usr/local/Mosaic/Seis
+basewebdir_out  /usr/local/Mosaic/Seis
+illustrator	"Adobe Illustrator.app"

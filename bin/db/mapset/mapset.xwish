@@ -1,0 +1,1031 @@
+# Program: mapset
+# Kent Lindquist
+# Geophysical Institute
+# University of Alaska, Fairbanks
+
+lappend auto_path $env(ANTELOPE)/data/tcl/library
+
+global env
+
+proc ShowWindow. {args} {
+
+  # Window manager configurations
+  global tkVersion
+  wm positionfrom . user
+  wm sizefrom . ""
+  wm maxsize . 1024 1024
+  wm title . {mapset}
+
+
+  # build widget .frame14
+  frame .frame14 \
+    -borderwidth {2} \
+    -relief {raised}
+
+  # build widget .frame14.button17
+  button .frame14.button17 \
+    -command {destroy .} \
+    -text {Quit}
+
+  # build widget .frame14.button18
+  button .frame14.button18 \
+    -command {
+    save_pf ak_dbmapevents
+    if {$iint == 1} {
+	catch "exec xterm -e $Dbmapevents $dbname $center $range -c $authcmp &"
+    } else {
+	catch "exec $Dbmapevents $dbname $center $range $authcmp &"
+    }} \
+    -text {Execute}
+
+  # build widget .frame14.checkbutton11
+  checkbutton .frame14.checkbutton11 \
+    -text {interactive} \
+    -variable {iint}
+
+  # build widget .frame14.button12
+  button .frame14.button12 \
+    -command print_map \
+    -text {Print map}
+
+  frame .frame14.b12frame \
+    -relief {raised} 
+
+  label .frame14.b12frame.label \
+    -relief {raised} \
+    -text {printer: }
+
+  global Printer
+  entry .frame14.b12frame.entry \
+    -relief {raised} \
+    -textvariable {Printer} \
+    -width {10}
+
+  pack append .frame14.b12frame \
+    .frame14.b12frame.label {left frame w} \
+    .frame14.b12frame.entry {left frame center}
+
+  # build widget .frame14.button6
+  button .frame14.button6 \
+    -command {show_man} \
+    -text {Help}
+
+  # build widget .frame14.button0
+  button .frame14.button0 \
+    -command {set dbbasename [exec basename $dbname]
+    exec event.summary $dbname > $dbbasename\_summary} \
+    -text {Summary} -state disabled
+
+  # pack widget .frame14
+  pack append .frame14 \
+    .frame14.button17 {top frame center} \
+    .frame14.button18 {top frame center} \
+    .frame14.checkbutton11 {bottom frame center} \
+    .frame14.button12 {top frame center} \
+    .frame14.b12frame {top frame center} \
+    .frame14.button0 {top frame center} \
+    .frame14.button6 {top frame center} 
+
+  # build widget .frame19
+  frame .frame19 \
+    -borderwidth {2} \
+    -relief {raised}
+
+  # build widget .frame19.frame1
+  frame .frame19.frame1 \
+    -borderwidth {2} \
+    -relief {raised}
+
+  # build widget .frame19.frame1.frame3
+  frame .frame19.frame1.frame3 \
+    -borderwidth {2} \
+    -relief {raised}
+
+  # build widget .frame19.frame1.frame3.label6
+  label .frame19.frame1.frame3.label6 \
+    -relief {raised} \
+    -text {database: }
+
+  global dbname
+  # build widget .frame19.frame1.frame3.entry7
+  entry .frame19.frame1.frame3.entry7 \
+    -relief {raised} \
+    -textvariable {dbname} \
+    -width {45}
+
+  # pack widget .frame19.frame1.frame3
+  pack append .frame19.frame1.frame3 \
+    .frame19.frame1.frame3.label6 {left frame center} \
+    .frame19.frame1.frame3.entry7 {left frame center}
+
+  # build widget .frame19.frame1.frame4
+  frame .frame19.frame1.frame4 \
+    -borderwidth {2} \
+    -relief {raised}
+
+  # build widget .frame19.frame1.frame4.label8
+  label .frame19.frame1.frame4.label8 \
+    -relief {raised} \
+    -text {    center: }
+
+  # build widget .frame19.frame1.frame4.entry9
+  entry .frame19.frame1.frame4.entry9 \
+    -relief {raised} \
+    -textvariable {center}
+
+  # pack widget .frame19.frame1.frame4
+  pack append .frame19.frame1.frame4 \
+    .frame19.frame1.frame4.label8 {left frame w} \
+    .frame19.frame1.frame4.entry9 {top frame center}
+
+  # build widget .frame19.frame1.frame5
+  frame .frame19.frame1.frame5 \
+    -borderwidth {2} \
+    -relief {raised}
+
+  # build widget .frame19.frame1.frame5.label10
+  label .frame19.frame1.frame5.label10 \
+    -relief {raised} \
+    -text {     range: }
+
+  # build widget .frame19.frame1.frame5.entry11
+  entry .frame19.frame1.frame5.entry11 \
+    -relief {raised} \
+    -textvariable {range}
+
+  # pack widget .frame19.frame1.frame5
+  pack append .frame19.frame1.frame5 \
+    .frame19.frame1.frame5.label10 {left frame w} \
+    .frame19.frame1.frame5.entry11 {left frame center}
+
+  # build widget .frame19.frame1.frame_cmp
+  frame .frame19.frame1.frame_cmp \
+    -borderwidth {2} \
+    -relief {raised}
+
+  # build widget .frame19.frame1.frame_cmp.label_cmp
+  label .frame19.frame1.frame_cmp.label_cmp \
+    -relief {raised} \
+    -text {     auth compare: }
+
+  button .frame19.frame1.frame_cmp.button_set \
+    -relief {raised} \
+    -text { set } \
+    -command set_auth_cmp
+
+  global authcmp
+  # build widget .frame19.frame1.frame_cmp.entry_cmp
+  entry .frame19.frame1.frame_cmp.entry_cmp \
+    -relief {raised} \
+    -textvariable {authcmp} \
+    -width {45}
+
+  # pack widget .frame19.frame1.frame_cmp
+  pack append .frame19.frame1.frame_cmp \
+    .frame19.frame1.frame_cmp.label_cmp {left frame w} \
+    .frame19.frame1.frame_cmp.button_set {left frame w} \
+    .frame19.frame1.frame_cmp.entry_cmp {left frame center}
+
+  # pack widget .frame19.frame1
+  pack append .frame19.frame1 \
+    .frame19.frame1.frame3 {top frame w} \
+    .frame19.frame1.frame4 {top frame w} \
+    .frame19.frame1.frame5 {top frame w} \
+    .frame19.frame1.frame_cmp {top frame w}
+
+  # build widget .frame19.frame3
+  frame .frame19.frame3 \
+    -borderwidth {2} \
+    -relief {raised}
+
+  # build widget .frame19.frame3.checkbutton13
+  checkbutton .frame19.frame3.checkbutton13 \
+    -text {use custom title} \
+    -variable {ititl}
+
+  # build widget .frame19.frame3.frame8
+  frame .frame19.frame3.frame8 \
+    -borderwidth {2} \
+    -relief {raised}
+
+  # build widget .frame19.frame3.frame8.label4
+  label .frame19.frame3.frame8.label4 \
+    -relief {raised} \
+    -text {title: }
+
+  # build widget .frame19.frame3.frame8.entry5
+  entry .frame19.frame3.frame8.entry5 \
+    -relief {raised} \
+    -textvariable {title} \
+    -width {50}
+
+  # pack widget .frame19.frame3.frame8
+  pack append .frame19.frame3.frame8 \
+    .frame19.frame3.frame8.label4 {left frame w} \
+    .frame19.frame3.frame8.entry5 {right frame e}
+
+  # pack widget .frame19.frame3
+  pack append .frame19.frame3 \
+    .frame19.frame3.checkbutton13 {bottom frame w} \
+    .frame19.frame3.frame8 {top frame center}
+
+  # build widget .frame19.frame2
+  frame .frame19.frame2 \
+    -borderwidth {2} \
+    -relief {raised}
+
+  # build widget .frame19.frame2.frame
+  frame .frame19.frame2.frame \
+    -relief {raised}
+
+  # build widget .frame19.frame2.frame.scrollbar1
+  scrollbar .frame19.frame2.frame.scrollbar1 \
+    -command {.frame19.frame2.frame.hypertext2 yview} \
+    -relief {raised}
+
+  # build widget .frame19.frame2.frame.scrollbar3
+  scrollbar .frame19.frame2.frame.scrollbar3 \
+    -command {.frame19.frame2.frame.hypertext2 xview} \
+    -orient {horizontal} \
+    -relief {raised}
+
+  # build widget .frame19.frame2.frame14
+  frame .frame19.frame2.frame14 \
+    -relief {raised}
+
+  # build widget .frame19.frame2.frame14.scrollbar1
+  scrollbar .frame19.frame2.frame14.scrollbar1 \
+    -command {.frame19.frame2.frame14.hypertext2 yview} \
+    -relief {raised}
+
+  # build widget .frame19.frame2.frame14.scrollbar3
+  scrollbar .frame19.frame2.frame14.scrollbar3 \
+    -command {.frame19.frame2.frame14.hypertext2 xview} \
+    -orient {horizontal} \
+    -relief {raised}
+
+  # build widget .frame19.frame2.frame15
+  frame .frame19.frame2.frame15
+
+  # build widget .frame19.frame2.frame15.scrollbar3
+  scrollbar .frame19.frame2.frame15.scrollbar3 \
+    -command {.frame19.frame2.frame15.listbox1 xview} \
+    -orient {horizontal} \
+    -relief {raised}
+
+  # build widget .frame19.frame2.frame15.scrollbar2
+  scrollbar .frame19.frame2.frame15.scrollbar2 \
+    -command {.frame19.frame2.frame15.listbox1 yview} \
+    -relief {raised}
+
+  # build widget .frame19.frame2.frame15.listbox1
+  listbox .frame19.frame2.frame15.listbox1 \
+    -relief {raised} \
+    -xscrollcommand {.frame19.frame2.frame15.scrollbar3 set} \
+    -yscrollcommand {.frame19.frame2.frame15.scrollbar2 set}
+  # bindings
+  bind .frame19.frame2.frame15.listbox1 <Double-Button-1> {
+	set index [lsearch $label_files [selection get]]
+	set label_files [lreplace $label_files $index $index]
+	.frame19.frame2.frame15.listbox1 delete $index $index}
+
+  # pack widget .frame19.frame2.frame15
+  pack append .frame19.frame2.frame15 \
+    .frame19.frame2.frame15.scrollbar2 {right frame center filly} \
+    .frame19.frame2.frame15.listbox1 {top frame center expand fill} \
+    .frame19.frame2.frame15.scrollbar3 {bottom frame center fillx}
+
+  # build widget .frame19.frame2.menubutton4
+  menubutton .frame19.frame2.menubutton4 \
+    -menu {.frame19.frame2.menubutton4.m} \
+    -text {Label files}
+
+  # build widget .frame19.frame2.menubutton4.m
+  menu .frame19.frame2.menubutton4.m
+
+  # pack widget .frame19.frame2
+  pack append .frame19.frame2 \
+    .frame19.frame2.frame15 {bottom frame center padx 37 fill} \
+    .frame19.frame2.menubutton4 {top frame center fill}
+
+  # build widget .frame19.frame4
+  frame .frame19.frame4 \
+    -borderwidth {2} \
+    -relief {raised}
+
+  # build widget .frame19.frame4.frame
+  frame .frame19.frame4.frame
+
+  # build widget .frame19.frame4.frame.scrollbar3
+  scrollbar .frame19.frame4.frame.scrollbar3 \
+    -command {.frame19.frame4.frame.listbox1 xview} \
+    -orient {horizontal} \
+    -relief {raised}
+
+  # build widget .frame19.frame4.frame.scrollbar2
+  scrollbar .frame19.frame4.frame.scrollbar2 \
+    -command {.frame19.frame4.frame.listbox1 yview} \
+    -relief {raised}
+
+  # build widget .frame19.frame4.frame.listbox1
+  listbox .frame19.frame4.frame.listbox1 \
+    -relief {raised} \
+    -xscrollcommand {.frame19.frame4.frame.scrollbar3 set} \
+    -yscrollcommand {.frame19.frame4.frame.scrollbar2 set}
+  # bindings
+  bind .frame19.frame4.frame.listbox1 <Double-Button-1> {
+	set index [lsearch $bp_files [selection get]]
+	set bp_files [lreplace $bp_files $index $index]
+	.frame19.frame4.frame.listbox1 delete $index $index}
+
+  # pack widget .frame19.frame4.frame
+  pack append .frame19.frame4.frame \
+    .frame19.frame4.frame.scrollbar2 {right frame center filly} \
+    .frame19.frame4.frame.listbox1 {top frame center expand fill} \
+    .frame19.frame4.frame.scrollbar3 {bottom frame center fillx}
+
+  # build widget .frame19.frame4.menubutton5
+  menubutton .frame19.frame4.menubutton5 \
+    -menu {.frame19.frame4.menubutton5.m} \
+    -text {Boilerplate files}
+
+  # build widget .frame19.frame4.menubutton5.m
+  menu .frame19.frame4.menubutton5.m
+
+  # pack widget .frame19.frame4
+  pack append .frame19.frame4 \
+    .frame19.frame4.frame {bottom frame center padx 25 fill} \
+    .frame19.frame4.menubutton5 {top frame center fill}
+
+  # pack widget .frame19
+  pack append .frame19 \
+    .frame19.frame1 {top frame w fillx} \
+    .frame19.frame3 {top frame w} \
+    .frame19.frame2 {left frame w expand} \
+    .frame19.frame4 {top frame center}
+
+  # build widget .frame20
+  frame .frame20 \
+    -borderwidth {2} \
+    -relief {raised}
+
+  # build widget .frame20.frame15
+  frame .frame20.frame15 \
+    -borderwidth {2} \
+    -relief {raised}
+
+  # build widget .frame20.frame15.menubutton1
+  menubutton .frame20.frame15.menubutton1 \
+    -menu {.frame20.frame15.menubutton1.m} \
+    -text {Macros}
+
+  # build widget .frame20.frame15.menubutton1.m
+  menu .frame20.frame15.menubutton1.m
+
+  # pack widget .frame20.frame15
+  pack append .frame20.frame15 \
+    .frame20.frame15.menubutton1 {top frame center padx 70 fillx}
+
+  # build widget .frame20.frame0
+  frame .frame20.frame0 \
+    -borderwidth {2} \
+    -relief {raised}
+
+  # build widget .frame20.frame0.checkbutton1
+  checkbutton .frame20.frame0.checkbutton1 \
+    -text {plot stations} \
+    -variable {istaplt}
+
+  # build widget .frame20.frame0.checkbutton2
+  checkbutton .frame20.frame0.checkbutton2 \
+    -text {plot station-names} \
+    -variable {istnam}
+
+  # build widget .frame20.frame0.checkbutton3
+  checkbutton .frame20.frame0.checkbutton3 \
+    -text {mark PDE events} \
+    -variable {ipdeplt}
+
+  # build widget .frame20.frame0.checkbutton5
+  checkbutton .frame20.frame0.checkbutton5 \
+    -text {plot orids} \
+    -variable {iporid}
+
+  # build widget .frame20.frame0.checkbutton6
+  checkbutton .frame20.frame0.checkbutton6 \
+    -text {plot cities} \
+    -variable {icities}
+
+  # build widget .frame20.frame0.checkbutton7
+  checkbutton .frame20.frame0.checkbutton7 \
+    -text {plot pipeline} \
+    -variable {ipipe}
+
+  # build widget .frame20.frame0.checkbutton8
+  checkbutton .frame20.frame0.checkbutton8 \
+    -text {color oceans blue} \
+    -variable {iblue}
+
+  # build widget .frame20.frame0.checkbutton9
+  checkbutton .frame20.frame0.checkbutton9 \
+    -text {plot pump-stations} \
+    -variable {ipumps}
+
+  # build widget .frame20.frame0.checkbutton10
+  checkbutton .frame20.frame0.checkbutton10 \
+    -text {plot range circles} \
+    -variable {idcirc}
+
+  # build widget .frame20.frame0.checkbutton11
+  checkbutton .frame20.frame0.checkbutton11 \
+    -text {plot faults} \
+    -variable {iflt}
+
+  # build widget .frame20.frame0.checkbutton12
+  checkbutton .frame20.frame0.checkbutton12 \
+    -text {plot magnitudes} \
+    -variable {ipmag}
+
+  # build widget .frame20.frame0.checkbutton0
+  checkbutton .frame20.frame0.checkbutton0 \
+    -text {landscape} \
+    -variable {itran}
+
+  # build widget .frame20.frame0.checkbutton13
+  checkbutton .frame20.frame0.checkbutton13 \
+    -text {legend box} \
+      -variable {ilegnd}
+  # build widget .frame20.frame0.frame5
+  frame .frame20.frame0.frame5 \
+    -borderwidth {2} \
+    -relief {raised}
+
+  # build widget .frame20.frame0.frame5.menubutton2
+  menubutton .frame20.frame0.frame5.menubutton2 \
+    -menu {.frame20.frame0.frame5.menubutton2.m} \
+    -text {events: }
+
+  # build widget .frame20.frame0.frame5.menubutton2.m
+  menu .frame20.frame0.frame5.menubutton2.m
+  .frame20.frame0.frame5.menubutton2.m add command \
+    -command {set icol 1
+    set event_symbols hexagons
+    } \
+    -label {hexagons}
+  .frame20.frame0.frame5.menubutton2.m add command \
+    -command {set icol 0
+    set event_symbols circles
+    } \
+    -label {circles}
+
+  # build widget .frame20.frame0.frame5.label1
+  label .frame20.frame0.frame5.label1 \
+    -relief {raised} \
+    -text {circles} \
+    -textvariable {event_symbols}
+
+  # pack widget .frame20.frame0.frame5
+  pack append .frame20.frame0.frame5 \
+    .frame20.frame0.frame5.menubutton2 {left frame w} \
+    .frame20.frame0.frame5.label1 {left frame center}
+
+  # build widget .frame20.frame0.frame6
+  frame .frame20.frame0.frame6 \
+    -borderwidth {2} \
+    -relief {raised}
+
+  # build widget .frame20.frame0.frame6.menubutton2
+  menubutton .frame20.frame0.frame6.menubutton2 \
+    -menu {.frame20.frame0.frame6.menubutton2.m} \
+    -text {Depth coloring: }
+
+  # build widget .frame20.frame0.frame6.menubutton2.m
+  menu .frame20.frame0.frame6.menubutton2.m
+  .frame20.frame0.frame6.menubutton2.m add command \
+    -command {set ipdepth 0
+    set depth_colors off
+    } \
+    -label {off} \
+    -state {active}
+  .frame20.frame0.frame6.menubutton2.m add command \
+    -command {set ipdepth 1
+    set depth_colors standard
+    } \
+    -label {standard}
+  .frame20.frame0.frame6.menubutton2.m add command \
+    -command {set ipdepth 2
+    set depth_colors shallow
+    } \
+    -label {shallow}
+  .frame20.frame0.frame6.menubutton2.m add command \
+    -command {set ipdepth 4
+    set depth_colors grayscale
+    } \
+    -label {grayscale}
+
+  # build widget .frame20.frame0.frame6.label1
+  label .frame20.frame0.frame6.label1 \
+    -relief {raised} \
+    -text {standard} \
+    -textvariable {depth_colors}
+
+  # pack widget .frame20.frame0.frame6
+  pack append .frame20.frame0.frame6 \
+    .frame20.frame0.frame6.menubutton2 {left frame w} \
+    .frame20.frame0.frame6.label1 {left frame center}
+
+  # pack widget .frame20.frame0
+  pack append .frame20.frame0 \
+    .frame20.frame0.checkbutton1 {top frame w} \
+    .frame20.frame0.checkbutton2 {top frame w} \
+    .frame20.frame0.checkbutton3 {top frame w} \
+    .frame20.frame0.checkbutton5 {top frame w} \
+    .frame20.frame0.checkbutton6 {top frame w} \
+    .frame20.frame0.checkbutton7 {top frame w} \
+    .frame20.frame0.checkbutton8 {top frame w} \
+    .frame20.frame0.checkbutton9 {top frame w} \
+    .frame20.frame0.checkbutton10 {top frame w} \
+    .frame20.frame0.checkbutton11 {top frame w} \
+    .frame20.frame0.checkbutton12 {top frame w} \
+    .frame20.frame0.checkbutton13 {top frame w} \
+    .frame20.frame0.checkbutton0 {top frame w} \
+    .frame20.frame0.frame5 {top frame w} \
+    .frame20.frame0.frame6 {top frame w}
+
+  # pack widget .frame20
+  pack append .frame20 \
+    .frame20.frame15 {top frame n} \
+    .frame20.frame0 {bottom frame center expand filly}
+
+  # pack widget .
+  pack append . \
+    .frame14 {left frame n filly} \
+    .frame19 {left frame n filly} \
+    .frame20 {left frame center filly}
+}
+
+proc print_map {} {
+	global Printer
+
+	if { $Printer == "" } {
+		set printopt ""
+	} else {
+		set printopt "-d $Printer"
+	}
+
+	catch "exec lp $printopt ak_dbmapevents.ps"
+}
+
+proc coltonum {color} {
+	switch $color red {return 0} green {return 120} blue {return 240}
+}
+
+proc set_auth_cmp {} {
+	global authcmp
+	global auth1 auth2 col1 col2 sym1 sym2
+
+#	set authcmp "AEIC box 0 0.5 1 binder hexagon 120 0.5 1"
+	global dbname
+	set auths [exec dbselect $dbname.origin auth | sort | uniq ]
+	regsub -all " +" [translit \n " " $auths] " " auths
+	if { [llength $auths] < 2 } {
+		tkdialog .nope "Not possible" "Not enough authors present" OK
+		set authcmp ""
+		return
+	}
+	if {[winfo exists .set]} {
+		wm deiconify .set
+		blt::winop raise .set
+		return
+	}
+	toplevel .set
+	frame .set.auth1
+	frame .set.auth2
+
+	button .set.ok -text OK -command {
+		set authcmp "$auth1 $sym1 [coltonum $col1] 0.5 1 $auth2 $sym2 [coltonum $col2] 0.5 1"
+	}
+
+	button .set.clear -text Clear -command {
+		set authcmp ""
+	}
+
+	label .set.auth1.lbl -text "Author 1:"
+	label .set.auth2.lbl -text "Author 2:"
+    
+	set colors [list red green blue]
+	set symbols [list box triangle hexagon cross]
+
+	SelectorButton .set.auth1.sbauth -options $auths -variable auth1
+	SelectorButton .set.auth2.sbauth -options $auths -variable auth2
+
+	SelectorButton .set.auth1.sbcol -options $colors -variable col1
+	SelectorButton .set.auth2.sbcol -options $colors -variable col2
+
+	SelectorButton .set.auth1.sbsym -options $symbols -variable sym1
+	SelectorButton .set.auth2.sbsym -options $symbols -variable sym2
+
+	pack .set.auth1 -side top -fill x
+	pack .set.auth2 -side top -fill x
+	pack .set.clear -side top -fill x
+	pack .set.ok -side top -fill x
+
+	pack .set.auth1.lbl -side left -fill y
+	pack .set.auth2.lbl -side left -fill y
+
+	pack .set.auth1.sbauth -side left -fill y
+	pack .set.auth2.sbauth -side left -fill y
+
+	pack .set.auth1.sbcol -side left -fill y
+	pack .set.auth2.sbcol -side left -fill y
+
+	pack .set.auth1.sbsym -side left -fill y
+	pack .set.auth2.sbsym -side left -fill y
+
+	set auth1 [lindex $auths 0]
+	set auth2 [lindex $auths 1]
+
+	set col1 [lindex $colors 0]
+	set col2 [lindex $colors 1]
+
+	set sym1 [lindex $symbols 0]
+	set sym2 [lindex $symbols 1]
+
+}
+
+proc add_label {label} {
+	global label_files
+	if {[lsearch $label_files $label] == -1} {
+		lappend label_files $label
+		.frame19.frame2.frame15.listbox1 insert end $label
+	}
+}
+
+proc add_boilerplate {bp} {
+	global bp_files
+        if {[lsearch $bp_files $bp] == -1} {
+                lappend bp_files $bp
+                .frame19.frame4.frame.listbox1 insert end $bp
+        }
+}
+
+proc clear_labels {} {
+	global label_files
+	set label_files ""
+	.frame19.frame2.frame15.listbox1 delete 0 end
+}
+
+proc clear_boilerplates {} {
+	global bp_files
+	set bp_files ""
+	.frame19.frame4.frame.listbox1 delete 0 end
+}
+
+proc get_macro {basename} {
+	global istaplt istnam ipdeplt ipdepth iporid icities ipipe
+ 	global iblue ipmag idcirc icol ititl ipumps iflt itran ilegnd
+	global event_symbols depth_colors title center range
+	global bp_files label_files 
+	
+	set Pf $basename\_mapset_macro
+	pfread $Pf
+
+	set center [pfget $Pf center]
+	set range [pfget $Pf range]
+
+	set istaplt [pfget $Pf istaplt]
+	set istnam [pfget $Pf istnam]
+	set ipdeplt [pfget $Pf ipdeplt]
+	set ipdepth [pfget $Pf ipdepth]
+	set iporid [pfget $Pf iporid]
+	set icities [pfget $Pf icities]
+	set ipipe [pfget $Pf ipipe]
+	set iblue [pfget $Pf iblue]
+	set ipmag [pfget $Pf ipmag]
+	set idcirc [pfget $Pf idcirc]
+	set icol [pfget $Pf icol]
+	set ititl [pfget $Pf ititl]
+	set ipumps [pfget $Pf ipumps]
+	set iflt [pfget $Pf iflt]
+	set itran [pfget $Pf itran]
+	set ilegnd [pfget $Pf ilegnd]
+	set title [pfget $Pf title]
+
+	switch $icol {
+		0
+			{set event_symbols circles}
+		1
+			{set event_symbols hexagons}
+		default
+			{set event_symbols none}
+	}
+	switch $ipdepth {
+		0
+			{set depth_colors off}
+		1
+			{set depth_colors standard}
+		2
+			{set depth_colors shallow}
+		4
+			{set depth_colors grayscale}
+		default
+			{set depth_colors off}
+	}
+
+	clear_labels
+	foreach label [pfgetlist [pfget $Pf label_files]] {
+		add_label $label
+	}
+
+	clear_boilerplates
+	foreach bp [pfgetlist [pfget $Pf boilerplate_files]] {
+		add_boilerplate $bp
+	}
+
+}
+
+proc save_pf {name} {
+	global istaplt istnam ipdeplt ipdepth iporid icities ipipe
+ 	global iblue ipmag idcirc icol ititl ipumps iflt itran ilegnd
+	global title center range
+	global bp_files label_files
+	
+	set file [open $name.pf w]
+
+	puts $file "center $center"
+	puts $file "range $range"
+
+	puts $file "istaplt $istaplt"
+	puts $file "istnam $istnam"
+	puts $file "ipdeplt $ipdeplt"
+	puts $file "ipdepth $ipdepth"
+	puts $file "iporid $iporid"
+	puts $file "icities $icities"
+	puts $file "ipipe $ipipe"
+	puts $file "iblue $iblue"
+	puts $file "ipmag $ipmag"
+	puts $file "idcirc $idcirc"
+	puts $file "ititl $ititl"
+	puts $file "iflt $iflt"
+	puts $file "ipumps $ipumps"
+	puts $file "icol $icol"
+	puts $file "itran $itran"
+	puts $file "ilegnd $ilegnd"
+	puts $file "title $title"
+
+	puts $file "label_files  &Tbl{"
+	foreach label $label_files {
+		puts $file "$label"
+	}
+	puts $file "}"
+
+	puts $file "boilerplate_files  &Tbl{"
+	foreach bp $bp_files {
+		puts $file "$bp"
+	}
+	puts $file "}"
+
+	close $file
+}
+
+proc save_macro {} {
+
+	toplevel .getname
+	wm title .getname {Macro name: }
+	frame .getname.f1
+	frame .getname.f2
+	pack .getname.f1 .getname.f2
+
+	entry .getname.f1.entry1 \
+		-relief {raised} \
+		-textvariable {macro_name} \
+		-width {40}
+
+	pack append .getname.f1 \
+		.getname.f1.entry1 {top frame center}
+
+	button .getname.f2.button_ok \
+		-text "OK" \
+		-command {
+		save_pf "$macro_name\_mapset_macro"
+		add_macro $macro_name
+		fill_macro_menu
+		destroy .getname
+	}
+
+
+	button .getname.f2.button_cancel \
+		-text "Cancel" \
+		-command {
+		destroy .getname
+	}
+
+	pack append .getname.f2 \
+		.getname.f2.button_ok {left frame center} \
+		.getname.f2.button_cancel {right frame center}
+}
+
+
+proc show_man {} {
+	toplevel .man
+	wm title .man {man mapset}
+	text .man.text -yscrollcommand ".man.scroll set"
+	scrollbar .man.scroll -relief flat -command ".man.text yview"
+	button .man.button1 -relief raised \
+		-text "dismiss" \
+		-command {destroy .man}
+	 
+	pack .man.scroll -side right -fill y
+	pack .man.button1 -side bottom -fill x
+	pack .man.text -expand yes -fill both
+
+	#Remove the backspaces put in by nroff to signify bold characters
+	.man.text insert current [exec sh -c \
+	{nroff -man $AEIC/man/man1/mapset.1 | sed 's@\([A-Z].\)\1\1@@g'}]
+}
+
+proc fill_macro_menu {} {
+	global macros
+
+	set menu .frame20.frame15.menubutton1.m
+
+	set macros [lsort $macros]
+
+	$menu delete 0 last
+
+	foreach macro $macros {
+		$menu add command -label "$macro" -command "get_macro $macro"
+	}
+	$menu add separator
+	$menu add command -label "Save as..." -command save_macro
+}
+
+proc add_macro {name} {
+	global macros
+	if {[lsearch $macros $name] == -1} {
+		lappend macros $name
+	}
+}
+
+
+proc StartupSrc {args} {
+	global argv0 argc
+	if {$argc > 1} {
+		echo usage: $argv0 \[dbname\]
+		exit 1
+	}
+}
+
+
+proc EndSrc {} {
+	global env macros
+
+	regsub -all : $env(PFPATH) " " paths
+	foreach path $paths {
+   	if {[catch "glob $path/*mapset_macro.pf"] == 0} {
+      		foreach file [glob $path/*mapset_macro.pf] {
+           		regsub _mapset_macro.pf [exec basename $file] {} temp
+	   		add_macro $temp
+      		}
+   	}
+	}
+	fill_macro_menu
+		
+	regsub -all : $env(DBMAPEVENTS_DATA) " " paths
+	foreach path $paths {
+   		if {[catch "glob $path/*.bp"] == 0} {
+			foreach file [glob $path/*.bp] {
+				regsub .bp [exec basename $file] {} temp
+				.frame19.frame4.menubutton5.m add command -label "$temp" \
+	  			-command "add_boilerplate $temp"
+			}
+		}
+   		if {[catch "glob $path/*.label"] == 0} {
+			foreach file [glob $path/*.label] {
+				regsub .label [exec basename $file] {} temp
+				.frame19.frame2.menubutton4.m add command -label "$temp" \
+	  			-command "add_label $temp"
+			}
+		}
+	}
+}
+
+StartupSrc
+
+# initialize global variables
+proc InitGlobals {} {
+  global env argc argv
+  global {Dbmapevents} 
+  set {Dbmapevents} {ak_dbmapevents}
+  if {! [info exists env(DBMAPEVENTS_DATA)]} {set env(DBMAPEVENTS_DATA) "."}
+  regsub -all : $env(DBMAPEVENTS_DATA) " " temp
+  if {[lsearch $temp "."] == -1} {
+	set env(DBMAPEVENTS_DATA) "$env(DBMAPEVENTS_DATA):."
+  }
+  if {! [info exists env(PFPATH)]} {set env(PFPATH) "."}
+  regsub -all : $env(PFPATH) " " temp
+  if {[lsearch $temp "."] == -1} {
+	set env(PFPATH) "$env(PFPATH):."
+  }
+  global {bp_files}
+  set {bp_files} {}
+  global {center}
+  set {center} {}
+  global {checkbutton0}
+  set {checkbutton0} {0}
+  global {checkbutton1}
+  set {checkbutton1} {0}
+  global {checkbutton10}
+  set {checkbutton10} {0}
+  global {checkbutton11}
+  set {checkbutton11} {0}
+  global {checkbutton12}
+  set {checkbutton12} {0}
+  global {checkbutton13}
+  set {checkbutton13} {0}
+  global {checkbutton2}
+  set {checkbutton2} {0}
+  global {checkbutton3}
+  set {checkbutton3} {0}
+  global {checkbutton4}
+  set {checkbutton4} {0}
+  global {checkbutton5}
+  set {checkbutton5} {0}
+  global {checkbutton6}
+  set {checkbutton6} {0}
+  global {checkbutton7}
+  set {checkbutton7} {0}
+  global {checkbutton8}
+  set {checkbutton8} {0}
+  global {checkbutton9}
+  set {checkbutton9} {0}
+  global {dbbasename}
+  set {dbbasename} {}
+  global {dbname}
+  if {$argc == 1} {
+	set {dbname} [lindex $argv 0]
+  } else {
+  	set {dbname} {}
+  }
+  global {depth_colors}
+  set {depth_colors} {standard}
+  global {event_symbols}
+  set {event_symbols} {hexagons}
+  global {file}
+  set {file} {file6}
+  global {iblue}
+  set {iblue} {0}
+  global {icities}
+  set {icities} {0}
+  global {icol}
+  set {icol} {1}
+  global {idcirc}
+  set {idcirc} {0}
+  global {iflt}
+  set {iflt} {0}
+  global {iint}
+  set {iint} {1}
+  global {ipdeplt}
+  set {ipdeplt} {0}
+  global {ipdepth}
+  set {ipdepth} {0}
+  global {ipipe}
+  set {ipipe} {0}
+  global {ipmag}
+  set {ipmag} {0}
+  global {iporid}
+  set {iporid} {0}
+  global {ipumps}
+  set {ipumps} {0}
+  global {istaplt}
+  set {istaplt} {0}
+  global {istnam}
+  set {istnam} {0}
+  global {ititl}
+  set {ititl} {0}
+  global {itran}
+  set {itran} {0}
+  global {ilegnd}
+  set {ilegnd} {0}
+  global {label_files}
+  set {label_files} {}
+  global {macro}
+  set {macro} {aeic}
+  global {macros}
+  set {macros} {}
+  global {range}
+  set {range} {}
+  global {authcmp}
+  set {authcmp} {}
+  global {title}
+  set {title} {}
+  global {tmplt}
+  set {tmplt} {0}
+
+}
+
+InitGlobals
+
+ShowWindow.
+
+EndSrc

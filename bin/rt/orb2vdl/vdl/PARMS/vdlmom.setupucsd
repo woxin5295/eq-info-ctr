@@ -1,0 +1,1 @@
+vdlidatap if=localhost -v parms.vdl -n 18 -s 50 -host nsn5.cr.usgs.gov -port 2003 -f 20 -t 1 -i vpe -k 0

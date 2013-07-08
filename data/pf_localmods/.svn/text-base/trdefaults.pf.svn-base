@@ -1,0 +1,87 @@
+# Read the man page trdefaults.pf(5) for more information on these parameters used
+# by the tr library.  
+#
+# Also refer to addwf(5) for more information about the waveform_types table below.
+
+waveform_types         &Tbl{
+# These values are carefully chosen to have an exact representation in a 4 byte float.
+#   Valid values are > lower-limit and < upper-limit.
+# datatype  code        fill-value      lower-limit     upper-limit  bps input      header   output  tail appendable    description
+as         trASCII      3.402823466E+38 -1e38         1e38            0   -       -          -       -     yes          free format ascii
+c2         trIDA_2BYTE  32767           -32768        32766           0   -       -          -       -     yes          IDA 2 byte compression
+c4         trIDA_4BYTE  2147483647      -2147483648   2147483647      0   -       -          -       -     yes          IDA 4 byte compression
+ca         trGSE_CM6    2147483647      -2147483648   2147483647      0   -       wfhdrCM6   -       X     no           GSE/AutoDRM CM6 ascii compression
+g2         trGAIN_RANGE 32767           -32768        32767           0   -       -          -       -     yes          gain range
+i2         trINTELSHORT 32767           -32768        32767           2   -       -          -       -     yes          Intel order 2 byte integer
+i3         trINTEL3BYTE 8388607        -8388608      8388607        3   wfinINTEL3BYTE -   wfoutINTEL3BYTE - yes          Intel order 3 byte integer
+i4         trINTELINT   2147483647      -2147483648   2147483647      4   -       -          -       -     yes          Intel order 4 byte integer
+s2         trSHORT      32767           -32768        32767           2   -       -          -       -     yes          Sun order 2 byte integer
+s3         tr3BYTE      8388607        -8388608      8388607        3   wfin3BYTE -        wfout3BYTE -  yes          Sun order 3 byte integer
+s4         trINT        2147483647      -2147483648   2147483647      4   -       -          -       -     yes          Sun order 4 byte integer
+sd         trSEED       268435456       -268435456    268435456       0   -       -          -       -     yes          SEED (steim compressed) format
+t4         trFLOAT      3.402823466E+38 -1e38         1e38            4   -       -          -       -     yes          Sun order 4 byte float
+u4         trINTELFLOAT 3.402823466E+38 -1e38         1e38            4   -       -          -       -     yes          Intel order 4 byte float
+zz         trDISCARD    3.402823466E+38 -1e38         1e38            0   -       -          -       -     yes          trDISCARD : no data in file.
+sc         trSAC        3.402823466E+38 -1e38         1e38            4   -       wfhdrSAC   -       -     no           sac
+ah         trAH         3.402823466E+38 -1e38         1e38            4   -       wfhdrAH    -       -     no           xdr version of AH
+# aa         trAAH        3.402823466E+38 -1e38         1e38            0   wfinAAH wfhdrAAH   wfoutAAH -     no           Alaska version of AH
+aa         55        3.402823466E+38 -1e38         1e38            0   wfinAAH wfhdrAAH   wfoutAAH -     no           Alaska version of AH
+IS         trInternalShort 32767        -32768        32767           2   -       -          -       -     yes          program internal conversions only
+II         trInternalInt 2147483647     -2147483648   2147483647      4   -       -          -       -     yes          program internal conversions only
+IF         trInternalFloat 3.402823466E+38 -1e38      1e38            4   -       -          -       -     yes          program internal conversions only
+}
+
+tick_tolerance               0.5	
+samprate_tolerance      0.0001
+default_datatype        sd
+
+default_trace_schema          Trace4.0
+
+max_open_files          # leave empty to use the default calculated with getrlimit(2)
+
+default_waveform_pattern %Y/%j/%{sta}.%{chan}.%Y:%j:%H:%M:%S # see trwfname(3)
+
+foreignkeys_database	foreignkeys
+
+seed_net_sta	&Tbl{
+# pattern	substitution
+# net_fsta	sta
+# The following default pattern just puts drops the network code
+(.*)_(.*)	$2
+}
+
+seed_sta_chan_loc	&Tbl{
+# pattern	substitution
+# sta/fchan_loc   chan
+#
+# The following pattern just puts the loc code into the channel code
+[^/]+/(.*)_	$1    	# map the blank loc code to the original channel code
+# map all the other loc codes into the channel name, before the last letter
+[^/]+/([^_]+)_(.*)	$1_$2
+}
+
+autodrm_net_sta	&Tbl{
+# pattern	substitution
+# net_fsta      sta
+# The following default pattern just puts drops the network code
+(.*)_(.*)	$2
+}
+
+autodrm_sta_chan_aux	&Tbl{
+# pattern	substitution
+# sta/fchan_aux 	chan
+[^/]+/(.*)_ 	$1    	# map the aux loc code to the original channel code
+# map all the other aux codes into the channel name, before the last letter
+[^/]+/([^_]+)_(.*)	$1_$2
+}
+
+# The following parameters are used when creating autoDRM responses
+# The default network and aux code are used only when lookup in the foreignkeys
+# database fails, and lookup in the morph lists above also fails.
+default_autodrm_network	USA_BRTT	
+default_aux_code		
+reference_coordinates   WGS-84	
+
+# The following are used when generating SEED data
+default_seed_network    BR	
+default_loc_code

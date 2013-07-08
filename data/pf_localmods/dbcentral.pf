@@ -1,0 +1,110 @@
+home &env(HOME)
+
+dbcentral_database /Seis/databases/dbcentral/dbcentral
+
+default_tasks &Tbl{
+	dbe		dbe DBNAME
+	dbe_editable	dbe -e DBNAME
+}
+
+custom_tasks &Arr{
+	catalogs_pde &Tbl{
+		dbe_origin	dbe  DBNAME.origin 
+	}
+	catalogs_pde_current_year &Tbl{
+		dbe_origin	dbe  DBNAME.origin 
+	}
+	RT_quakes_bak &Tbl{
+		dbe		dbe DBNAME
+		dbevents	aeic_dbevents  DBNAME 
+	}
+	RT_quakes_op &Tbl{
+		dbe		dbe DBNAME
+		dbevents	aeic_dbevents  DBNAME 
+	}
+	RT_quakes_mig &Tbl{
+		dbe		dbe DBNAME
+		dbevents	aeic_dbevents  DBNAME 
+	}
+	RT_quakes_web &Tbl{
+		dbe		dbe DBNAME
+		dbevents	aeic_dbevents  DBNAME 
+	}
+	RT_summary_quakes_database &Tbl{
+		dbe		dbe DBNAME
+		dbevents	aeic_dbevents  DBNAME 
+	}
+	daily_auto_quakes_web &Tbl{
+		dbe		dbe DBNAME
+		dbevents	aeic_dbevents  DBNAME 
+	}
+	daily_auto_quakes_op &Tbl{
+		dbe		dbe DBNAME
+		dbevents	aeic_dbevents  DBNAME 
+	}
+	daily_auto_quakes_bak &Tbl{
+		dbe		dbe DBNAME
+		dbevents	aeic_dbevents  DBNAME 
+	}
+	daily_auto_quakes_mig &Tbl{
+		dbe		dbe DBNAME
+		dbevents	aeic_dbevents  DBNAME 
+	}
+	RT_wf_archive_bak &Tbl{
+##		dbe		dbe DBNAME
+#		dbe_origin	dbe  DBNAME.origin 
+		dbe_wfdisc	dbe  DBNAME.wfdisc 
+#		dbpick		xterm -e dbpick -nostarttalk DBNAME
+		smartpick 	smartpick_classic -nowait DBNAME
+	}
+	RT_wf_archive_op &Tbl{
+#		dbe		dbe DBNAME
+#		dbpick		xterm -e dbpick -nostarttalk DBNAME
+		dbe_wfdisc	dbe  DBNAME.wfdisc 
+		smartpick 	smartpick_classic -nowait DBNAME
+	}
+	RT_wf_archive_mig &Tbl{
+#		dbe		dbe DBNAME
+#		dbpick		xterm -e dbpick -nostarttalk DBNAME
+		dbe_wfdisc	dbe  DBNAME.wfdisc 
+		smartpick 	smartpick_classic -nowait DBNAME
+	}
+	wf_archive_1996_1998 &Tbl{
+#		dbe		dbe DBNAME
+#		dbpick		xterm -e dbpick -nostarttalk DBNAME
+		dbe_wfdisc	dbe  DBNAME.wfdisc 
+		smartpick 	smartpick_classic -nowait DBNAME
+	}
+	wf_archive_1999_2006 &Tbl{
+#		dbe		dbe DBNAME
+#		dbpick		xterm -e dbpick -nostarttalk DBNAME
+		dbe_wfdisc	dbe  DBNAME.wfdisc 
+		smartpick 	smartpick_classic -nowait DBNAME
+	}
+	wf_archive_2007_bak &Tbl{
+#		dbe		dbe DBNAME
+#		dbpick		xterm -e dbpick -nostarttalk DBNAME
+		dbe_wfdisc	dbe  DBNAME.wfdisc 
+		smartpick 	smartpick_classic -nowait DBNAME
+	}
+	wf_archive_2007_op &Tbl{
+#		dbe		dbe DBNAME
+#		dbpick		xterm -e dbpick -nostarttalk DBNAME
+		dbe_wfdisc	dbe  DBNAME.wfdisc 
+		smartpick 	smartpick_classic -nowait DBNAME
+	}
+	wfseg_archive_1988_1999 &Tbl{
+#		dbe		dbe DBNAME
+#		dbpick		xterm -e dbpick -nostarttalk DBNAME
+		dbe_wfdisc	dbe  DBNAME.wfdisc 
+		smartpick 	smartpick_classic -nowait DBNAME
+	}
+	wfseg_archive_1999_2007 &Tbl{
+#		dbe		dbe DBNAME
+#		dbpick		xterm -e dbpick -nostarttalk DBNAME
+		dbe_wfdisc	dbe  DBNAME.wfdisc 
+		smartpick 	smartpick_classic -nowait DBNAME
+	}
+}
+
+pf_revision_time 1134472039

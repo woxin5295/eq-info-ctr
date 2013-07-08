@@ -1,0 +1,28 @@
+# @(#)cshrc 1.11 89/11/29 SMI
+
+umask 002
+
+setenv OPENWINHOME /usr/openwin
+setenv LD_LIBRARY_PATH $OPENWINHOME/lib:/usr/lib:/opt/SUNWspro/lib
+setenv MANPATH /opt/SUNWspro/man:/usr/man:/usr/openwin/man:/opt/local/man
+
+set path=(. ~/bin /bin /usr/sbin /usr/ccs /usr/ccs/bin /usr/bin /opt/SUNWspro/bin /opt/SUNWspro/SC3.0.1/bin $OPENWINHOME/bin /usr/ucb /etc /opt/local/bin /usr/lib/lp/postscript )
+
+set prompt="`hostname` \!? "
+if ( $?prompt ) then
+	set history=32
+endif
+
+# set up the earthworm environment
+source /home/earthworm/run/params/ew_sol_sparc.cmd
+alias   cdp  'cd /home/earthworm/run/params'
+alias   cdg  'cd /home/earthworm/run/log'
+alias   cdpm 'cd /home/earthworm/run_memphis/params'
+alias   cdgm 'cd /home/earthworm/run_memphis/log'
+alias   cdpu 'cd /home/earthworm/run_utah/params'
+alias   cdgu 'cd /home/earthworm/run_utah/log'
+alias   cds  'cd /home/earthworm/working/src'
+alias   cdb  'cd /home/earthworm/working/bin'
+alias   cdi  'cd /home/earthworm/working/include'
+alias   cdl  'cd /home/earthworm/working/lib'
+alias   cdv  'cd /home/earthworm/working/src/vdl'

@@ -1,0 +1,27 @@
+# parameter file for fm_tool
+
+Maintainer natasha<natasha@gi.alaska.edu>
+
+# list of paths used by the program
+
+Paths &Arr{
+ 	entry_db 	/Seis/processing/analyzed/2007_08/analyzed_2007_08_20	# path to database
+ 	data_path 	/Seis/processing/focal_mechanisms	# data path
+ 	prog_fm_path 	/usr/local/aeic/5.2-64/bin
+ 	pf_path 	/usr/local/aeic/5.2-64/data/pf
+}
+
+#helpers array
+Helpers &Arr{
+	prog_plot_path /usr/tools/bin/fpplot
+	gedit		gedit
+}
+
+
+# templates for database files, used in 'save new db'
+descr_templ &Arr{
+	dbextract_data	css3.0\n/Seis/databases/stations/{master_stations}:/iwrun/$waveforms/db/archive/{archive_$date}
+	dbout	css3.0\n/Seis/databases/stations/{master_stations} 
+}
+
+

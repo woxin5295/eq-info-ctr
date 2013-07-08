@@ -1,0 +1,112 @@
+onerun 0 # loop forever, 1 run once and exit
+db_destroy 0 # 0 do not destroy output database if dbprocess returns empty veiw, 1 destroy database 
+#forkprog /iwrun/sum/run/bin/dbrecent/dbrecenteqs/dbrecenteqs -p /home/mitch/dbrent_test/dbrecent/dbrecenteqs.pf /home/mitch/dbrent_test/dbsum # fork program as child process
+sleeptime 120 # sleep 300 seconds between input db checks
+db_templates &Arr{
+	a_qdds &Arr{
+		dbin /iwrun/sum/run/dbsum/dbsum
+		#dbin /usr/local/aeic/4.9/src/bin/db/db2dbsubset/testdbs/dbsum 
+		monitor origin
+		dbout /usr/local/aeic/4.9/src/bin/db/db2dbsubset/testdbs/dbqdds
+		maxdays 1 # only subset the most recent maxday of jdate, 0 all days
+		lddate 1 # update lddate if set to 1, default 
+			 # preserve lddate from dbin if set to 0
+		realloc 512 # memory map of output database reallocation up and down steps, in db rows 
+			    # default 512 rows
+		crunchinterval 86400 # frequency to crunch null rows in output database in seconds 
+
+		# CAVEAT subset_sequence must connect all output_tables 
+		#dbjoin -o ignorerow
+		#dbsubset ((whoig!="all"&&whoig!="qdds")||whoig=="-")
+		subset_sequence &Tbl{
+			dbopen event
+			dbjoin origin 
+			dbsubset (prefor==orid)&&(lat>=55.0&&lat<=71.0&&lon>=-170.0&&lon<=-135.0)||(lat>=50.0&&lat<=55.0&&lon>=-180.0&&lon<=-153.0)||(lat>=50.0&&lat<=55.0&&lon>=160.0&&lon<=180.0)&&((ml>=4.0||mb>=4.0||ms>=4.0)&&(ndef<10))
+			dbjoin -o origerr orid
+			dbjoin -o assoc orid
+			dbjoin -o arrival arid
+			dbjoin -o emodel orid
+			dbjoin -o netmag orid
+		}
+		output_tables &Tbl{
+			event
+			origin
+			origerr
+			assoc
+			arrival
+			emodel
+			netmag
+		}
+	}
+	a_igqdds &Arr{
+		dbin /iwrun/sum/run/dbsum/dbsum
+		#dbin /usr/local/aeic/4.9/src/bin/db/db2dbsubset/testdbs/dbsum 
+		monitor origin
+		dbout /usr/local/aeic/4.9/src/bin/db/db2dbsubset/testdbs/dbqddsig
+		maxdays 1 # only subset the most recent maxday of jdate, 0 all days
+		lddate 1 # update lddate if set to 1, default 
+			 # preserve lddate from dbin if set to 0
+		realloc 512 # memory map of output database reallocation up and down steps, in db rows 
+			    # default 512 rows
+		crunchinterval 86400 # frequency to crunch null rows in output database in seconds 
+
+		# CAVEAT subset_sequence must connect all output_tables 
+		#dbjoin ignorerow
+		#dbsubset (whoig=="all"||whoig=="qdds")
+		subset_sequence &Tbl{
+			dbopen event
+			dbjoin origin 
+			dbsubset prefor==orid
+			dbjoin -o origerr orid
+			dbjoin -o assoc orid
+			dbjoin -o arrival arid
+			dbjoin -o emodel orid
+			dbjoin -o netmag orid
+		}
+		output_tables &Tbl{
+			event
+			origin
+			origerr
+			assoc
+			arrival
+			emodel
+			netmag
+		}
+	}
+#	b_mirror &Arr{
+#		#dbin /iwrun/sum/run/dbsum/dbsum
+#		dbin /usr/local/aeic/4.9/src/bin/db/db2dbsubset/testdbs/dbsum 
+#		monitor origin
+#		dbout /usr/local/aeic/4.9/src/bin/db/db2dbsubset/testdbs/dbmir
+#		maxdays 1 # only subset the most recent maxday of jdate, 0 all days
+#		lddate 0 # update lddate if set to 1, default 
+#			 # preserve lddate from dbin if set to 0
+#		realloc 512 # memory map of output database reallocation up and down steps, in db rows 
+#			    # default 512 rows
+#		crunchinterval 86400 # frequency to crunch null rows in output database in seconds 
+# 
+#		# CAVEAT subset_sequence must connect all output_tables 
+#		subset_sequence &Tbl{
+#			dbopen event
+#			dbjoin origin 
+#			dbjoin -o origerr
+#			dbjoin -o assoc
+#			dbjoin -o arrival
+#			dbjoin -o emodel
+#			dbjoin -o netmag
+#			dbjoin -o predarr 
+#		}
+#		output_tables &Tbl{
+#			event
+#			origin
+#			origerr
+#			assoc
+#			arrival
+#			emodel
+#			netmag
+#			predarr
+#		}
+#	}
+}
+pf_revision_time 1100071267
+

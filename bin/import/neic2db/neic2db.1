@@ -1,0 +1,28 @@
+.TH NEIC2DB 1 "$Date: 2002-02-07 01:56:34 $"
+.SH NAME
+neic2db \- Generates a database event entry in dbout for reviewed NEIC solutions in
+the users mailbox.
+.SH SYNOPSIS
+\fBneic2db \fP\fIdbout\fP
+.LP
+\fBwhere: \fP
+.LP
+\fBdbout \fP= \fIoutput\fP \fIdatabase\fP
+.SH DESCRIPTION
+\fBneic2db\fP makes use of email2pick.script, pick2db and aeic_dbconcat_event
+to make \fIdatabase\fP entry for each NEIC reviewed solution in the users
+mailbox.
+
+.SH OPTIONS
+.IP "dbout"
+The \fIoutput\fP \fIdatabase\fP name. This argument is required.
+.SH ENVIRONMENT
+\fBneic2db\fP expects the ANTELOPE environment variable to be set correctly.
+.SH EXAMPLE
+%\fB neic2db mydbout\fP
+.SH "SEE ALSO"
+.nf
+pick2db, aeic_dbconcat_event, email2pick.script
+.fi
+.SH AUTHOR
+Dan McNamara.

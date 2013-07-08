@@ -1,0 +1,9 @@
+cd /export/home/ketchudc/vdl
+rm -f vdlpass.log BMN*.log* MVU*.log* TPH*.log* DAC*.log* vdlstart.log vdl.log vdlmom.log
+cp vdlmom.setupeggtcp vdlmom.setup
+#vdlpass -passout /dev/ttyb -passport 9567 >pass.log &
+vdlmom
+Mail -s "Nevada VDL down" ketchum@gldfs.cr.usgs.gov </export/home/ketchudc/vdl/vdl.mail
+Mail -s "Nevada VDL down" whiterl@gwsmtp.egg.nv.doe.gov </export/home/ketchudc/vdl/vdl.mail
+Mail -s "page ketchum" pagemail@nsn4.cr.usgs.gov </export/home/ketchudc/vdl/vdl.mail
+echo "mail sent to gldfs."

@@ -1,0 +1,43 @@
+'\" te	
+.TH SET_MAKEFILE_PACKAGE 1 "$Date: 2000-05-23 23:27:06 $"
+.SH NAME
+set_makefile_package\- reset the PACKAGE macro in a makefile
+.SH SYNOPSIS
+.nf
+set_makefile_package new_package_value
+.fi
+.SH DESCRIPTION
+This command resets the assignment of the PACKAGE= macro in all 
+makefiles named Makefile that are in the current directory or 
+subdirectories of the current directory. If no assignment exists, 
+a new macro assignment value is entered right before the
+include $(ANTELOPEMAKE) line. 
+.SH OPTIONS
+.SH FILES
+.SH ENVIRONMENT
+.SH PARAMETER FILE
+.SH EXAMPLE
+.ft CW
+.RS .2i
+.RE
+.ft R
+.nf
+array% set_makefile_package '$(ANTELOPE)/contrib'
+array%
+.fi
+.SH RETURN VALUES
+.SH LIBRARY
+.SH DIAGNOSTICS
+.SH "SEE ALSO"
+.nf
+antelopemake(5)
+.fi
+.SH "BUGS AND CAVEATS"
+If the macro refers to other environment variables or macros, the specification
+must be enclosed in single quotes to protect it from shell expansion
+.SH AUTHOR
+.nf
+Kent Lindquist
+Geophysical Institute
+.fi
+.\" $Id: set_makefile_package.1,v 1.1.1.1 2000-05-23 23:27:06 kent Exp $

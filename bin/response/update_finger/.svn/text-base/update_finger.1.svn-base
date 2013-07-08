@@ -1,0 +1,13 @@
+.TH UPDATE_FINGER 1 "$Date: 2002-02-07 01:56:39 $"
+.SH NAME
+update_finger \- update the .plan file for finger quake
+.SH SYNOPSIS
+.nf
+\fBupdate_finger \fP
+.fi
+.SH DESCRIPTION
+\fBupdate_finger\fP updates the list of recent earthquakes in the file
+/home/quake/.plan
+.SH AUTHOR
+Various
+.\" $Id: update_finger.1,v 1.2 2002-02-07 01:56:39 kent Exp $

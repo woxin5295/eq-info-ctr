@@ -1,0 +1,59 @@
+Pipeevent and pipelinmatrix need to be manually compiles only on systems
+with /usr/local/mysql setup.
+
+install mysql -
+Read /usr/local/aeic/4.9/src/bin/db/pipelinematrix/MSQLSETUP
+
+pipemessage tktcl setup -
+cd /usr/local/aeic/4.9/src/bin/db/pipelinematrix/tktcl
+make pipemessage install
+
+select utility display mysql tables -
+cd /usr/local/aeic/4.9/src/bin/db/pipelinematrix/mysqlcode
+cp select.c to private run/bin location
+vi select.c and change hardwired setup
+cd to private run/bin location
+cc -L/usr/local/mysql/lib/mysql -R/usr/local/mysql/lib/mysql -I/usr/local/mysql/include/mysql -o select select.c -lmysqlclient -lnsl -lsocket 
+
+remote aeicems select setup
+cd /iwrun/acq/run/bin/mysql
+cp select.c select_aeicems.c
+vi select_aeicems.c
+cc -L/usr/local/mysql/lib/mysql -R/usr/local/mysql/lib/mysql -I/usr/local/mysql/include/mysql -o select_aeicems select_aeicems.c -lmysqlclient -lnsl -lsocket
+
+
+
+create schema -
+cd /usr/local/aeic/4.9/src/bin/db/pipelinematrix/schema
+make install
+
+Compile programs -
+make -f Makefile_pipeevent install
+make -f Makefile_pipelinematrix install
+
+Run programs -
+pipelinematrix -pf /iwrun/acq/run/pf/pipelinematrix.pf -S /iwrun/acq/run/state/pipelinematrix
+pipeevent -pf /iwrun/acq/run/pf/pipelinematrix.pf
+
+
+Sending messages to pipelinematrix-
+	orblog -s pipelinemsg aeicpipe:6510 "Testing message"
+
+#richter:mitch 181 tcsh>> orbstat -s aeicpipe:6510 | grep pipelinemsg
+#richter/ch/pipelinemsg        5185          1        0.0     9898  073 22:51:44     9898  073 22:51:44          Inf    2:27 minutes       
+
+Send message to maintain station -
+orblog -s pipelinemsg aeicpipe:6510 "Maintain ALL on"
+orblog -s pipelinemsg aeicpipe:6510 "Maintain PS11 on"
+orblog -s pipelinemsg aeicpipe:6510 "Test PS11 on"
+orblog -s pipelinemsg aeicpipe:6510 "Fault PS11 on"
+
+Done maintaining station -
+orblog -s pipelinemsg aeicpipe:6510 "Maintain ALL off"
+orblog -s pipelinemsg aeicpipe:6510 "Maintain PS11 off"
+orblog -s pipelinemsg aeicpipe:6510 "Fault PS11 off"
+
+Send Heartbeat -
+orblog -s pipelinemsg aeicpipe:6510 "Heartbeat"
+Send Cleanup -
+orblog -s pipelinemsg aeicpipe:6510 "Cleanup"

@@ -1,0 +1,370 @@
+# Timecorr-table change script for Iceworm
+#
+# K. Lindquist
+# February, 1999
+# Geophysical Institute
+# University of Alaska, Fairbanks
+ 
+lappend auto_path $env(ANTELOPE)/data/tcl/library
+
+proc init_globals {} {
+        global Pfname 
+        set Pfname aeic_rtsys
+ 
+	global Systems
+	pfgetarr processing_systems %$Pfname#processing_systems
+        set Systems [array names processing_systems]
+
+	global Primary_system
+	set Primary_system [pfget $Pfname primary_system]
+
+	global Current_system
+	set Current_system $Primary_system
+
+	global Previous_system
+	set Previous_system $Current_system
+
+        global Databases
+	global System_names
+        foreach system $Systems {
+                pfgetarr myarr %${Pfname}#processing_systems#$system
+                set Databases($system) $myarr(site_database)
+		set System_names($system) $myarr(system_name)
+        }
+
+	global Linked 
+	set Linked 1
+ 
+        global Database_status
+        set Database_status unchecked
+}
+ 
+proc init_databases {} {
+	global Systems
+
+	foreach system $Systems {
+		open_database $system
+		backup_database $system
+		check_database_permissions $system
+	}
+}
+
+proc init_windows {} {
+	global Dbptrs Systems Current_system
+	global System_names 
+	global Linked
+
+	frame .command
+	pack .command -side bottom -fill x
+
+	button .command.quit -bg red -text Quit -command "destroy ."
+	pack .command.quit -side right -fill y
+
+	button .command.revert -bg green -text "Revert to last saved" \
+				-command revert
+	pack .command.revert -side right -fill y
+
+	label .command.l -text "Acquisition System: "
+	pack .command.l -side left -fill y
+
+	foreach system $Systems {
+		radiobutton .command.$system -text $System_names($system) \
+				-value $system -variable Current_system \
+				-command "switch_systems $system"
+		if { $Linked && $system != $Current_system } {
+			.command.$system config -state disabled
+		}
+		pack .command.$system -side left -fill y
+	}
+
+	checkbutton .command.link -text "All Systems" -bg lightblue \
+				  -variable Linked -command toggle_link
+	pack .command.link -side left -fill y
+
+	draw_buttonset $Current_system
+}
+
+proc add_button { w sta chan commdelay } {
+
+	set myframe $w.f_$sta\_$chan
+	set mymb $myframe.m
+	set mymenu $mymb.menu
+	set mylabel $myframe.l_$sta\_$chan
+
+	frame $myframe
+	pack $myframe -side top -fill x
+
+	menubutton $mymb -text "$sta $chan" -menu $mymenu
+	pack $mymb -side left 
+
+	label $mylabel -text "$commdelay sec"
+	pack $mylabel -side right -fill x
+
+	menu $mymenu -tearoff 0
+	$mymenu add command -label Set -command "set_station $mylabel $sta $chan"
+	$mymenu add command -label Remove -command "remove_entry $w $sta $chan"
+
+}
+
+proc blank_slate {} {
+	global Frames 
+
+	foreach f $Frames {
+		destroy $f
+	}
+
+	set Frames ""
+}
+
+proc draw_buttonset { system } {
+	global Frames 
+	global Dbptrs
+
+	set db $Dbptrs($system)
+
+	set nrecs [dbquery $db dbRECORD_COUNT]
+
+	set nrows 30
+
+	set nframes [expr int( ceil( $nrecs/$nrows ) + 1 ) ]
+	
+	for { set iframe 1 } { $iframe <= $nframes } { incr iframe } {
+		frame .f$iframe -borderwidth 5 -relief sunken
+		pack .f$iframe -side left -fill y
+		lappend Frames .f$iframe
+	}
+
+	for { set record 0 } { $record < $nrecs } { incr record } {
+		set mylist [dbgetv $db timecorr $record sta chan commdelay]
+		set sta [lindex $mylist 0]
+		set chan [lindex $mylist 1]
+		set commdelay [lindex $mylist 2]
+
+		set frameno [expr int( ceil( $record / $nrows ) + 1 )]
+		add_button .f$frameno $sta $chan $commdelay
+	}
+}
+ 
+proc open_database { system } {
+        global Databases
+        global Dbptrs
+ 
+	set dbname $Databases($system)
+	set db [dbopen_table $dbname.timecorr r+]
+	set Dbptrs($system) $db
+}
+
+proc reopen_database { system } {
+	global Dbptrs
+
+	dbclose $Dbptrs($system)
+	open_database $system
+}
+
+proc backup_database { system } {
+        global Databases
+        global Dbptrs
+	global Tablepaths Backups
+	global env
+ 
+	set db $Dbptrs($system)
+
+	set Tablepaths($system) [dbquery $db dbTABLE_FILENAME]
+	set Backups($system) "/tmp/pickertbl_$env(USER)\_[pid]_$system"
+
+	exec cp $Tablepaths($system) $Backups($system)
+}
+
+proc check_database_permissions { system } {
+        global Databases Database_status
+ 
+	set db $Databases($system)
+
+	set timecorr_table "$db.timecorr"
+	set yes [file exists $timecorr_table]
+	if { ! $yes } {
+		set msg "Fatal error: Database table $timecorr_table,"
+		set msg "$msg specified in aeic_rtsys.pf, doesnt exist"
+
+		tkdialog .die Error $msg  Ok
+		exit 1
+	}
+	set yes [file writable $timecorr_table]
+	if { ! $yes } {
+		set msg "Fatal error: Database table $timecorr_table,"
+		set msg "$msg specified in aeic_rtsys.pf, exists"
+		set msg "$msg but is not writable by you"
+
+		tkdialog .die Error $msg Ok
+		exit 1
+	}
+ 
+        set Database_status "ok"
+}
+
+proc switch_systems { system } {
+	global Previous_system Current_system
+
+	if { $system == $Previous_system } {
+		return
+	}
+
+	blank_slate
+
+	draw_buttonset $system
+
+	set Previous_system $system
+}
+
+proc toggle_link {} {
+	global Linked
+	global Current_system Primary_system Previous_system
+	global Systems
+
+	if { $Linked } {
+		foreach system $Systems {
+			if { $system == $Primary_system } {
+				set Current_system $system
+				.command.$system config -state normal	
+			} else {
+				.command.$system config -state disabled
+			}
+		}
+	} else {
+		foreach system $Systems {
+			.command.$system config -state normal
+		}
+	}
+
+	if { $Previous_system != $Current_system } {
+		switch_systems $Primary_system
+		set Current_system $Primary_system
+	}
+
+}
+
+proc revert {} {
+	global Backups Tablepaths Current_system Linked Systems
+
+	if { $Linked } {
+		set mylist $Systems
+	} else {
+		set mylist $Current_system
+	}
+
+	foreach system $mylist {
+		exec cp $Backups($system) $Tablepaths($system)
+		reopen_database $system
+	}
+
+	blank_slate 
+
+	draw_buttonset $Current_system
+
+}
+
+proc get_new_commdelay { sta chan } {
+	global mydialog_result
+
+	set w .get_$sta\_$chan
+
+	catch {destroy $w}
+	toplevel $w -class Dialog
+
+	button $w.ok -text "OK" -command "destroy $w"
+	pack $w.ok -side bottom -fill x
+
+	label $w.l -text "New delay for $sta:$chan:"
+	pack $w.l -side left
+
+	set mydialog_result($sta:$chan) 0
+	entry $w.e -textvariable mydialog_result($sta:$chan)
+	pack $w.e -side left
+
+	label $w.u -text Seconds
+	pack $w.u -side left
+
+	grab set $w
+	tkwait window $w
+	grab release $w
+
+	return $mydialog_result($sta:$chan)
+}
+
+proc set_station { mylabel sta chan } {
+	global Dbptrs Current_system Systems Linked System_names
+
+	if { $Linked } {
+		set mylist $Systems
+	} else {
+		set mylist $Current_system
+	}
+
+	set new_commdelay [get_new_commdelay $sta $chan]
+
+	foreach system $mylist {
+
+		set db $Dbptrs($system)
+
+		set expression "sta == \"$sta\" && chan == \"$chan\""
+		set record [dbfind $db 0 0 $expression]
+
+		if { $record < 0 } {
+
+			set name $System_names($system)
+			puts "Failed to toggle $sta:$chan in $name system"
+		
+		} else {
+
+			set db [lreplace $db 3 3 $record]
+
+			set commdelay [dbgetv $db timecorr $record commdelay]
+
+			puts "Resetting $sta:$chan from $commdelay to $new_commdelay"
+
+			dbputv $db timecorr $record commdelay $new_commdelay
+		}
+	}
+
+	$mylabel config -text "$new_commdelay sec"
+}
+
+proc remove_entry { w sta chan } {
+	global Dbptrs Current_system Systems Linked System_names
+
+	if { $Linked } {
+		set mylist $Systems
+	} else {
+		set mylist $Current_system
+	}
+
+	foreach system $mylist {
+
+		set db $Dbptrs($system)
+
+		set expression "sta == \"$sta\" && chan == \"$chan\""
+		set record [dbfind $db 0 0 $expression]
+
+		if { $record < 0 } {
+
+			set name $System_names($system)
+			puts "Failed to remove $sta:$chan from $name system"
+
+		} else {
+
+			set db [lreplace $db 3 3 $record]
+
+			dbmark $db
+			dbcrunch $db
+		}
+
+	}
+
+	destroy $w.f_$sta\_$chan
+}
+
+init_globals
+
+init_databases
+
+init_windows

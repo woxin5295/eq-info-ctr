@@ -1,0 +1,13 @@
+script to get mysql information
+# runs on bedrock
+	/home/shake/run/bin/watchshake_version/mycommand/mycommand
+	creates /home/shake/run/bin/watchshake_version/shake_version_dumpfile
+# manual mysql command
+	mysql -u shakepipe -p++++++++ -e'select * from shake_version;' shakemappipe > shake_version_dumpfile
+
+#example xml information 
+dbjoin -v shaketestd.event :prefor#orid origin eventpipe | db2xml -d quakes -r event - event_id evid origin_time 'strtime(time)' latitude lat longitude lon magnitude ml shakemap shakemap arrivals ndef review review timestamp 'strtime(lddate)' > test.xml
+ 
+./shakemysqlversionextract -monitor /export/bedrock2/mysql/var/shakemappipe/shake_version.MYD -exec /home/shake/run/bin/watchshake_version/mycommand/mycommand -filein /home/shake/run/bin/watchshake_version/shake_version_dumpfile -dbout /usr/local/aeic/4.9/src/bin/db/shakemysqlversionextract/testdb/shakeverdb [-onerun] [-sleep seconds]
+# test monitor file 
+./shakemysqlversionextract -monitor /usr/local/aeic/4.9/src/bin/db/shakemysqlversionextract/testdb/shake_version.MYD -exec /home/shake/run/bin/watchshake_version/mycommand/mycommand -filein /home/shake/run/bin/watchshake_version/shake_version_dumpfile -dbout /usr/local/aeic/4.9/src/bin/db/shakemysqlversionextract/testdb/shakeverdb [-onerun] [-sleep seconds]

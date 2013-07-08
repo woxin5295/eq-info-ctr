@@ -1,0 +1,80 @@
+.TH RUN_ORBTRIGGERED_SHAKEMAP 1 "$Date: 2005-02-28 17:45:17 $"
+.SH NAME
+run_orbtriggered_shakemap \- scaffold script to launch shakemap from rtexec
+.SH SYNOPSIS
+.nf
+run_orbtriggered_shakemap [-1d] [-s seekposition] orbname shakemap_bindir
+.fi
+.SH DESCRIPTION
+The run_orbtriggered_shakemap script launches the USGS ShakeMap program
+from within a running instance of the Antelope rtexec(1) utility. The orbname
+specifies the orb from which to acquire /db/origin packets for 
+located hypocenters. The shakemap_bindir argument gives the directory 
+from which the ShakeMap program "shake" is to run (run_orbtriggered_shakemap
+expects to find this command in said directory).  The event-id ("evid") 
+from the database row is passed to shake via 
+.nf
+
+	shake -event <evid>
+.fi
+
+.SH OPTIONS
+.IP -1
+Only run one earthquake and then exit. Used for testing purposes. (the 
+default is to run continuously on all incoming orb packets).
+.IP -d
+Run in debug mode, dumping each packet header.
+.IP -s seekposition
+orbseek to seekposition before beginning to reap packets. seekposition
+can be any acceptable orbseek value, such as a pktid or ORBOLDEST, ORBCURRENT,
+etc. default is ORBNEXT.
+.SH FILES
+.SH ENVIRONMENT
+.SH PARAMETER FILE
+.SH EXAMPLE
+.in 2c
+.ft CW
+.nf
+
+From within rtexec.pf: 
+
+Processes &Tbl{
+   ....
+   ....
+   run_orbtriggered_shakemap    run_orbtriggered_shakemap $ORB /opt/ShakeMap/bin
+   ....
+   ....
+}
+
+.fi
+.ft R
+.in
+.SH RETURN VALUES
+.SH LIBRARY
+.SH ATTRIBUTES
+.SH DIAGNOSTICS
+.SH "SEE ALSO"
+.nf
+.fi
+.SH "BUGS AND CAVEATS"
+
+Due to limited error-trapping and major structural weaknesses, this 
+script is absolutely not for operational use. It is only for 
+testing and for scaffolding during system implementation. 
+
+The sleep-time after an orb packet arrives and before the 
+shakemap process is launched is hard-wired to 5 seconds. 
+
+run_orbtriggered_shakemap expects that orb packets will already have the 
+evid set correctly and identical to the one in the database ShakeMap is
+querying.
+
+In order to run this script under rtrun, it is necessary to add 
+environment variable GS_LIB to the Env array in the appropriate 
+rtexec.pf.
+.SH AUTHOR
+.nf
+Kent Lindquist
+Lindquist Consulting
+.fi
+.\" $Id: run_orbtriggered_shakemap.1,v 1.1 2005-02-28 17:45:17 josh Exp $

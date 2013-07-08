@@ -1,0 +1,14 @@
+BIN= pipeevent 
+
+MAN1= pipeevent.1
+
+cflags= -L/usr/local/mysql/lib/mysql -R/usr/local/mysql/lib/mysql -I/usr/local/mysql/include/mysql
+ldlibs=	 -L/usr/local/mysql/lib/mysql -R/usr/local/mysql/lib/mysql -I/usr/local/mysql/include/mysql -lmysqlclient $(TRLIBS)  -lorb -lxtra -lPkt $(SVR4LIBS)
+include $(AEICMAKE)  	
+			
+DIRS=			
+			
+OBJS= pipeevent.o
+
+$(BIN) : $(OBJS)
+	$(CC) $(CFLAGS) -o pipeevent $(OBJS)  $(LDFLAGS) $(LDLIBS)

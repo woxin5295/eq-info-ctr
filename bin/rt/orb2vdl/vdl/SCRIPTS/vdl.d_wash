@@ -1,0 +1,40 @@
+#
+# vdl_ew configuration file
+# VDL under Earthworm is started by startstop, and given the commandline found in startstop.d
+# That's where vdl gets its customary command line arguments. The file here is read
+# by the "feedme" routines, which determine vdl's identity to earthworm, and what to feed to vdl.
+#
+ MyModuleId     MOD_VDL_EW     # module id for this export,
+ RingName       WAVE_RING      # transport ring to use for input/output,
+ HeartBeatInt   600        # Heartbeat interval in seconds (Earthworm internal)
+   # feedme() will consider beating the heart each time it's called, but will
+   # not beat faster than the interval above
+ LogFile        1              # If 0, don't write logfile at all,
+ MaxMsgSize     2064   # length of largest message we'll ever handle - in bytes
+ MaxMessages    200    # limit of number of message to buffer
+
+# List the message logos to grab from transport ring for us to choose from
+#  - as to which we will forward to VDL
+#              Installation       Module       Message Type
+ GetMsgLogo    INST_UW      MOD_WILDCARD     TYPE_TRACEBUF
+
+# List of pin numbers to send to VDL, and the corresponding VDL-USNSN designators
+#               Earthworm pin number    USNSN designator
+SendPin 409 0 # SPW   UW HHZ
+SendPin 410 1 # SPW   UW HHN
+SendPin 411 2 # SPW   UW HHE
+SendPin 421 3 # ERW   UW HHZ
+SendPin 422 4 # ERW   UW HHE
+SendPin 423 5 # ERW   UW HHE
+SendPin 57  6 # DPW   UW EHZ
+SendPin 125 7 # LON   UW EHZ
+SendPin 8   8 # BMW   UW EHZ
+SendPin 26  9 # SHW   UW EHZ
+SendPin 47 10 # LNOR  UW EHZ
+SendPin 67 11 # SSOR  UW EHZ
+SendPin 104 12 # VGB  UW EHZ
+SendPin 106 13 # VPIM UW EHZ
+SendPin 2  14 # GMW   UW EHZ
+SendPin 19 15 # RMW   UW EHZ
+SendPin 71 16 # HSO   UW EHZ
+

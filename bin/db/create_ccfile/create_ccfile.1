@@ -1,0 +1,57 @@
+.TH CERATE_CCFILE 1 "$Date: 2009-02-19 22:48:28 $"
+.SH NAME
+create_ccfile \- reformat dbcorrelate output into cross-correlation file for hypoDD 
+.SH SYNOPSIS
+.nf
+\fBcreate_ccfile \fP\ \fIinputfile\fP \fIoutputfile\fP \fIcccmin\fP \fIiflag\fP \fIspdifmin\fP \fIminobs\fP
+.fi
+.SH DESCRIPTION
+\fBcreate_ccfile\fP reformats correlation output of dbcorrelate program so that it can be used in the relocation program HYPODD.
+.SH INPUT
+.nf
+ where the arguments are:
+ 
+inputfile - will be the output file of the dbcorrelate program 
+
+outputfile - will hold the output (arbitrary name, but dt.cc is consistent with HYPODD documention)
+
+cccmin - is the minimum value of the CCC to accept (0.7 is suggested)
+
+iflag - is a flag to accept (0) or reject (1) CCC's which are negative but have |CCC| > cccmin
+
+spdifmin - is the minimum absolute difference between S and P CC results (for a given station and event pair) to accept; otherwise both observations are discarded (0.2 is suggested)
+
+minobs - is the minimum number of CC results to have in order to accept an event pair (if one wants all event pairs to be used, no matter how few CC observations, enter "1")
+
+.fi
+.SH OUTPUT
+.nf
+ file that holds cross-correlation results for use by hypoDD program
+.fi
+.SH EXAMPLE
+.ft CW
+.in 2c
+.nf
+
+%\fB create_ccfile dbcorrelate.out dt.cc .7 1 .2 1 \fP
+
+
+%\fB \fP
+
+.fi
+.in
+.ft R
+.SH "SEE ALSO"
+.nf
+Documentation for dbcorrelate program in /usr/local/aeic/4.10/src/bin/dbcorrelate/cross-correlation_r3.doc
+.fi
+.SH CAVEATS
+.nf
+.fi
+.SH AUTHOR
+.nf
+David von Seggern
+University of Reno, Nevada
+Installed at AEIC by N.Ruppert
+.fi
+.\" $Id: create_ccfile.1,v 1.2 2009-02-19 22:48:28 natasha Exp $

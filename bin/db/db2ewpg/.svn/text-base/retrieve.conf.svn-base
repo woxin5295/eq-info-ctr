@@ -1,0 +1,44 @@
+# VERSION: 1.3	DO NOT REMOVE OR CHANGE THIS LINE
+###########################################################################
+# retrieve.conf : configuration file for the ShakeMap "retrieve" program.
+###########################################################################
+
+###########################################################################
+# program:
+# Programs run by retrieve to generate XML data for ShakeMap programs.
+# The XML files are to be placed in the directory 
+# "<SHAKE_HOME>/data/<event_id>/input" where <SHAKE_HOME> is the ShakeMap
+# installation directory and <event_id> is the id of the event being processed.
+# ShakeMap requires at least two files in the input data directory:
+#
+#    event.xml -- contains information about the event, as specified in
+#                 the DTD file "earthquake.dtd"
+#
+#    *_dat.xml -- this (these) file(s) contain information about the 
+#                 recorded ground motions, as specified by the XML DTD 
+#                 "stationinfo.dtd".  All files in the input directory
+#                 with the "_dat.xml" extension are assumed to be of 
+#                 this type (though it is possible that we will validate 
+#                 the file type before blindly parsing it).
+#
+# The format of the configuration lines below is:
+#
+#	program : prog_name 
+#
+# Where "prog_name" is the name of the program that retrieve will run.
+# These programs are assumed to be in the directory "$shake_home/bin",
+# and will be executed as:
+#
+#	prog_name -event <event_id>
+#
+# The programs are expected to return exit status 0 upon success and
+# non-zero on failure.  "retrieve" makes no other attempt to validate
+# that the programs have been successful or produced the expected
+# output.
+#
+###########################################################################
+program		: zone_config
+program		: getciim
+program         : getciim_us
+program         : getnsmp
+

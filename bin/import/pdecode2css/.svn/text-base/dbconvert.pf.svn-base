@@ -1,0 +1,33 @@
+css3.0     &Arr{
+          pde  &Arr{
+              origin     &Arr{
+               input     pde
+               fields    &Arr{
+                   lat   latitude/1000.*(north=="N"?1:-1)
+                   lon   longitude/1000.*(east=="E"?1:-1)
+                   time  date2e(year, month, day, hour*3600+minute*60+second+csec/100.)
+                   depth depth/10.
+		   orid  -1
+		   evid  -1
+		   jdate yearday(date2e(year, month, day, hour*3600+minute*60+second+csec/100.))
+		   nass	 hypoarrivals
+		   ndp	 ndp
+		   depdp -999.
+		   mbid	 -1
+		   msid	 -1
+		   mlid	 -1
+		   commid -1
+                   ndef  hypoarrivals
+                   mb    mb == 0 ? -999. : mb/10.0
+                   ms    ms == 0 ? -999. : ms/10.0
+                   ml    (contrib_mag1 == 0 || contrib_type1 !~ /\[mM\]\[Ll\]/) ? ((contrib_mag2 == 0 || contrib_type2 !~ /\[mM\]\[Ll\]/) ? -999. : contrib_mag2/100.0 ) : contrib_mag1/100.0
+                   algorithm ["pdecode2css" "hypoquality" hypoquality]
+                   etype ["pdecode2css" "atectonic" atectonic]
+                   dtype ["pdecode2css" "depthquality" depthquality]
+                   srn   srn(latitude/1000.*(north=="N"?1:-1),longitude/1000.*(east=="N"?1:-1))
+                   auth  "PDE"
+		   lddate -9999999999.999
+                   }
+              }
+          }
+         }

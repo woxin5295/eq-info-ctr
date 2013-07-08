@@ -1,0 +1,27 @@
+#!/bin/csh -f
+#
+#	Define VDL environment.  VDL_DIR points to the directory for vdl.  THis 
+#	directory would have the executable images, and SCRIPTS/PARMS
+#
+#	VDL_STATION is the unique name appended to vdlmom.setup?? etc with station
+# 	specific data.  Note the files are case sensitive so "BLO" means files are
+#	vdlmom.setupBLO
+#
+#	For stations with startup or other problems, VDL will not run if there
+#	is a file translated from VDL_LOCK
+#
+#	PSVDL is the best way to run ps on this system it is often "
+#	/usr/bin/ps -A
+#	/usr/bin/ps -aux
+#	/usr/bin/ps -a
+#
+setenv VDL_DIR /home/idahub/ketchum/vdl
+setenv VDL_STATION ida
+setenv VDL_LOCK ~/vdllock
+setenv PSVDL "/usr/bin/ps -A"
+alias psvdl '$VDL_DIR/SCRIPTS/psvdl'
+alias psall '$VDL_DIR/SCRIPTS/psall'
+alias psorb '$VDL_DIR/SCRIPTS/psorb'
+alias greperr 'grep -n \!* /usr/include/sys/err*.h'
+alias grepsys 'grep -n \!* /usr/include/sys/*.h'
+alias grepinc 'grep -n \!* /usr/include/sys/*.h'

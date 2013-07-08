@@ -1,0 +1,143 @@
+: # use perl
+eval 'exec $ANTELOPE/bin/perl -S $0 "$@"'
+if 0;
+
+use lib "$ENV{ANTELOPE}/data/perl" ;
+
+# Glenn Thompson 20081014
+# This script is a wrapper for dbcalibrate
+# Its most important task is to subset the appropriate wfdisc table for each station (/iwrun/op/db/archive/archive_YYYY_MM_DD)
+# and merge those tables together
+$usage = "\nUsage: \n$0 dbContainingDlcalwf nameOfTemporaryDb calseq1 [calseq2]\nwhere calseq comes from dlcalwf table\n".
+	"calseq1 will usually be a recent measurement, and calseq2 and older benchmark\n";
+
+use Datascope ;
+
+our $ANTELOPE = $ENV{ANTELOPE};
+our $ARCHIVEDIR = "/iwrun/op/db/archive";
+use File::Basename;
+
+# read command line parameters
+die ("$usage\n") if ($#ARGV < 2 || $#ARGV > 3);
+my ($DBCAL, $DBTEMP, @calseqs) = @ARGV;
+my $dbcaldir = dirname $DBCAL;
+my $dbcalbase = basename $DBCAL;
+my $dbtempdir = dirname $DBTEMP;
+my $dbtempwfdisc = "$DBTEMP.wfdisc";
+
+# remove wfdisc table from last run
+if (-e $dbtempwfdisc) {
+#	my @filestat = stat($dbtempwfdisc);
+#	if ($filestat[9] > 3600) { # only delete tempdb.wfdisc if its not been modified for an hour
+		&run_cmd("rm $dbtempwfdisc");
+#	}
+}
+
+# Part 1
+&printheader("creating wfdisc table");
+
+foreach $calseq (@calseqs) {
+	# This part builds the appropriate YYYY_MM_DD strings
+	$pos=index $calseq,"-";
+	$yyyy=substr($calseq,$pos+1,4);
+	$jjj=substr($calseq,$pos+5,3); 
+	push @yyyyjjjs, $yyyy.$jjj; # used for filepath later
+	$epoch=str2epoch($yyyy.$jjj);
+	$yyyymmdd = epoch2str($epoch,"%Y_%m_%d");
+	$sta = substr($calseq, 3, $pos-3); 
+	push @stas, $sta;
+
+	# Create links to the appropriate waveform directories so they can be found from entries in wfdisc
+	&run_cmd("ln -s $ARCHIVEDIR/$yyyy $dbtempdir/$yyyy") unless (-e "$dbtempdir/$yyyy");
+
+	# Subset the wfdisc table for the appropriate station
+	$database = "$ARCHIVEDIR/archive_$yyyymmdd";
+	print "$0: Opening $database\n";
+	@db = dbopen($database, "r") or die("Cannot open\n");
+
+        # Open the wfdisc table
+        @db = dblookup(@db, "", "wfdisc", "", "");
+
+        # Do the subsetting
+	print "$0: Subsetting on $sta\n";
+        @db = dbsubset(@db, "sta == \"$sta\"");
+	$numrecs = dbquery(@db, "dbRECORD_COUNT");
+	print "$0: #Records in $database.wfdisc matching sta=$sta is $numrecs\n";
+
+	# Save the subsetted wfdisc table locally
+	my $dbcalseq = "$dbtempdir/$calseq";
+	print "$0: Saving as $dbcalseq.wfdisc\n";
+	dbunjoin(@db, $dbcalseq);
+
+	# Build a descriptor file for this table so it merges OK later
+	print "Creating $dbcalseq\n";
+	open(FD, ">$dbcalseq");
+	print FD<<"EOF";
+#  Datascope Database Descriptor File
+schema css3.0
+dblocks local
+EOF
+	close(FD);
+	dbclose(@db);
+}
+
+# Build a descriptor file for tempdb
+unless (-e "$DBTEMP") {
+	print "Creating $DBTEMP\n";
+	open(FD, ">$DBTEMP");
+	print FD<<"EOF";
+#  Datascope Database Descriptor File
+schema css3.0
+dbpath $dbcaldir/{$dbcalbase}:/iwrun/op/db/seg/{quakes}
+dblocks local 
+EOF
+	close(FD);
+}
+
+# Copy/Merge first wfdisc table to tempdb
+#if (-e $dbtempwfdisc) {
+#	&run_cmd("$ANTELOPE/bin/dbmerge $dbtempdir/".$calseqs[0]." $DBTEMP");
+#}
+#else
+#{
+	&run_cmd("cp $dbtempdir/".$calseqs[0].".wfdisc $dbtempwfdisc");
+#}
+
+# Merge the two wfdisc tables together as tempdb, if in comparison mode
+if ($#calseqs == 1) {
+	&run_cmd("$ANTELOPE/bin/dbmerge $dbtempdir/".$calseqs[1]." $DBTEMP");
+}
+
+
+
+# Run dbcalibrate
+# Part 2
+printheader("running dbcalibrate");
+&run_cmd("$ANTELOPE/bin/dbcalibrate -v -outrecno -out $DBCAL $DBTEMP @calseqs ");
+
+
+# remove temporary files
+# Part 3
+&printheader("remove temporary files");
+foreach $calseq (@calseqs) {
+	&run_cmd("rm  $dbtempdir/".$calseq."*");
+}
+print "$0: finished\n";
+exit(1); # for some reason it was not always exiting before
+
+
+
+# subroutines
+sub run_cmd {
+	my $cmd = $_[0];
+	print "$0: $cmd\n";
+	system($cmd);
+}
+
+sub printheader {
+	my $string = $_[0];
+	print "\n\n######################################################################\n";
+	print "$0: $string\n";
+	print `date`;
+	print "######################################################################\n\n";
+}

@@ -1,0 +1,3 @@
+setenv JAVA_HOME /export/home/java
+setenv CLASSPATH /export/home/java/lib:.:/export/home/java/CoreJavaBook
+setenv PFPATH /opt/antelope/4.1/data/pf:/export/home/run/pf

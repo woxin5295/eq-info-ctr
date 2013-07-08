@@ -1,0 +1,46 @@
+.TH PARSESHAKEMAPARCHIVE 1 2007/11/08 "Glenn Thompson, AEIC" "User Commands"
+.SH NAME
+.nf
+parseShakemapArchive - download a ShakeMap for an event and convert it to gif format
+.fi
+.SH SYNOPSIS
+.nf
+parseShakemapArchive [-p parameter_file] YEAR [evid evtime ShakeMapDir]
+.fi
+.SH DESCRIPTION
+\fBparseShakemapArchive\fP logs on to ShakeMap webpage and downloads the Shakemap Archive webpage for the given year. If event information is provided, the archive webpage is parsed to see if there is a live ShakeMap for this event. If there is, the corresponding ShakeMap image file is downloaded. For compatibility with dbevents_aeic which is a Tcl/Tk program, the image file is converted from JPEG to GIF (Tcl/Tk cannot display JPEG images). This is saved to ShakeMapDir.
+.LP
+The event information given should be an evid (event id) and evtime (event time). If evid is not matched, evtime will be matched.
+.SH OPTIONS
+.IP "-p parameter_file"
+Path of parameter file to use. If omitted, defaults to pf/parseShakemapArchive.pf.
+.IP YEAR
+4-digit year of event origin (needed because ShakeMap makes 1 archive.html file per year)
+.IP evid
+the event id to find a Shakemap for - if omitted, a list of all events in YEAR is displayed
+.IP evtime 
+if evid is not found, match this event time instead (in case databases have different ids)
+.IP ShakeMapDir
+the output directory for the ShakeMap gif files (downloaded and converted from Jpeg format because tcl (dbevents) cannot display Jpg)
+.SH "PARAMETER FILE"
+.IP shakemap_url
+url of the shakemap website.
+.IP cat_url
+Path of the cat_url program.
+.IP html_tmpfile
+Temporary path to download the ShakeMap archive webpage to.
+.IP user
+username for the ShakeMap website.
+.IP pass
+password for the ShakeMap website.
+.IP prompt
+Question asked by the ShakeMap website when a user tries to access it.
+.IP shakemapdir
+Where to cache downloaded/converted ShakeMaps for faster access.
+.SH BUGS AND CAVEATS
+None known.
+.SH AUTHOR
+Glenn Thompson
+.br
+Alaska Earthquake Information Center
+

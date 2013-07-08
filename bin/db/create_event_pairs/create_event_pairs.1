@@ -1,0 +1,64 @@
+.TH HYPODD2DB 1 "$Date: 2009-01-15 22:17:37 $"
+.SH NAME
+create_event_pairs \- creates event pairs for dbcorrelate program 
+.SH SYNOPSIS
+.nf
+\fBcreate_event_pairs \fP\ \fIdb\fP \fIxtol\fP \fIytol\fP \fIztol\fP \fImaxlinks\fP \fIoutputfile\fP
+.fi
+.SH DESCRIPTION
+\fBcreate_event_pairs\fP creates event pairs for dbcorrelate program. Unless the source region is very small, it is not reasonable that every event be cross-correlated with every other.  When event separations become larger than 1/5 to 1/10 the station distance, they will likely have correlation coefficients for matching waveforms that are statistically not different that zero.  Thus a means of limiting the correlations to pairs of events where the 
+separations are small is needed.  The following program operates on the database just created to identify these event pairs.
+.SH INPUT
+.nf
+ where the arguments are:
+
+db - is the database name in the local directory 
+
+xtol, ytol, ztol - are the tolerances to use for hypocenter differences between event pairs. Normally the z tolerance should be largest to allow for the fact that depth is the least certain dimension of the hypocenter solution. 
+ 
+maxlinks - limits the number of events with which any given event can be paired.  This prevents over-determining the event relative locations and can immensely save on the amount of computational time when events are closely packed in space (computational time savings of one or two orders of magnitude).
+
+outputfile - is the name of the file to hold the event pairs
+
+.fi
+.SH OUTPUT
+.nf
+ file that holds the event pairs
+.fi
+.SH EXAMPLE
+.ft CW
+.in 2c
+.nf
+
+%\fB create_event_pairs dbin 2 2 5 20 event_pairs.dat\fP
+# origins   = 84
+orid1,orid2 =     83828    83893
+orid1,orid2 =     83828    83854
+orid1,orid2 =     83828    83983
+orid1,orid2 =     83828    83988
+orid1,orid2 =     83826    83959
+orid1,orid2 =     83826    83927
+orid1,orid2 =     83823    83948
+orid1,orid2 =     83823    83951
+
+etc.
+
+%\fB \fP
+
+.fi
+.in
+.ft R
+.SH "SEE ALSO"
+.nf
+Documentation for dbcorrelate program in /usr/local/aeic/4.10/src/bin/dbcorrelate/cross-correlation_r3.doc
+.fi
+.SH CAVEATS
+.nf
+.fi
+.SH AUTHOR
+.nf
+David von Seggern
+University of Reno, Nevada
+Installed at AEIC by N.Ruppert
+.fi
+.\" $Id: create_event_pairs.1,v 1.1 2009-01-15 22:17:37 natasha Exp $

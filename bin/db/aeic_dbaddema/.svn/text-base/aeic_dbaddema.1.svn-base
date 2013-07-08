@@ -1,0 +1,51 @@
+.\" @(#)aeic)dbaddema.1  1.1 08/23/2007
+.TH AEIC_DBADDEMA "$Date: 2008-05-21 18:42:34 $"
+.SH NAME
+aeic_dbaddema \- calculates angle of emergence for each arrival and writes it into a CSS database table arrival.
+.SH SYNOPSIS
+aeic_dbaddema dbin
+.LP
+where:
+.LP
+dbin = input database
+.SH DESCRIPTION
+aeic_dbaddema computes angle of emergence for each arrival in input database and writes into field ema of table arrival of CSS database. Two velocity models are used depending on location of the earthquake: scak and northak south and north of 62.5N, respectively. The program is intended to be used before dbfpfit to fill in missing angle of emergence values.
+
+.SH OPTIONS
+.IP "dbin"
+The input database name. This argument is required.
+.SH FILES
+
+Example of the program output:
+
+asperity:natasha 110 tcsh>> aeic_dbaddema db_tmp
+ orid =   1, lat =     61.3606, depth =     47.2140
+   103 arrivals for orid:   1
+ Computing emas for orid:   1
+ MODLIN: Using scak model
+  
+ orid =   2, lat =     63.6361, depth =     124.527
+   89 arrivals for orid:   2
+ Computing emas for orid:   2
+ MODLIN: Using northak model
+  
+
+.SH ENVIRONMENT
+aeic_dbaddema expects the ANTELOPE environment variable to be set correctly.
+.SH EXAMPLE
+tele% aeic_dbaddema mydb
+.fi
+.ft CW
+.RS .2i
+.RE
+.ft R
+.SH RETURN VALUES
+.SH LIBRARY
+.SH DIAGNOSTICS
+.SH "SEE ALSO"
+dbfpfit, fm_tool
+.nf
+.fi
+.SH "BUGS AND CAVEATS"
+.SH AUTHOR
+Natalia Ruppert

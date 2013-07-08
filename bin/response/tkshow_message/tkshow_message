@@ -1,0 +1,18 @@
+#!/bin/sh
+# \
+exec $ANTELOPE/bin/awish $0 -- "$@"
+
+package require Datascope
+
+# tkshow_message
+#
+# Small graphic utility to show a message in a window
+
+append message "\n" [join $argv] "\n"
+regsub -all {\\n} $message \n message
+
+label .l -text $message -justify left -bg yellow
+pack .l -side top -fill x
+
+button .ok -text Dismiss -bg red -command "destroy ."
+pack .ok -side top -fill x 

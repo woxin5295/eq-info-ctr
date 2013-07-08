@@ -1,0 +1,21 @@
+.TH AEIC_RUN_RTM 1 "$Date: 2002-02-07 01:56:40 $"
+.SH NAME
+aeic_run_rtm \- run rtm in the proper directory
+.SH SYNOPSIS
+.nf
+\fBaeic_run_rtm \fP
+.fi
+.SH DESCRIPTION
+\fBaeic_run_rtm\fP is a wrapper script to launch rtm(1)
+in the proper directory, after checking the name
+of the current host and looking for the rtexec run
+directory for that host as specified in aeic_rtsys.pf.
+.SH PARAMETER FILE
+aeic_rtsys.pf
+.SH "SEE ALSO"
+.nf
+rtm(1)
+.fi
+.SH AUTHOR
+Kent Lindquist
+.\" $Id: aeic_run_rtm.1,v 1.2 2002-02-07 01:56:40 kent Exp $

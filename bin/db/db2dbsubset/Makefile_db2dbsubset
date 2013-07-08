@@ -1,0 +1,18 @@
+BIN=db2dbsubset 
+
+MAN1=db2dbsubset.1
+
+ldlibs=	$(TRLIBS)  -lorb -lxtra -lPkt $(SVR4LIBS)
+
+#cflags= -fast -xarch=v8
+
+include $(AEICMAKE)  
+	
+
+DIRS=			
+			
+OBJS= \
+	db2dbsubset.o
+
+db2dbsubset : $(OBJS)
+	$(CC) $(CFLAGS) -o $@ $(OBJS) $(LDFLAGS) $(LDLIBS)

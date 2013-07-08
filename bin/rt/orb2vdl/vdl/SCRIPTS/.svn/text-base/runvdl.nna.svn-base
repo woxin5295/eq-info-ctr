@@ -1,0 +1,1 @@
+nohup csh /usr/nrts/neic/vdl/cshvdl >/usr/nrts/neic/vdl/vdl.log &

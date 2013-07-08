@@ -1,0 +1,34 @@
+.\" %W% $Date: 2002-02-07 01:56:31 $
+.TH LOCAL_CDROM_WFDISC 1 "$Date: 2002-02-07 01:56:31 $"
+.SH NAME
+local_cdrom_wfdisc \- Copy a wfdisc on cdrom to local directory
+.SH DESCRIPTION
+local_cdrom_wfdisc allows the user to choose a wfdisc from a CDROM
+of CSS-format waveform data, copying that wfdisc to a local filename
+on disk and updating the dir field entries such that the paths point
+back to the waveforms on the CD. The database descriptor file is set
+to point back to the rest of the database tables on the CDROM.
+.SH EXAMPLE
+.ft CW
+.in 2c
+.nf
+
+.ne 9
+        [load cdrom onto kiska cdrom drive]
+        %\fB local_cdrom_wfdisc\fP
+        [choose /cdrom/uaf_array_data_970717_to_970724/UAFARR_970722.wfdisc
+                 with GUI file-chooser]
+        [Enter a database subsetting expression if desired]
+        [Approve UAFARR_970722 as the local database name, or enter
+                 another one with the GUI utility that pops up]
+        %\fB \fP
+
+.fi
+.in
+.ft R
+.SH "SEE ALSO"
+.nf
+dbintro(3), dbcp(1), dbexpressions(5)
+.fi
+.SH AUTHOR
+Kent Lindquist

@@ -1,0 +1,101 @@
+.TH DB2EVT 1 "$Date: 2008-07-24 23:53:12 $"
+.SH NAME
+db2evt \- create Kinemetrics EVT file from waveforms
+.SH SYNOPSIS
+.nf
+\fBdb2evt \fP[-v] [-p \fIpffile\fP] [-s \fIsubset\fP] [-t \fItriggertime\fP]
+                \fIdbname\fP \fIevtfilename\fP \fIstarttime\fP \fIendtime\fP
+.fi
+
+.SH DESCRIPTION
+\fBdb2evt\fP saves waveforms in EVT, used by Kinemetrics Altus Family instruments like K2 or Etna.
+The header of such a file contains various information, most of it is related to the operation of triggered dataloggers. Only a few relevant parameter are written to the header while most of the fields contain default values or are left empty.
+.SH OPTIONS
+.IP "-v"
+verbose flag
+.IP "-p pffile"
+parameter file
+.IP "-s subset"
+Specify data and channel for convesion. Note that this program allows for only one station, only one samplerate and only up to 12 channels.
+.IP "-t triggertime"
+determine the trigger time information in the header. Default is \fIstarttime\fP + 5 seconds.
+.IP "dbname"
+Name of database with waveforms. This argument is required
+.IP "evtfilename"
+Name of the output file in EVT format. This argument is required.
+.IP "starttime, endtime"
+These specify start and \fIendtime\fP of the wavform data.
+
+.SH PARAMETER FILE
+Some parameter that can not easily be extracted from the input data are specified in the parameter file.
+The parameter file specifies the input view from the database and a few station parameter.
+Default values can be overriden by station parameter.
+.in 2c
+.ft CW
+.nf
+sta_defaults &Arr{
+        serialno 999
+        sensitivity     20  # V/g
+        fullscale       20      # V
+        sensortype      32 # 32=Episensor 11=FBA 4g - 16=FBA 0.1g, S13=41
+        lat     00.0
+        lon     00.0
+        elev 0.000
+}
+sta_params      &Arr{
+        CHM &Arr{
+                serialno 111
+                lat     42.9986
+                lon     74.7513
+                elev 0.665
+        }
+        CONA &Arr{
+                serialno 222
+                sensitivity     20  # V/g
+                fullscale       20      # V
+                sensortype      32 # 32=Episensor
+                lat     34.5
+                lon     45.6
+                elev 1.0234
+        }
+}
+view   &Tbl{
+#   verbose
+        dbopen wfdisc
+}
+
+.fi
+.ft R
+.in
+.SH EXAMPLE
+Convert data from the demo database to EVT format and check if the conversion worked.
+.in 2c
+.ft CW
+.nf
+.ne 4
+
+db2evt -s "sta=~/CHM/" /opt/antelope/data/db/demo/demo demoCHM.evt \\
+        "1992-05-17 21:55:16" "1992-05-17 21:57:00"
+
+k2evt2db demoCHM.evt db CHM 0=BHZ 1=BHN 2=BHE
+
+.fi
+.ft R
+.in
+
+.SH "BUGS AND CAVEATS"
+many.
+Despite the fact that the EVT-file format allows some more flexibility, the following is hardwired:
+byteorder is big endian, 24 bytes per sample. The program allows not more than 12 channels.
+The input station name, sta, is used both for the siteID and staID fields. The channel names are use for the channel id.
+All channel gains and sensor types are set to the same for all output channels.
+.SH "SEE ALSO"
+.nf
+k2evt2db(1)
+.fi
+.SH AUTHOR
+.nf
+Nikolaus Horn, 2008
+
+Vienna / Austria , Nikolaus.Horn@zamg.ac.at
+

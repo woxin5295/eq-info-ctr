@@ -1,0 +1,523 @@
+#!/bin/sh
+# \
+exec $ANTELOPE/bin/awish $0 -- "$@"
+
+package require Datascope
+
+#!/bin/sh
+# This comment extends to the next line for tcl \
+exec awish -f $0 $*
+# Mitch switched wish to awish 2002_02_21
+#exec wish -f $0 $*
+
+package require Datascope;
+package require Tclx;
+
+#
+# weekly_report_maker
+#
+# D. McNamara with help from K. Lindquist
+# Geophysical Institute
+# University of Alaska, Fairbanks
+# Sept, 1999
+#
+
+set auto_path [linsert $auto_path 0 $env(ANTELOPE)/data/tcl/library]
+
+
+
+proc init_globals {} {
+        global argc argv argv0
+
+        global progname
+        set progname [exec basename $argv0]
+
+	set Pfname "weekly_report_tool"
+
+	global WEEKLYDB
+	set WEEKLYDB [pfget $Pfname WEEKLYDB]
+
+	global DAYdbs
+	set DAYdbs [pfget $Pfname DAYdbs]
+
+	global weekly_template
+	set weekly_template [pfget $Pfname highlight_template]
+
+	global listing_template
+	set listing_template [pfget $Pfname listing_template]
+
+	global macros
+	set macros [pfget $Pfname Macros]
+
+	if { $argc > 1 } {
+                puts "Usage: $progname \[-n\]"
+                exit 1
+        } elseif { $argc == 1 } {
+                global Exec
+                puts "Defanging $progname"
+                set Exec "echo"
+        } else {
+                global Exec
+                set Exec "exec"
+        }
+
+	global State
+
+        set State(start) [pfget $Pfname start_date]
+        set State(end) [pfget $Pfname end_date]
+        set State(minmag) [pfget $Pfname min_mag]
+        set State(PRINTER_MAPS) [pfget $Pfname PRINTER_MAPS]
+        set State(PRINTER_LIST) [pfget $Pfname PRINTER_LIST]
+
+	set State(tracking_dbname) [pfget aeic_rtsys analysis_control_database]
+
+	if { ! [file exists $State(tracking_dbname)] } {
+		set message "Tracking database $State(tracking_dbname) " 
+		append message " not present. Please contact administrator.\n"
+		wm withdraw .
+		mytkdialog [unique_window .] Error $message center OK
+		exit -1
+	}
+	set State(dbtrack) [dbopen $State(tracking_dbname) r+] 
+	foreach table [list days weeks months] {
+		set State(dbtrack) [dblookup $State(dbtrack) 0 $table 0 0]
+		if { ! [dbquery $State(dbtrack) dbRECORD_COUNT] } {
+			set message "$State(tracking_dbname).$table "
+			append message "is not present or empty. "
+			append message "Please contact administrator.\n"
+			wm withdraw .
+			mytkdialog [unique_window .] Error $message center OK
+			exit -1
+		}
+		if { ! [dbquery $State(dbtrack) dbTABLE_IS_WRITEABLE] } {
+			set message "$State(tracking_dbname).$table "
+			append message "is not writable by you. "
+			append message "Please contact administrator.\n"
+			wm withdraw .
+			mytkdialog [unique_window .] Error $message center OK
+			exit -1
+		}
+	}
+
+
+
+}
+
+proc MyLblEntry {w args} {
+    frame $w
+    label $w.l
+    entry $w.e
+    pack $w.l -side left
+    pack $w.e -side left -fill x
+    while { ! [lempty $args] } {
+        set option [lvarpop args]
+        switch -- $option {
+            -label      { set value [lvarpop args] ; $w.l config -text $value }
+            -textvariable       { set value [lvarpop args] ; global $value; $w.e config -textvariable $value }
+            -width      { set value [lvarpop args] ; $w.e config -width $value }        }
+    }    
+    return $w
+}
+
+proc CommandCheckoff {w args} {
+        frame $w
+        button $w.b
+        checkbutton $w.cb -command "$w.b config -state normal"
+        pack $w.cb -side left
+        pack $w.b -side left -fill x -expand 1
+        while { ! [lempty $args] } {
+                set option [lvarpop args]
+                switch -- $option {
+                -label  { set value [lvarpop args] ; $w.b config -text $value
+}
+                -variable {
+                        set value [lvarpop args]
+                        global $value
+                        $w.cb config -variable $value
+                }
+                -background { set value [lvarpop args] ; $w.b config -background $value }
+                -command {
+                        set value [lvarpop args]
+                        $w.b config -command \
+                             "$w.cb select; $w.b config -state disabled; $value"
+                        }
+                }
+        }
+        return $w
+}
+
+proc concat_db {} {
+
+	global WEEKLYDB State DAYdbs
+
+	set HERE [exec pwd]
+
+	set start_month [string range $State(start) 0 6]
+	set end_month [string range $State(end) 0 6]
+	
+	if { $start_month == $end_month } { 
+	
+	set allfiles [exec ls -1 $DAYdbs/$start_month]
+	set alldays [lmatch -regexp $allfiles {analyzed_...._.._...origin}]
+	foreach f $alldays {
+	regsub analyzed_ $f {} tmp
+	regsub .origin $tmp {} day
+	if { $day >= $State(start) && $day <= $State(end) } {
+		lappend good_days $DAYdbs/$start_month/analyzed_$day \
+	}
+	}
+	
+	} else {
+	
+	set allfiles [exec ls -1 $DAYdbs/$start_month]
+	set alldays [lmatch -regexp $allfiles {analyzed_...._.._...origin}]
+	foreach f $alldays {
+	regsub analyzed_ $f {} tmp
+	regsub .origin $tmp {} day
+	if { $day >= $State(start) && $day <= $State(end) } {
+		lappend good_days $DAYdbs/$start_month/analyzed_$day \
+	}
+	}
+	set allfiles [exec ls -1 $DAYdbs/$end_month]
+	set alldays [lmatch -regexp $allfiles {analyzed_...._.._...origin}]
+	foreach f $alldays {
+	regsub analyzed_ $f {} tmp
+	regsub .origin $tmp {} day
+	if { $day >= $State(start) && $day <= $State(end) } {
+		lappend good_days $DAYdbs/$end_month/analyzed_$day \
+	}
+	}
+	}
+	
+	puts "aeic_dbconcat_event $good_days $WEEKLYDB "
+
+	catch "exec aeic_dbconcat_event -v $good_days $WEEKLYDB"
+
+	exec echo "css3.0 \n/Seis/databases/stations/{master_stations}:/iwrun/op/db/archive/{archive}" > $WEEKLYDB
+
+#	puts "...Cleaning concatenated database $WEEKLYDB..."
+#	catch "exec aeic_dbclean $WEEKLYDB"
+	
+}
+
+proc errorcheck {} {
+
+	global WEEKLYDB 
+
+	exec aeic_dberrchk $WEEKLYDB &
+}
+
+proc view_errorcheck {} {
+
+	exec textedit dberrchk.err &
+#	exec enscript -r dberrchk.err
+
+}
+
+
+proc review_weeklydb {} {
+
+	global WEEKLYDB State 
+
+	exec dbe $WEEKLYDB &
+
+}
+
+proc run_db2weekly {} {
+
+	global State WEEKLYDB
+
+	puts stderr "\nRunning aeic_db2weekly $WEEKLYDB $State(minmag)\n"
+	catch "exec aeic_db2weekly $WEEKLYDB $State(minmag)" db2weekly_result
+	puts stderr $db2weekly_result
+
+}
+
+proc edit_highlights {} {
+
+	exec textedit weekly_highlights &
+
+}
+
+proc edit_list {} {
+
+	exec textedit weekly_list &
+}
+
+proc maker_highlights {} {
+
+	global State WEEKLYDB weekly_template macros
+
+	exec /bin/cp $macros fmMacros
+
+	exec /bin/cp $weekly_template weekly_highlights.fm
+	exec maker -f weekly_highlights.fm &
+
+	puts "\n\n*** Must run 2 Framemaker keyboard macros to create weekly_highlights.fm"
+	puts "\n      control 1 - imports and formats your edited weekly_highlights text file"
+	puts "\n      control 3 - saves weekly_highlights.fm and prints to printer $State(PRINTER_LIST)"
+}
+
+proc maker_listing {} {
+
+	global State WEEKLYDB weekly_template listing_template macros
+
+	exec /bin/cp $macros fmMacros
+
+	exec /bin/cp $listing_template weekly_listing.fm
+	exec maker -f weekly_listing.fm &
+
+	puts "\n\n*** Must run 2 Framemaker keyboard macros to create weekly_listing.fm"
+	puts "\n      control 2 - imports and formats your edited weekly_list text file"
+	puts "\n      control 3 - saves weekly_listing.fm and prints to printer $State(PRINTER_LIST)"
+}
+
+proc view_figs {} {
+
+	global State
+
+	exec ghostview weekly_fig1.ps &
+	exec ghostview weekly_fig2.ps &
+}
+
+proc print_figs {} {
+
+	global State
+
+	puts "\nPrinting weekly_fig1.ps weekly_fig2.ps to printer $State(PRINTER_MAPS)\n"
+	exec lp -d $State(PRINTER_MAPS) weekly_fig1.ps
+	exec lp -d $State(PRINTER_MAPS) weekly_fig2.ps
+}
+
+proc run_dbstats {} {
+
+	global State WEEKLYDB 
+
+	puts "\n\nComputing Station Statistics...\n\n"
+#	puts "\n\nNot yet implemented\n\n"
+	catch "exec dbstats $WEEKLYDB" dbstats_result
+	puts stderr $dbstats_result
+}
+
+proc view_dbstats_figs {} {
+
+	global State
+
+	set allfiles [exec ls -1 ./]
+	set printfiles [lmatch -regexp $allfiles {sta_ttres..ps}]
+	foreach f $printfiles {
+	exec ghostview $f &
+	}
+	set printfiles [lmatch -regexp $allfiles {sta_magres..ps}]
+	foreach f $printfiles {
+	exec ghostview $f &
+	}
+}
+
+proc print_dbstats_figs {} {
+
+	global State
+
+	puts "\nPrinting stat_ttres.ps and stat_magres.ps to printer $State(PRINTER_LIST)\n"
+	
+	set allfiles [exec ls -1 ./]
+	set printfiles [lmatch -regexp $allfiles {sta_ttres..ps}]
+	foreach f $printfiles {
+	exec lp -d $State(PRINTER_LIST) $f
+	}
+	set printfiles [lmatch -regexp $allfiles {sta_magres..ps}]
+	foreach f $printfiles {
+	exec lp -d $State(PRINTER_LIST) $f
+	}
+}
+
+proc update_web {} {
+
+	global State
+
+	puts "\n\nUpdating web...\n\n"
+#	exec updateweb & 
+# updateweb is folded in below (N.R.)
+
+#	exec /bin/cp weekly_highlights.html /usr/local/Mosaic/Seis/weekly
+	exec /bin/cat /usr/local/Mosaic/Seis/weekly/weekly_highlights_header weekly_highlights.txt /usr/local/Mosaic/Seis/weekly/weekly_listing_footer > /usr/local/Mosaic/Seis/weekly/weekly_highlights.html
+	exec /bin/cat /usr/local/Mosaic/Seis/weekly/weekly_listing_header weekly_list /usr/local/Mosaic/Seis/weekly/weekly_listing_footer > /usr/local/Mosaic/Seis/weekly/weekly_listing.html
+
+	catch "exec alchemy weekly_fig1.ps weekly_Alaska_seis_map.gif -g1 -Zo4.0i 2.5i -Zm4 -Zc1 -Z+ -Zr-90 -o" alchemy_result
+	puts stderr $alchemy_result
+	catch "exec alchemy weekly_fig2.ps weekly_SouthCentral_seis_map.gif -g1 -Zo2.5i 4.0i -Zm4 -Zc1 -Z+ -o" alchemy_result
+	puts stderr $alchemy_result
+
+	exec /bin/mv weekly_Alaska_seis_map.gif /usr/local/Mosaic/Seis/graphics/weekly_Alaska_seis_map.gif
+	exec /bin/mv weekly_SouthCentral_seis_map.gif /usr/local/Mosaic/Seis/graphics/weekly_SouthCentral_seis_map.gif
+
+# send file to archive directory
+
+	set year [string range $State(start) 0 3]
+	set month [string range $State(start) 5 6]
+	set day [string range $State(start) 8 9]
+
+#	exec /bin/cat /usr/local/Mosaic/Seis/weekly/weekly_archive_header weekly_highlights.txt /usr/local/Mosaic/Seis/weekly/weekly_archive_middle weekly_list /usr/local/Mosaic/Seis/weekly/weekly_listing_footer > /usr/local/Mosaic/Seis/weekly_archive/${year}_${month}_${day}_weekly.html
+	exec /bin/cat weekly_highlights.txt /usr/local/Mosaic/Seis/weekly/weekly_archive_middle weekly_list > /usr/local/Mosaic/Seis/weekly_archive/${year}_${month}_${day}_weekly.txt
+	exec /usr/local/bin/create_weekly_index.pl
+
+	puts "\nFinished updating AEIC website"
+
+}
+
+
+proc currentify_tracking_database {} {
+
+	global State
+
+	# Update weeks table
+
+	set State(dbtrack) [dblookup $State(dbtrack) 0 weeks 0 0]
+#	set nrecs [dbquery $State(dbtrack) dbRECORD_COUNT]
+	
+	set tmp_year [string range $State(start) 0 3]
+	set tmp_month [string range $State(start) 5 6]
+	set tmp_day [string range $State(start) 8 9]
+	
+	append week_start $tmp_month / $tmp_day / $tmp_year
+	 
+	set week_start_epoch [str2epoch $week_start]
+	
+	set recno [dbfind $State(dbtrack) 0 0 "time == $week_start_epoch"]
+		
+	dbputv $State(dbtrack) 0 $recno report done
+	
+}
+
+
+proc init_windows {} {
+
+	global State WEEKLYDB
+
+	frame .week
+	pack .week -fill x
+
+	MyLblEntry .week.starttime -label "Start Time(YYYY_MM_DD)"\
+                            -textvariable State(start) \
+                            -width 10 
+	MyLblEntry .week.endtime -label "End Time(YYYY_MM_DD)"\
+                            -textvariable State(end) \
+                            -width 10 
+	MyLblEntry .week.minmag -label "Min. Ml"\
+                            -textvariable State(minmag) \
+                            -width 4
+
+	pack .week.starttime -side left -fill x
+	pack .week.endtime -side left -fill x
+	pack .week.minmag -side left -fill x
+
+
+	CommandCheckoff .concat_db -background lightgreen \
+                          -label "Concatenate daily databases" \
+			  -variable concat_db \
+			  -command concat_db
+        pack .concat_db -side top -fill x
+
+#	CommandCheckoff .errorcheck -background grey \
+#                          -label "Run error checking on $WEEKLYDB" \
+#			  -variable errorcheck \
+#			  -command errorcheck
+#        pack .errorcheck -side top -fill x
+
+#	CommandCheckoff .view_errorcheck -background grey \
+#                          -label "View error report for $WEEKLYDB" \
+#			  -variable view_errorcheck \
+#			  -command view_errorcheck
+#        pack .view_errorcheck -side top -fill x
+
+	CommandCheckoff .review_weeklydb -background lightgreen \
+                          -label "Review $WEEKLYDB with dbe" \
+			  -variable review_weeklydb \
+			  -command review_weeklydb
+        pack .review_weeklydb -side top -fill x
+
+	CommandCheckoff .db2weekly -background pink \
+                          -label "Generate maps, highlights and event listing" \
+			  -variable run_db2weekly \
+			  -command run_db2weekly
+        pack .db2weekly -side top -fill x
+
+#	CommandCheckoff .edit_highlights -background tan \
+#                          -label "Edit weekly earthquake highlights" \
+#			  -variable edit_highlights \
+#			  -command edit_highlights
+#        pack .edit_highlights -side top -fill x
+
+	CommandCheckoff .maker_highlights -background pink \
+                          -label "Open Framemaker to edit weekly highlights" \
+			  -variable maker_highlights \
+			  -command maker_highlights
+        pack .maker_highlights -side top -fill x
+
+#	CommandCheckoff .edit_list -background tan \
+#                          -label "Edit weekly earthquake listing" \
+#			  -variable edit_list \
+#			  -command edit_list
+#        pack .edit_list -side top -fill x
+
+#	CommandCheckoff .maker_listing -background pink \
+#                          -label "Run Framemaker to format weekly listing" \
+#			  -variable maker_listing \
+#			  -command maker_listing
+#        pack .maker_listing -side top -fill x
+
+#	CommandCheckoff .view_figs -background white \
+#                          -label "View seismicity maps" \
+#			  -variable view_figs \
+#			  -command view_figs
+#        pack .view_figs -side top -fill x
+
+	CommandCheckoff .print_figs -background white \
+                          -label "Print seismicity maps on $State(PRINTER_MAPS)" \
+			  -variable print_figs \
+			  -command print_figs
+        pack .print_figs -side top -fill x
+
+	CommandCheckoff .update_web -background "pale turquoise" \
+                          -label "Update AEIC weekly report website" \
+                          -variable update_web \
+                          -command update_web
+        pack .update_web -side top -fill x
+
+
+	CommandCheckoff .currentify_tracking_database -background "pale turquoise" \
+                          -label "Update AEIC tracking database" \
+                          -variable currentify_tracking_database \
+                          -command currentify_tracking_database
+        pack .currentify_tracking_database -side top -fill x
+
+	CommandCheckoff .run_dbstats -background orange \
+                          -label "Compute station statistics" \
+			  -variable run_dbstats \
+			  -command run_dbstats
+        pack .run_dbstats -side top -fill x
+
+	CommandCheckoff .view_dbstats_figs -background orange \
+                          -label "View station statistics figures" \
+			  -variable view_dbstats_figs \
+			  -command view_dbstats_figs
+        pack .view_dbstats_figs -side top -fill x
+
+	CommandCheckoff .print_dbstats_figs -background orange \
+                          -label "Print station statistics figures on $State(PRINTER_LIST)" \
+			  -variable print_dbstats_figs \
+			  -command print_dbstats_figs
+        pack .print_dbstats_figs -side top -fill x
+
+	button .quit -bg red -fg yellow -text Quit -command "destroy ."
+        pack .quit -side top -fill x
+}
+
+
+
+
+
+init_globals
+
+init_windows
+

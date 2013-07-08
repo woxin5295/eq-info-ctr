@@ -1,0 +1,965 @@
+ABF    SHZ       1980203        1  1995107 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    898299225.59169
+ACH    SHE       1996240      743       -1 -      -9.9999   90.0   90.0 -                                                    841117333.00000
+ACH    SHN       1996240      745       -1 -      -9.9999    0.0   90.0 -                                                    841117336.00000
+ACH    SHZ       1996240      747       -1 -      -9.9999 -999.9    0.0 -                                                    841117230.00000
+ACK    SHZ       1976001        2  1982001 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738871.00000
+ADAG   SHZ       1999238      923       -1 n      -9.9999 -999.9    0.0 -                                                    935640812.90875
+ADK    BHE       1993244        4       -1 n      -9.9999   90.0   90.0 Broadband, high gain, east-west                      898299629.60912
+ADK    BHN       1993244        5       -1 n      -9.9999    0.0   90.0 Broadband, high gain, north-south                    898299637.37948
+ADK    BHZ       1993244        3       -1 n      -9.9999 -999.9    0.0 Broadband, high gain, vertical                       898299619.22933
+ADK    SHZ       1966001        6       -1 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738871.00000
+ADK    SLZ       1966001        7       -1 n      -9.9999 -999.9    0.0 Short period, low gain, vertical                     821738871.00000
+AG1    SHZ       1971213        8  1976001 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738871.00000
+AGA    SHZ       1983278        9  1988239 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738871.00000
+AGI    SHZ       1971213       10  1976001 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738871.00000
+AHB    SHZ       1996240      765       -1 -      -9.9999 -999.9    0.0 -                                                    841117402.00000
+AK1    SHZ       1996076      706  1997129 n      -9.9999 -999.9    0.0 -                                                    863128383.89554
+AK2    SHZ       1996076      707  1997129 n      -9.9999 -999.9    0.0 -                                                    863128395.76562
+AK3    SHZ       1996076      708  1997129 n      -9.9999 -999.9    0.0 -                                                    863128406.28563
+AK4    SHZ       1996076      709  1997129 n      -9.9999 -999.9    0.0 -                                                    863128413.97571
+AK5    SHZ       1996076      710  1997129 n      -9.9999 -999.9    0.0 -                                                    863128419.71524
+AKM    SHZ       1996076      705  1997129 n      -9.9999 -999.9    0.0 -                                                    863128373.04563
+AKS    SHE       1996240      764       -1 -      -9.9999   90.0   90.0 -                                                    841117376.00000
+AKS    SHN       1996240      763       -1 -      -9.9999    0.0   90.0 -                                                    841117396.00000
+AKS    SHZ       1996240      762       -1 -      -9.9999 -999.9    0.0 -                                                    841117232.00000
+AKT    BHE       1996076      713       -1 n      -9.9999   90.0   90.0 -                                                    946689351.85546
+AKT    BHN       1996076      712       -1 n      -9.9999    0.0   90.0 -                                                    946689355.59523
+AKT    BHZ       1996076      711       -1 n      -9.9999 -999.9    0.0 -                                                    946689359.86509
+AKV    SHZ       1996240      767       -1 -      -9.9999 -999.9    0.0 -                                                    841117233.00000
+AL     LHZ       1997195      832       -1 b      -9.9999    0.0    0.0                                                      910397497.42299
+AL     LZE       1997195      830       -1 b      -9.9999   90.0   90.0                                                      910397497.42273
+AL     LZN       1997195      831       -1 b      -9.9999    0.0   90.0                                                      910397497.42286
+AL1    LHE       1970001       12  1997194 n      -9.9999   90.0   90.0 Long period, high gain, east-west                    910397063.78281
+AL1    LHN       1970001       13  1997194 n      -9.9999    0.0   90.0 Long period, high gain, north-south                  910397063.78293
+AL1    LHZ       1970001       11  1997194 n      -9.9999 -999.9    0.0 Long period, high gain, vertical                     910397063.78227
+AL2    LHE       1970001       15  1997194 n      -9.9999   90.0   90.0 Long period, high gain, east-west                    910397063.78317
+AL2    LHN       1970001       16  1997194 n      -9.9999    0.0   90.0 Long period, high gain, north-south                  910397063.78329
+AL2    LHZ       1970001       14  1997194 n      -9.9999 -999.9    0.0 Long period, high gain, vertical                     910397063.78305
+AL3    LHE       1970001       18  1997194 n      -9.9999   90.0   90.0 Long period, high gain, east-west                    910397063.78353
+AL3    LHN       1970001       19  1997194 n      -9.9999    0.0   90.0 Long period, high gain, north-south                  910397063.78365
+AL3    LHZ       1970001       17  1997194 n      -9.9999 -999.9    0.0 Long period, high gain, vertical                     910397063.78341
+AL4    LHE       1970001       21  1997194 n      -9.9999   90.0   90.0 Long period, high gain, east-west                    910397063.78399
+AL4    LHN       1970001       22  1997194 n      -9.9999    0.0   90.0 Long period, high gain, north-south                  910397063.78411
+AL4    LHZ       1970001       20  1997194 n      -9.9999 -999.9    0.0 Long period, high gain, vertical                     910397063.78386
+AL5    LHE       1970001       24  1997194 n      -9.9999   90.0   90.0 Long period, high gain, east-west                    910397063.78435
+AL5    LHN       1970001       25  1997194 n      -9.9999    0.0   90.0 Long period, high gain, north-south                  910397063.78448
+AL5    LHZ       1970001       23  1997194 n      -9.9999 -999.9    0.0 Long period, high gain, vertical                     910397063.78423
+AL6    LHE       1970001       27  1997194 n      -9.9999   90.0   90.0 Long period, high gain, east-west                    910397063.78473
+AL6    LHN       1970001       28  1997194 n      -9.9999    0.0   90.0 Long period, high gain, north-south                  910397063.78485
+AL6    LHZ       1970001       26  1997194 n      -9.9999 -999.9    0.0 Long period, high gain, vertical                     910397063.78460
+AL7    LHE       1970001       30  1997194 n      -9.9999   90.0   90.0 Long period, high gain, east-west                    910397063.78510
+AL7    LHN       1970001       31  1997194 n      -9.9999    0.0   90.0 Long period, high gain, north-south                  910397063.78523
+AL7    LHZ       1970001       29  1997194 n      -9.9999 -999.9    0.0 Long period, high gain, vertical                     910397063.78498
+ALC    SHZ       1979298       32  1982264 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738872.00000
+ALL1   LHE       1997195      946       -1 n      -9.9999   90.0   90.0 -                                                    946948156.03693
+ALL1   LHN       1997195      947       -1 n      -9.9999    0.0   90.0 -                                                    946948172.62629
+ALL1   LHZ       1997195      945       -1 n      -9.9999    0.0    0.0 -                                                    946948132.15672
+ALL2   LHE       1997195      949       -1 n      -9.9999   90.0   90.0 -                                                    946948212.28725
+ALL2   LHN       1997195      950       -1 n      -9.9999    0.0   90.0 -                                                    946948221.03744
+ALL2   LHZ       1997195      948       -1 n      -9.9999    0.0    0.0 -                                                    946948201.04737
+ALL3   LHE       1997195      952       -1 n      -9.9999   90.0   90.0 -                                                    946948252.72816
+ALL3   LHN       1997195      953       -1 n      -9.9999    0.0   90.0 -                                                    946948262.69864
+ALL3   LHZ       1997195      951       -1 n      -9.9999    0.0    0.0 -                                                    946948241.42803
+ALL4   LHE       1997195      955       -1 n      -9.9999   90.0   90.0 -                                                    946948292.49847
+ALL4   LHN       1997195      956       -1 n      -9.9999    0.0   90.0 -                                                    946948301.10974
+ALL4   LHZ       1997195      954       -1 n      -9.9999    0.0    0.0 -                                                    946948288.36923
+ALL5   LHE       1997195      958       -1 n      -9.9999   90.0   90.0 -                                                    946948330.69987
+ALL5   LHN       1997195      959       -1 n      -9.9999    0.0   90.0 -                                                    946948338.14085
+ALL5   LHZ       1997195      957       -1 n      -9.9999    0.0    0.0 -                                                    946948317.42963
+ALL6   LHE       1997195      961       -1 n      -9.9999   90.0   90.0 -                                                    946948380.34138
+ALL6   LHN       1997195      962       -1 n      -9.9999    0.0   90.0 -                                                    946948389.74141
+ALL6   LHZ       1997195      960       -1 n      -9.9999    0.0    0.0 -                                                    946948359.09301
+ALL7   LHE       1997195      964       -1 n      -9.9999   90.0   90.0 -                                                    946948413.59199
+ALL7   LHN       1997195      965       -1 n      -9.9999    0.0   90.0 -                                                    946948422.73202
+ALL7   LHZ       1997195      963       -1 n      -9.9999    0.0    0.0 -                                                    946948402.76144
+ANCK   SHZ       1996240      744       -1 -      -9.9999 -999.9    0.0 -                                                    841117229.00000
+ANI    SHZ       1960001       33  1982225 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738872.00000
+ANIA   SHZ       1998034      867       -1 n      -9.9999    0.0    0.0 -                                                    886813551.93375
+ANK    SHZ       1994188       34  1998033 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    898299966.96621
+ANM    SHZ       1978274       35       -1 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738872.00000
+ANNE   SHZ       1998034      860       -1 n      -9.9999    0.0    0.0 -                                                    886812181.91691
+ANNW   SHZ       1998034      861       -1 n      -9.9999    0.0    0.0 -                                                    886812182.50249
+ANPB   SHZ       1998034      862       -1 n      -9.9999    0.0    0.0 -                                                    886812183.79338
+ANPK   SHZ       1998034      863       -1 n      -9.9999    0.0    0.0 -                                                    886812198.44984
+ANSL   SHE       1998034      866       -1 n      -9.9999    0.0    0.0 -                                                    886812243.30421
+ANSL   SHN       1998034      865       -1 n      -9.9999    0.0    0.0 -                                                    886812237.57074
+ANSL   SHZ       1998034      864       -1 n      -9.9999    0.0    0.0 -                                                    886812222.47768
+ANV    SHZ       1976320       36  1978271 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738872.00000
+ASR    EHZ       1982244      885       -1 -       0.0000    0.0    0.0                                                      904178473.47635
+AU1    SHZ       1971213       37  1976001 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738872.00000
+AU2    SHZ       1972167       38  1989001 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738872.00000
+AU3    SHZ       1976291       39  1978096 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738872.00000
+AU4    SHZ       1974001       40  1976001 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738872.00000
+AU5    SHZ       1960001       41  1989001 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738872.00000
+AUB    BHE       1995355       42  1998252 n      -9.9999   90.0   90.0 Broadband, high gain, east-west                      910658418.87359
+AUB    BHN       1995355       43  1998252 n      -9.9999    0.0   90.0 Broadband, high gain, north-south                    910658425.14057
+AUB    BHZ       1995355       44  1998252 n      -9.9999 -999.9    0.0 Broadband, high gain, vertical                       910658428.74992
+AUC    SHZ       1995256       45       -1 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738873.00000
+AUD    SHZ       1994249       46  1996218 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    898300477.78590
+AUD    SLZ       1994249       47  1996218 n      -9.9999 -999.9    0.0 Short period, low gain, vertical                     898300483.60629
+AUE    SHP       1980303       50  1997364 n      -9.9999 -999.9 -999.9 Short period, high gain, pressure                    898300589.23832
+AUE    SHZ       1980303       48  1994162 n      -9.9999 -999.9  180.0 Short period, high gain, vertical                    821738873.00000
+AUE    SHZ       1994163       49       -1 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738873.00000
+AUF    SHZ       1977209       51  1980238 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738873.00000
+AUG    SHZ       1971001       52  1976291 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738873.00000
+AUH    SHZ       1978335       53  1992239 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738873.00000
+AUH    SHZ       1992240       54  1994163 n      -9.9999 -999.9  180.0 Short period, high gain, vertical                    821738873.00000
+AUH    SHZ       1994164       55       -1 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738873.00000
+AUI    SHE       1978001       58       -1 n      -9.9999   90.0   90.0 Short period, high gain, east-west                   821738873.00000
+AUI    SHN       1978001       59       -1 n      -9.9999    0.0   90.0 Short period, high gain, north-south                 821738873.00000
+AUI    SHZ       1978096       56  1994163 n      -9.9999 -999.9  180.0 Short period, high gain, vertical                    821738873.00000
+AUI    SHZ       1994164       57       -1 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738873.00000
+AUK    SHZ       1976291       60  1978096 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738873.00000
+AUL    BHE       1998253      907       -1 n      -9.9999   90.0   90.0 -                                                    915753452.11618
+AUL    BHN       1998253      906       -1 n      -9.9999    0.0   90.0 -                                                    915753456.91057
+AUL    BHZ       1998253      905       -1 n      -9.9999 -999.9    0.0 -                                                    910659100.94321
+AUL    SHZ       1980303       61  1992239 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738873.00000
+AUL    SHZ       1992240       62  1994255 n      -9.9999 -999.9  180.0 Short period, high gain, vertical                    821738873.00000
+AUL    SHZ       1994256       63       -1 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738873.00000
+AUM    SHZ       1975244       64  1980303 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738873.00000
+AUP    SHZ       1977265       65  1994162 n      -9.9999 -999.9  180.0 Short period, high gain, vertical                    821738873.00000
+AUP    SHZ       1994163       66       -1 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738873.00000
+AUR    SHZ       1995305       67       -1 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738873.00000
+AUS    SHZ       1990244       68  1994164 n      -9.9999 -999.9  180.0 Short period, high gain, vertical                    821738873.00000
+AUS    SHZ       1994165       69       -1 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738873.00000
+AUW    SHZ       1976291       70  1986182 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738873.00000
+AUW    SHZ       1986183       71  1992239 n      -9.9999 -999.9  180.0 Short period, high gain, vertical                    821738874.00000
+AUW    SHZ       1992240       72       -1 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738874.00000
+AVN    SHZ       1979305       73  1992012 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738874.00000
+AVN    SHZ       1992013       74  1998286 n      -9.9999 -999.9  180.0 Short period, high gain, vertical                    908302562.42944
+BAL    SHZ       1973236       75       -1 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738874.00000
+BBB    BHZ       1993302       76       -1 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    898126803.82848
+BBO    SHZ       1980183       77  1982001 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738874.00000
+BC     SHZ       1997195      835       -1 b      -9.9999    0.0    0.0 -                                                    910397497.42348
+BC01   SHZ       1997195      782       -1 n      -9.9999    0.0    0.0 -                                                    910397497.41506
+BC02   SHZ       1997195      783       -1 n      -9.9999    0.0    0.0 -                                                    910397497.41522
+BC03   SHZ       1997195      784       -1 n      -9.9999    0.0    0.0 -                                                    910397497.41542
+BC04   SHZ       1997195      785       -1 n      -9.9999    0.0    0.0 -                                                    910397497.41558
+BC05   SHZ       1997195      786       -1 n      -9.9999    0.0    0.0 -                                                    910397497.41600
+BC3    SHZ       1970001       78  1997194 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    910397063.79107
+BCP    SHZ       1979247       79       -1 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738874.00000
+BCR    SHZ       1987204       80  1987237 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738874.00000
+BCS    SHZ       1976177       81  1979247 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738874.00000
+BDP    SHZ       1971256       82  1979273 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738874.00000
+BEE    SHZ       1987201       83  1987236 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738874.00000
+BEH    SHZ       1985041       84  1985163 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738874.00000
+BEW    SHZ       1987201       85  1987236 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738874.00000
+BGA    SHZ       1975281       86  1976087 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738874.00000
+BGL    SHZ       1989225       87       -1 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738874.00000
+BGM    SHZ       1978251       88  1989213 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738874.00000
+BGM    SHZ       1989214       89       -1 n      -9.9999 -999.9  180.0 Short period, high gain, vertical                    821738874.00000
+BGR    SHZ       1991182       90       -1 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738874.00000
+BI0    SHZ       1991001       91  1992346 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738875.00000
+BIG    SHZ       1972213       92  1978251 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738875.00000
+BKG    SHZ       1991182       93       -1 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738875.00000
+BLDY   SHZ       1996240      751       -1 -      -9.9999 -999.9    0.0 -                                                    841117230.00000
+BLGA   SHE       1998155      873       -1 n      -9.9999   90.0   90.0 -                                                    896988752.19765
+BLGA   SHN       1998155      872       -1 n      -9.9999    0.0   90.0 -                                                    896988740.23988
+BLGA   SHZ       1998155      871       -1 n      -9.9999 -999.9    0.0 -                                                    896988725.24272
+BLHA   SHZ       1996240      752       -1 -      -9.9999 -999.9    0.0 -                                                    841117231.00000
+BLM    SHZ       1978096       94  1998001 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    898300688.32012
+BLR    SHZ       1965060       95  1985220 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738875.00000
+BLY    SHZ       1974203       96  1978152 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738875.00000
+BM     SHZ       1997195      834       -1 b      -9.9999    0.0    0.0 -                                                    910397497.42332
+BM01   SHZ       1997195      787       -1 n      -9.9999    0.0    0.0 -                                                    910397497.41615
+BM02   SHZ       1997195      788       -1 n      -9.9999    0.0    0.0 -                                                    910397497.41630
+BM03   SHZ       1997195      789       -1 n      -9.9999    0.0    0.0 -                                                    910397497.41645
+BM04   SHZ       1997195      790       -1 n      -9.9999    0.0    0.0 -                                                    910397497.41660
+BM05   SHZ       1997195      791       -1 n      -9.9999    0.0    0.0 -                                                    910397497.41676
+BM3    SHZ       1970001       97  1997194 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    910397063.79337
+BMR    SHZ       1979231       98  1985196 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738875.00000
+BMT    SHZ       1974001       99  1978096 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738875.00000
+BNAB   SHZ       1989131      650       -1 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738902.00000
+BNB    SHZ       1985249      100       -1 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738875.00000
+BQB    SHZ       1981282      101  1996271 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    898542224.93442
+BRB    SHZ       1976001      102  1977190 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738875.00000
+BRH    SHZ       1970190      103  1972223 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738875.00000
+BRLK   SHE       1980285      651  1984182 n      -9.9999   90.0   90.0 Short period, high gain, east-west                   923944039.64812
+BRLK   SHN       1980285      652  1984182 n      -9.9999    0.0   90.0 Short period, high gain, north-south                 923944046.64787
+BRLK   SHZ       1980285      653  1990198 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738902.00000
+BRLK   SHZ       1990199      654  1992289 n      -9.9999 -999.9  180.0 Short period, high gain, vertical                    821738902.00000
+BRLK   SHZ       1992290      655       -1 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738902.00000
+BRNE   SHZ       1980286      656  1984180 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738902.00000
+BRNW   SHZ       1980277      657  1984180 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738902.00000
+BRPK   SHZ       1997232      849       -1 n      -9.9999    0.0    0.0 -                                                    874026388.95303
+BRSE   SHZ       1980284      658  1987183 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738903.00000
+BRSW   SHZ       1980286      659  1984180 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738903.00000
+BRV    SHZ       1978001      104  1983178 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738875.00000
+BRW    SHZ       1965001      105       -1 n      -9.9999 -999.9  180.0 Short period, high gain, vertical                    821738875.00000
+BWN    SHZ       1989262      106  1993154 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738875.00000
+BWN    SHZ       1993155      107  1993279 n      -9.9999 -999.9  180.0 Short period, high gain, vertical                    821738875.00000
+BWN    SHZ       1993280      108       -1 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738876.00000
+CAE    SHZ       1983206      109  1984240 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738876.00000
+CAHL   SHZ       1996240      749       -1 -      -9.9999 -999.9    0.0 -                                                    841117230.00000
+CBHL   SHZ       1983195      660  1983273 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738903.00000
+CBKL   SHZ       1983196      661  1983273 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738903.00000
+CBLB   SHZ       1983196      662  1983273 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738903.00000
+CBML   SHZ       1983261      663  1983273 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738903.00000
+CBSI   SHZ       1983263      664  1983273 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738903.00000
+CBUI   SHZ       1983254      665  1983273 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738903.00000
+CBY    BHE       1993152      111  1996138 n      -9.9999   90.0   90.0 Broadband, high gain, east-west                      898301004.85376
+CBY    BHN       1993152      112  1996138 n      -9.9999    0.0   90.0 Broadband, high gain, north-south                    898301009.84378
+CBY    BHZ       1993152      110  1996138 n      -9.9999 -999.9    0.0 Broadband, high gain, vertical                       898300999.42372
+CCB    SHZ       1971056      113  1992176 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738876.00000
+CCB    SHZ       1992177      114       -1 n      -9.9999 -999.9  180.0 Short period, high gain, vertical                    821738876.00000
+CDA    SHZ       1978001      115  1981228 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738876.00000
+CDD    SHZ       1981229      116  1992242 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738876.00000
+CDD    SHZ       1992243      117  1994163 n      -9.9999 -999.9  180.0 Short period, high gain, vertical                    821738876.00000
+CDD    SHZ       1994164      118       -1 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738876.00000
+CDL    SHZ       1978350      119  1989001 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738876.00000
+CDY    SHZ       1980183      120  1982001 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738876.00000
+CEB    BHE       1982006      122  1996165 n      -9.9999   90.0   90.0 Broadband, high gain, east-west                      898301232.82589
+CEB    BHN       1982006      123  1996165 n      -9.9999    0.0   90.0 Broadband, high gain, north-south                    898301280.09950
+CEB    BHZ       1982006      121  1996165 n      -9.9999 -999.9    0.0 Broadband, high gain, vertical                       898301231.79249
+CEN    SHZ       1987205      124  1987237 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738876.00000
+CFI    SHZ       1974212      125       -1 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738876.00000
+CFP    SHZ       1993135      126       -1 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738876.00000
+CGB    SHZ       1975281      127  1976087 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738876.00000
+CGL    SHZ       1981265      128       -1 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738876.00000
+CHG    SHE       1993152      130  1994213 n      -9.9999   90.0   90.0 Short period, high gain, east-west                   821738877.00000
+CHG    SHN       1993152      131  1994213 n      -9.9999    0.0   90.0 Short period, high gain, north-south                 821738877.00000
+CHG    SHZ       1993152      129  1994213 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738876.00000
+CHI    SHZ       1975222      132  1982182 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738877.00000
+CHK    SHZ       1987182      133  1987213 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738877.00000
+CHN    SHH       1993152      135       -1 n      -9.9999 -999.9   90.0 Short period, high gain, horizontal                  821738877.00000
+CHN    SHZ       1993152      134       -1 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738877.00000
+CHSA   BHZ       1998001      908  1999127 n      -9.9999 -999.9    0.0 -                                                    927324104.09242
+CHW    SHZ       1978096      136  1982182 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738877.00000
+CHX    SHZ       1974247      137       -1 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738877.00000
+CIR    SHZ       1987205      138  1987237 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738877.00000
+CKK    SHZ       1972211      139  1978252 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738877.00000
+CKL    SHZ       1989217      140       -1 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738877.00000
+CKN    SHZ       1991231      141  1993194 n      -9.9999 -999.9  180.0 Short period, high gain, vertical                    821738877.00000
+CKN    SHZ       1993195      142       -1 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738877.00000
+CKR    SHZ       1980183      143  1982001 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738877.00000
+CKT    SHZ       1992260      144       -1 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738877.00000
+CNP    SHZ       1983182      145       -1 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738877.00000
+CNTC   SHZ       1996240      742       -1 -      -9.9999 -999.9    0.0 -                                                    841117229.00000
+COL    SHZ       1964001      146  1996165 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    898301266.23929
+COLA   BCI       1996166      739       -1 -       0.1500    0.0   90.0                                                      836198411.00000
+COLA   BH1       1996166      738       -1 -       0.0745  127.0   90.0                                                      836198410.00000
+COLA   BH2       1996166      737       -1 -       0.0745  217.0   90.0                                                      836198409.00000
+COLA   BHZ       1996166      736       -1 -       0.0745    0.0    0.0                                                      836198409.00000
+COLA   HHE       1996166      735       -1 -       0.0000   90.0   90.0                                                      836198408.00000
+COLA   HHN       1996166      734       -1 -       0.0000    0.0   90.0                                                      836198408.00000
+COLA   HHZ       1996166      733       -1 -       0.0000    0.0    0.0                                                      836198407.00000
+COLA   HLE       1996166      732       -1 -       0.0000   90.0   90.0                                                      836198406.00000
+COLA   HLN       1996166      731       -1 -       0.0000    0.0   90.0                                                      836198406.00000
+COLA   HLZ       1996166      730       -1 -       0.0000    0.0    0.0                                                      836198405.00000
+COLA   LH1       1996166      729       -1 -       0.0745  127.0   90.0                                                      836198405.00000
+COLA   LH2       1996166      728       -1 -       0.0745  217.0   90.0                                                      836198404.00000
+COLA   LHZ       1996166      727       -1 -       0.0745    0.0    0.0                                                      836198403.00000
+COLA   LLE       1996166      726       -1 -       0.0000   90.0   90.0                                                      836198403.00000
+COLA   LLN       1996166      725       -1 -       0.0000    0.0   90.0                                                      836198402.00000
+COLA   LLZ       1996166      724       -1 -       0.0000    0.0    0.0                                                      836198401.00000
+COLA   SCI       1996166      723       -1 -       0.0000    0.0   90.0                                                      836198401.00000
+COLA   SHE       1996166      722       -1 -       0.0000   90.0   90.0                                                      836198400.00000
+COLA   SHN       1996166      721       -1 -       0.0000    0.0   90.0                                                      836198399.00000
+COLA   SHZ       1996166      720       -1 -       0.0000    0.0    0.0                                                      836198399.00000
+COLA   UHZ       1996166      719       -1 -       0.0745    0.0    0.0                                                      836198398.00000
+COLA   VE1       1996166      718       -1 -       0.0000    0.0   90.0 DC Voltage monitor                                   836198397.00000
+COLA   VH1       1996166      717       -1 -       0.0745  127.0   90.0                                                      836198397.00000
+COLA   VH2       1996166      716       -1 -       0.0745  217.0   90.0                                                      836198396.00000
+COLA   VHZ       1996166      715       -1 -       0.0745    0.0    0.0                                                      836198395.00000
+COLA   VK1       1996166      714       -1 -       0.0000    0.0   90.0 DA Temp + (-800cts)                                  836198394.00000
+CP1    SHZ       1982219      147  1982225 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738877.00000
+CP2    SHZ       1992297      148       -1 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738878.00000
+CP3    SHZ       1982219      149  1982225 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738878.00000
+CP4    SHZ       1982219      150  1982225 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738878.00000
+CPA    SHE       1992303      152  1993209 n      -9.9999   90.0   90.0 Short period, high gain, east-west                   821738878.00000
+CPA    SHN       1992303      153  1993209 n      -9.9999    0.0   90.0 Short period, high gain, north-south                 821738878.00000
+CPA    SHZ       1992303      151  1993209 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738878.00000
+CPK    SHE       1992253      156  1992263 n      -9.9999   90.0   90.0 Short period, high gain, east-west                   821738878.00000
+CPK    SHN       1992253      157  1992263 n      -9.9999    0.0   90.0 Short period, high gain, north-south                 821738878.00000
+CPK    SHZ       1991274      154  1992263 n      -9.9999 -999.9  180.0 Short period, high gain, vertical                    821738878.00000
+CPK    SLZ       1992253      155  1992263 n      -9.9999 -999.9  180.0 Short period, low gain, vertical                     821738878.00000
+CR2    SHE       1991182      159  1991212 n      -9.9999   90.0   90.0 Short period, high gain, east-west                   821738878.00000
+CR2    SHN       1991182      160  1991212 n      -9.9999    0.0   90.0 Short period, high gain, north-south                 821738878.00000
+CR2    SHZ       1991182      158  1991212 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738878.00000
+CR3    SHE       1991182      162  1991212 n      -9.9999   90.0   90.0 Short period, high gain, east-west                   821738878.00000
+CR3    SHN       1991182      163  1991212 n      -9.9999    0.0   90.0 Short period, high gain, north-south                 821738878.00000
+CR3    SHZ       1991182      161  1991212 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738878.00000
+CR4    SHE       1991182      165  1991212 n      -9.9999   90.0   90.0 Short period, high gain, east-west                   821738878.00000
+CR4    SHN       1991182      166  1991212 n      -9.9999    0.0   90.0 Short period, high gain, north-south                 821738878.00000
+CR4    SHZ       1991182      164  1991212 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738878.00000
+CRB    BHE       1993214      168  1995364 n      -9.9999   90.0   90.0 Broadband, high gain, east-west                      898301497.73385
+CRB    BHN       1993214      169  1995364 n      -9.9999    0.0   90.0 Broadband, high gain, north-south                    898301500.27356
+CRB    BHZ       1993214      167  1995364 n      -9.9999 -999.9    0.0 Broadband, high gain, vertical                       898301495.72351
+CRK    SHZ       1980183      170  1982001 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738878.00000
+CRP    SHE       1981238      172       -1 n      -9.9999   90.0   90.0 Short period, high gain, east-west                   821738879.00000
+CRP    SHN       1981238      173       -1 n      -9.9999    0.0   90.0 Short period, high gain, north-south                 821738879.00000
+CRP    SHP       1981238      174  1995364 n      -9.9999 -999.9 -999.9 Short period, high gain, pressure                    898301587.55542
+CRP    SHZ       1981238      171       -1 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738879.00000
+CRQ    SHZ       1988183      175       -1 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738879.00000
+CSG    SHZ       1984204      176  1985222 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738879.00000
+CTG    SHZ       1979240      177       -1 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738879.00000
+CUT    SHZ       1986199      178  1992221 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738879.00000
+CUT    SHZ       1992222      179  1994093 n      -9.9999 -999.9  180.0 Short period, high gain, vertical                    821738879.00000
+CUT    SHZ       1994094      180       -1 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738879.00000
+CVA    SHZ       1971243      181       -1 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738879.00000
+CWB    SHZ       1985245      182  1996055 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    898542332.59657
+CYK    SHZ       1989227      183       -1 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738879.00000
+CYT    SHZ       1978220      184  1980266 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738879.00000
+DAWY   BHZ       1992274      666       -1 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    898127403.85382
+DDM    SHZ       1990222      185       -1 n      -9.9999 -999.9  180.0 Short period, high gain, vertical                    821738879.00000
+DFR    SHZ       1988228      186       -1 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738879.00000
+DFS    SHZ       1990029      187  1990033 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738879.00000
+DHS    SHZ       1989180      188  1997364 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    898304062.88333
+DHY    SHZ       1992234      189       -1 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738879.00000
+DIV    BHE       1999007      913       -1 n      -9.9999   90.0   90.0 -                                                    915753433.98587
+DIV    BHN       1999007      912       -1 n      -9.9999    0.0   90.0 -                                                    915753431.99589
+DIV    BHZ       1999007      911       -1 n      -9.9999 -999.9    0.0 -                                                    915753422.02433
+DJE    SHZ       1990155      190  1991281 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738880.00000
+DJE    SHZ       1991282      191  1995245 n      -9.9999 -999.9  180.0 Short period, high gain, vertical                    898304140.43469
+DLB    SHZ       1981280      192  1995234 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    898542405.87800
+DLBC   SHZ       1994271      667       -1 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738903.00000
+DLY    SHZ       1978246      193  1981091 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738880.00000
+DMA    SHZ       1977213      194  1982001 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738880.00000
+DMB    SHZ       1975274      195  1985001 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738880.00000
+DMW    SHZ       1986001      196  1990231 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738880.00000
+DOL    SHZ       1996240      757       -1 -      -9.9999 -999.9    0.0 -                                                    841117231.00000
+DOT    SHZ       1986169      197       -1 n      -9.9999 -999.9  180.0 Short period, high gain, vertical                    821738880.00000
+DR2    SHE       1991182      199  1991212 n      -9.9999   90.0   90.0 Short period, high gain, east-west                   821738880.00000
+DR2    SHN       1991182      200  1991212 n      -9.9999    0.0   90.0 Short period, high gain, north-south                 821738880.00000
+DR2    SHZ       1991182      198  1991212 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738880.00000
+DR3    SHE       1991182      202  1991212 n      -9.9999   90.0   90.0 Short period, high gain, east-west                   821738880.00000
+DR3    SHN       1991182      203  1991212 n      -9.9999    0.0   90.0 Short period, high gain, north-south                 821738880.00000
+DR3    SHZ       1991182      201  1991212 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738880.00000
+DR4    SHE       1991182      205  1991212 n      -9.9999   90.0   90.0 Short period, high gain, east-west                   821738880.00000
+DR4    SHN       1991182      206  1991212 n      -9.9999    0.0   90.0 Short period, high gain, north-south                 821738880.00000
+DR4    SHZ       1991182      204  1991212 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738880.00000
+DR5    SHE       1991182      208  1991212 n      -9.9999   90.0   90.0 Short period, high gain, east-west                   821738880.00000
+DR5    SHN       1991182      209  1991212 n      -9.9999    0.0   90.0 Short period, high gain, north-south                 821738880.00000
+DR5    SHZ       1991182      207  1991212 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738880.00000
+DRE    SHZ       1990032      210  1990180 n      -9.9999 -999.9  180.0 Short period, high gain, vertical                    821738880.00000
+DRE    SHZ       1990181      211  1991001 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738880.00000
+DRR    SHZ       1975001      212  1996239 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    898304294.68788
+DRR3   SHZ       1996240      750       -1 -      -9.9999 -999.9    0.0 -                                                    841117230.00000
+DSB    SHZ       1974251      213  1976160 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738881.00000
+DSK    SHZ       1974208      214  1976159 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738881.00000
+DSS    SHZ       1986204      215  1989001 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738881.00000
+DT1    SHZ       1991172      216       -1 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738881.00000
+DT2    SHZ       1988219      217  1996170 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    898304393.90994
+DTN    SHZ       1988198      218       -1 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738881.00000
+DWY    SHZ       1984261      219       -1 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738881.00000
+E1E    SHZ       1991182      220  1991212 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738881.00000
+E1N    SHZ       1991182      221  1991212 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738881.00000
+E1Z    SHZ       1991182      222  1991212 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738881.00000
+EAF    SHZ       1994175      223  1997060 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    898304442.16096
+EAM    SHZ       1980183      224  1982001 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738881.00000
+ECNI   SHZ       1987190      668  1987219 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738903.00000
+EFLB   SHZ       1987190      669  1987219 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738903.00000
+EFSH   SHZ       1985166      670  1986196 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738903.00000
+EGRI   SHZ       1987190      671  1987219 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738903.00000
+EGRU   SHZ       1985167      672  1986196 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738903.00000
+EKR    SHZ       1982274      225  1982305 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738881.00000
+ELAI   SHZ       1987190      673  1987219 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738903.00000
+EMTC   SHZ       1986240      674  1986254 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738903.00000
+ENG    SHZ       1971245      226  1976153 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738881.00000
+ENKI   SHZ       1987190      675  1987219 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738904.00000
+EPKS   SHZ       1986240      676  1986254 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738904.00000
+ERN    SHZ       1971259      227  1973241 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738881.00000
+ETAL   SHZ       1986240      677  1986254 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738904.00000
+ETKA   SHZ       1999238      924       -1 n      -9.9999 -999.9    0.0 -                                                    935640812.92449
+EWTF   SHZ       1986240      678  1986254 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738904.00000
+FB2    SHZ       1983001      228  1990142 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738881.00000
+FBA    SHZ       1978225      229       -1 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738881.00000
+FIB    BHE       1996004      230       -1 n      -9.9999   90.0   90.0 Broadband, high gain, east-west                      821738882.00000
+FIB    BHN       1996004      231       -1 n      -9.9999    0.0   90.0 Broadband, high gain, north-south                    821738882.00000
+FIB    BHZ       1996004      232       -1 n      -9.9999 -999.9    0.0 Broadband, high gain, vertical                       821738882.00000
+FID    SHZ       1970002      233       -1 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738882.00000
+FIH    SHZ       1985073      234  1985163 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738882.00000
+FIS    SHZ       1974267      235  1976125 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738882.00000
+FISH   SHZ       1985073      679  1985163 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738904.00000
+FKBC   SHZ       1989301      680  1996271 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    898542859.85685
+FL2    EHZ       1963060      886       -1 -       0.0000    0.0    0.0                                                      904178480.50624
+FLP    SHZ       1975274      236  1983001 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738882.00000
+FTP    SHZ       1982274      237  1982305 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738882.00000
+FX01   SHZ       1997195      792       -1 n      -9.9999    0.0    0.0 -                                                    910397497.41692
+FX1    SHZ       1970001      238  1997194 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    910397063.81220
+FXBB   LHE       1997195      798       -1 n      -9.9999   90.0   90.0 -                                                    910397497.41799
+FXBB   LHN       1997195      797       -1 n      -9.9999    0.0   90.0 -                                                    910397497.41782
+FXBB   LHZ       1997195      796       -1 n      -9.9999    0.0    0.0 -                                                    910397497.41765
+FXBB   SHE       1997195      795       -1 n      -9.9999   90.0   90.0 -                                                    910397497.41748
+FXBB   SHN       1997195      794       -1 n      -9.9999    0.0   90.0 -                                                    910397497.41732
+FXBB   SHZ       1997195      793       -1 n      -9.9999    0.0    0.0 -                                                    910397497.41709
+FYU    SHZ       1972040      239  1990050 n      -9.9999 -999.9  180.0 Short period, high gain, vertical                    821738882.00000
+FYU    SHZ       1990051      240       -1 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738882.00000
+GALN   SHZ       1972196      681  1972226 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738904.00000
+GAR    SHZ       1987293      241  1989161 n      -9.9999 -999.9  180.0 Short period, high gain, vertical                    821738882.00000
+GBY    SHZ       1985202      242  1988181 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738882.00000
+GEO    SHZ       1967152      243  1968001 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738882.00000
+GGHO   SHZ       1984255      682  1985001 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738904.00000
+GHO    SHZ       1984255      244       -1 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738882.00000
+GIB    BHE       1994274      246       -1 n      -9.9999   90.0   90.0 Broadband, high gain, east-west                      821738882.00000
+GIB    BHN       1994274      247       -1 n      -9.9999    0.0   90.0 Broadband, high gain, north-south                    821738882.00000
+GIB    BHZ       1994274      245       -1 n      -9.9999 -999.9    0.0 Broadband, high gain, vertical                       821738882.00000
+GIL    SHZ       1967286      248  1978211 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    898304516.94258
+GKC    SHZ       1976183      249  1986069 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738882.00000
+GLB    SHE       1977207      251       -1 n      -9.9999   90.0   90.0 Short period, high gain, east-west                   821738883.00000
+GLB    SHN       1977207      252       -1 n      -9.9999    0.0   90.0 Short period, high gain, north-south                 821738883.00000
+GLB    SHZ       1973237      250       -1 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738883.00000
+GLC    SHZ       1972206      253  1984261 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738883.00000
+GLI    SHZ       1984261      254       -1 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738883.00000
+GLM    SHZ       1968214      255  1988201 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738883.00000
+GLM    SHZ       1988202      256  1994225 n      -9.9999 -999.9  180.0 Short period, high gain, vertical                    821738883.00000
+GLM    SHZ       1994226      257       -1 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738883.00000
+GLN    SHZ       1986001      258  1990182 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738883.00000
+GMA    SHZ       1970260      259  1978084 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    898304634.71426
+GOU    SHE       1994224      262       -1 n      -9.9999   90.0   90.0 Short period, high gain, east-west                   821738883.00000
+GOU    SHN       1994224      263       -1 n      -9.9999    0.0   90.0 Short period, high gain, north-south                 821738883.00000
+GOU    SHZ       1994224      260  1994293 n      -9.9999 -999.9  180.0 Short period, high gain, vertical                    821738883.00000
+GOU    SHZ       1994294      261       -1 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738883.00000
+GSCK   SHZ       1999238      925       -1 n      -9.9999 -999.9    0.0 -                                                    935640812.92568
+GSIG   SHZ       1999238      926       -1 n      -9.9999 -999.9    0.0 -                                                    935640812.93208
+GSMY   SHZ       1999238      927       -1 n      -9.9999 -999.9    0.0 -                                                    935640812.93304
+GSSP   SHZ       1999238      928       -1 n      -9.9999 -999.9    0.0 -                                                    935640812.93396
+GSTD   SHE       1999238      931       -1 n      -9.9999 -999.9    0.0 -                                                    935640812.93487
+GSTD   SHN       1999238      930       -1 n      -9.9999 -999.9    0.0 -                                                    935640812.93487
+GSTD   SHZ       1999238      929       -1 n      -9.9999 -999.9    0.0 -                                                    935640812.93487
+GSTR   SHZ       1999238      932       -1 n      -9.9999 -999.9    0.0 -                                                    935640812.93580
+GWN    SHZ       1975280      264  1975300 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738883.00000
+GYO    SHZ       1976153      265  1988238 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738883.00000
+HAG    SHZ       1996240      761       -1 -      -9.9999 -999.9    0.0 -                                                    841117232.00000
+HDA    SHZ       1977244      266       -1 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738883.00000
+HIN    SHZ       1974276      267       -1 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738883.00000
+HMT    SHZ       1977228      268       -1 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738883.00000
+HOM    SHZ       1981001      269  1996257 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    843517155.00000
+HOM    SHZ       1996257      779       -1 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    843517155.00000
+HPP    SHZ       1970274      270  1976153 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738884.00000
+HQN    SHZ       1974274      271  1985247 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    898304690.66552
+HSB    SHZ       1996240      769       -1 -      -9.9999 -999.9    0.0 -                                                    841117233.00000
+HTP    SHZ       1982274      272  1986199 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738884.00000
+HUR    SHZ       1977045      273       -1 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738884.00000
+HYT    SHZ       1981208      274       -1 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738884.00000
+IL     SHZ       1997195      836       -1 b      -9.9999    0.0    0.0 -                                                    910397497.42364
+IL01   SHZ       1997195      799       -1 n      -9.9999    0.0    0.0 -                                                    910397497.41811
+IL02   SHZ       1997195      800       -1 n      -9.9999    0.0    0.0 -                                                    910397497.41824
+IL03   SHZ       1997195      801       -1 n      -9.9999    0.0    0.0 -                                                    910397497.41837
+IL04   SHZ       1997195      802       -1 n      -9.9999    0.0    0.0 -                                                    910397497.41850
+IL05   SHZ       1997195      803       -1 n      -9.9999    0.0    0.0 -                                                    910397497.41863
+IL06   SHZ       1997195      804       -1 n      -9.9999    0.0    0.0 -                                                    910397497.41876
+IL07   SHZ       1997195      805       -1 n      -9.9999    0.0    0.0 -                                                    910397497.41892
+IL08   SHZ       1997195      806       -1 n      -9.9999    0.0    0.0 -                                                    910397497.41906
+IL09   SHZ       1997195      807       -1 n      -9.9999    0.0    0.0 -                                                    910397497.41920
+IL1    SHZ       1970001      275  1997194 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    910397063.81684
+IL10   SHZ       1997195      808       -1 n      -9.9999    0.0    0.0 -                                                    910397497.41934
+IL11   SHZ       1997195      809       -1 n      -9.9999    0.0    0.0 -                                                    910397497.41948
+IL12   SHZ       1997195      810       -1 n      -9.9999    0.0    0.0 -                                                    910397497.41962
+IL13   SHZ       1997195      811       -1 n      -9.9999    0.0    0.0 -                                                    910397497.41977
+IL14   SHZ       1997195      812       -1 n      -9.9999    0.0    0.0 -                                                    910397497.41991
+IL15   SHZ       1997195      813       -1 n      -9.9999    0.0    0.0 -                                                    910397497.42006
+IL16   SHZ       1997195      814       -1 n      -9.9999    0.0    0.0 -                                                    910397497.42021
+IL17   SHZ       1997195      815       -1 n      -9.9999    0.0    0.0 -                                                    910397497.42036
+IL18   SHZ       1997195      816       -1 n      -9.9999    0.0    0.0 -                                                    910397497.42051
+IL19   SHZ       1997195      817       -1 n      -9.9999    0.0    0.0 -                                                    910397497.42067
+ILB    BHE       1970001      277  1997194 n      -9.9999   90.0   90.0 Broadband, high gain, east-west                      910397063.81710
+ILB    BHN       1970001      278  1997194 n      -9.9999    0.0   90.0 Broadband, high gain, north-south                    910397063.81722
+ILB    BHZ       1970001      276  1997194 n      -9.9999 -999.9    0.0 Broadband, high gain, vertical                       910397063.81697
+ILBB   LHE       1997195      822       -1 n      -9.9999   90.0   90.0 -                                                    910397497.42146
+ILBB   LHN       1997195      823       -1 n      -9.9999    0.0   90.0 -                                                    910397497.42162
+ILBB   LHZ       1997195      821       -1 n      -9.9999    0.0    0.0 -                                                    910397497.42131
+ILBB   SHE       1997195      819       -1 n      -9.9999   90.0   90.0 -                                                    910397497.42100
+ILBB   SHN       1997195      820       -1 n      -9.9999    0.0   90.0 -                                                    910397497.42115
+ILBB   SHZ       1997195      818       -1 n      -9.9999    0.0    0.0 -                                                    910397497.42083
+ILI    SHZ       1987258      279  1992310 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738884.00000
+ILI    SHZ       1992311      280       -1 n      -9.9999 -999.9  180.0 Short period, high gain, vertical                    821738884.00000
+ILM    SHZ       1971219      281  1987259 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738884.00000
+ILN    SHZ       1971219      282  1972274 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738884.00000
+ILS    SHZ       1996240      741       -1 -      -9.9999 -999.9    0.0 -                                                    841117229.00000
+ILW    SHZ       1994252      283       -1 n      -9.9999 -999.9  180.0 Short period, high gain, vertical                    821738884.00000
+IM     SHZ       1997195      833       -1 b      -9.9999    0.0    0.0 -                                                    910397497.42317
+IM01   SHZ       1997195      824       -1 n      -9.9999    0.0    0.0 -                                                    910397497.42179
+IM02   SHZ       1997195      825       -1 n      -9.9999    0.0    0.0 -                                                    910397497.42196
+IM03   SHZ       1997195      826       -1 n      -9.9999    0.0    0.0 -                                                    910397497.42214
+IM04   SHZ       1997195      827       -1 n      -9.9999    0.0    0.0 -                                                    910397497.42231
+IM05   SHZ       1997195      828       -1 n      -9.9999    0.0    0.0 -                                                    910397497.42249
+IM3    SHZ       1970001      284  1997194 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    910397063.81807
+IMA    SHZ       1979362      285       -1 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738884.00000
+IMA    SIZ       1979362      287       -1 n      -9.9999 -999.9    0.0 Short period, inter. gain, vertical                  821738884.00000
+IMA    SLZ       1979362      286       -1 n      -9.9999 -999.9    0.0 Short period, low gain, vertical                     821738884.00000
+INE    SHZ       1990241      288       -1 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738884.00000
+INK    BHZ       1969053      289       -1 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738884.00000
+INW    SHZ       1990241      290  1991244 n      -9.9999 -999.9  180.0 Short period, high gain, vertical                    821738885.00000
+INW    SHZ       1991245      291  1994255 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738885.00000
+ISNN   SHZ       1997232      850       -1 n      -9.9999    0.0    0.0 -                                                    874026385.54909
+ISTK   SHZ       1997232      851       -1 n      -9.9999    0.0    0.0 -                                                    874026376.47878
+IVE    SHE       1996240      780       -1 -      -9.9999 -999.9    0.0 -                                                    841353009.00000
+IVE    SHN       1996240      781       -1 -      -9.9999 -999.9    0.0 -                                                    841353009.00000
+IVE    SHZ       1996240      740       -1 -      -9.9999 -999.9    0.0 -                                                    841353009.00000
+IVS    SHZ       1990241      292       -1 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738885.00000
+JACK   SHZ       1972196      683  1972226 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738904.00000
+JFR    SHZ       1986199      293  1987237 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738885.00000
+JIS    SHZ       1995107      294       -1 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738885.00000
+JPK    SHZ       1997178      838       -1 n      -9.9999    0.0    0.0 -                                                    867556323.45925
+JUN    EHZ       1980061      887       -1 -       0.0000    0.0    0.0                                                      904178484.83644
+KABR   SHZ       1998224      890       -1 n      -9.9999 -999.9    0.0 -                                                    904758535.77064
+KAHC   SHZ       1998286      891       -1 n      -9.9999 -999.9    0.0 -                                                    908388836.99368
+KAHG   SHZ       1998286      892       -1 n      -9.9999 -999.9    0.0 -                                                    908388847.51217
+KAI    SHZ       1982215      295       -1 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738885.00000
+KAIC   SHZ       1998286      893       -1 n      -9.9999 -999.9    0.0 -                                                    908388858.94253
+KAPH   SHE       1998286      896       -1 n      -9.9999   90.0   90.0 -                                                    908388905.02361
+KAPH   SHN       1998286      895       -1 n      -9.9999    0.0   90.0 -                                                    908388892.14322
+KAPH   SHZ       1998286      894       -1 n      -9.9999 -999.9    0.0 -                                                    908388873.47262
+KARR   SHZ       1998286      897       -1 n      -9.9999 -999.9    0.0 -                                                    908388922.15398
+KAWH   SHZ       1998286      898       -1 n      -9.9999 -999.9    0.0 -                                                    908388934.93434
+KBM    SHZ       1991203      296       -1 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738885.00000
+KCE    SHZ       1991203      297       -1 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738885.00000
+KCG    SHE       1988214      300       -1 n      -9.9999   90.0   90.0 Short period, high gain, east-west                   821738885.00000
+KCG    SHN       1988214      301       -1 n      -9.9999    0.0   90.0 Short period, high gain, north-south                 821738885.00000
+KCG    SHZ       1988214      298  1995207 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738885.00000
+KCG    SHZ       1995208      299       -1 n      -9.9999 -999.9  180.0 Short period, high gain, vertical                    821738885.00000
+KCVP   SHP       1996240      776  1999049 -      -9.9999 -999.9    0.0 -                                                    919381385.78526
+KDAK   BHE       1997171      844       -1 -      -9.9999   90.0   90.0 -                                                    872733023.42094
+KDAK   BHN       1997171      843       -1 -      -9.9999    0.0   90.0 -                                                    872733014.15422
+KDAK   BHZ       1997171      842       -1 -      -9.9999    0.0    0.0 -                                                    872733002.21364
+KDAK   LHE       1997171      847       -1 -      -9.9999   90.0   90.0 -                                                    872733113.19691
+KDAK   LHN       1997171      846       -1 -      -9.9999    0.0   90.0 -                                                    872733108.78140
+KDAK   LHZ       1997171      845       -1 -      -9.9999    0.0    0.0 -                                                    872733037.81975
+KDAK   SHE       1997171      841       -1 -      -9.9999   90.0   90.0 -                                                    872732985.39872
+KDAK   SHN       1997171      840       -1 -      -9.9999    0.0   90.0 -                                                    872732972.54269
+KDAK   SHZ       1997171      839       -1 -      -9.9999    0.0    0.0 -                                                    872732952.90169
+KDC    SHZ       1978263      302       -1 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738885.00000
+KDC    SLZ       1978263      303       -1 n      -9.9999 -999.9    0.0 Short period, low gain, vertical                     821738885.00000
+KEL    SHN       1988214      306  1997364 n      -9.9999    0.0   90.0 Short period, high gain, north-south                 898304774.69692
+KEL    SHZ       1988214      304  1995207 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738885.00000
+KEL    SHZ       1995208      305       -1 n      -9.9999 -999.9  180.0 Short period, high gain, vertical                    821738885.00000
+KEY    SHZ       1978238      307  1981206 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738885.00000
+KGR    SHZ       1980183      308  1982001 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738885.00000
+KGS    SHZ       1980183      309  1982001 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738885.00000
+KIC    SHZ       1987244      310  1993182 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738885.00000
+KICM   SHZ       1999238      933       -1 n      -9.9999 -999.9    0.0 -                                                    935640812.93694
+KIKV   SHZ       1999238      934       -1 n      -9.9999 -999.9    0.0 -                                                    935640812.93787
+KIMD   SHZ       1999238      935       -1 n      -9.9999 -999.9    0.0 -                                                    935640812.94012
+KINC   SHZ       1999238      936       -1 n      -9.9999 -999.9    0.0 -                                                    935640812.94117
+KIRH   SHZ       1999238      937       -1 n      -9.9999 -999.9    0.0 -                                                    935640812.94211
+KIWB   SHZ       1999238      938       -1 n      -9.9999 -999.9    0.0 -                                                    935640812.94303
+KJL    SHZ       1996240      746       -1 -      -9.9999 -999.9    0.0 -                                                    841117229.00000
+KKC    SHE       1988214      684  1993182 n      -9.9999   90.0   90.0 Short period, high gain, east-west                   821738904.00000
+KKC    SHN       1988214      685  1993182 n      -9.9999    0.0   90.0 Short period, high gain, north-south                 821738904.00000
+KKC    SHZ       1988214      686  1993182 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738904.00000
+KKL    SHZ       1980183      311  1982001 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738885.00000
+KKP    SHN       1988214      687  1993182 n      -9.9999    0.0   90.0 Short period, high gain, north-south                 821738904.00000
+KKP    SHZ       1988214      688  1993182 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738904.00000
+KKR    SHZ       1987244      312  1993182 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738885.00000
+KLU    SHZ       1972204      313       -1 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738886.00000
+KMC    SHZ       1991203      314  1993182 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738886.00000
+KMN    SHZ       1987244      315  1993182 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738886.00000
+KMP    SHZ       1976214      316  1985199 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738886.00000
+KNE    SHZ       1987244      317  1993182 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738886.00000
+KNI    SHZ       1985202      318  1994202 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738886.00000
+KNK    SHZ       1973223      319       -1 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738886.00000
+KOD    BHE       1994242      321  1996364 n      -9.9999   90.0   90.0 Broadband, high gain, east-west                      898304862.42861
+KOD    BHN       1994242      322  1996364 n      -9.9999    0.0   90.0 Broadband, high gain, north-south                    898304864.91871
+KOD    BHZ       1994242      320  1996364 n      -9.9999 -999.9    0.0 Broadband, high gain, vertical                       898304859.70852
+KRB    SHE       1987244      689  1993182 n      -9.9999   90.0   90.0 Short period, high gain, east-west                   821738904.00000
+KRB    SHN       1987244      690  1993182 n      -9.9999    0.0   90.0 Short period, high gain, north-south                 821738904.00000
+KRB    SHZ       1987244      691  1993182 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738904.00000
+KRY    SHZ       1978241      323  1981091 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738886.00000
+KSL    SHZ       1973001      324  1976273 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738886.00000
+KSM    SHZ       1986199      325  1993182 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738886.00000
+KSV    SHZ       1987244      326  1993182 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738886.00000
+KTA    SHZ       1976252      327  1982001 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738886.00000
+KTH    SHZ       1988228      328  1989351 n      -9.9999 -999.9  180.0 Short period, high gain, vertical                    821738886.00000
+KTH    SHZ       1989352      329  1991173 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738886.00000
+KTH    SHZ       1991174      330  1994228 n      -9.9999 -999.9  180.0 Short period, high gain, vertical                    821738886.00000
+KTH    SHZ       1994229      331       -1 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738886.00000
+KTM    SHZ       1973208      332  1975236 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738886.00000
+KTP    SHZ       1987244      333  1993182 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738886.00000
+KTR    SHZ       1991203      334  1993182 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738886.00000
+KVT    SHE       1988214      337  1997364 n      -9.9999   90.0   90.0 Short period, high gain, east-west                   898304946.88041
+KVT    SHN       1988214      338  1997364 n      -9.9999    0.0   90.0 Short period, high gain, north-south                 898304949.55024
+KVT    SHZ       1988214      335  1995207 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738887.00000
+KVT    SHZ       1995208      336       -1 n      -9.9999 -999.9  180.0 Short period, high gain, vertical                    821738887.00000
+KYK    SHZ       1974275      339  1982214 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738887.00000
+LIB    SHZ       1984257      340       -1 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738887.00000
+LOU    SHZ       1985196      341  1988181 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738887.00000
+LOWE   SHZ       1972196      692  1972226 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738904.00000
+LTI    SHZ       1988183      342       -1 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738887.00000
+LVA    SHZ       1996240      766       -1 -      -9.9999 -999.9    0.0 -                                                    841117233.00000
+LVY    SHZ       1972183      343  1989262 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738887.00000
+MBC    SHZ       1961291      344       -1 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738887.00000
+MBM    SHZ       1995283      345  1995289 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738887.00000
+MCB    SHZ       1968245      346  1971244 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738887.00000
+MCIR   SHZ       1997171      837       -1 n      -9.9999    0.0    0.0 -                                                    866849315.32227
+MCK    BHE       1997296      859       -1 n      -9.9999   90.0   90.0 -                                                    886812181.17996
+MCK    BHN       1997296      858       -1 n      -9.9999    0.0   90.0 -                                                    923008777.70915
+MCK    BHZ       1997296      857       -1 n      -9.9999    0.0    0.0 -                                                    886812180.02209
+MCK    SHZ       1964001      347       -1 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738887.00000
+MCN    SHZ       1976289      348  1980001 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738887.00000
+MCN    SHZ       1980002      349  1981234 n      -9.9999 -999.9  180.0 Short period, high gain, vertical                    821738887.00000
+MCNL   SHZ       1981234      693  1997364 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    898305119.77387
+MCR    SHZ       1971274      350  1975212 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738887.00000
+MDB    SHZ       1986199      351  1989001 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738887.00000
+MDM    SHZ       1990047      352  1990219 n      -9.9999 -999.9  180.0 Short period, high gain, vertical                    821738887.00000
+MDM    SHZ       1990220      353  1992294 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738887.00000
+MDM    SHZ       1992295      354  1993250 n      -9.9999 -999.9  180.0 Short period, high gain, vertical                    821738887.00000
+MDM    SHZ       1993251      355       -1 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738887.00000
+MDW    SHZ       1995280      356  1995288 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738887.00000
+MGLS   SHZ       1996240      748       -1 -      -9.9999 -999.9    0.0 -                                                    841117230.00000
+MGOD   SHZ       1996240      770       -1 -      -9.9999 -999.9    0.0 -                                                    841117234.00000
+MID    SHZ       1976142      357       -1 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738887.00000
+MIK    SHZ       1970121      358  1975060 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738888.00000
+MIN    SHZ       1970121      359  1975060 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738888.00000
+MLS    SHZ       1974247      360  1981247 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738888.00000
+MLY    SHZ       1990268      361       -1 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738888.00000
+MMC    SHZ       1975240      362  1994364 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    898305238.33641
+MMN    SHZ       1981234      363  1992243 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738888.00000
+MMN    SHZ       1992244      364  1994163 n      -9.9999 -999.9  180.0 Short period, high gain, vertical                    821738888.00000
+MMN    SHZ       1994164      365       -1 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738888.00000
+MNAT   SHZ       1996240      777       -1 -      -9.9999 -999.9    0.0 -                                                    841117235.00000
+MNC    SHZ       1976289      366  1981234 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738888.00000
+MNRL   SHZ       1972196      694  1972226 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738905.00000
+MRD    SHZ       1982274      367  1982305 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738888.00000
+MRN    SHZ       1975234      368  1976091 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738888.00000
+MRS    SHZ       1977140      369  1980306 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738888.00000
+MSE    SHZ       1984255      370  1985273 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738888.00000
+MSOM   SHZ       1996240      771       -1 -      -9.9999 -999.9    0.0 -                                                    841117234.00000
+MSP    SHZ       1973217      371  1992185 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738888.00000
+MSP    SHZ       1992186      372  1993220 n      -9.9999 -999.9  180.0 Short period, high gain, vertical                    821738888.00000
+MSP    SHZ       1993221      373       -1 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738888.00000
+MSTB   SHZ       1987338      695       -1 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738905.00000
+MSW    SHE       1996240      775       -1 -      -9.9999   90.0   90.0 -                                                    841117413.00000
+MSW    SHN       1996240      774       -1 -      -9.9999    0.0   90.0 -                                                    841117409.00000
+MSW    SHZ       1996240      773       -1 -      -9.9999 -999.9    0.0 -                                                    841117234.00000
+MTBL   SHZ       1996240      772       -1 -      -9.9999 -999.9    0.0 -                                                    841117234.00000
+MTG    SHZ       1974276      374  1985196 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738888.00000
+MTU    SHZ       1985202      375  1997178 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    867554844.56228
+MUB    SHZ       1981287      376       -1 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738888.00000
+N1E    SHZ       1991182      377  1991212 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738888.00000
+N1N    SHZ       1991182      378  1991212 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738888.00000
+N1Z    SHZ       1991182      379  1991212 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738889.00000
+NAG    SHE       1993152      381  1994364 n      -9.9999   90.0   90.0 Short period, high gain, east-west                   898305336.84807
+NAG    SHN       1993152      382  1994364 n      -9.9999    0.0   90.0 Short period, high gain, north-south                 898305340.44819
+NAG    SHZ       1993152      380       -1 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738889.00000
+NCA    SHZ       1986198      383  1990152 n      -9.9999 -999.9  180.0 Short period, high gain, vertical                    821738889.00000
+NCG    SHZ       1989218      384       -1 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738889.00000
+NCT    SHZ       1988227      385       -1 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738889.00000
+NDB    SHZ       1987349      386  1996074 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    898542593.57152
+NEA    SHZ       1981064      387  1990274 n      -9.9999 -999.9  180.0 Short period, high gain, vertical                    821738889.00000
+NEA    SHZ       1990275      388       -1 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738889.00000
+NGL    SHZ       1974269      389  1976087 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738889.00000
+NHSA   BHZ       1999141      919       -1 n      -9.9999    0.0    0.0 -                                                    927324209.37666
+NIK    SHZ       1971137      390  1997364 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    898305455.85027
+NIN    SHZ       1971240      391  1972237 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738889.00000
+NKA    SHZ       1971256      392       -1 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738889.00000
+NKI    SHZ       1976087      393  1985057 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738889.00000
+NMO    SHE       1995279      394  1996364 n      -9.9999  270.0   90.0 Short period, high gain, east-west                   898305531.21201
+NMO    SHN       1995279      395  1996364 n      -9.9999  180.0   90.0 Short period, high gain, north-south                 898305533.35188
+NMO    SHZ       1995279      396  1996364 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    898305535.86193
+NNC    SHZ       1985102      397  1985163 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738889.00000
+NNL    SHZ       1972237      398       -1 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738889.00000
+NPO    SHZ       1970001      399  1997364 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    898305798.46702
+NRA    SHZ       1976214      400  1978159 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738889.00000
+NTK    SHZ       1974252      401  1976152 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738890.00000
+OCC    SHZ       1976001      402  1976115 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738890.00000
+OPT    SHZ       1974001      403  1990274 n      -9.9999 -999.9  180.0 Short period, high gain, vertical                    821738890.00000
+OPT    SHZ       1990275      404  1992212 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738890.00000
+OPT    SHZ       1992213      405       -1 n      -9.9999 -999.9  180.0 Short period, high gain, vertical                    821738890.00000
+PAX    SHZ       1969182      406  1990311 n      -9.9999 -999.9  180.0 Short period, high gain, vertical                    821738890.00000
+PAX    SHZ       1990312      407       -1 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738890.00000
+PBG    SHZ       1994115      411       -1 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738890.00000
+PCA    SHZ       1974248      412  1996076 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    898305890.06867
+PCB    SHZ       1987349      413       -1 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738890.00000
+PCE    SHZ       1993135      414  1993237 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738890.00000
+PCL    SHZ       1973247      415  1974273 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738890.00000
+PDB    SHZ       1978252      416  1992212 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738890.00000
+PDB    SHZ       1992213      417  1994161 n      -9.9999 -999.9  180.0 Short period, high gain, vertical                    821738890.00000
+PDB    SHZ       1994162      418       -1 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738890.00000
+PIN    SHZ       1974248      419  1994217 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738890.00000
+PIN    SHZ       1994218      420  1996076 n      -9.9999 -999.9  180.0 Short period, high gain, vertical                    827175958.00000
+PIN    SHZ       1996226      778       -1 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    841292017.00000
+PJD    SHZ       1966001      421  1971305 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738890.00000
+PLBC   SHZ       1990263      696       -1 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738905.00000
+PLR    SHZ       1984264      422  1994139 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738890.00000
+PLR    SHZ       1994140      423  1994152 n      -9.9999 -999.9  180.0 Short period, high gain, vertical                    821738890.00000
+PLR    SHZ       1994153      424       -1 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738890.00000
+PMA    SHZ       1972250      425  1978285 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738891.00000
+PME    SHZ       1980232      426  1990060 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738891.00000
+PMR    BHE       1995060      409       -1 n      -9.9999   90.0   90.0 Broadband, high gain, east-west                      932687648.24709
+PMR    BHN       1995060      410       -1 n      -9.9999    0.0   90.0 Broadband, high gain, north-south                    932687653.06671
+PMR    BHZ       1995060      408       -1 n      -9.9999 -999.9    0.0 Broadband, high gain, vertical                       932687659.32699
+PMR    SHZ       1967244      427       -1 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738891.00000
+PMR    SLZ       1967244      428       -1 n      -9.9999 -999.9    0.0 Short period, low gain, vertical                     821738891.00000
+PMS    SHZ       1967145      429       -1 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738891.00000
+PN7A   SHP       1999055      915       -1 n      -9.9999 -999.9 -999.9 pressure sensor                                      919898503.43038
+PN7A   SHZ       1996240      756       -1 -      -9.9999 -999.9    0.0 -                                                    841117231.00000
+PNL    SHZ       1974245      430       -1 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738892.00000
+PNM    SHZ       1974001      431  1989001 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738892.00000
+PNN    SHZ       1974001      432  1989001 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738892.00000
+POR    SHZ       1987202      433  1987237 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738892.00000
+PPD    SHZ       1990047      434       -1 n      -9.9999 -999.9  180.0 Short period, high gain, vertical                    821738892.00000
+PPSA   BHZ       1998001      909       -1 n      -9.9999 -999.9    0.0 -                                                    911602431.76429
+PRC    SHZ       1982274      435  1982305 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738892.00000
+PRG    SHZ       1972242      436       -1 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738892.00000
+PRY    BHE       1993152      438  1996364 n      -9.9999   90.0   90.0 Broadband, high gain, east-west                      898305971.67033
+PRY    BHN       1993152      439  1996364 n      -9.9999    0.0   90.0 Broadband, high gain, north-south                    898305976.60055
+PRY    BHZ       1993152      437  1996364 n      -9.9999 -999.9    0.0 Broadband, high gain, vertical                       898305969.32016
+PS1A   SHZ       1996240      758       -1 -      -9.9999 -999.9    0.0 -                                                    841117232.00000
+PS4A   SHZ       1996240      759       -1 -      -9.9999 -999.9    0.0 -                                                    841117232.00000
+PS7    SHE       1995279      440  1996364 n      -9.9999   90.0   90.0 Short period, high gain, east-west                   898306090.45278
+PS7    SHN       1995279      441  1996364 n      -9.9999    0.0   90.0 Short period, high gain, north-south                 898306093.98265
+PS7    SHZ       1995279      442  1995281 n      -9.9999 -999.9  180.0 Short period, high gain, vertical                    821738892.00000
+PS7    SHZ       1995282      443  1995283 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738892.00000
+PS7    SHZ       1995284      444       -1 n      -9.9999 -999.9  180.0 Short period, high gain, vertical                    821738892.00000
+PTR    SHZ       1973224      445  1974258 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738892.00000
+PUB    SHZ       1974001      446  1994364 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    898306179.48424
+PV6    SHE       1996240      755       -1 -      -9.9999 -999.9   90.0 -                                                    841117304.00000
+PV6    SHN       1996240      754       -1 -      -9.9999    0.0   90.0 -                                                    946691029.12753
+PV6    SHZ       1996240      753       -1 -      -9.9999 -999.9    0.0 -                                                    841117231.00000
+PVK    SHZ       1980183      447  1989001 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738893.00000
+PVV    SHZ       1996240      760       -1 -      -9.9999 -999.9    0.0 -                                                    841117232.00000
+PWA    SHZ       1967143      448       -1 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738893.00000
+PWL    SHZ       1974215      449       -1 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738893.00000
+RAG    SHZ       1984204      450       -1 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738893.00000
+RAI    SHZ       1975274      451  1989001 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738893.00000
+RC01   BHE       1998219      884       -1 n      -9.9999   90.0   90.0 -                                                    902969932.33127
+RC01   BHN       1998219      883       -1 n      -9.9999    0.0   90.0 -                                                    902969921.76105
+RC01   BHZ       1998219      882       -1 n      -9.9999 -999.9    0.0 -                                                    902969905.84363
+RDN    SHZ       1988226      452       -1 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738893.00000
+RDS    SHZ       1977163      453  1991199 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738893.00000
+RDT    SHE       1978258      454  1990200 n      -9.9999   90.0   90.0 Short period, high gain, east-west                   821738893.00000
+RDT    SHN       1978258      455  1990200 n      -9.9999    0.0   90.0 Short period, high gain, north-south                 821738893.00000
+RDT    SHZ       1971221      456  1991234 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738893.00000
+RDT    SHZ       1991235      457       -1 n      -9.9999 -999.9  180.0 Short period, high gain, vertical                    821738893.00000
+RDW    SHZ       1990250      458  1996076 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    827175404.00000
+RED    SHE       1981314      462       -1 n      -9.9999   90.0   90.0 Short period, high gain, east-west                   821738893.00000
+RED    SHN       1991182      463       -1 n      -9.9999    0.0   90.0 Short period, high gain, north-south                 821738893.00000
+RED    SHZ       1981314      459  1988272 n      -9.9999 -999.9  180.0 Short period, high gain, vertical                    821738893.00000
+RED    SHZ       1988273      460       -1 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738893.00000
+RED    SLZ       1992067      461       -1 n      -9.9999 -999.9    0.0 Short period, low gain, vertical                     821738893.00000
+REF    SHE       1990073      468       -1 n      -9.9999   90.0   90.0 Short period, high gain, east-west                   821738894.00000
+REF    SHN       1990073      469       -1 n      -9.9999    0.0   90.0 Short period, high gain, north-south                 821738894.00000
+REF    SHZ       1990073      464  1990182 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738893.00000
+REF    SHZ       1990183      465  1990253 n      -9.9999 -999.9  180.0 Short period, high gain, vertical                    821738893.00000
+REF    SHZ       1990254      466       -1 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738893.00000
+REF    SLZ       1990073      467       -1 n      -9.9999 -999.9    0.0 Short period, low gain, vertical                     821738893.00000
+REM    SHZ       1976001      470  1977221 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738894.00000
+RGD    SHZ       1974273      471  1977228 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738894.00000
+RGV    SHZ       1985077      472  1985102 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738894.00000
+RIU    SHZ       1976216      473  1981271 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738894.00000
+RIZ    SHZ       1982274      474  1982305 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738894.00000
+RND    SHZ       1988180      475  1992222 n      -9.9999 -999.9  180.0 Short period, high gain, vertical                    821738894.00000
+RND    SHZ       1992223      476       -1 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738894.00000
+RON    SHZ       1971265      477  1974304 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738894.00000
+RPZ    SHZ       1982274      478  1982304 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738894.00000
+RS1    SHZ       1990253      479  1996364 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    898306236.72531
+RS2    SHZ       1990253      480  1994231 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738894.00000
+RSO    SHZ       1990060      481  1990180 n      -9.9999 -999.9  180.0 Short period, high gain, vertical                    821738894.00000
+RSO    SHZ       1990181      482       -1 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738894.00000
+RUB    SHZ       1985244      483       -1 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738894.00000
+RWS    SHZ       1990074      484  1990244 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738894.00000
+SAW    SHZ       1973243      485  1999311 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    942282991.31682
+SAW    BHZ       1999311      939       -1 n      -9.9999 -999.9    0.0 -                                                    942283266.72241
+SAW    BHN       1999311      940       -1 n      -9.9999 -999.9    0.0 -                                                    942283270.64256
+SAW    BHE       1999311      941       -1 n      -9.9999 -999.9    0.0 -                                                    942283276.46279
+SBEA   BHZ       1998001      910       -1 n      -9.9999 -999.9    0.0 -                                                    911602439.41448
+SCF    SHZ       1971264      486  1975280 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738894.00000
+SCM    SHZ       1966152      487  1991272 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738894.00000
+SCM    SHZ       1991273      488       -1 n      -9.9999 -999.9  180.0 Short period, high gain, vertical                    821738894.00000
+SCT    SHZ       1971264      489  1975152 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738894.00000
+SDE    SHZ       1983185      490  1984180 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738894.00000
+SDG    SHZ       1986001      491  1994098 n      -9.9999 -999.9  180.0 Short period, high gain, vertical                    821738894.00000
+SDG    SHZ       1994099      492       -1 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738894.00000
+SDN    SHZ       1978284      493       -1 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738895.00000
+SDN    SLZ       1978284      494       -1 n      -9.9999 -999.9    0.0 Short period, low gain, vertical                     821738895.00000
+SE2    SHE       1991182      496  1991212 n      -9.9999   90.0   90.0 Short period, high gain, east-west                   821738895.00000
+SE2    SHN       1991182      497  1991212 n      -9.9999    0.0   90.0 Short period, high gain, north-south                 821738895.00000
+SE2    SHZ       1991182      495  1991212 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738895.00000
+SE3    SHE       1991182      499  1991212 n      -9.9999   90.0   90.0 Short period, high gain, east-west                   821738895.00000
+SE3    SHN       1991182      500  1991212 n      -9.9999    0.0   90.0 Short period, high gain, north-south                 821738895.00000
+SE3    SHZ       1991182      498  1991212 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738895.00000
+SE4    SHE       1991182      502  1991212 n      -9.9999   90.0   90.0 Short period, high gain, east-west                   821738895.00000
+SE4    SHN       1991182      503  1991212 n      -9.9999    0.0   90.0 Short period, high gain, north-south                 821738895.00000
+SE4    SHZ       1991182      501  1991212 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738895.00000
+SE5    SHE       1991182      505  1991212 n      -9.9999   90.0   90.0 Short period, high gain, east-west                   821738895.00000
+SE5    SHN       1991182      506  1991212 n      -9.9999    0.0   90.0 Short period, high gain, north-south                 821738895.00000
+SE5    SHZ       1991182      504  1991212 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738895.00000
+SEG    SHZ       1975281      507  1976183 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738895.00000
+SENE   SHZ       1979206      697  1979229 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738905.00000
+SENW   SHZ       1979201      698  1979229 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738905.00000
+SESE   SHZ       1979205      699  1979229 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738905.00000
+SESW   SHZ       1979202      700  1979229 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738905.00000
+SGA    SHZ       1976229      508  1994216 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738895.00000
+SGA    SHZ       1994217      509  1995191 n      -9.9999 -999.9  180.0 Short period, high gain, vertical                    821738895.00000
+SGA    SHZ       1995192      510       -1 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738895.00000
+SHOU   SHZ       1972196      701  1972226 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738905.00000
+SHU    SHZ       1974001      511  1988275 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738895.00000
+SHU    SHZ       1988276      512  1990239 n      -9.9999 -999.9  180.0 Short period, high gain, vertical                    821738895.00000
+SHW    EHZ       1972275      888       -1 -       0.0000    0.0    0.0                                                      904178489.31634
+SII    SHZ       1975221      513  1989001 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738896.00000
+SIM    SHE       1993152      515  1997364 n      -9.9999   90.0   90.0 Short period, high gain, east-west                   898306326.18704
+SIM    SHN       1993152      516  1997364 n      -9.9999    0.0   90.0 Short period, high gain, north-south                 898306328.30707
+SIM    SHZ       1993152      514  1997364 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    898306323.53725
+SIT    BHE       1999200      922       -1 n      -9.9999   90.0   90.0 -                                                    932757960.45268
+SIT    BHN       1999200      921       -1 n      -9.9999    0.0   90.0 -                                                    932757950.11255
+SIT    BHZ       1999200      920       -1 n      -9.9999    0.0    0.0 -                                                    932757937.81923
+SIT    SHZ       1960001      517       -1 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738896.00000
+SIT    SLZ       1976143      518       -1 n      -9.9999 -999.9    0.0 Short period, low gain, vertical                     821738896.00000
+SIY    SHZ       1979339      519  1980087 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738896.00000
+SKB    SHZ       1978293      520       -1 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738896.00000
+SKD    SHZ       1970001      521  1989001 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738896.00000
+SKL    SHZ       1971252      522  1984210 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738896.00000
+SKN    SHE       1978216      523       -1 n      -9.9999   90.0   90.0 Short period, high gain, east-west                   821738896.00000
+SKN    SHN       1978216      524       -1 n      -9.9999    0.0   90.0 Short period, high gain, north-south                 821738896.00000
+SKN    SHZ       1972221      525       -1 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738896.00000
+SKS    SHZ       1975274      526  1977223 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738896.00000
+SLK    SHZ       1984211      527       -1 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738896.00000
+SLV    SHZ       1972274      528  1985180 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738896.00000
+SMT    SHZ       1960001      529  1989001 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738896.00000
+SMY    SHZ       1970321      530       -1 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738896.00000
+SNO    SHZ       1985102      531  1985163 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738896.00000
+SOS    EHZ       1994264      889       -1 -       0.0000    0.0  180.0                                                      904178494.49661
+SOV    SHZ       1976001      532  1982001 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738896.00000
+SP-    BLE       1991182      534  1992364 n      -9.9999   90.0   90.0 Broadband, low gain, east-west                       898306412.28878
+SP-    BLN       1991182      535  1992364 n      -9.9999    0.0   90.0 Broadband, low gain, north-south                     898306414.56884
+SP-    BLZ       1991182      533  1992364 n      -9.9999 -999.9    0.0 Broadband, low gain, vertical                        898306409.86864
+SPA    SHZ       1988202      536  1997364 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    898306480.24012
+SPB    BHE       1991182      538  1996364 n      -9.9999   90.0   90.0 Broadband, high gain, east-west                      898306532.22120
+SPB    BHN       1991182      539  1996364 n      -9.9999    0.0   90.0 Broadband, high gain, north-south                    898306535.24121
+SPB    BHZ       1991182      537  1996364 n      -9.9999 -999.9    0.0 Broadband, high gain, vertical                       898306529.77108
+SPL    SHZ       1975274      540  1997364 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    898306623.00299
+SPS    SHE       1991182      542  1997364 n      -9.9999   90.0   90.0 Short period, high gain, east-west                   898306682.75393
+SPS    SHN       1991182      543  1997364 n      -9.9999    0.0   90.0 Short period, high gain, north-south                 898306685.67415
+SPS    SHZ       1991182      541  1997364 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    898306680.70393
+SPU    SHZ       1971222      544       -1 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738897.00000
+SSLN   SHP       1999049      914       -1 n      -9.9999 -999.9 -999.9 pressure sensor                                      919385173.95224
+SSLN   SHZ       1997232      852       -1 n      -9.9999    0.0    0.0 -                                                    874026377.08116
+SSLS   SHE       1997232      856       -1 n      -9.9999   90.0   90.0 -                                                    874026379.83326
+SSLS   SHN       1997232      855       -1 n      -9.9999    0.0   90.0 -                                                    874026378.81563
+SSLS   SHZ       1997232      854       -1 n      -9.9999    0.0    0.0 -                                                    874026378.23730
+SSLW   SHZ       1997232      853       -1 n      -9.9999    0.0    0.0 -                                                    874026377.65112
+SSN    SHZ       1972228      545       -1 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738897.00000
+SSP    SHZ       1974253      546       -1 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738897.00000
+SST    SHZ       1971236      547  1972222 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738897.00000
+STG    SHZ       1974192      548  1976031 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738897.00000
+STLK   SHZ       1997246      848       -1 n      -9.9999    0.0    0.0 -                                                    874024359.86457
+STM    SHZ       1980183      549  1982001 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738897.00000
+STV    SHZ       1987200      550  1987236 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738897.00000
+STY    SHZ       1972206      551  1975209 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738897.00000
+SU1    SHE       1991182      553  1991212 n      -9.9999   90.0   90.0 Short period, high gain, east-west                   821738898.00000
+SU1    SHN       1991182      554  1991212 n      -9.9999    0.0   90.0 Short period, high gain, north-south                 821738898.00000
+SU1    SHZ       1991182      552  1991212 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738898.00000
+SU2    SHE       1991182      556  1991212 n      -9.9999   90.0   90.0 Short period, high gain, east-west                   821738898.00000
+SU2    SHN       1991182      557  1991212 n      -9.9999    0.0   90.0 Short period, high gain, north-south                 821738898.00000
+SU2    SHZ       1991182      555  1991212 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738898.00000
+SU3    SHE       1991182      559  1991212 n      -9.9999   90.0   90.0 Short period, high gain, east-west                   821738898.00000
+SU3    SHN       1991182      560  1991212 n      -9.9999    0.0   90.0 Short period, high gain, north-south                 821738898.00000
+SU3    SHZ       1991182      558  1991212 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738898.00000
+SU4    SHE       1991182      562  1991212 n      -9.9999   90.0   90.0 Short period, high gain, east-west                   821738898.00000
+SU4    SHN       1991182      563  1991212 n      -9.9999    0.0   90.0 Short period, high gain, north-south                 821738898.00000
+SU4    SHZ       1991182      561  1991212 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738898.00000
+SU6    SHE       1991182      565  1991212 n      -9.9999   90.0   90.0 Short period, high gain, east-west                   821738898.00000
+SU6    SHN       1991182      566  1991212 n      -9.9999    0.0   90.0 Short period, high gain, north-south                 821738898.00000
+SU6    SHZ       1991182      564  1991212 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738898.00000
+SUE    SHZ       1980183      567  1981245 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738898.00000
+SUK    SHZ       1974275      568  1985222 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738898.00000
+SVG    SHZ       1977229      569  1989001 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738898.00000
+SVW    SHZ       1967213      570       -1 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738898.00000
+SWD    SHZ       1972235      571       -1 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738898.00000
+SWML   SHZ       1972196      702  1972226 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738905.00000
+SYI    SHZ       1990239      572  1995204 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738898.00000
+SYI    SHZ       1995205      573       -1 n      -9.9999 -999.9  180.0 Short period, high gain, vertical                    821738899.00000
+TAM    SHZ       1995280      574  1995289 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738899.00000
+TAR    SHE       1995284      575  1995289 n      -9.9999   90.0   90.0 Short period, high gain, east-west                   821738899.00000
+TAR    SHN       1995284      576  1995289 n      -9.9999    0.0   90.0 Short period, high gain, north-south                 821738899.00000
+TAR    SHZ       1995280      577  1995283 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738899.00000
+TAR    SHZ       1995284      578  1995289 n      -9.9999 -999.9  180.0 Short period, high gain, vertical                    821738899.00000
+TCBC   SHZ       1989283      703  1996213 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    898542935.55849
+TCY    SHZ       1980183      579  1982001 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738899.00000
+TGL    SHZ       1988183      580       -1 n      -9.9999 -999.9  180.0 Short period, high gain, vertical                    821738899.00000
+THY    SHZ       1986001      581  1992254 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738899.00000
+THY    SHZ       1992255      582       -1 n      -9.9999 -999.9  180.0 Short period, high gain, vertical                    946689328.09510
+TLK    SHZ       1974191      583  1976183 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738899.00000
+TLR    SHZ       1980001      584  1982001 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738899.00000
+TMF    SHZ       1960001      585  1989001 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738899.00000
+TMW    SHZ       1990232      586  1992274 n      -9.9999 -999.9  180.0 Short period, high gain, vertical                    821738899.00000
+TMW    SHZ       1992275      587       -1 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738899.00000
+TNA    BHE       1998297      901       -1 n       2.0000   90.0   90.0 -                                                    910901962.06973
+TNA    BHN       1998297      900       -1 n       2.0000    0.0   90.0 -                                                    910901958.39999
+TNA    BHZ       1998297      899       -1 n       2.0000 -999.9    0.0 -                                                    910901954.57901
+TNA    HHE       1998297      904       -1 n       2.0000   90.0   90.0 strong-motion instrument                             910901972.69069
+TNA    HHN       1998297      903       -1 n       2.0000    0.0   90.0 strong-motion instrument                             910901969.09929
+TNA    HHZ       1998297      902       -1 n       2.0000 -999.9    0.0 strong-motion instrument                             910901965.65510
+TNA    SHZ       1976214      588  1989001 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738899.00000
+TNN    SHZ       1965001      589  1979003 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738899.00000
+TOA    SHZ       1971258      590       -1 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738899.00000
+TPK    SHZ       1980183      591  1982001 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738899.00000
+TRF    SHZ       1990002      592  1990227 n      -9.9999 -999.9  180.0 Short period, high gain, vertical                    821738899.00000
+TRF    SHZ       1990228      593       -1 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738899.00000
+TSI    SHZ       1976228      594  1985198 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738899.00000
+TT01   SHZ       1970001      829       -1 n      -9.9999    0.0    0.0 -                                                    864327925.38474
+TTA    SHZ       1978263      595       -1 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738899.00000
+TTL    SHZ       1960001      596  1975001 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738899.00000
+TTV    SHZ       1984263      597  1985195 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738900.00000
+TZL    SHZ       1990190      598       -1 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738900.00000
+TZO    SHZ       1987274      599  1989198 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738900.00000
+UGB    SHZ       1976275      600  1977189 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738900.00000
+UGI    SHZ       1979155      601  1989001 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738900.00000
+UKL    SHZ       1975274      602  1979250 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738900.00000
+UNL    SHZ       1980001      603  1982001 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738900.00000
+UNV    BHE       1999050      918       -1 n      -9.9999   90.0   90.0 -                                                    919898951.94623
+UNV    BHN       1999050      917       -1 n      -9.9999    0.0   90.0 -                                                    919898940.23398
+UNV    BHZ       1999050      916       -1 n      -9.9999 -999.9    0.0 -                                                    919898929.12055
+USL    SHZ       1979250      604  1982225 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738900.00000
+VEN    SHZ       1987201      605  1987236 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738900.00000
+VIB    SHZ       1985249      606       -1 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738900.00000
+VLZ    SHE       1978047      608       -1 n      -9.9999   90.0   90.0 Short period, high gain, east-west                   821738900.00000
+VLZ    SHN       1978047      609       -1 n      -9.9999    0.0   90.0 Short period, high gain, north-south                 821738900.00000
+VLZ    SHZ       1971245      607       -1 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738900.00000
+VOGL   SHE       1998155      870       -1 n      -9.9999   90.0   90.0 -                                                    896988703.33549
+VOGL   SHN       1998155      869       -1 n      -9.9999    0.0   90.0 -                                                    896988670.27088
+VOGL   SHZ       1998155      868       -1 n      -9.9999 -999.9    0.0 -                                                    896988633.48559
+VZS    SHZ       1972204      610  1976228 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738900.00000
+VZW    SHZ       1972199      611  1998170 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    898307280.53564
+W1E    SHZ       1991182      612  1991212 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738900.00000
+W1N    SHZ       1991182      613  1991212 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738900.00000
+W1Z    SHZ       1991182      614  1991212 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738900.00000
+W2E    SHZ       1991182      615  1991212 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738901.00000
+W2N    SHZ       1991182      616  1991212 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738901.00000
+W2Z    SHZ       1991182      617  1991212 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738901.00000
+WAX    SHZ       1975234      618       -1 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738901.00000
+WESE   SHZ       1998098      876       -1 n      -9.9999 -999.9    0.0 -                                                    902444502.83636
+WESN   SHZ       1998098      875       -1 n      -9.9999 -999.9    0.0 -                                                    902444495.74628
+WESS   SHE       1998098      879       -1 n      -9.9999   90.0   90.0 -                                                    902444555.98219
+WESS   SHN       1998098      878       -1 n      -9.9999    0.0   90.0 -                                                    902444542.52036
+WESS   SHZ       1998098      877       -1 n      -9.9999 -999.9    0.0 -                                                    902444527.44136
+WFAR   SHZ       1998098      880       -1 n      -9.9999 -999.9    0.0 -                                                    902444609.32522
+WHC    SHZ       1971244      619  1992091 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738901.00000
+WHY    BHZ       1993239      620       -1 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738901.00000
+WLM    SHZ       1971244      621  1972214 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738901.00000
+WPOG   SHZ       1998098      874       -1 n      -9.9999 -999.9    0.0 -                                                    902444029.34082
+WRG    SHZ       1974253      622       -1 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738901.00000
+WRH    SHZ       1983259      623  1989125 n      -9.9999 -999.9  180.0 Short period, high gain, vertical                    821738901.00000
+WRH    SHZ       1989126      624  1993277 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738901.00000
+WRH    SHZ       1993278      625       -1 n      -9.9999 -999.9  180.0 Short period, high gain, vertical                    821738901.00000
+WRT    SHZ       1968001      626  1969001 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738901.00000
+WS2    SHE       1995283      627  1996364 n      -9.9999   90.0   90.0 Short period, high gain, east-west                   898306794.00644
+WS2    SHN       1995283      628  1996364 n      -9.9999    0.0   90.0 Short period, high gain, north-south                 898306798.10636
+WS2    SHZ       1995283      629  1996364 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    898306796.41626
+WS3    SHZ       1995286      630  1996364 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    898306800.26611
+WSD    SHE       1995279      631  1995283 n      -9.9999   90.0   90.0 Short period, high gain, east-west                   821738901.00000
+WSD    SHN       1995279      632  1995283 n      -9.9999    0.0   90.0 Short period, high gain, north-south                 821738901.00000
+WSD    SHZ       1995279      633  1995283 n      -9.9999 -999.9  180.0 Short period, high gain, vertical                    821738901.00000
+WSL    SHZ       1993135      634  1993237 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738901.00000
+WTUG   SHZ       1998098      881       -1 n      -9.9999 -999.9    0.0 -                                                    902444644.58661
+WWW    SHZ       1982231      635  1993182 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738901.00000
+XLV    SHZ       1987259      636  1991171 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738901.00000
+XLV    SHZ       1991172      637  1992248 n      -9.9999 -999.9  180.0 Short period, high gain, vertical                    821738901.00000
+XLV    SHZ       1992249      638  1993294 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738901.00000
+XLV    SHZ       1993295      639       -1 n      -9.9999 -999.9  180.0 Short period, high gain, vertical                    821738901.00000
+YAH    SHZ       1974248      640       -1 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738902.00000
+YCB    SHZ       1974001      641  1982224 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738902.00000
+YKA    SHZ       1962001      642       -1 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738902.00000
+YKC    SHZ       1964197      643  1996074 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    898542748.64467
+YKG    SHZ       1972282      644  1985246 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738902.00000
+YKT    SHZ       1972280      645  1974273 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738902.00000
+YKU    SHZ       1960001      646       -1 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738902.00000
+YKU    SLZ       1978264      647       -1 n      -9.9999 -999.9    0.0 Short period, low gain, vertical                     821738902.00000
+YKW3   BHZ       1993326      704       -1 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738906.00000
+YTG    SHZ       1972282      648  1974258 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738902.00000
+YTT    SHZ       1973257      649  1973273 n      -9.9999 -999.9    0.0 Short period, high gain, vertical                    821738902.00000
+ZRO    SHZ       1996240      768       -1 n      -9.9999 -999.9    0.0 -                                                    927324227.53619
+SIT    BLZ       1999200      942       -1 n      -9.9999    0.0    0.0 -                                                    946689591.15476
+SIT    BLN       1999200      943       -1 n      -9.9999    0.0   90.0 -                                                    946689614.34418
+SIT    BLE       1999200      944       -1 n      -9.9999   90.0   90.0 -                                                    946689621.29328

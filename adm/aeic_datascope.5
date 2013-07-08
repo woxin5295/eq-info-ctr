@@ -1,0 +1,224 @@
+.\" @(#)manpage_template        1.4 $Date: 2002-02-07 01:56:20 $
+.TH AEIC_DATASCOPE 5 "$Date: 2002-02-07 01:56:20 $"
+.SH NAME
+aeic_datascope \- Installation of Datascope at AEIC
+.SH DESCRIPTION
+The Datascope software will be in /opt/dsap.  New datascope software
+will go into /opt/dsap_staging.
+
+Because our datascope distribution is managed
+with cvs, the structure of our dsap directories has had to be
+carefully tailored to get around subtleties of code checkouts and updates.
+To update the Datascope distribution (not to be done without proper
+precautions to protect running systems!!), one sets
+.ft CW
+.in 2c
+.nf
+.ne 3
+
+        setenv CVSROOT lindquis@lemond.colorado.edu:/opt/dsap/cvs
+
+.fi
+.in
+.ft R
+goes to the directory
+.ft CW
+.in 2c
+.nf
+.ne 3
+
+        /opt/dsap/solaris/dsap/src
+
+.fi
+.in
+.ft R
+and types
+.ft CW
+.in 2c
+.nf
+.ne 4
+
+        cvs update
+        cvs update -d
+
+.fi
+.in
+.ft R
+ .
+This fills the directory /opt/dsap/solaris/dsap with appropriate
+files from Colorado. Some of the subdirectories of dsap are filled
+in; some are just empty, except for the directory of CVS notes.
+For directories and files that are filled in by cvs, we have soft-links
+from /opt/dsap/solaris/dsap to /opt/dsap/solaris. For directories
+in /opt/dsap/solaris/dsap that are made but not filled, we have
+corresponding real directories in /opt/dsap/solaris.
+This is done this way because we want DSAP in /opt/dsap/solaris, but
+cvs expects to put all the code in a directory named not "solaris" but
+in one named "dsap". If cvs finds files in the dsap directory here that
+it does not see in Colorado, however, it will complain and abort. Also,
+the cvs distribution that comes across, as implied above, does not
+contain everything we need.  Much must be rebuilt with make here at AEIC.
+Notably, the data files and the ext/ software packages are not imported.
+Finally, this setup supports local changes to data files, such as the
+addition of the iceworm1.2 schema, that do not get removed at each
+update, as they did with the old rdist strategy.
+The following contents of /opt/dsap/solaris are soft-links to
+the files and directories imported by cvs into /opt/dsap/solaris/dsap:
+.ft CW
+.in 2c
+.nf
+
+.ne 9
+
+        /opt/dsap/solaris/src/
+        /opt/dsap/solaris/config/
+        /opt/dsap/solaris/setup.env
+        /opt/dsap/solaris/configure.in
+        /opt/dsap/solaris/include/config.h
+        /opt/dsap/solaris/include/dsapmake.solaris
+        /opt/dsap/solaris/man/tmac.an
+
+.fi
+.in
+.ft R
+The following contents of /opt/dsap/solaris are real directories,
+filled by make commands or other means:
+.ft CW
+.in 2c
+.nf
+
+.ne 11
+
+        /opt/dsap/solaris/bin
+        /opt/dsap/solaris/lib
+        /opt/dsap/solaris/data
+        /opt/dsap/solaris/ext
+        /opt/dsap/solaris/include
+                (contains the two soft-links mentioned above)
+        /opt/dsap/solaris/man
+                (contains the soft-link mentioned above)
+        /opt/dsap/solaris/man/man*
+
+.fi
+.in
+.ft R
+.LP
+The perl installation at AEIC differs slightly from that of the
+Colorado systems. In the Colorado Datascope installation, thus
+at least in the distributions that include the ext/ subdirectories,
+the perl libraries, man pages, and executables are installed directly in
+the equivalent of
+.ft CW
+.in 2c
+.nf
+.ne 3
+
+        /opt/dsap/solaris/ext/perl
+
+.fi
+.in
+.ft R
+At the AEIC, perl is installed in /usr/local/bin, /usr/local/man, and
+/usr/local/lib. The source code for perl, however, is still in
+.ft CW
+.in 2c
+.nf
+.ne 3
+
+        /opt/dsap/solaris/ext/perl5.004_03
+
+.fi
+.in
+.ft R
+(or appropriate later version).
+Since some of the datascope software expects perl in $(DSAP)/ext/perl/bin,
+$(DSAP)/ext/perl/man, and $(DSAP)/ext/perl/lib, we maintain a directory
+called $(DSAP)/ext/perl which has three links in it: one to /usr/local/bin,
+one to /usr/local/man, and one to /usr/local/lib.
+
+.LP
+Running cvs update brings in new source code, which must be recompiled
+on our local system. DO NOT RECOMPILE WITHOUT UNDERSTANDING THE CONSEQUENCES
+AND SAFETY PRECAUTIONS. To recompile Datascope, go to
+.ft CW
+.in 2c
+.nf
+.ne 3
+
+        /opt/dsap/solaris/src
+
+.fi
+.in
+.ft R
+make sure you have
+.ft CW
+.in 2c
+.nf
+.ne 4
+
+        setenv DSAP /opt/dsap/solaris
+        setenv DSAPMAKE /opt/dsap/solaris/include/dsapmake.solaris
+
+.fi
+.in
+.ft R
+Then type
+.ft CW
+.in 2c
+.nf
+.ne 4
+
+        make Include
+        make install
+
+.fi
+.in
+.ft R
+The initial 'make Include' is critical to put the updated include files
+into the proper directory before trying to compile source code.
+Finally, go to
+.ft CW
+.in 2c
+.nf
+.ne 3
+
+        /opt/dsap/solaris/man
+
+.fi
+.in
+.ft R
+and type
+.ft CW
+.in 2c
+.nf
+.ne 3
+
+        mkhtml
+
+.fi
+.in
+.ft R
+to update the html versions of any new or modified man pages. This
+compiles the master version of datascope, provided you did it all
+from the right server (currently megathrust). The running Iceworm
+machine has its own copy of the Datascope source distribution.
+This must also be updated. Currently, this means going to
+/Seis/mega2, the location of the dsap directory, and typing
+.ft CW
+.in 2c
+.nf
+.ne 3
+
+        cpdir dsap /net/earlybird/export/src/dsap
+
+.fi
+.in
+.ft R
+as root. Once again, make sure you know what you're doing so you don't
+clobber the running acquisition system.
+.SH "SEE ALSO"
+.nf
+aeic_dirs(1)
+.fi
+.SH AUTHOR
+Kent Lindquist

@@ -1,0 +1,27 @@
+.TH CAT_URL 1 2007/09/28 "Glenn Thompson, AEIC" "User Commands"
+.SH NAME
+cat_url - Echoes the contents of a document on a webserver to STDOUT. Similar to the Unix "cat" command.
+.SH SYNOPSIS
+.nf
+cat_url url [prompt username password]
+.fi
+.SH DESCRIPTION
+\fBcat_url\fP will locate a document on a webserver indicated by its url, and echo its contents to stdout. It therefore provides a convenient mechanism for copying any document from a webserver (by redirecting output to a file), or for piping into another program (which could for example parse the web document for certain information).
+.LP
+\fBcat_url\fP
+has the capability to access password protected documents on a webserver, through the specification of optional command line arguments. The program was written to allow html and gif files to be downloaded and parsed from the password protected Shakemap website.LP
+.SH COMMAND LINE ARGUMENTS
+These are:
+.IP url
+The webserver address for the required document (e.g. html file, jpeg, gif, css, xml etc). .IP "-pf pf"
+.IP prompt
+If the document is password protected, the question asked by the webserver must be given here.
+.IP username
+The username for a password protected document. 
+.IP password
+The password for a password protected document. 
+.SH AUTHOR
+Glenn Thompson, 2007
+.br
+Alaska Earthquake Information Center
+

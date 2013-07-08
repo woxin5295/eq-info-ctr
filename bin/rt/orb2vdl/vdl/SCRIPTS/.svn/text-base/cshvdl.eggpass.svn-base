@@ -1,0 +1,8 @@
+cd /export/home/ketchudc/vdl
+rm -f vdlstart.log vdl.log vdlmom.log
+cp PARMS/vdlmom.setupeggpass vdlmom.setup
+vdlmom
+Mail -s "Nevada VDL down" ketchum@gldfs.cr.usgs.gov </export/home/ketchudc/vdl/SCRIPTS/vdl.mailegg
+Mail -s "Nevada VDL down" whiterl@gwsmtp.egg.nv.doe.gov </export/home/ketchudc/vdl/SCRIPTS/vdl.mailegg
+Mail -s "page ketchum" pagemail@nsn4.cr.usgs.gov </export/home/ketchudc/vdl/SCRIPTS/vdl.mailegg
+

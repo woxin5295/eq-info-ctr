@@ -1,0 +1,9 @@
+Minimum_associated	3	# minimum number of stations with consistent arrivals
+Average_velocity     ttimes	# used to calculate maximum time difference between stations
+				# set to ttimes to use ttimes for calculation instead.
+epsilon_t		1	# time to add to calculated maximum arrival time 
+fudge_factor		1.001   # the criterion is
+				#     ( delta_t + epsilon_t ) * fudge_factor
+				#   where delta_t is calculated with ttimes or the specified
+				#   average velocity.
+Earth_radius	     6400000	# radius of earth in same system of units as average velocity

@@ -1,0 +1,288 @@
+#!/bin/sh
+# \
+exec $ANTELOPE/bin/awish $0 -- "$@"
+
+package require Datascope
+
+ 
+# AEIC partial information-release distributor
+#
+# N. Ruppert
+# Geophysical Institute
+# University of Alaska, Fairbanks
+# February, 2004
+
+package require Tclx
+
+set auto_path [linsert $auto_path 0 $env(ANTELOPE)/data/tcl/library]
+
+proc init_globals {} {
+	global argc argv argv0
+
+	global progname
+	set progname [exec basename $argv0]
+
+	if { $argc > 1 } {
+		puts "Usage: $progname \[-n\]"
+		exit 1
+	} elseif { $argc == 1 } {
+		global Exec
+		puts "Defanging $progname"
+		set Exec "echo"
+	} else {			
+		global Exec
+		set Exec "exec"
+	}
+	
+	global Pfname
+	set Pfname "aeic_release"
+
+	global mail_update_recipient 
+	set mail_update_recipient [pfget $Pfname email_update_recipient]
+
+	global email_update_file 
+	set email_update_file [pfget $Pfname email_update]
+
+	global subset_database
+	set subset_database [pfget $Pfname subset_database]
+
+	global release_database
+	set release_database [pfget $Pfname release_database]
+
+	global printer
+	set printer [pfget $Pfname printer]
+
+	global Helpers
+	pfgetarr Helpers %$Pfname#Helpers
+
+	global maintainer
+	set maintainer [pfget $Pfname maintainer]
+}
+
+
+proc CommandCheckoff {w args} { 
+	frame $w
+	button $w.b 
+	checkbutton $w.cb -command "$w.b config -state normal"
+	pack $w.cb -side left
+	pack $w.b -side left -fill x -expand 1
+	while { ! [lempty $args] } {
+		set option [lvarpop args]
+		switch -- $option {
+		-label	{ set value [lvarpop args] ; $w.b config -text $value }
+		-variable { 
+			set value [lvarpop args] 	
+			global $value
+			$w.cb config -variable $value
+		}
+		-background { set value [lvarpop args] ; $w.b config -background $value }
+		-command { 
+			set value [lvarpop args] 
+			$w.b config -command \
+			     "$w.cb select; $w.b config -state disabled; $value"
+			}
+		}
+	}
+	return $w
+}
+
+proc send_feedback {} {
+	global maintainer
+	
+	catch { [ destroy .fbw] }
+	toplevel .fbw -class Dialog
+	wm title .fbw Feedback
+
+	text .fbw.text -yscrollcommand ".fbw.scroll set" -exportselection yes
+	scrollbar .fbw.scroll -relief flat -command ".fbw.text yview"
+
+	pack .fbw.scroll -side right -fill y
+	pack .fbw.text -expand yes -fill both
+
+	.fbw.text insert end "\nFeedback on response process:\n"
+
+	button .fbw.cancel -text "Cancel" -bg red -command "destroy .fbw"
+	button .fbw.send -text "Send to $maintainer" \
+			  -bg chartreuse -command {
+				global progname maintainer 
+				set cmd "|$env(ANTELOPE)/bin/rtmail "
+				append cmd "-s \"Feedback on $progname\" "
+				append cmd "$maintainer"
+				set fd [open $cmd w]
+				puts -nonewline $fd [.fbw.text get 1.0 end]
+				flush $fd
+				close $fd
+				destroy .fbw
+			}
+
+	pack .fbw.send -side top -fill x 
+	pack .fbw.cancel -side top -fill x 
+
+	grab set .fbw
+	tkwait window .fbw
+	grab release .fbw
+
+}
+
+proc update_finger {} {
+	global Helpers Exec
+
+	$Exec nohup $Helpers(update_finger) &
+}
+
+#proc update_qdds {} {
+#	global Helpers Exec subset_database
+#	$Exec nohup $Helpers(update_qdds) &
+#}
+
+proc update_releasedb {} {
+	global subset_database release_database
+
+	set db [dbopen $subset_database r]
+
+	# Assume subset database has only one origin
+	set time [dbgetv $db origin 0 time]
+
+	set release_database [epoch2str $time $release_database]
+
+	catch { 
+		exec dbfixids $subset_database orid 1
+		exec dbfixids $subset_database evid 1
+		exec dbfixids $subset_database arid 1
+		exec dbfixids $subset_database magid 1
+		exec dbmerge $subset_database $release_database
+		} result
+	puts "$result"
+}
+
+proc send_mail { cb } {
+	global email_update_file mail_update_recipient
+
+	global Exec
+	set subject [exec grep "Subject: AEIC EQ UPDATE" $email_update_file | cut -c 10- ]
+#	$Exec rtmail -s "$subject" $mail_update_recipient < $email_update_file
+	puts "rtmail -s $subject"
+	exec grep -v "Subject: AEIC EQ UPDATE" $email_update_file | rtmail -s "$subject" $mail_update_recipient
+	
+}
+
+proc ApprovedExit {} {
+	global progname 
+
+#	set procedures [list update_qdds 
+#			     update_finger 
+	set procedures [list update_finger \
+			     update_releasedb \
+			     send_mail]
+	
+	catch { [destroy .exit] } 
+	toplevel .exit -class Dialog
+
+	set report ""
+	set quit "Quit"
+	foreach var $procedures {
+		global $var
+		set checked [set $var]
+		set state [.$var.b config -state]
+		set state [lindex $state 4]
+		if { $checked && $state == "disabled" } {
+			# Task completed
+		} elseif { $checked } {
+			lappend Skipped $var
+		} else {
+			lappend Missed $var
+		}
+	}
+
+	if { [info exists Missed] } {
+		foreach var $Missed {
+			puts \007
+			append report "\nTask $var was missed !!\n"
+			set quit "Quit Anyway"
+		}
+	}
+
+	if { $report != "" } {
+		append report "\n"
+	}
+
+	if { [info exists Skipped] } {
+		foreach var $Skipped {
+			append report "\nTask $var intentionally skipped.\n"	
+		}
+	}
+
+	if { $report == "" } { 
+		destroy .
+	}
+
+	label .exit.l -text $report -background "orange red" -fg yellow
+	pack .exit.l -side top -fill x
+
+	button .exit.cancel -text "Return to $progname" -command \
+			    "destroy .exit" -background chartreuse
+	pack .exit.cancel -side top -fill x 
+
+	button .exit.fit -text $quit -command "destroy ." \
+			 -background red
+	pack .exit.fit -side top -fill x
+
+	grab set .exit
+	tkwait window .exit
+	grab release .exit
+}
+
+proc init_windows {} {
+	global Exec
+#	global update_finger update_qdds update_releasedb send_mail
+	global update_finger update_releasedb send_mail
+
+	if { $Exec == "echo" } {
+		label .defang1 -text "FANGS REMOVED" -background yellow
+		pack .defang1 -side top -fill x
+	}
+
+
+	CommandCheckoff .update_finger -background "aquamarine" \
+				    -label "Update finger quake list" \
+				    -variable update_finger \
+			   	    -command update_finger
+	pack .update_finger -side top -fill x
+
+#	CommandCheckoff .update_qdds -background "cyan" \
+#				    -label "Update QDDS quake list" \
+#				    -variable update_qdds \
+#			   	    -command update_qdds
+#	pack .update_qdds -side top -fill x
+
+	CommandCheckoff .update_releasedb -background "yellow" \
+				    -label "Update Release Database" \
+				    -variable update_releasedb \
+			   	    -command update_releasedb
+	pack .update_releasedb -side top -fill x
+
+	CommandCheckoff .send_mail -background "orange" \
+				    -label "Send email log" \
+				    -variable send_mail \
+			   	    -command "send_mail .send_mail.cb"
+	pack .send_mail -side top -fill x
+	
+	global maintainer 
+	button .fb -text "Mail feedback to $maintainer" \
+			-command send_feedback -bg bisque2
+	pack .fb -side top -fill x 
+
+	if { $Exec == "echo" } {
+		label .defang2 -text "FANGS REMOVED" -background yellow
+		pack .defang2 -side top -fill x
+	}
+
+	button .quit -bg red -text Quit -command ApprovedExit
+	pack .quit -side top -fill x
+
+	wm resizable . 0 0
+}
+
+init_globals 
+
+init_windows

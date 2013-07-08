@@ -1,0 +1,23 @@
+.TH CUBE2XML 1 2007/11/08 "Glenn Thompson, AEIC" "User Commands"
+.SH NAME
+.nf
+cube2xml - parse CUBE files as output xml
+.fi
+.SH SYNOPSIS
+.nf
+cube2xml [-m mode] cubefile_1 cubefile_2 ... cubefile_N
+.fi
+.SH DESCRIPTION
+\fBcube2xml\fP takes CUBE files as input, parses them, and spits out xml in 1 of 2 possible formats.
+.SH OPTIONS
+.IP "-m mode"
+mode is 1 or 2. mode 1 puts each separate field (e.g. magnitude) as a separate <tag>. mode 2 puts each field as a property of the <event /> tag.
+.SH EXAMPLE
+cube2xml -m 2 /home/qdds/polldirfinish/event.* > allevents.xml 
+.SH BUGS AND CAVEATS
+* output goes to STDOUT (command line). Use redirect > to send to file 
+.SH AUTHOR
+Glenn Thompson
+.br
+Alaska Earthquake Information Center
+

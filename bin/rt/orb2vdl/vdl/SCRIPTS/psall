@@ -1,0 +1,5 @@
+#!/bin/csh -f
+$PSVDL -o "pid ppid pcpu time vsz args" | grep vdl
+$PSVDL -o "pid ppid pcpu time vsz args" | grep $VDL_STATION
+$PSVDL -o "pid ppid pcpu time vsz args" | grep datasock
+$PSVDL -o "pid ppid pcpu time vsz args" | grep netmon

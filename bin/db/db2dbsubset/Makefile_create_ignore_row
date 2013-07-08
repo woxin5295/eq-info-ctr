@@ -1,0 +1,18 @@
+BIN=create_ignore_row 
+
+MAN1=create_ignore_row.1
+
+ldlibs=	$(TRLIBS)  -lorb -lxtra -lPkt $(SVR4LIBS)
+
+#cflags= -fast -xarch=v8
+
+include $(AEICMAKE)  
+	
+
+DIRS=			
+			
+OBJS= \
+	create_ignore_row.o
+
+create_ignore_row : $(OBJS)
+	$(CC) $(CFLAGS) -o $@ $(OBJS) $(LDFLAGS) $(LDLIBS)

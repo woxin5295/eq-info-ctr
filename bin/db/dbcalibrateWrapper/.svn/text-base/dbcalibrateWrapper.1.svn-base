@@ -1,0 +1,47 @@
+'\" te
+.TH DBCALIBRATEWRAPPER 1 "$Date: 2008-11-07 00:20:19 $"
+.SH NAME
+dbcalibrateWrapper \- a helpful wrapper script for dbcalibrate
+.SH SYNOPSIS
+.nf
+dbcalibrateWrapper dbin dbtemp calseq calseqcomp
+.fi
+.SH DESCRIPTION
+\fBdbcalibrateWrapper\fP is a wrapper script for calling dbcalibrate. It's main purpose
+is to construct a temporary database which includes a wfdisc table built from the
+AEIC continuous waveform archive databases, relevant for the calibration sequence(s)
+requested.
+
+.SH COMMAND LINE ARGUMENTS
+.IP DBIN
+	The input database, which must containing a dlcalwf table.
+.IP DBTEMP
+	The temporary database, which will be created prior to dbcalibrate being called, and removed afterwards.
+.IP CALSEQ
+	The calibration sequence we want to examine.
+.IP CALSEQCOMP
+	The calibration sequence we want to compare against, to examine relative changes in spectra.
+.SH EXAMPLE
+.in 2c
+.ft CW
+.nf
+
+Change to the correct directory:
+> cd /net/inverse/export/inverse/fema/run_calibrate
+
+Examine the calwf table, and select a calibration sequence of interest, and a comparison calibration sequence:
+> dbe dbpipe/pipeline_stations.dlcalwf
+
+Run dbcalibrateWrapper on the calibration sequences chosen. In the following case, we will compare the response
+for station PS06 on November 6th, with one computed about 43 hours earlier on November 5th:
+> dbcalibrateWrapper dbpipe/pipeline_stations db/tempdb PS_PS06-2008311:22:10:12 PS_PS06-2008310:03:00:11
+
+After running this, you will probably want to run DISPLAYSCAL.
+.fi
+.ft R
+.in
+.SH SEE ALSO
+	DBCALIBRATE, DISPLAYSCAL, WATCH_DLCALWF, DISPLAYSCAL_AEIC
+.SH AUTHOR
+Glenn Thompson (glenn@giseis.alaska.edu)
+.\" $Id: dbcalibrateWrapper.1,v 1.2 2008-11-07 00:20:19 glenn Exp $

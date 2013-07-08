@@ -1,0 +1,798 @@
+#!/bin/sh
+# This comment extends to the next line for tcl \
+exec awish -f $0 $*
+# Mitch switched wish to awish 2002_02_21
+#exec wish -f $0 $*
+
+package require Datascope;
+package require Tclx;
+
+#
+# weekly_report_maker
+#
+# D. McNamara with help from K. Lindquist
+# Geophysical Institute
+# University of Alaska, Fairbanks
+# Sept, 1999
+# G. Thompson ported from Solaris to MacOs
+# Oct, 2012
+# This mainly involved replacing Framemaker and alchemy calls
+
+set auto_path [linsert $auto_path 0 $env(ANTELOPE)/data/tcl/library]
+
+proc mytkdialog {w title msg justify args} {
+# 20121005: G. Thompson copied this procedure from another program
+# since it was missing.
+    global tkdialogOk
+    catch {destroy $w}
+    toplevel $w -class Dialog
+    wm title $w $title
+    wm iconname $w $title
+ 
+    # Create two frames in the main window. The top frame will hold the
+    # message and the bottom one will hold the buttons.  Arrange them
+    # one above the other, with any extra vertical space split between
+    # them.
+ 
+    frame $w.top -relief raised -border 1
+    frame $w.bot -relief raised -border 1
+    pack $w.bot $w.top -side bottom -fill both -expand yes
+ 
+    # Create the message widget and arrange for it to be centered in the
+    # top frame.
+    
+    message $w.top.msg -justify $justify \
+            -text $msg \
+            -aspect 500 \
+            -bg beige \
+            -fg red
+    catch "$w.top.msg config -font -Adobe-times-medium-r-normal--*-180*"
+    pack $w.top.msg -side top -expand yes -padx 3 -pady 3
+ 
+    # Create as many buttons as needed and arrange them from left to right
+    # in the bottom frame.  Embed the left button in an additional sunken
+    # frame to indicate that it is the default button, and arrange for that
+    # button to be invoked as the default action for clicks and returns in
+    # the dialog.
+ 
+    if {[llength $args] > 0} {
+        set arg [lindex $args 0]
+        frame $w.bot.0 -relief sunken -border 1
+        pack $w.bot.0 -side left -expand yes -padx 10 -pady 10
+        button $w.bot.0.button -text [lindex $arg 0] \
+                -command "set tkdialogOk($w) 0; destroy $w"
+        #pack w.bot.0.button -expand yes -padx 6 -pady 6
+        bind $w <Return> "set tkdialogOk($w) 0; destroy $w"
+        focus $w
+ 
+        set i 1
+        foreach arg [lrange $args 1 end] {
+            button $w.bot.$i -text [lindex $arg 0] \
+                    -command "set tkdialogOk($w) $i; destroy $w"
+            pack $w.bot.$i -side left -expand yes -padx 10
+            incr i
+        }
+    bind $w <Any-Enter> [list focus $w]
+    focus $w
+
+    catch "grab set $w"
+    tkwait window $w
+    grab release $w
+    return $tkdialogOk($w)
+    }
+    return 0 
+}
+
+proc init_globals {} {
+        global argc argv argv0
+
+        global progname
+        set progname [exec basename $argv0]
+
+	set Pfname "weekly_report_tool"
+
+	global WEEKLYDB
+	set WEEKLYDB [pfget $Pfname WEEKLYDB]
+
+	global DAYdbs
+	set DAYdbs [pfget $Pfname DAYdbs]
+
+	global weekly_template
+	set weekly_template [pfget $Pfname highlight_template]
+
+	global listing_template
+	set listing_template [pfget $Pfname listing_template]
+
+	# G.Thompson removed Framemaker Macros, 2012/10
+	#global macros
+	#set macros [pfget $Pfname Macros]
+
+	# G.Thompson adding 4 new parameters, 2012/10
+	global cupsfilter
+	set cupsfilter [pfget $Pfname cupsfilter]
+
+	global convert
+	set convert [pfget $Pfname convert]
+
+	global basewebdir_in
+	set basewebdir_in [pfget $Pfname basewebdir_in]
+
+	global basewebdir_out
+	set basewebdir_out [pfget $Pfname basewebdir_out]
+
+	global weekly_txt
+	set weekly_txt weekly_highlights.txt
+
+	if { $argc > 1 } {
+                puts "Usage: $progname \[-n\]"
+                exit 1
+        } elseif { $argc == 1 } {
+                global Exec
+                puts "Defanging $progname"
+                set Exec "echo"
+        } else {
+                global Exec
+                set Exec "exec"
+        }
+
+	global State
+
+        set State(start) [pfget $Pfname start_date]
+        set State(end) [pfget $Pfname end_date]
+        set State(minmag) [pfget $Pfname min_mag]
+        set State(PRINTER_MAPS) [pfget $Pfname PRINTER_MAPS]
+        set State(PRINTER_LIST) [pfget $Pfname PRINTER_LIST]
+
+	set State(tracking_dbname) [pfget aeic_rtsys analysis_control_database]
+	
+	if { ! [file exists $State(tracking_dbname)] } {
+		set message "Tracking database $State(tracking_dbname) " 
+		append message " not present. Please contact administrator.\n"
+		wm withdraw .
+		mytkdialog [unique_window .] Error $message center OK
+		exit -1
+	}
+	set State(dbtrack) [dbopen $State(tracking_dbname) r+] 
+	foreach table [list days weeks months] {
+		set State(dbtrack) [dblookup $State(dbtrack) 0 $table 0 0]
+		if { ! [dbquery $State(dbtrack) dbRECORD_COUNT] } {
+			set message "$State(tracking_dbname).$table "
+			append message "is not present or empty. "
+			append message "Please contact administrator.\n"
+			wm withdraw .
+			mytkdialog [unique_window .] Error $message center OK
+			exit -1
+		}
+		if { ! [dbquery $State(dbtrack) dbTABLE_IS_WRITEABLE] } {
+			set message "$State(tracking_dbname).$table "
+			append message "is not writable by you. "
+			append message "Please contact administrator.\n"
+			wm withdraw .
+			mytkdialog [unique_window .] Error $message center OK
+			exit -1
+		}
+	}
+
+
+
+}
+
+proc MyLblEntry {w args} {
+    frame $w
+    label $w.l
+    entry $w.e
+    pack $w.l -side left
+    pack $w.e -side left -fill x
+    while { ! [lempty $args] } {
+        set option [lvarpop args]
+        switch -- $option {
+            -label      { set value [lvarpop args] ; $w.l config -text $value }
+            -textvariable       { set value [lvarpop args] ; global $value; $w.e config -textvariable $value }
+            -width      { set value [lvarpop args] ; $w.e config -width $value }        }
+    }    
+    return $w
+}
+
+proc CommandCheckoff {w args} {
+        frame $w
+        button $w.b
+        checkbutton $w.cb -command "$w.b config -state normal"
+        pack $w.cb -side left
+        pack $w.b -side left -fill x -expand 1
+        while { ! [lempty $args] } {
+                set option [lvarpop args]
+                switch -- $option {
+                -label  { set value [lvarpop args] ; $w.b config -text $value
+}
+                -variable {
+                        set value [lvarpop args]
+                        global $value
+                        $w.cb config -variable $value
+                }
+                -background { set value [lvarpop args] ; $w.b config -background $value }
+                -command {
+                        set value [lvarpop args]
+                        $w.b config -command \
+                             "$w.cb select; $w.b config -state disabled; $value"
+                        }
+                }
+        }
+        return $w
+}
+
+proc concat_db {} {
+
+	global WEEKLYDB State DAYdbs
+
+	set HERE [exec pwd]
+
+	set start_month [string range $State(start) 0 6]
+	set end_month [string range $State(end) 0 6]
+	
+	if { $start_month == $end_month } { 
+	
+	set allfiles [exec ls -1 $DAYdbs/$start_month]
+	set alldays [lmatch -regexp $allfiles {analyzed_...._.._...origin}]
+	foreach f $alldays {
+	regsub analyzed_ $f {} tmp
+	regsub .origin $tmp {} day
+	if { $day >= $State(start) && $day <= $State(end) } {
+		lappend good_days $DAYdbs/$start_month/analyzed_$day \
+	}
+	}
+	
+	} else {
+	
+	set allfiles [exec ls -1 $DAYdbs/$start_month]
+	set alldays [lmatch -regexp $allfiles {analyzed_...._.._...origin}]
+	foreach f $alldays {
+	regsub analyzed_ $f {} tmp
+	regsub .origin $tmp {} day
+	if { $day >= $State(start) && $day <= $State(end) } {
+		lappend good_days $DAYdbs/$start_month/analyzed_$day \
+	}
+	}
+	set allfiles [exec ls -1 $DAYdbs/$end_month]
+	set alldays [lmatch -regexp $allfiles {analyzed_...._.._...origin}]
+	foreach f $alldays {
+	regsub analyzed_ $f {} tmp
+	regsub .origin $tmp {} day
+	if { $day >= $State(start) && $day <= $State(end) } {
+		lappend good_days $DAYdbs/$end_month/analyzed_$day \
+	}
+	}
+	}
+	
+	puts "aeic_dbconcat_event $good_days $WEEKLYDB "
+
+	catch "exec aeic_dbconcat_event -v $good_days $WEEKLYDB"
+
+	exec echo "css3.0 \n/Seis/databases/stations/{master_stations}:/iwrun/op/db/archive/{archive}" > $WEEKLYDB
+
+#	puts "...Cleaning concatenated database $WEEKLYDB..."
+#	catch "exec aeic_dbclean $WEEKLYDB"
+
+	puts "concat_db DONE\n"
+	
+}
+
+#proc errorcheck {} {
+# 20121005: G. Thompson commented this procedure out as it was not being called
+# event in Solaris/Antelope4.11
+#
+#	global WEEKLYDB 
+#
+#	exec aeic_dberrchk $WEEKLYDB &
+#}
+
+#proc view_errorcheck {} {
+# 20121005: G. Thompson commented this procedure out as it was not being called
+# event in Solaris/Antelope4.11
+#	exec textedit dberrchk.err &
+##	exec enscript -r dberrchk.err
+#
+#}
+
+
+proc review_weeklydb {} {
+
+	global WEEKLYDB State 
+
+	exec dbe $WEEKLYDB 
+	
+	puts "review_weeklydb DONE\n"
+
+}
+
+proc run_db2weekly {} {
+
+	global State WEEKLYDB
+
+	puts stderr "\nRunning aeic_db2weekly $WEEKLYDB $State(minmag)\n"
+	catch "exec aeic_db2weekly $WEEKLYDB $State(minmag)" db2weekly_result
+	puts stderr $db2weekly_result
+
+	puts "run_db2weekly DONE\n"
+
+}
+
+#proc edit_highlights {} {
+# 20121005: G. Thompson commented this procedure out as it was not being called
+# event in Solaris/Antelope4.11
+#
+#	exec textedit weekly_highlights &
+#
+#}
+
+#proc edit_list {} {
+# 20121005: G. Thompson commented this procedure out as it was not being called
+# event in Solaris/Antelope4.11
+#
+#	exec textedit weekly_list &
+#}
+
+#proc maker_highlights {} {
+# 20121005: G. Thompson replaced this procedure with the new acrobat_edit_highlights
+# as part of effort to migrate from Solaris/Antelope4.11 to MacOSX/Antelope5.2
+#
+#	global State WEEKLYDB weekly_template macros
+#
+#	exec /bin/cp $macros fmMacros
+#
+#	exec /bin/cp $weekly_template weekly_highlights.fm
+#	exec maker -f weekly_highlights.fm &
+#
+#	puts "\n\n*** Must run 2 Framemaker keyboard macros to create weekly_highlights.fm"
+#	puts "\n      control 1 - imports and formats your edited weekly_highlights text file"
+#	puts "\n      control 3 - saves weekly_highlights.fm and prints to printer $State(PRINTER_LIST)"
+#}
+
+#proc acrobat_edit_highlights {} {
+## 20121005: G. Thompson added this procedure to replace maker_highlights
+## as part of effort to migrate from Solaris/Antelope4.11 to MacOSX/Antelope5.2
+#
+#	global State WEEKLYDB weekly_template cupsfilter
+#	#puts "Using this template: $weekly_template\n"
+#	exec /bin/cp $weekly_template weekly_highlights_tmp.html
+#	#puts "Inserting the weekly_highlights file into a copy of the template\n"
+#	exec /bin/bash -c "/usr/bin/sed '/Insert weekly_highlights file/r weekly_highlights' weekly_highlights_tmp.html > weekly_highlights.html"
+#	exec /bin/rm weekly_highlights_tmp.html
+#	#puts "Converting HTML to PDF\n"
+#	catch "exec $cupsfilter -o Resolution=1200dpi weekly_highlights.html > weekly_highlights.pdf"
+#	#puts "Opening PDF\n"
+#	catch "exec /usr/bin/open weekly_highlights.pdf" 
+#	puts "Make any edits to the PDF file with \"Tools->Advanced Editing->Touch Up Text Tool\"\n"
+#	if {[yesno "Have you edited the PDF file? (Y/N)"]} {
+#		puts "Resave the file with \"File->Save\"\n"
+#		if {[yesno "Have you resaved the file?(Y/N)"]} {
+#			puts "Good\n"
+#		} 
+#	}
+#	if {[yesno "Print to ${State(PRINTER_LIST)}?(Y/N)"]} {
+#		exec lp -d $State(PRINTER_LIST) weekly_highlights.pdf 
+#	} 
+#	puts "acrobat_edit_highlights DONE\n"
+#}
+
+proc textedit_highlights {} {
+# 20121005: G. Thompson added this procedure to replace maker_highlights
+# as part of effort to migrate from Solaris/Antelope4.11 to MacOSX/Antelope5.2
+
+	global State WEEKLYDB weekly_template cupsfilter weekly_txt
+	#puts "Using this template: $weekly_template\n"
+	exec /bin/cp $weekly_template weekly_highlights_tmp.html
+	#puts "Inserting the weekly_highlights file into a copy of the template\n"
+	exec /bin/bash -c "/usr/bin/sed '/Insert weekly_highlights file/r weekly_highlights' weekly_highlights_tmp.html > weekly_highlights.html"
+	exec /bin/rm weekly_highlights_tmp.html
+	if  { [file exists $weekly_txt] } {
+		exec /bin/rm $weekly_txt
+	}
+	catch "exec /usr/bin/open -a textedit weekly_highlights.html" 
+	puts "Make any edits to the HTML file with textedit (see Wiki instructions - you have to Overwrite)\n"
+
+	if {[yesno "Have you edited the HTML file? (Y/N)"]} {
+		puts "Resave the HTML file with \"File->Save a Version\"\n"
+		while {! [yesno "Have you resaved the HTML file?(Y/N)"]} {
+			puts "Please do so now.\n"
+		} 
+	}
+
+	while  { ! [file exists $weekly_txt] } {
+		puts "Save the file in ASCII text version also with Format->Make Plain Text, then File->Save a Version.\n"
+		if {[yesno "Have you saved the file to txt format ($weekly_txt)? (Y/N)"]} {
+			if { ! [file exists $weekly_txt] } {
+				if { [file exists "$::env(HOME)/$weekly_txt"] } {
+					puts "$weekly_txt found in your home directory. Moving"
+					exec /bin/mv $::env(HOME)/$weekly_txt $weekly_txt
+				} else {
+					puts "Error: $weekly_txt not found - check the directory where you saved it\n" 
+				}
+			}
+		} 
+	}
+
+	if {[yesno "Print HTML file to ${State(PRINTER_LIST)}?(Y/N)"]} {
+		catch "exec $cupsfilter -o Resolution=1200dpi weekly_highlights.html > weekly_highlights.pdf"
+		exec lp -d $State(PRINTER_LIST) weekly_highlights.pdf 
+	} 
+	puts "textedit_highlights DONE\n"
+}
+
+proc yesno {{message "Press Y or N to continue"}} {
+# 20121005: G. Thompson added this helper procedure
+# there is probably something better than uses a GUI
+    fconfigure stdin -blocking 0
+    exec stty raw
+    read stdin ; # flush
+    puts -nonewline "${message}: "
+    flush stdout
+    while {![eof stdin]} {
+        set c [string tolower [read stdin 1]]
+        if {$c eq "y" || $c eq "n"} break
+    }
+    puts [string toupper $c]
+    exec stty -raw
+    fconfigure stdin -blocking 1
+    return [expr {$c eq "y"}]
+}
+
+#proc maker_listing {} {
+# 20121005: G. Thompson commented this procedure out as it was not being called
+# event in Solaris/Antelope4.11
+#	global State WEEKLYDB weekly_template listing_template macros
+#
+#	exec /bin/cp $macros fmMacros
+#
+#	exec /bin/cp $listing_template weekly_listing.fm
+#	exec maker -f weekly_listing.fm &
+#
+#	puts "\n\n*** Must run 2 Framemaker keyboard macros to create weekly_listing.fm"
+#	puts "\n      control 2 - imports and formats your edited weekly_list text file"
+#	puts "\n      control 3 - saves weekly_listing.fm and prints to printer $State(PRINTER_LIST)"
+#}
+
+#proc view_figs {} {
+# 20121011: G. Thompson: this is obsolete
+#	global State
+#
+# 20121005: G. Thompson replaced calls to ghostview with calls to open
+# as part of effort to migrate from Solaris/Antelope4.11 to MacOSX/Antelope5.2
+#	#exec ghostview weekly_fig1.ps &
+#	#exec ghostview weekly_fig2.ps &
+#	catch "exec /usr/bin/open weekly_fig1.ps &" 
+#	catch "exec /usr/bin/open weekly_fig2.ps &" 
+#}
+
+proc print_figs {} {
+
+	global State
+
+	puts "\nPrinting weekly_fig1.ps weekly_fig2.ps to printer $State(PRINTER_MAPS)\n"
+	exec lp -d $State(PRINTER_MAPS) weekly_fig1.ps
+	exec lp -d $State(PRINTER_MAPS) weekly_fig2.ps
+
+	puts "print_figs DONE\n"
+}
+
+proc run_dbstats {} {
+
+	global State WEEKLYDB 
+
+	puts "\n\nComputing Station Statistics...\n\n"
+	catch "exec dbstats $WEEKLYDB" dbstats_result
+	puts stderr $dbstats_result
+
+	puts "run_dbstats DONE\n"
+}
+
+proc view_dbstats_figs {} {
+	# 20121012 G. Thompson: replaced call to ghostview with call to "open" on MacOSX
+	global State
+
+	set allfiles [exec ls -1 ./]
+	set printfiles [lmatch -regexp $allfiles {sta_ttres..ps}]
+	foreach f $printfiles {
+		#exec ghostview $f &
+		exec /usr/bin/open $f &
+	}
+	set printfiles [lmatch -regexp $allfiles {sta_magres..ps}]
+	foreach f $printfiles {
+		#exec ghostview $f &
+		exec /usr/bin/open $f &
+	}
+
+	puts "view_dbstats_figs DONE\n"
+}
+
+#proc print_dbstats_figs {} {
+# 20121012 G. Thompson: commented this out as added procedures to print time and
+# magnitude residual figure separately, per Natasha's email today
+#
+#	global State
+#
+#	puts "\nPrinting stat_ttres.ps and stat_magres.ps to printer $State(PRINTER_LIST)\n"
+#	
+#	set allfiles [exec ls -1 ./]
+#	set printfiles [lmatch -regexp $allfiles {sta_ttres..ps}]
+#	foreach f $printfiles {
+#	exec lp -d $State(PRINTER_LIST) $f
+#	}
+#	set printfiles [lmatch -regexp $allfiles {sta_magres..ps}]
+#	foreach f $printfiles {
+#	exec lp -d $State(PRINTER_LIST) $f
+#	}
+#
+#	puts "print_dbstats_figs DONE\n"
+#}
+
+proc print_timeresidual_figs {} {
+# 20121012 G. Thompson: added this to print time
+# residual figures separately, per Natasha's email today
+
+	global State
+
+	puts "\nPrinting stat_ttres.ps to printer $State(PRINTER_LIST)\n"
+	
+	set allfiles [exec ls -1 ./]
+	set printfiles [lmatch -regexp $allfiles {sta_ttres..ps}]
+	foreach f $printfiles {
+		exec lp -d $State(PRINTER_LIST) $f
+	}
+
+	puts "print_timeresidual_figs DONE\n"
+}
+
+proc print_magnituderesidual_figs {} {
+
+	global State
+
+	puts "\nPrinting stat_magres.ps to printer $State(PRINTER_LIST)\n"
+	
+	set allfiles [exec ls -1 ./]
+	set printfiles [lmatch -regexp $allfiles {sta_magres..ps}]
+	foreach f $printfiles {
+		exec lp -d $State(PRINTER_LIST) $f
+	}
+
+	puts "print_magnituderesidual_figs DONE\n"
+}
+
+proc update_web {} {
+# 20121005: G. Thompson modified this procedure to use convert rather than alchemy
+# since alchemy is not available on MacOSX
+# Added basewebdir_in and basewebdir_out to eliminate multiple uses of /usr/local/Mosaic/Seis
+# and allow for efficient testing (can make a local pf with basewebdir_out set to a local directory)
+# Changed all references to weekly_highlights.txt to weekly_highlights (there were 3, in this procedure only)
+# since the former is not a file that gets produced (the latter is)
+	global State convert basewebdir_in basewebdir_out weekly_txt
+
+	puts "\n\nUpdating web...\n\n"
+#	exec updateweb & 
+# updateweb is folded in below (N.R.)
+
+#	exec /bin/cp weekly_highlights.html $basewebdir_out/weekly
+	exec /bin/cat $basewebdir_in/weekly/weekly_highlights_header $weekly_txt $basewebdir_in/weekly/weekly_listing_footer > $basewebdir_out/weekly/weekly_highlights.html
+	exec /bin/cat $basewebdir_in/weekly/weekly_listing_header weekly_list $basewebdir_in/weekly/weekly_listing_footer > $basewebdir_out/weekly/weekly_listing.html
+	# 20121005: 2 lines commented out, 1 line added by G. Thompson
+	#catch "exec alchemy weekly_fig1.ps weekly_Alaska_seis_map.gif -g1 -Zo4.0i 2.5i -Zm4 -Zc1 -Z+ -Zr-90 -o" alchemy_result
+	#puts stderr $alchemy_result
+	catch "exec $convert -density 180x180 weekly_fig1.ps weekly_Alaska_seis_map.gif"
+
+	# 20121005: 2 lines commented out, 1 line added by G. Thompson
+	#catch "exec alchemy weekly_fig2.ps weekly_SouthCentral_seis_map.gif -g1 -Zo2.5i 4.0i -Zm4 -Zc1 -Z+ -o" alchemy_result
+	#puts stderr $alchemy_result
+	catch "exec $convert weekly_fig2.ps weekly_SouthCentral_seis_map.gif"
+
+	exec /bin/mv weekly_Alaska_seis_map.gif $basewebdir_out/graphics/weekly_Alaska_seis_map.gif
+	exec /bin/mv weekly_SouthCentral_seis_map.gif $basewebdir_out/graphics/weekly_SouthCentral_seis_map.gif
+
+# send file to archive directory
+
+	set year [string range $State(start) 0 3]
+	set month [string range $State(start) 5 6]
+	set day [string range $State(start) 8 9]
+
+#	exec /bin/cat $basewebdir_in/weekly/weekly_archive_header $weekly_txt $basewebdir_in/weekly/weekly_archive_middle weekly_list $basewebdir_in/weekly/weekly_listing_footer > $basewebdir_out/weekly_archive/${year}_${month}_${day}_weekly.html
+	exec /bin/cat $weekly_txt $basewebdir_in/weekly/weekly_archive_middle weekly_list > $basewebdir_out/weekly_archive/${year}_${month}_${day}_weekly.txt
+
+	# SCAFFOLD
+	# 20121005: G. Thompson noticed the following script does not exist on MacOSX, and it is in a weird place. Ask Natasha/Mitch if it should be moved to repository.
+	# for now just comment it out
+	puts "SCAFFOLD: /usr/local/bin/create_weekly_index.pl not available on MacOSX\n"
+	#exec /usr/local/bin/create_weekly_index.pl
+
+	puts "\nupdate_web DONE"
+
+}
+
+
+proc currentify_tracking_database {} {
+
+	global State
+
+	# Update weeks table
+
+	set State(dbtrack) [dblookup $State(dbtrack) 0 weeks 0 0]
+#	set nrecs [dbquery $State(dbtrack) dbRECORD_COUNT]
+	
+	set tmp_year [string range $State(start) 0 3]
+	set tmp_month [string range $State(start) 5 6]
+	set tmp_day [string range $State(start) 8 9]
+	
+	append week_start $tmp_month / $tmp_day / $tmp_year
+	 
+	set week_start_epoch [str2epoch $week_start]
+	
+	set recno [dbfind $State(dbtrack) 0 0 "time == $week_start_epoch"]
+		
+	dbputv $State(dbtrack) 0 $recno report done
+
+	puts "currentify_tracking_database DONE\n"
+	
+}
+
+
+proc init_windows {} {
+
+	global State WEEKLYDB
+
+	frame .week
+	pack .week -fill x
+
+	MyLblEntry .week.starttime -label "Start Time(YYYY_MM_DD)"\
+                            -textvariable State(start) \
+                            -width 10 
+	MyLblEntry .week.endtime -label "End Time(YYYY_MM_DD)"\
+                            -textvariable State(end) \
+                            -width 10 
+	MyLblEntry .week.minmag -label "Min. Ml"\
+                            -textvariable State(minmag) \
+                            -width 4
+
+	pack .week.starttime -side left -fill x
+	pack .week.endtime -side left -fill x
+	pack .week.minmag -side left -fill x
+
+
+	CommandCheckoff .concat_db -background lightgreen \
+                          -label "Concatenate daily databases" \
+			  -variable concat_db \
+			  -command concat_db
+        pack .concat_db -side top -fill x
+
+#	CommandCheckoff .errorcheck -background grey \
+#                          -label "Run error checking on $WEEKLYDB" \
+#			  -variable errorcheck \
+#			  -command errorcheck
+#        pack .errorcheck -side top -fill x
+
+#	CommandCheckoff .view_errorcheck -background grey \
+#                          -label "View error report for $WEEKLYDB" \
+#			  -variable view_errorcheck \
+#			  -command view_errorcheck
+#        pack .view_errorcheck -side top -fill x
+
+	CommandCheckoff .review_weeklydb -background lightgreen \
+                          -label "Review $WEEKLYDB with dbe" \
+			  -variable review_weeklydb \
+			  -command review_weeklydb
+        pack .review_weeklydb -side top -fill x
+
+	CommandCheckoff .db2weekly -background pink \
+                          -label "Generate maps, highlights and event listing" \
+			  -variable run_db2weekly \
+			  -command run_db2weekly
+        pack .db2weekly -side top -fill x
+
+#	CommandCheckoff .edit_highlights -background tan \
+#                          -label "Edit weekly earthquake highlights" \
+#			  -variable edit_highlights \
+#			  -command edit_highlights
+#        pack .edit_highlights -side top -fill x
+
+# 20121005 G.Thompson: Eliminating Framemaker
+#	CommandCheckoff .maker_highlights -background pink \
+#                          -label "Open Framemaker to edit weekly highlights" \
+#			  -variable maker_highlights \
+#			  -command maker_highlights
+#       pack .maker_highlights -side top -fill x
+
+# 20121011 G.Thompson: My first attempt at replacing Framemaker was to produce
+# a PDF file with the cupsfilter, get the user to edit it with Acrobat, then
+# resave to html. But edits make with Touchup Text Tool don't seem to get exported.
+# So I've abandoned this approach.        
+#    	CommandCheckoff .acrobat_edit_highlights -background pink \
+#                          -label "Open Adobe Acrobat to edit weekly highlights" \
+#			  -variable acrobat_edit_highlights \
+#			  -command acrobat_edit_highlights
+#        pack .acrobat_edit_highlights -side top -fill x
+
+# 20121011 G.Thompson: My second attempt at replacing Framemaker uses textedit. I was
+# previously unaware of its ability to render HTML.
+    	CommandCheckoff .textedit_highlights -background pink \
+                          -label "Edit weekly earthquake highlights" \
+			  -variable textedit_highlights \
+			  -command textedit_highlights
+        pack .textedit_highlights -side top -fill x
+
+#	CommandCheckoff .edit_list -background tan \
+#                          -label "Edit weekly earthquake listing" \
+#			  -variable edit_list \
+#			  -command edit_list
+#        pack .edit_list -side top -fill x
+
+#	CommandCheckoff .maker_listing -background pink \
+#                          -label "Run Framemaker to format weekly listing" \
+#			  -variable maker_listing \
+#			  -command maker_listing
+#        pack .maker_listing -side top -fill x
+
+#	CommandCheckoff .view_figs -background white \
+#                          -label "View seismicity maps" \
+#			  -variable view_figs \
+#			  -command view_figs
+#        pack .view_figs -side top -fill x
+
+	CommandCheckoff .print_figs -background white \
+                          -label "Print seismicity maps on $State(PRINTER_MAPS)" \
+			  -variable print_figs \
+			  -command print_figs
+        pack .print_figs -side top -fill x
+
+	CommandCheckoff .update_web -background "pale turquoise" \
+                          -label "Update AEIC weekly report website" \
+                          -variable update_web \
+                          -command update_web
+        pack .update_web -side top -fill x
+
+
+	CommandCheckoff .currentify_tracking_database -background "pale turquoise" \
+                          -label "Update AEIC tracking database" \
+                          -variable currentify_tracking_database \
+                          -command currentify_tracking_database
+        pack .currentify_tracking_database -side top -fill x
+
+	CommandCheckoff .run_dbstats -background orange \
+                          -label "Compute station statistics" \
+			  -variable run_dbstats \
+			  -command run_dbstats
+        pack .run_dbstats -side top -fill x
+
+	CommandCheckoff .view_dbstats_figs -background orange \
+                          -label "View station statistics figures" \
+			  -variable view_dbstats_figs \
+			  -command view_dbstats_figs
+        pack .view_dbstats_figs -side top -fill x
+
+	# 20121012 G. Thompson: broke print_dbstats_figs into print_timeresidual_figs and
+	# print_magnituderesidual_figs per Natasha's email today
+	#CommandCheckoff .print_dbstats_figs -background orange \
+        #                  -label "Print station statistics figures on $State(PRINTER_LIST)" \
+	#		  -variable print_dbstats_figs \
+	#		  -command print_dbstats_figs
+        #pack .print_dbstats_figs -side top -fill x
+
+	CommandCheckoff .print_timeresidual_figs -background orange \
+                          -label "Print time residual figures on $State(PRINTER_LIST)" \
+			  -variable print_timeresidual_figs \
+			  -command print_timeresidual_figs
+        pack .print_timeresidual_figs -side top -fill x
+
+	CommandCheckoff .print_magnituderesidual_figs -background orange \
+                          -label "Print magnitude residual figures on $State(PRINTER_LIST)" \
+			  -variable print_magnituderesidual_figs \
+			  -command print_magnituderesidual_figs
+        pack .print_magnituderesidual_figs -side top -fill x
+
+	button .quit -bg red -fg yellow -text Quit -command "destroy ."
+        pack .quit -side top -fill x
+}
+
+
+
+
+
+init_globals
+
+init_windows
+

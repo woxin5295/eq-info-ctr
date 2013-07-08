@@ -1,0 +1,1092 @@
+: # use perl
+eval 'exec $ANTELOPE/bin/perl -S $0 "$@"'
+if 0;
+
+use lib "$ENV{ANTELOPE}/data/perl" ;
+# aeic_respond
+#
+# Driver script for information releases at AEIC
+#
+# K. Lindquist
+# Geophysical Institute
+# University of Alaska, Fairbanks
+# June 1998
+
+use Datascope;
+
+require "getopts.pl";
+require "winding.pl";
+
+$Pf = "aeic_release.pf";
+
+sub choose_database_row {
+	my( $dbin_name ) = @_;
+	my( @tables );
+
+	if( $dbin_name eq "-" ) {
+
+		@db = dbopen_table( $dbin_name, "r" );
+
+		$Dbname = dbquery( @db, "dbDATABASE_NAME" );
+
+		@tables = dbquery( @db, "dbVIEW_TABLES" );
+
+		if( grep( /event/, @tables ) && grep( /origin/, @tables ) ) {
+			
+			@db = dbsubset( @db, "origin.orid == prefor" );
+
+			@db = choose_unique_origin_row( @db );
+
+		} elsif( grep( /event/, @tables ) ) {
+
+			@dborigin = dblookup( @db, "", "origin", "", "" );
+
+			@db = dbjoin( @db, @dborigin );
+
+			@db = dbsubset( @db, "origin.orid == prefor" );
+
+			@db = choose_unique_origin_row( @db );
+
+		} elsif( grep( /origin/, @tables ) ) {
+
+			@db = choose_unique_origin_row( @db );
+
+		} else {
+			MyDie( "No origin information passed to $Prog_name" );
+		}
+		
+	} elsif( $Orid ) {
+
+		$Dbname = `abspath $dbin_name`;
+		chop( $Dbname );
+
+		@db = dbopen( $Dbname, "r" );
+		@db = dblookup( @db, "", "origin", "", "" );
+
+		$yes = dbquery( @db, "dbTABLE_PRESENT" );
+		if( ! $yes ) {
+			MyDie( "Origin table not present in $dbin_name" );
+		}
+
+		@db = dbsubset( @db, "orid == $Orid" );
+		$nrecs = dbquery( @db, "dbRECORD_COUNT" );
+
+		if( $nrecs != 1 ) {
+			MyDie( "Couldn't find orid $Orid in $dbin_name" );
+		}
+
+		$db[3] = 0;
+
+	} elsif( $Evid ) {
+
+		$Dbname = `abspath $dbin_name`;
+		chop( $Dbname );
+
+		@db = dbopen( $Dbname, "r" );
+		@dbevent = dblookup( @db, "", "event", "", "" );
+		
+		$yes = dbquery( @dbevent, "dbTABLE_PRESENT" );
+		if( ! $yes ) {
+			MyDie( "Event table not present in $dbin_name" );
+		}
+
+		@dbscratch = dblookup( @dbevent, "", "event", "", "dbSCRATCH" );
+		dbputv( @dbscratch, "evid", $Evid );
+
+		@records = dbmatches( @dbscratch, @dbevent, "myhook", "evid" );
+
+		if( $records[0] < 0 ) {
+			MyDie( "Couldn't find evid $Evid in $dbin_name" );
+		} else {
+			$expr = "evid == $Evid";
+			@dbevent = dbsubset( @dbevent, $expr );
+		}
+
+		@dborigin = dblookup( @db, "", "origin", "", "dbALL" );
+
+		@db = dbjoin( @dbevent, @dborigin );
+
+		@db = dbsubset( @db, "origin.orid == prefor" );
+
+		@db = choose_unique_origin_row( @db );
+
+	} else {
+
+		$Dbname = `abspath $dbin_name`;
+		chop( $Dbname );
+
+		@db = dbopen( $Dbname, "r" );
+		@db = dblookup( @db, "", "event", "", "" );
+	
+		$nevents = dbquery( @db, "dbRECORD_COUNT" );
+	
+		if( $nevents == 0 ) {
+	
+			@db = dblookup( @db, "", "origin", "", "" );
+	
+			@db = choose_unique_origin_row( @db );
+
+		} elsif( $nevents > 1 ) {
+	
+			MyDie( "Multiple events in $Dbname" );
+	
+		} else {
+	
+			@dbtemp = dblookup( @db, "", "origin", "", "" );
+			@db = dbjoin( @db, @dbtemp );
+			@db = dbsubset( @db, "origin.orid == prefor" );
+
+			@db = choose_unique_origin_row( @db );
+		}
+	}
+
+	return @db;
+}
+
+sub choose_unique_origin_row {
+	my( @db ) = @_;
+
+	$norigins = dbquery( @db, "dbRECORD_COUNT" );
+
+	if( $norigins <= 0 ) {
+
+		MyDie( "origin row selection failed for $Dbname" );
+
+	} elsif( $norigins == 1 ) {
+
+		$db[3] = 0;
+
+	} else {
+
+		$db[3] = 0;
+		my( $unique_orid ) = dbgetv( @db, "origin.orid" );
+
+		for( $db[3] = 1; $db[3] < $norigins; $db[3]++ ) {
+
+			if( dbgetv( @db, "origin.orid" ) != $unique_orid ) {
+				MyDie( "multiple origins in $Dbname view" );
+			}
+		}
+
+		$db[3] = 0;
+	}
+
+	return @db;
+}
+
+sub save_subset_database {
+	my( @dborigin ) = @_;
+
+	@dbass = dblookup( @dborigin, "", "assoc", "", "" );
+	@dbarr = dblookup( @dborigin, "", "arrival", "", "" );
+	@dborigerr = dblookup( @dborigin, "", "origerr", "", "" );
+	@dbevent = dblookup( @dborigin, "", "event", "", "" );
+	@dbnetmag = dblookup( @dborigin, "", "netmag", "", "" );
+
+	@db = dbjoin( @dborigin, @dbevent );
+
+	my( $nrecs ) = dbquery( @db, "dbRECORD_COUNT" );
+	if( $nrecs <= 0 ) {
+		dbunjoin( @dborigin, $subset_database );
+		return;
+	}
+
+	@db = dbjoin( @db, @dborigerr );
+
+	my( $nrecs ) = dbquery( @db, "dbRECORD_COUNT" );
+	if( $nrecs <= 0 ) {
+		dbunjoin( @dborigin, $subset_database );
+		return;
+	}
+
+	@db = dbjoin( @db, @dbnetmag );
+
+	my( $nrecs ) = dbquery( @db, "dbRECORD_COUNT" );
+	if( $nrecs <= 0 ) {
+		dbunjoin( @dborigin, $subset_database );
+		return;
+	}
+
+	@db = dbjoin( @db, @dbass );
+
+	my( $nrecs ) = dbquery( @db, "dbRECORD_COUNT" );
+	if( $nrecs <= 0 ) {
+		dbunjoin( @dborigin, $subset_database );
+		return;
+	}
+
+	@db = dbjoin( @db, @dbarr );
+
+	$nrecs = dbquery( @db, "dbRECORD_COUNT" );
+	if( $nrecs > 0 ) {
+		dbunjoin( @db, $subset_database );
+	} else {
+		dbunjoin( @dborigin, $subset_database );
+	}
+}
+
+sub epoch_to_yyyymmddhhmmss {
+	local( $epoch ) = @_;
+
+	$result = epoch2str( $epoch, "%Y%m%d%H%M%S" );
+	return $result;
+}
+
+sub establish_correct_cwd {
+	local( $event_time ) = @_;
+
+	$base_release_dir =~ s@HOME@$ENV{'HOME'}@;
+
+	if( -e $base_release_dir && ! -d $base_release_dir ) {
+
+		$message = "Intended target directory $base_release_dir ";
+		$message .= "but is not a directory";
+		MyDie( $message );
+
+	} elsif( ! -e $base_release_dir ) {
+
+		mkdir( $base_release_dir, 0755 );
+		if( ! -e $base_release_dir ) {
+			MyDie( "Failed to make $base_release_dir" ); 
+		}
+		chdir( $base_release_dir );
+
+	} elsif( ! -W $base_release_dir ) {
+
+		MyDie( "Directory $base_release_dir is not writable" );
+
+	} else {
+
+		chdir( $base_release_dir );
+	}
+
+	$event_timestr = epoch_to_yyyymmddhhmmss( $event_time );
+	$! = 0;
+	chdir( $event_timestr );
+	if( $! ) {
+		MyDie( "Failed change directory to $base_release_dir/$event_timestr: $!" ); 
+	}
+#	chdir( $event_timestr );
+
+	$release_dir = "$base_release_dir/$event_timestr";
+	$htmlrelease_dir = "$base_release_dir/$event_timestr/html";
+	mkdir( "$htmlrelease_dir", 0755 );
+	if( $! ) {
+		MyDie( "Failed to make $htmlrelease_dir: $!" ); 
+	}
+}
+
+sub choose_magnitude {
+	local( @db ) = @_;
+
+	( $ml, $mb, $ms ) = dbgetv( @db, "ml", "mb", "ms" );
+
+	if(  $ms != -999.00 ) {
+
+		return $ms, "Ms (NEIC)";
+
+	} elsif( $mb != -999.00 ) {
+
+		return $mb, "mb (NEIC)";
+
+	} elsif( $ml != -999.00 ) {
+
+		return $ml, "ML";
+
+	} else {
+		MyDie( "$Prog_name: no magnitude available" );
+	}
+}
+
+sub local_time {
+	local( $mytime ) = @_;
+
+	$result = epoch2str( $mytime, "%I:%M %p %Z", $ENV{'TZ'} );
+	$result =~ s/^0//;
+	$result =~ s/\s*$//;
+
+	return $result;
+}
+
+sub describe_strength {
+	local( $mymag ) = @_;
+
+	if ( $mymag >= 3.0 && $mymag < 4.0 ) {
+
+		return "a minor earthquake";
+
+	} elsif ( $mymag >= 4.0 && $mymag < 5.0 ) {
+
+		return "a light earthquake";
+
+	} elsif ( $mymag >= 5.0 && $mymag < 6.0 ) {
+
+		return "a moderate earthquake";
+
+	} elsif ( $mymag >= 6.0 && $mymag < 7.0 ) {
+
+		return "a strong earthquake";
+
+	} elsif ( $mymag >= 7.0 && $mymag < 8.0 ) {
+
+		return "a major earthquake";
+
+	} elsif ( $mymag >= 8.0 ) {
+
+		return "a great earthquake";
+
+	} else {
+		
+		return "an earthquake";
+	}
+}
+
+sub compass_from_azimuth {
+	local( $azimuth ) = @_;
+
+	while( $azimuth < 0. ) { $azimuth += 360.; };
+	while( $azimuth > 360. ) { $azimuth -= 360.; };
+
+	if( $azimuth >= 348.75 || $azimuth < 11.25 ) {
+
+		return "N";		# 0.00
+
+	} elsif( $azimuth >= 11.25 && $azimuth < 33.75 ) {
+
+		return "NNE";		# 22.50
+
+	} elsif( $azimuth >= 33.75 && $azimuth < 56.25 ) {
+
+		return "NE";		# 45.00	
+
+	} elsif( $azimuth >= 56.25 && $azimuth < 78.75 ) {
+
+		return "ENE";		# 67.50	
+
+	} elsif( $azimuth >= 78.75 && $azimuth < 101.25 ) {
+
+		return "E";		# 90.00	
+
+	} elsif( $azimuth >= 101.25 && $azimuth < 123.75 ) {
+
+		return "ESE";		# 112.50	
+
+	} elsif( $azimuth >= 123.75 && $azimuth < 146.25 ) {
+
+		return "SE";		# 135.00	
+
+	} elsif( $azimuth >= 146.25 && $azimuth < 168.75 ) {
+
+		return "SSE";		# 157.50	
+
+	} elsif( $azimuth >= 168.75 && $azimuth < 191.25 ) {
+
+		return "S";		# 180.00	
+
+	} elsif( $azimuth >= 191.25 && $azimuth < 213.75 ) {
+
+		return "SSW";		# 202.50	
+
+	} elsif( $azimuth >= 213.75 && $azimuth < 236.25 ) {
+
+		return "SW";		# 225.00 	
+
+	} elsif( $azimuth >= 236.25 && $azimuth < 258.75 ) {
+
+		return "WSW";		# 247.50	
+
+	} elsif( $azimuth >= 258.75 && $azimuth < 281.25 ) {
+
+		return "W";		# 270.00	
+
+	} elsif( $azimuth >= 281.25 && $azimuth < 303.75 ) {
+
+		return "WNW";		# 292.50	
+
+	} elsif( $azimuth >= 303.75 && $azimuth < 326.25 ) {
+
+		return "NW";		# 315.00	
+
+	} elsif( $azimuth >= 326.25 && $azimuth < 348.75 ) {
+
+		return "NNW";		# 337.50	
+	} 
+
+	MyDie( "Faulty logic in compass_from_azimuth subroutine" );
+}
+
+sub set_distances {
+
+	local( $lat, $lon, $n ) = @_;
+
+	@dbp = dbopen( $place_database, "r" );
+	@dbp = dblookup( @dbp, "", "places", "", "" );
+	@dbp = dbsort( @dbp, "distance(lat,lon,$lat,$lon)" );
+
+	$nrecs = dbquery( @dbp, "dbRECORD_COUNT" );
+
+	$nrows = $nrecs > $n ? $n : $nrecs;
+
+	for( $dbp[3] = 0; $dbp[3] < $nrows; $dbp[3]++ ) { 
+
+		$place = dbgetv( @dbp, "place" );
+
+		$dist_deg = dbex_eval( @dbp, "distance(lat,lon,$lat,$lon)" );
+		$dist_km = $dist_deg * 111.195;
+		$dist_mi = $dist_km / 1.6;
+
+		$azimuth = dbex_eval( @dbp, "azimuth(lat,lon,$lat,$lon)" );
+
+		$compass = &compass_from_azimuth( $azimuth );
+
+		$distances .= sprintf( "  %4.0f km (%4.0f miles) %3s of %s\n",
+					$dist_km, $dist_mi, $compass, $place );
+	}
+
+	dbclose( @dbp );
+	return $distances;
+}
+
+sub set_distances_html {
+
+	local( $lat, $lon, $n ) = @_;
+
+	@dbp = dbopen( $place_database, "r" );
+	@dbp = dblookup( @dbp, "", "places", "", "" );
+	@dbp = dbsort( @dbp, "distance(lat,lon,$lat,$lon)" );
+
+	$nrecs = dbquery( @dbp, "dbRECORD_COUNT" );
+
+	$nrows = $nrecs > $n ? $n : $nrecs;
+
+	for( $dbp[3] = 0; $dbp[3] < $nrows; $dbp[3]++ ) { 
+
+		$place = dbgetv( @dbp, "place" );
+
+		$dist_deg = dbex_eval( @dbp, "distance(lat,lon,$lat,$lon)" );
+		$dist_km = $dist_deg * 111.195;
+		$dist_mi = $dist_km / 1.6;
+
+		$azimuth = dbex_eval( @dbp, "azimuth(lat,lon,$lat,$lon)" );
+
+		$compass = &compass_from_azimuth( $azimuth );
+
+		$distances_html .= sprintf( "<p class=\"p9\"><span class=\"Apple-converted-space\">    </span>%4.0f km (<span class=\"Apple-converted-space\">  </span>%4.0f miles) <span class=\"Apple-converted-space\">  </span>%3s of %s</p>\n",
+					$dist_km, $dist_mi, $compass, $place );
+	}
+	# blank line
+	$distances_html .= sprintf( "<p class=\"p9\"><span class=\"Apple-converted-space\"> </span></p>\n");
+
+	dbclose( @dbp );
+	return $distances_html;
+}
+
+sub nearest_big_city {
+
+	local( $lat, $lon ) = @_;
+
+	@dbp = dbopen( $common_place_database, "r" );
+	@dbp = dblookup( @dbp, "", "places", "", "" );
+	@dbp = dbsort( @dbp, "distance(lat,lon,$lat,$lon)" );
+
+	$nrecs = dbquery( @dbp, "dbRECORD_COUNT" );
+
+	$dbp[3] = 0;
+
+	$place = dbgetv( @dbp, "place" );
+
+	$dist_deg = dbex_eval( @dbp, "distance(lat,lon,$lat,$lon)" );
+	$dist_km = $dist_deg * 111.195;
+	$dist_mi = $dist_km / 1.6;
+
+	$azimuth = dbex_eval( @dbp, "azimuth(lat,lon,$lat,$lon)" );
+
+	$compass = &compass_from_azimuth( $azimuth );
+
+	my( $nearest_city ) = sprintf( "%4.0f miles %3s of %s",
+				$dist_mi, $compass, $place );				
+
+	$nearest_city =~ s/^\s+//;
+
+	dbclose( @dbp );
+
+	return $nearest_city;
+}
+
+sub MyDie {
+	my( $msg ) = @_;
+
+	$msg = "$Prog_name: $msg. Bye!";
+
+	if( $Graphic_death ) {
+		$cmd = $Helpers{"tkshow_message"};
+		$cmd .= " $msg";
+		system( $cmd );
+		exit( 1 );
+	} else {
+		$msg .= "\n";
+		die( $msg );
+	}
+}
+
+sub set_vital_statistics {
+
+	local( @db ) = @_;
+
+	($lat, $lon, $depth_km, 
+	$origin_time, $orid) = dbgetv( @db, "lat",
+				"lon", "depth", "time", "orid" );
+	
+	if( $depth_km < 0 ) { $depth_km = 0.; }
+
+	$min = $lat;
+	$min =~ s/\d+\./0./;
+	$min *= 60 * ( $lat > 0 ? 1. : -1. );
+	$lat_string =  sprintf( "%02d %s %02d\'",
+			$lat * ( $lat > 0 ? 1. : -1. ),
+			$lat > 0 ? 'N' : 'S',
+			$min + 0.5 );
+
+	$min = $lon;
+	$min =~ s/\d+\./0./;
+	$min *= 60 * ( $lon > 0 ? 1. : -1. );
+	$lon_string =  sprintf( "%02d %s %02d\'",
+			$lon * ( $lon > 0 ? 1. : -1. ),
+			$lon > 0 ? 'E' : 'W',
+			$min + 0.5 );
+
+	$local_time = &local_time( $origin_time );
+
+	$depth_mi = $depth_km / 1.6;
+
+	$depth_km = sprintf( "%1.0f", $depth_km );
+	$depth_mi = sprintf( "%1.0f", $depth_mi );
+
+	( $mag, $magtype ) = &choose_magnitude( @db );
+
+	$mag = sprintf( "%3.1f", $mag );
+
+	$gregion = dbex_eval( @db, "grname(lat,lon)" );
+
+}
+
+sub describe_when {
+
+	$when = epoch2str( $origin_time, "%m/%d/%Y %H:%M" );
+	$when_HMS = epoch2str( $origin_time, "%m/%d/%Y %H:%M:%S" );
+}
+
+sub find_day_name {
+	
+	$day_name = epoch2str( $origin_time, "%A, %B %o", $ENV{'TZ'} );
+
+	return $day_name;
+}
+
+sub describe_where {
+
+	@dbregions = dbopen( $region_phrases_database, 'r' ); 
+	@dbregions = dblookup( @dbregions, "", "regions", "", "" );
+	@regions = get_containing_regions( @dbregions, $lat, $lon );
+
+	if( ! defined( $where = shift( @regions ) ) ) {
+
+		$where = "(" . grname( $lat, $lon ) . ")";
+	}
+}
+
+sub describe_felt_info {
+
+	print "\n$Prog_name:\tLaunching felt_report_tool...\n\n";
+
+	$cmd = "$Helpers{'felt_report_tool'} $subset_database ";
+
+	$felt =`$cmd`;
+
+	if( $felt eq "" ) {
+		MyDie( "Abandoning response to earthquake at user request" );
+	}
+
+	$felt = `echo "$felt" | tr '\012' ' ' | fmt -w 60`;
+	$felt =~ s/\s+$//;
+	if( $felt !~ /\.$/ ) { $felt .= "."; }
+	$felt .= "\n\n";
+}
+
+sub summarize_earthquake {
+
+	$strength = &describe_strength( $mag );
+
+	$day_name = &find_day_name();
+
+	$description = <<"	EODESCRIPTION";
+	The Alaska Earthquake Information Center located $strength
+	that occurred on $day_name at $local_time $where. This earthquake had a
+	preliminary magnitude of $mag and was located at a depth
+	of about $depth_mi miles ($depth_km km). The magnitude and location may
+	change slightly as additional data are received and processed.
+	
+	EODESCRIPTION
+	
+	$description =~ s/^\t//;
+	$description =~ s/\n\t/\n/g;
+
+	$description = `echo "$description" | fmt -w 60`;
+	chop( $description );
+}
+
+sub write_voicemail_message {
+
+	my( $strength ) = &describe_strength( $mag );
+
+	my( $day ) = epoch2str( $origin_time, "%A, %B %e, %Y", $ENV{'TZ'} );
+
+	my( $nearest_city ) = &nearest_big_city( $lat, $lon );
+
+	$myfelt = $felt;
+	$myfelt =~ s/\s+$//;
+
+	$voicemail_message = <<"	EOVOICEMAIL";
+	The Alaska Earthquake Information Center located $strength
+	that occurred on $day at $local_time. The epicenter was $nearest_city,
+	$where. This earthquake had a preliminary magnitude of $mag and was
+	located at a depth of about $depth_mi miles. $myfelt For more
+	information, please call during regular business hours, or visit 
+	our web site at www.aeic.alaska.edu. If you wish, leave your name,
+	phone number, and message at the tone. Thank you.
+	
+	EOVOICEMAIL
+	
+	$voicemail_message =~ s/^\t//;
+	$voicemail_message =~ s/\n\t/\n/g;
+
+	$voicemail_message = `echo "$voicemail_message" | fmt -w 60`;
+	chop( $voicemail_message );
+
+	open( M, ">$voicemail_file" );
+
+	print M $voicemail_message;
+
+	close( M );
+}
+
+sub describe_nearest {
+
+	$distances = &set_distances( $lat, $lon, $num_nearest );
+	$distances_html = &set_distances_html( $lat, $lon, $num_nearest );
+}
+
+sub describe_vitals {
+
+	$vitals = <<"	EOVITALS";
+  Origin Time (UT):  $when_HMS
+  Latitude:          $lat_string
+  Longitude:         $lon_string
+  Depth:             $depth_km km
+  Magnitude:         $magtype $mag
+	EOVITALS
+
+	$vitals_html = <<"	EOVITALS";
+<p class="p11"><span class="Apple-converted-space">  </span>Origin Time (UT):<span class="Apple-converted-space">  </span>$when_HMS</p>
+<p class="p11"><span class="Apple-converted-space">  </span>Latitude:<span class="Apple-converted-space">          </span>$lat_string</p>
+<p class="p11"><span class="Apple-converted-space">  </span>Longitude: <span class="Apple-converted-space">        </span>$lon_string</p>
+<p class="p11"><span class="Apple-converted-space">  </span>Depth: <span class="Apple-converted-space">            </span>$depth_km km</p>
+<p class="p11"><span class="Apple-converted-space">  </span>Magnitude: <span class="Apple-converted-space">        </span>$magtype $mag</p>
+	EOVITALS
+	
+	$vitals =~ s/^\t//;
+	$vitals =~ s/\n\t/\n/g;
+
+}
+
+sub make_message_trailer {
+
+	$trailer = <<"	EOTRAILER";
+	If you felt this earthquake, you may file your report here:
+	URL: http://earthquake.usgs.gov/earthquakes/dyfi/
+
+	The Alaska Earthquake Information Center (AEIC) monitors
+	earthquakes in Alaska and provides earthquake information
+	to the citizens and public officials of Alaska.  The Center
+	is a cooperative program of the Geophysical Institute of
+	the University of Alaska and the U.S. Geological Survey and
+	is located at the Geophysical Institute in Fairbanks with
+	the Alaska State Seismologist's Office.
+	
+	Additional information may be obtained from:
+	AEIC, Geophysical Institute, Fairbanks, AK, 99775-7320
+	Phone: (907) 474-7320        Fax: (907) 474-5618
+	Email: roger\@giseis.alaska.edu or natasha\@giseis.alaska.edu
+	URL: http://www.aeic.alaska.edu 
+	Map: http://www.aeic.alaska.edu/Seis/recenteqs_sub/
+	 
+	NEIC, Denver, CO, 80225
+	Phone: (303) 273-8500 FAX: (303) 273-8450
+	URL: http://neic.usgs.gov or http://earthquake.usgs.gov/recenteqs/
+	EOTRAILER
+	
+	$trailer =~ s/^\t//;
+	$trailer =~ s/\n\t/\n/g;
+}
+
+sub set_mail_subject {
+
+	$subject =
+	  "Subject: AEIC EQ RELEASE: $when UT, $mag $magtype $gregion\n\n";
+}
+
+sub write_email_file {
+
+	open( M,">$email_file" );
+
+	print M $subject;
+	print M $description;
+	print M $felt;
+        print M " Distance to nearby locations:\n";
+	print M $distances;
+        print M "\n\n Preliminary earthquake parameters:\n";
+	print M $vitals;
+	print M $trailer;
+	
+	close( M );
+}
+
+sub create_html_page {
+
+	open( W, ">$htmlrelease_dir/$InRelMainFile" );
+	print W "<!DOCTYPE html PUBLIC \"-//W3C//DTD HTML 4.01//EN\" \"http://www.w3.org/TR/html4/strict.dtd\">\n";
+	print W "<html>\n";
+	print W "<head>\n";
+	print W "  <meta http-equiv=\"Content-Type\" content=\"text/html\"; charset=\"utf-8\">\n";
+	print W "  <meta http-equiv=\"Content-Style-Type\" content=\"text/css\">\n";
+	print W "  <title></title>\n";
+	print W "  <meta name=\"Generator\" content=\"Cocoa HTML Writer\">\n";
+	print W "  <meta name=\"CocoaVersion\" content=\"1038.36\">\n";
+	print W "  <style type=\"text/css\">\n";
+	print W "    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Times; min-height: 14.0px}\n";
+	print W "    p.p2 {margin: 0.0px 0.0px 5.0px 0.0px; text-align: center; font: 4.0px Times; min-height: 5.0px}\n";
+	print W "    p.p3 {margin: 0.0px 0.0px 5.0px 0.0px; text-align: center; font: 14.0px Times}\n";
+	print W "    p.p4 {margin: 0.0px 0.0px 5.0px 0.0px; text-align: center; font: 14.0px Times}\n";
+	print W "    p.p5 {margin: 0.0px 0.0px 5.0px 0.0px; font: 8.0px Times; min-height: 10.0px}\n";
+	print W "    p.p6 {margin: 0.0px 0.0px 0.0px 0.0px; font: 11.0px Times; min-height: 13.0px}\n";
+	print W "    p.p7 {margin: 0.0px 0.0px 5.0px 0.0px; text-align: justify; font: 11.0px Times}\n";
+	print W "    p.p9 {margin: 0.0px 0.0px 0.0px 0.0px; font: 8.0px Courier}\n";
+	print W "    p.p10 {margin: 0.0px 0.0px 0.0px 0.0px; font: 8.0px Courier; min-height: 10.0px}\n";
+	print W "    p.p11 {margin: 0.0px 0.0px 0.0px 0.0px; font: 9.0px Courier}\n";
+	print W "    p.p12 {margin: 0.0px 0.0px 6.0px 0.0px; font: 10.0px Times; min-height: 13.0px}\n";
+	print W "    p.p13 {margin: 0.0px 14.0px 14.0px 0.0px; text-align: justify; font: 10.0px Times}\n";
+	print W "    p.p14 {margin: 0.0px 0.0px 0.0px 0.0px; font: 10.0px Times; min-height: 13.0px}\n";
+	print W "    p.p15 {margin: 0.0px 0.0px 0.0px 0.0px; font: 8.0px Courier}\n";
+	print W "    p.p17 {margin: 0.0px 0.0px 0.0px 0.0px; text-align: justify; font: 7.0px Courier}\n";
+	print W "    p.p18 {margin: 0.0px 0.0px 0.0px 0.0px; text-align: justify; font: 6.0px Courier; min-height: 10.0px}\n";
+	print W "    p.p19 {margin: 0.0px 0.0px 0.0px 0.0px; text-align: center; font: 7.0px Courier}\n";
+	print W "    p.p20 {margin: 0.0px 0.0px 0.0px 0.0px; font: 7.0px Courier}\n";
+	print W "    span.s1 {font: 7.0px Courier}\n";
+	print W "    table.t1 {width: 565.0px }\n";
+	print W "    td.td1 {width: 76.0px; padding: 1.0px 1.0px 1.0px 1.0px}\n";
+	print W "    td.td2 {width: 402.0px; padding: 1.0px 1.0px 1.0px 1.0px}\n";
+	print W "    td.td3 {width: 81.0px; padding: 1.0px 1.0px 1.0px 1.0px}\n";
+	print W "    td.td4 {width: 563.0px; padding: 1.0px 1.0px 1.0px 1.0px}\n";
+	print W "    td.td5 {width: 256.0px; padding: 1.0px 1.0px 1.0px 1.0px}\n";
+	print W "    td.td6 {width: 305.0px; padding: 1.0px 1.0px 1.0px 1.0px}\n";
+	print W "    td.td7 {width: 563.0px; padding: 1.0px 1.0px 1.0px 1.0px}\n";
+	print W "  </style>\n";
+	print W "</head>\n";
+	print W "<body>\n";
+
+	print W "<table width=\"565.0\" cellspacing=\"0\" cellpadding=\"0\" class=\"t1\">\n";
+	print W "  <tbody>\n";
+	print W "    <tr>\n";
+	print W "      <td valign=\"middle\" class=\"td1\">\n";
+	print W "        <p class=\"p1\"><br><img src=\"$InRelUsgsLogoTIFF\"></p>\n";
+	print W "      </td>\n";
+	print W "      <td valign=\"middle\" class=\"td2\">\n";
+	print W "        <p class=\"p2\"><br></p>\n";
+	print W "        <p class=\"p3\"><b>ALASKA EARTHQUAKE</b></p>\n";
+	print W "        <p class=\"p3\"><b>INFORMATION CENTER RELEASE</b></p>\n";
+        $t_time = time() ;
+        ($sec_time, $min_time, $hour_time, $mday_time, $mon_time, $year_time, $wday_time, $yday_time, $isdst_time) = localtime($t_time) ;
+        if($sec_hour > 12) {
+                $sec_hour = $sec_hour - 12;
+                $ampm = "pm";
+        } else
+          {
+                $ampm = "am";
+        }
+        $title_date = sprintf("        <p class=\"p4\">%2d/%02d/%04d %2d:%02d %s</p>\n", $mon_time+1, $mday_time, $year_time+1900, $hour_time, $min_time, $ampm );
+        print W $title_date;
+	print W "        <p class=\"p5\"><br></p>\n";
+	print W "      </td>\n";
+	print W "      <td valign=\"middle\" class=\"td3\">\n";
+	print W "        <p class=\"p6\"><br><img src=\"$InRelGiLogoTIFF\"></p>\n";
+	print W "      </td>\n";
+	print W "    </tr>\n";
+	print W "  </tbody>\n";
+	print W "</table>\n";
+	print W "<table width=\"565.0\" cellspacing=\"0\" cellpadding=\"0\" class=\"t1\">\n";
+	print W "  <tbody>\n";
+	print W "    <tr>\n";
+	print W "      <td colspan=\"2\" valign=\"middle\" class=\"td4\">\n";
+	print W "      <p class=\"p7\">\n";
+	$description =~ tr/\n/ /;
+	$felt =~ tr/\n/ /;
+	print W $description;
+	print W $felt;
+	print W "      </p></td>\n";
+	print W "     </tr>\n";
+	print W "    <tr>\n";
+	print W "      <td valign=\"middle\" class=\"td5\">\n";
+	print W "        <h2 style=\"margin: 0.0px 0.0px 11.0px 0.0px; font: 12.0px Times\"><b>Distance to nearby locations:</b></h2>\n";
+	print W $distances_html;
+	print W "        <h2 style=\"margin: 0.0px 0.0px 11.0px 0.0px; font: 12.0px Times\"><b>Preliminary earthquake parameters:</b></h2>\n";
+	print W $vitals_html;
+	print W "        <p class=\"p12\"><br></p>\n";
+	print W "        <p class=\"p13\">The location and magnitude for this earthquake may be updated as data from additional seismic stations are received. The Alaska Earthquake Information Center will continue to gather data and may issue additional releases as appropriate. With any moderate or large earthquake, aftershocks should be expected to occur.</p>\n";
+	print W "        <p class=\"p14\"><br></p>\n";
+	print W "      </td>\n";
+	print W "      <td valign=\"middle\" class=\"td6\">\n";
+	print W "        <p class=\"p14\"><br><img src=\"dbmapevents.jpg\"></p>\n";
+	print W "      </td>\n";
+	print W "    </tr>\n";
+	print W "    <tr>\n";
+	print W "      <td colspan=\"2\" valign=\"middle\" class=\"td7\">\n";
+	print W "        <p class=\"p15\"><b>For more information contact:<span class=\"Apple-converted-space\"> </span></b></p>\n";
+        print W "        <p class=\"p20\"><span class=\"Apple-converted-space\">      </span>Roger Hansen: State Seismologist, Geophysical Institute, Ph: (907) 474-5533, e-mail: roger\@giseis.alaska.edu </p>\n";
+        print W "        <p class=\"p20\"><span class=\"Apple-converted-space\">      </span>Natasha Ruppert: Seismologist, Geophysical Institute, Ph: (907) 474-7472, e-mail: natasha\@giseis.alaska.edu </p>\n";
+	print W "        <p class=\"p18\"><br></p>\n";
+	print W "        <p class=\"p17\">The Alaska Earthquake Information Center (AEIC) monitors earthquakes in Alaska and provides earthquake information to the citizens and public officials of Alaska. The Center is a cooperative program of the Geophysical Institute of the University of Alaska and the U.S. Geological Survey and is located at the Geophysical Institute in Fairbanks with the Alaska State Seismologist's Office.</p>\n";
+	print W "        <p class=\"p18\"><br></p>\n";
+	print W "        <p class=\"p19\">Additional information may be obtained from: AEIC, Geophysical Institute, Fairbanks, AK, 99775-7320<span class=\"Apple-converted-space\"> </span></p>\n";
+	print W "        <p class=\"p19\">Ph: (907) 474-7320; Fax: (907) 474-5618; Internet: http://www.aeic.alaska.edu<span class=\"Apple-converted-space\"> </span></p>\n";
+	print W "        <p class=\"p19\">OR USGS National Earthquake Information Center, Denver, CO. Ph: (303) 273-8500; Fax: (303) 273-8450</p>\n";
+	print W "</td></tr></tbody></table></body></html>\n";
+	close ( W );
+}
+
+sub create_earthquake_map {
+
+	print "\n$Prog_name:\tLaunching thumbnail-map generator...\n\n";
+
+#	print "\nMitch: $Helpers{'dbmaprelease'} $Dbname $orid $map_range\n\n";
+
+	system( "$Helpers{'dbmaprelease'} $Dbname $orid $map_range" );
+#	system( " dbmaprelease $Dbname $orid $map_range" );
+#	system( "$Helpers{'alchemy'} dbmapevents.ps -Zm1 -Zc1 -e3000 -o" );
+	system( "$Helpers{'convert'} -trim -density 88x88 dbmapevents.ps $htmlrelease_dir/dbmapevents.jpg " );
+#	system( "/bin/cp dbmapevents.epsi $map_epsi_file" );
+
+}
+
+sub copy_html_fixed_files {
+	print "\n$Prog_name:\tCopy fixed html files ...\n\n";
+	if( -d $htmlrelease_dir && -d $InRelTemplatedDir ) { 
+		system( "/bin/cp $InRelTemplatedDir/$InRelUsgsLogoTIFF $InRelTemplatedDir/$InRelGiLogoTIFF $htmlrelease_dir/" );
+	}
+}
+
+#sub create_gif_release {
+#	
+#	my( $alchemy_options ) = "-Z+ -Xb791p -Yb985p -Za9 -o";
+#
+#	$cmd = "$Helpers{'alchemy'} -g $alchemy_options $release_dir/$pdf_release_file ";
+#	$cmd .= "$release_dir/$gif_release_file";
+#	system( $cmd );
+#}
+
+sub prepare_custom_release_pffile {
+
+	open(P,">$release_dir/aeic_release.pf");
+
+	print P "gif_release_file $gif_release_file\n";
+	print P "pdf_release_file $pdf_release_file\n";
+
+	close( P );
+}
+
+sub map_workfile_names {
+	my( $origin_time ) = @_;
+
+	@keys = ( "email_file",
+		  "InRelTemplatedDir",
+		  "InRelMainFile",
+		  "InRelMainPDF",
+		  "InRelMainGIF",
+		  "InRelUsgsLogoTIFF",
+		  "InRelGiLogoTIFF",
+		  "InRelAEICCUPS",
+		  "pdf_release_file",
+		  "gif_release_file",
+		  "map_epsi_file" );
+
+	foreach $key ( @keys ) {
+		$$key = epoch2str( $origin_time, "$$key" );
+	}
+}
+
+sub initialize {
+
+	@myhelpers = ( "cupsfilter",
+		       "aeic_release_distributor",
+		       "dbmaprelease",
+		       "felt_report_tool",
+		       "update_finger" );
+
+	if( ! defined( pfget( $Pf, "Helpers" ) ) ) {
+		die( "Helpers array undefined in parameter file.\n" );
+	} else {
+		my( $hashref ) = pfget( $Pf, "Helpers" );
+		%Helpers = %$hashref;
+	}
+
+	$Graphic_death = 0 unless( defined( $Helpers{"tkshow_message"} ) );
+	$Graphic_death = 0 unless( -x $Helpers{"tkshow_message"} );
+
+	foreach $helper ( @myhelpers ) {
+
+		$message = "Helper application \'$helper\' is not defined ";
+		$message .= "in parameter file";
+		MyDie( $message ) unless( defined( $Helpers{$helper} ) );
+
+		MyDie( "Helper application $Helpers{$helper} is not available")
+		 unless( -x "$Helpers{$helper}" );
+	} 
+
+	@myparameters = (
+			 "email_release_recipient",
+			 "web_directory",
+			 "printer",
+			 "place_database",
+			 "common_place_database",
+			 "region_phrases_database",
+			 "contact_database",
+			 "calldown_database",
+			 "number_of_contacts",
+			 "num_nearest",
+			 "map_range",
+			 "stock_felt_report",
+			 "base_release_dir",
+			 "email_file",
+			 "voicemail_file", 
+                  	 "InRelTemplatedDir",
+                  	 "InRelMainFile",
+                  	 "InRelMainPDF",
+                  	 "InRelMainGIF",
+                  	 "InRelUsgsLogoTIFF",      
+                  	 "InRelGiLogoTIFF",        
+		  	 "InRelAEICCUPS",
+			 "pdf_release_file",
+			 "gif_release_file",
+			 "map_epsi_file",
+			 "subset_database",
+			 "voicemail_instructions",
+			 "maintainer"
+			);
+
+	
+	foreach $param ( @myparameters ) {
+		if( ! defined( $$param = pfget( $Pf, "$param" ) ) ) {
+			MyDie( "$param undefined in parameter file" );
+		} elsif( $$param eq "" ) {
+			MyDie( "$param value empty in parameter file" );
+		} 
+	}
+
+	# Suppress warnings about single use of some variables
+	use vars ('$num_nearest', '$map_range', 
+		  '$email_file', '$voicemail_file', '$common_place_database',
+		  '$printer', '$place_database' );
+
+	if( defined $ENV{'PFPATH'} ) {
+		$ENV{'PFPATH'} .= ":.";
+	} else {
+		$ENV{'PFPATH'} = ".";
+	}
+
+}
+
+$Prog_name = $0;
+$Prog_name =~ s@.*/@@;
+$Usage = "Usage: $Prog_name [-g] [-n] [-o orid] [-e evid] dbname\n";
+
+$opt_n = "";
+$opt_o = "";
+$opt_e = "";
+$opt_g = "";
+if( ! &Getopts('gno:e:') || $#ARGV != 0 ) {
+	die( "$Usage" );
+
+} else {
+	$dbin_name = $ARGV[0];
+
+	if( $opt_g ) { $Graphic_death = 1; } else { $Graphic_death = 0; }
+	if( $opt_o ) { $Orid = $opt_o; } else { $Orid = ""; }
+	if( $opt_e ) { $Evid = $opt_e; } else { $Evid = ""; }
+
+	if( ( $opt_o || $opt_e ) && $dbin_name eq "-" ) {
+		$message = "$Prog_name: -o/-e options incompatible with ";
+		$message .= "taking database from stdin.\n";
+		die( $message );
+	}
+}
+
+&initialize();
+
+@db = &choose_database_row( $dbin_name );
+
+set_vital_statistics( @db );
+
+establish_correct_cwd( $origin_time );
+
+map_workfile_names( $origin_time );
+
+save_subset_database( @db );
+
+&describe_when();
+
+&describe_where();
+
+&set_mail_subject();
+
+&describe_felt_info();
+
+&summarize_earthquake();
+
+&write_voicemail_message();
+
+&describe_nearest();
+
+&describe_vitals();
+
+&make_message_trailer();
+
+&write_email_file();
+
+&create_html_page();
+
+&create_earthquake_map();
+
+&copy_html_fixed_files();
+
+# veiw infomation release with Safari
+print ("$Helpers{'cupsfilter'} $htmlrelease_dir/$InRelMainFile > $htmlrelease_dir/$InRelMainPDF \n" );
+system( "$Helpers{'cupsfilter'} -o Resolution=1200dpi -p $InRelTemplatedDir/$InRelAEICCUPS $htmlrelease_dir/$InRelMainFile > $htmlrelease_dir/$InRelMainPDF " );
+#system( "open -a 'Adobe Illustrator' file:$htmlrelease_dir/$InRelMainPDF" );
+print ("AdobeAcrobatPro $htmlrelease_dir/$InRelMainPDF \n" );
+print ("  To edit $htmlrelease_dir/$InRelMainPDF Select- \n" );
+print ("     Tools -> Advanced Editting -> TouchUp Text Tool \n" );
+system("'/Applications/Adobe Acrobat 9.1.2 Pro/Adobe Acrobat Pro.app/Contents/MacOS/AdobeAcrobat' $htmlrelease_dir/$InRelMainPDF" );
+print ( "$Helpers{'convert'} -density 180x180 $htmlrelease_dir/$InRelMainPDF $htmlrelease_dir/$InRelMainGIF \n" );
+system( "$Helpers{'convert'} -density 180x180 $htmlrelease_dir/$InRelMainPDF $htmlrelease_dir/$InRelMainGIF " );
+system( "/bin/ln -s $htmlrelease_dir/$InRelMainPDF $release_dir/$pdf_release_file" );
+system( "/bin/ln -s $htmlrelease_dir/$InRelMainGIF $release_dir/$gif_release_file" );
+# &create_gif_release();
+
+&prepare_custom_release_pffile();
+
+print "\n$Prog_name:\tLaunching aeic_release_distributor...\n\n";
+
+system( "$Helpers{'aeic_release_distributor'} $opt_n" );
+
+print( "\n\n$Prog_name: Successfully finished earthquake response.\n\n" );
+
+exit( 0 );

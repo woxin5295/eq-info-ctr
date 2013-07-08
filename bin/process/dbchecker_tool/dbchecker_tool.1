@@ -1,0 +1,46 @@
+.TH DBCHECKER_TOOL "$Date: 2003-03-19 03:05:58 $"
+.SH NAME
+\fBdbchecker_tool\fR \-  Graphical driver for dbchecker, dberrchk and neic2db.
+the users mailbox. 
+.SH SYNOPSIS
+dbchecker_tool &
+.LP
+.SH DESCRIPTION
+\fBdbchecker_tool\fR is a graphical-user-interface driver for dbchecker, dberrchk and neic2db.
+It is intended to run silutaneously with dbloc2 and assist the analyst in locating earthquakes
+by identifying poor solutions with dbchecker and dberrchk and will allow the analyst to enter
+NEIC solutions in the database with neic2db.
+
+The graphical interface contains 2 dialog boxes  and 8 colored buttons. The dialog boxes allow
+the user to enter a database name and orid. The buttons are described in descending order.
+Button 1, pink, allows the user to review the input database with dbe.
+Button 2, yellow, allows the user to run dbchecker. For this to operate correctly both
+a database and orid are required. 
+Button 3, orange, allows the user to run dberrchk. For this to operate correctly a
+database name is required.
+Button 4, grey, allows the user to view the contents of dberrchk.err with textedit.
+Button 5, blue, allows to view last result of magnitude calculations.
+Button 8, red, quits dbchecker_tool.
+
+.SH OPTIONS
+.SH FILES
+.SH ENVIRONMENT
+dbchecker_tool expects the ANTELOPE environment variable to be set correctly.
+.SH PARAMETER FILE
+.SH EXAMPLE
+tele% dbchecker_tool &
+.fi
+.ft CW
+.RS .2i
+.RE
+.ft R
+.SH RETURN VALUES
+.SH LIBRARY
+.SH DIAGNOSTICS
+.SH "SEE ALSO"
+dbe, textedit, dbchecker, dberrchk, neic2db, aeic_dbclean
+.nf
+.fi
+.SH "BUGS AND CAVEATS"
+.SH AUTHOR
+Dan McNamara.

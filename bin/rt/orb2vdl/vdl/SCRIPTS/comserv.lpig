@@ -1,0 +1,9 @@
+echo "source .comserv"
+setenv LEAPSECONDS /export/home/config/etc/leapseconds
+alias cdc 'cd /export/home0/comserv/comserv.971126'
+alias cdd 'cd /export/home/data/lpig'
+alias cdg 'cd /export/home/logs'
+alias cdl 'cd /export/home/data/lpig'
+alias cdv 'cd /export/home0/ketchum/vdl'
+alias cdp 'cd /export/home/config/etc'
+alias pspig 'ps -aux | grep LPIG'

@@ -1,0 +1,8 @@
+!vdl if=obn@idahub chan=bhz,bhn,bhe -t 1 -n 15 -s 21 -f 20 -l 1 -i obn -k 0
+vdl if=pfo@idahub chan=bhz,bhn,bhe -t 1 -n 15 -s 5 -f 20 -l 1 -i pfo -k 0
+!vdl if=rpn@idahub chan=bhz,bhn,bhe -t 1 -n 15 -s 66 -f 20 -l 1 -i rpn -k 0
+!vdl if=abkt@idahub chan=bhz,bhn,bhe -t 1 -n 15 -s 8 -f 20 -l 1 -i abkt -k 0
+vdl if=tau@idahub chan=bhz,bhn,bhe -t 1 -n 15 -s 45 -f 20 -l 1 -i tau -k 0
+!vdl if=aru@idahub chan=bhz,bhn,bhe -t 1 -n 15 -s 29 -f 20 -l 1 -i aru -k 0
+!vdl if=kiv@idahub chan=bhz,bhn,bhe -t 1 -n 15 -s 22 -f 20 -l 1 -i kiv -k 0
+vdl if=sur@idahub chan=bhz,bhn,bhe -t 1 -n 15 -s 9 -f 20 -l 1 -i sur -k 0

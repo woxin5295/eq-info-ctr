@@ -1,0 +1,2 @@
+include $(AEICMAKE)
+DIRS=vdl

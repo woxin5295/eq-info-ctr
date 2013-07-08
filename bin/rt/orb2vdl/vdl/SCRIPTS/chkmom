@@ -1,0 +1,9 @@
+if /usr/bin/ps -axu | grep "[0-9] vdlmom" >/dev/null
+then
+	touch /cnmsn/seismic/vdl/chkvdlmom.file
+else
+	date
+	echo "VDLMOM not found at BLO"
+	sh /cnmsn/seismic/vdl/runvdl
+fi
+

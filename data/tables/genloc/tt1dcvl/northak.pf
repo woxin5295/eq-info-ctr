@@ -1,0 +1,143 @@
+velocity_model_name northak
+phases &Arr{
+P  &Arr{
+	travel_time_calculator general
+	TTmethod tt1dcvl tt1dcvl u1dcvl
+	TTmodel northak
+	time_distance_weight_function &Tbl{
+	0.0	1.0
+	1.5	1.0
+	5.0	0.1
+	10.0	0.0
+	360.0	0.0
+	}
+	ux_distance_weight_function &Tbl{
+        0.0     1.0
+        10.0    1.0
+        90.0    0.7
+        92.0    0.0
+        360.0   0.0
+        }
+        uy_distance_weight_function &Tbl{
+        0.0     1.0
+        10.0     1.0
+        90.0    0.7
+        92.0    0.0
+        360.0   0.0
+        }
+	default_time_uncertainty 0.2
+	default_slowness_uncertainty 0.01
+        dt_bound_factor 0.01
+        du_bound_factor 0.035
+	time_station_corrections &Tbl{
+	CKN .34
+	CNP -.44
+	CRP .11
+	CUT .41
+	CYT .57
+	DFR -.37
+	DLY 2.37
+	GHO .36
+	GYO -.06
+	HMT 1.28
+	ILM -.63
+	KEY 1.71
+	KNK .85
+	KRY 3.09
+	KYK 1.97
+	MSE -.32
+	MSP .13
+	NCT -.24
+	NKA 2.18
+	NNL 1.21
+	RDT -.49
+	RED -.43
+	SKL -.20
+	SLV -1.1
+	SPU .04
+	SWD .57
+	BRLE -.62
+	BRLK -.62
+	BRNE -.62
+	BRNW .34
+	BRSE -.54
+	BRSW -1.1
+	}
+	ux_station_corrections &Tbl{
+        }
+        uy_station_corrections &Tbl{
+        }
+}
+# Vs = Vp / sqrt(3) = Vp / 1.7321 = 0.5774*Vp
+S  &Arr{
+	travel_time_calculator general
+	TTmethod tt1dcvl tt1dcvl u1dcvl
+	TTmodel northak
+	time_distance_weight_function &Tbl{
+	0.0	1.0
+	1.5	1.0
+	5.0	0.1
+	10.0	0.0
+	360.0	0.0
+	}
+	ux_distance_weight_function &Tbl{
+        0.0     1.0
+        10.0     1.0
+        90.0    0.7
+        92.0    0.0
+        360.0   0.0
+        }
+        uy_distance_weight_function &Tbl{
+        0.0     1.0
+        10.0     1.0
+        90.0    0.7
+        92.0    0.0
+        360.0   0.0
+        }
+	default_time_uncertainty 0.5
+	default_slowness_uncertainty 0.005
+        dt_bound_factor 0.01
+        du_bound_factor 0.035
+	time_station_corrections &Tbl{
+	CKN .51
+	CNP -.78
+	CPK -.68
+	CRP .20
+	CUT .73
+	CYT 1.01
+	DFR -.77
+	DLY 4.22
+	GYO -.11
+	HMT 2.28
+	ILM -1.40
+	KEY 3.04
+	KNK -.54
+	KRY 5.05
+	KYK 4.51
+	MSE -.57
+	MSP .23
+	NCT -.66
+	NKA 3.88
+	NNL 2.15
+	RDT -.88
+	RED -1.
+	SKL -.8
+	SLV -2.
+	SPU -.06
+	SVW -.65
+	SWD 1.01
+	BRLE -1.2
+	BRLK -1.2
+	BRNE -1.8
+	BRNW .61
+	BRSE -.96
+	BRSW -2.
+	}
+	ux_station_corrections &Tbl{
+        }
+        uy_station_corrections &Tbl{
+        }
+}
+}
+
+# $Id: northak.pf,v 1.3 2006-04-06 00:10:45 natasha Exp $ 

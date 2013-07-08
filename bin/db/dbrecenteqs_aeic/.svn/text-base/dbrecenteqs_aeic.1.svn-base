@@ -1,0 +1,35 @@
+.TH DBRECENTEQS_AEIC 1 2007/11/08 "Glenn Thompson, AEIC" "User Commands"
+.SH NAME
+.nf
+dbrecenteqs_aeic - maintain a web site showing recent earthquakes, using AEIC extensions to dbrecenteqs
+.fi
+.SH SYNOPSIS
+.nf
+dbrecenteqs_aeic [-p pffile] [-v] [-h] [-u] [-e evid] [-c sourcedb] [-o] dbname
+.fi
+.SH DESCRIPTION
+\fBdbrecenteqs_aeic\fP incorporates all of the functionality of dbrecenteqs version 4.6. However, AEIC has added some extensions.
+.LP
+The basis for \fBdbrecenteqs_aeic\fP
+is BRTT's 4.6 release of dbrecenteqs. Modifications by AEIC staff including Josh Stacnik and Glenn Thompson have been made to tailor the program. For example, filtering has been added to allow dbrecenteqs_aeic to show a subset of the events available in the database. A switch has also been only just to show prefors, rather than all origins for an event, on the webpage.
+.SH OPTIONS
+These are identical to dbevents, except for the addition of:
+.IP "-o"
+If this is specified, then the webpage generated for each event will show only the prefor (preferred origin) rather than all origins. Think of -o as meaning "only prefors".
+.SH "PARAMETER FILE"
+All program parameters defined in the Antelope 4.6 version of the
+\fBdbrecenteqs\fP parameter file are supported. Added parameters include:
+.IP inputdb_subset
+An expression can be entered here, for example to filter the input database based on a geographical filter, e.g.:
+	inputdb_subset		(lat>49 && lat<72) && (lon<-130 || lon>165)
+.IP inputdb_delete
+To permanently delete bad events (rather than filter them from the display), an expression can be entered here, e.g.:
+	inputdb_delete	 	nass<10 && (ml>=3.5 || mb>=3.5)
+.SH BUGS AND CAVEATS
+* dbrecenteqs_aeic has not yet been tested
+* It is based on Antelope 4.6. There may be conflicts with Antelope 4.9. It would be better to merge the AEIC code from 4.6 into the 4.9 version of dbrecenteqs. 
+.SH AUTHOR
+Glenn Thompson
+.br
+Alaska Earthquake Information Center
+

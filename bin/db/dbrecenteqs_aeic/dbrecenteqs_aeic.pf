@@ -1,0 +1,174 @@
+
+institute_url http://www.aeic.alaska.edu/Seis/
+institute_webdir /usr/local/Mosaic/Seis/
+institute_description Alaska Earthquake Information Center 
+institute_logo /usr/local/Mosaic/Seis/recent/phAEIC_fastload.gif 
+
+dbrecenteqs_subdir recent/sub
+dbrecenteqs_title Recent Earthquakes 
+
+wiggle mini_logo.gif
+
+region_phrases_database /iwrun/sum/run/dbrecenteqs/regions/alaska_region_phrases 
+
+nearest_places &Arr{
+	cities_dbname /iwrun/sum/run/dbrecenteqs/places/wellknown_alaskan_cities 
+	max_dist_km 200	
+	always_include Fairbanks|Anchorage|Valdez|Juneau 
+}
+
+page_refresh_seconds 300
+pixfile_conversion_method imagick  # pnm, imagick, or alchemy
+
+keep_ndays 3
+
+# Hack #1: subset parameters for input database
+# this subset occurs after a join between origin,event,assoc,arrival
+# so any valid expression for this join will work
+# Note: this creats a temporary db in /tmp that gets removed after
+# dbrecenteqs runs, then copies this temporary database over 
+# the input database..like i said, Hack. This should proabaly
+# only be used with the -c sourcedb option which makes a copy
+# of the inputdb.
+inputdb_subset (lat>49 && lat<72) && (lon<-130 || lon>165)
+
+# Hack #2: last resort to get rid of bad events from origin table
+# using dbdelete - inputdb_subset is required for this to be used, 
+# which sort of makes sense. leave blank for no deletion.
+# swim at your own risk. Again, inputdb is harmed.:browse confirm saveas
+
+#inputdb_delete nass<10 && ml>=3.5
+inputdb_delete nass<10 && (ml>=3.5 || mb>=3.5)
+
+index_map_stylesheet /usr/local/Mosaic/Seis/recent/DATA/index_default.xsl
+focus_map_stylesheet /usr/local/Mosaic/Seis/recent/DATA/specific_default.xsl
+
+index_map &Arr{
+	include 	map_config
+	mapname		alaska_topo_sm	
+	file_basename 	try
+	latc 		65
+	lonc 		-155
+	left_dellon 	-17 
+	right_dellon 	17	
+	down_dellat 	-17	
+	up_dellat 	17 
+	detail_density 	l
+	background_magmin 6
+}
+
+focus_map &Arr{
+	include 	map_config
+	contour_mode grdcut
+	pixels_per_inch 80
+	size_inches 	4
+	background_magmin 3
+	left_dellon 	-2
+	right_dellon 	2
+	down_dellat 	-2
+	up_dellat 	2
+}
+
+#focus_map &Arr{
+#	include 	map_config
+#	left_dellon 	-2
+#	right_dellon 	2
+#	down_dellat 	-2
+#	up_dellat 	2
+#}
+
+global_map &Arr{
+	include 	map_config
+	mapname		globle_alaska
+}
+
+detail_map &Arr{
+	include 	map_config
+}
+
+map_config &Arr{
+	format 		gif
+	proj 		edp
+	contour_mode 	premade  # none, premade, grdcut, grdbuild or grdimage
+	premade_contour_ps /iwrun/sum/run/bin/dbrecentmaps/recenteqs/mkmap/premade_grdimage
+	grdfile 	/iwrun/sum/run/bin/dbrecentmaps/recenteqs/mkmap/DEMS/alaska_final.grd	
+	gradfile 	/iwrun/sum/run/bin/dbrecentmaps/recenteqs/mkmap/DEMS/alaska_final.grad	
+	longitude_branchcut_high 360
+	hypocenter_dbname /Seis/catalogs/aeic/Total/Total 
+	map_color_palette_file /iwrun/sum/run/bin/dbrecentmaps/recenteqs/mkmap/DEMS/alaska.cpt 
+	depth_color_palette_file /iwrun/sum/run/bin/dbrecentmaps/recenteqs/mkmap/depthmag2.cpt 
+	linefiles &Tbl{
+		# faults combined_faults.gmtlin 4/255/0/0
+		# roads roads.xy 4/255/255/255
+		#faults /iwrun/sum/run/bin/dbrecentmaps/recenteqs/mkmap/combined_faults.gmtlin 4/255/0/0
+		faults /iwrun/sum/run/bin/dbrecentmaps/recenteqs/mkmap/combined_faults2.gmtlin 4/255/0/0
+		roads /iwrun/sum/run/bin/dbrecentmaps/recenteqs/mkmap/roads.xy 4/255/255/255
+		pipeline /iwrun/sum/run/bin/dbrecentmaps/recenteqs/mkmap/pipeline.xy 6/50/50/50
+	}
+	# JCS cities_dbname /Seis/databases/places/main_alaskan_cities	
+	cities_dbname /iwrun/sum/run/dbrecenteqs/places/wellknown_alaskan_cities	
+	background_magsize_pixels 3
+	background_magmin 6
+	quakeshape 	square
+	prefor_quakecolor yellow
+	nonprefor_quakecolor white
+#	quake_agecolors &Arr{
+#		red	  21600
+#		orange	  43200
+#		yellow	  86400
+#		chartreuse	 259200
+#		blue	 604800
+#		grey	1209600
+#	}
+	quake_agecolors &Arr{
+		red	  3600
+		orange	  43200
+		yellow	  86400
+		white	1209600
+	}
+	pixels_per_inch 100
+	size_inches 	5
+	city_symbols_inches 0.08
+	cityname_shift_deg 0.2
+	reserve_colors 	12
+	detail_density 	l  # f,h,i,l,c
+}
+
+authtrans &Arr{
+	UAF:lalitha &Arr{
+		text Lalitha Rao
+		url	http://www.aeic.alaska.edu/Input/lalitha/lalitha.html
+	}
+	UAF:martin &Arr{
+		text Martin LaFevers
+		url	http://www.aeic.alaska.edu/Input/martin/martin.html
+	}
+	binder &Arr{
+		text Earthworm automatic
+		url	http://www.aeic.alaska.edu/Input/kent/Iceworm.html
+	}
+}
+
+other_region_links &Arr{
+	"Western Canada"	http://www.pgc.nrcan.gc.ca/seismo/recent/wc.50evt.html
+	"U.S. Pacific Northwest" 	http://www.geophys.washington.edu/recenteqs/
+	California 		http://quake.wr.usgs.gov/recenteqs/latest.htm
+	Nevada			http://www.seismo.unr.edu/jrted/
+	Hawaii			http://tux.wr.usgs.gov/results/seismic/recenteqs/
+	"US Intermountain West"	http://www.seis.utah.edu/req2webdir/recenteqs/
+	Montana			http://mbmgquake.mtech.edu/earthworm/
+	"Central/Southeastern U.S."	http://folkworm.ceri.memphis.edu/recenteqs/
+	"Northeastern U.S."	http://neic.usgs.gov/neis/current/us_ne.html
+	"Fennoscandia"		http://www.norsar.no/bulletins/
+}
+credits &Arr{
+    "Lindquist Consulting"      http://www.lindquistconsulting.com/
+    "NOAA/NGDC Arctic Bathymetry"       http://www.ngdc.noaa.gov/mgg/bathymetry/arctic/arctic.html
+    "Sandwell/Smith Marine Bathymetry"  http://topex.ucsd.edu/marine_topo/mar_topo.html
+    "USGS GTOPO30 topography database"  http://edcdaac.usgs.gov/gtopo30/gtopo30.html
+    "Wessel and Smith's Generic Mapping Tools"  http://gmt.soest.hawaii.edu/
+}
+
+
+# below line is required for antelope 4.6 Mitch
+pf_revision_time 1081293793.000

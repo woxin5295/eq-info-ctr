@@ -1,0 +1,126 @@
+# aeic_release parameter file
+# 
+# K. Lindquist
+# Geophysical Institute
+# University of Alaska, Fairbanks
+# 1999
+
+# Where to send the output 
+#########################################################################
+email_release_recipient aeic_release@giseis.alaska.edu
+email_update_recipient duty@giseis.alaska.edu
+fax_release_recipient &Literal{
+9077624540@emailfaxservice.com, 9072693061@emailfaxservice.com, 9074287095@emailfaxservice.com, 9075508402@emailfaxservice.com, 9074515050@emailfaxservice.com, 9074653532@emailfaxservice.com, 9072742189@emailfaxservice.com, 9077867425@emailfaxservice.com, 9077456071@emailfaxservice.com, 9074527917@emailfaxservice.com, 9074745064@emailfaxservice.com, 9074745163@emailfaxservice.com, 2022242354@emailfaxservice.com, 9074517290@emailfaxservice.com, 6503295163@emailfaxservice.com, 9078355860@emailfaxservice.com, 9074745618@emailfaxservice.com}
+
+web_directory /usr/local/apache/htmldocs/webinforelease 
+# I dont think eva log is used anymore
+# EVA_LOG /home/quake/eva_alarm.log
+release_database /iwrun/sum/db/releases/initial_releases
+
+cellphone_mail_recipients &Arr{
+	9074607215@txt.att.net 
+	9074607214@msg.acsalaska.com
+	9073222014@msg.acsalaska.com
+	9073475905@txt.att.net 
+	9074601875@msg.acsalaska.com 
+}
+
+printer lex840bw
+
+# Where to get necessary information and templates
+#########################################################################
+
+place_database /Seis/databases/places/cities
+common_place_database /Seis/databases/places/wellknown_alaskan_cities
+contact_database /Seis/databases/places/cities
+calldown_database /Seis/databases/notify/contacts
+region_phrases_database /Seis/databases/regions/alaska_region_phrases
+cellphone_reference_cities /Seis/databases/places/cellphone_cities
+
+number_of_contacts 40	# How many contacts to show for felt report investigation
+
+# What the output should look like
+#########################################################################
+
+num_nearest 8		# Number of nearest cities shown
+map_range 4		# Range of map in degrees
+
+stock_felt_report &Literal{
+No reports of this event being felt or causing damage
+have been received at this time.
+}
+
+
+# Where and how to get the job done, and with what software
+#########################################################################
+
+base_release_dir 	HOME/releases
+
+# Working files. These templates refer to the origin time
+email_file 		aeic_release.email
+email_update 		aeic_update.email
+voicemail_file		aeic_voicemail_text
+# fmpdf_file and pdf_release_file are the same, scripts have fmpdf_file hardwired in code
+fmpdf_file		%Y%m%d%H%M%S_.pdf
+pdf_release_file        %Y%m%d%H%M%S_.pdf
+gif_release_file 	%Y%m%d%H%M%S_.gif
+map_epsi_file 		db_release.epsi
+eva_log_file		eva_log.text
+subset_database		myrelease_db
+
+# templape InRel files for Information Release web page production
+InRelTemplatedDir       /usr/local/aeic/5.2-64/data/response
+InRelMainFile           InRelMain.html
+InRelMainPDF            InRelMain.pdf
+InRelMainGIF            InRelMain.gif
+InRelUsgsLogoTIFF     	InRelUsgsLogo.tiff
+InRelGiLogoTIFF        	InRelGiLogo.tiff 
+InRelAEICCUPS		InRelAEICCUPS.ppd
+
+
+Helpers &Arr{
+aeic_release_distributor	/usr/local/aeic/5.2-64/bin/aeic_release_distributor
+aeic_partial_release		/usr/local/aeic/5.2-64/bin/aeic_partial_release
+convert				/Applications/ImageMagick-6.6.3/bin/convert
+cupsfilter			/usr/sbin/cupsfilter
+cellphone_notifier		/usr/local/aeic/5.2-64/bin/aeic_cellphone_release
+dbmaprelease 			/usr/local/aeic/5.2-64/bin/dbmaprelease
+felt_report_tool 		/usr/local/aeic/5.2-64/bin/felt_report_tool
+tkshow_message			/usr/local/aeic/5.2-64/bin/tkshow_message
+update_finger			/usr/local/aeic/5.2-64/bin/update_finger
+calldown_notification		/usr/local/aeic/5.2-64/bin/calldown_notification_tool
+rtmail				/opt/antelope/5.2-64/bin/rtmail
+}
+
+# Avoid the following displays when starting framemaker, due to
+# obscure framemaker/Xserver interaction bug
+#bad_framemaker_displays &Arr{
+#nordic 1
+#tensor 1
+#}
+
+voicemail_instructions &Literal{
+Dial 1800	on campus for voice-mail access
+Dial 474-1800	off campus for voice-mail access
+Press *
+Enter 4300#	for the box number 
+Enter 159357#	for the password
+Press 4		for set up options 
+Press 1		to access the external greeting
+Press 1		Read new greeting
+Press #		to stop
+		Review greeting
+Press *		to exit the mailbox
+}
+
+# Who to harass with problems
+#########################################################################
+
+# maintainer natasha@giseis.alaska.edu
+# maintainer mitch@giseis.alaska.edu
+maintainer natasha@giseis.alaska.edu,mitch@giseis.alaska.edu
+
+
+
+
+#pf_revision_time 1282155711

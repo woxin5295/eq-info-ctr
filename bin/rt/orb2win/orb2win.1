@@ -1,0 +1,35 @@
+.TH ORB2WIN 1 "$Date: 2001-04-23 20:09:51 $"
+.SH NAME
+orb2win \- Convert packets from an orb to WIN format
+.SH SYNOPSIS
+.nf
+orb2win \[-p pffile\] \[-m match\] \[-r reject\] orbname
+.fi
+.SH DESCRIPTION
+Orb2win takes waveform-data packets from an orbserver and 
+converts them to Japanese WIN format
+.SH OPTIONS
+.nf
+-p pffile specify parameter file (default is orb2win.pf)
+-m match_expr specify sourcenames to match
+-r reject_expr specify sourcenames to reject
+.fi
+.SH FILES
+.SH ENVIRONMENT
+.SH PARAMETER FILE
+.SH EXAMPLE
+.ft CW
+.RS .2i
+.RE
+.ft R
+.SH RETURN VALUES
+.SH LIBRARY
+.SH DIAGNOSTICS
+.SH "SEE ALSO"
+.nf
+win2orb(1), orbserver(1)
+.fi
+.SH "BUGS AND CAVEATS"
+.SH AUTHOR
+Kent Lindquist, with pieces of code from Katsumata-san and Urabe-san
+.\" $Id: orb2win.1,v 1.2 2001-04-23 20:09:51 kent Exp $

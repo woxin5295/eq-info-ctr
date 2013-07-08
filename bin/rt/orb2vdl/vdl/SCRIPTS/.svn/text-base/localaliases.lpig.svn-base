@@ -1,0 +1,5 @@
+echo "source .localaliases"
+alias ucb 'telnet temblor.geo.berkeley.edu'
+alias fucb 'ftp temblor.geo.berkeley.edu'
+alias lpig 'telnet 192.100.161.111'
+alias netscape '/export/home0/netscape/netscape'

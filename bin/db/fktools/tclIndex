@@ -1,0 +1,14 @@
+# Tcl autoload index file, version 2.0
+#  Generated with the following perl script:
+#
+#	while ( <> ) { 
+#	    if ( /^\s*proc\s+(\S+)\s+|^\s*itcl_class\s+(\S+)\s+/ ) {
+#		print "set auto_index($1) \"source \$dir/$ARGV\"\n" ; 
+#	    }
+#	}
+
+set auto_index(array_for_arid) "source $dir/array_for_arid.tcl"
+set auto_index(fkarid) "source $dir/fkarid.tcl"
+set auto_index(fkscan) "source $dir/fkscan.tcl"
+set auto_index(get_array_codes) "source $dir/get_array_codes.tcl"
+set auto_index(LabelEntry) "source $dir/LabelEntry.tcl"

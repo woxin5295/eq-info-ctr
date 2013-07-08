@@ -1,0 +1,7 @@
+shakemap_url	http://www.aeic.alaska.edu/~shake/shake
+cat_url		/Users/eoc/run/bin/cat_url
+html_tmpfile	/tmp/shakemap_archive.html
+#user		shake
+#pass		shake
+#prompt		Enter username and password for "ShakeMap" at http://www.aeic.alaska.edu/~shake/shake
+shakemapdir	/Users/eoc/run/cache/shakemaps

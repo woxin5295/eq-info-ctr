@@ -1,0 +1,104 @@
+.SUFFIXES: .F
+.F.o: ;  $(FC) -c $*.F
+
+FC	= f77  -g 
+
+
+ldlibs  = $(DBLIBS) $(TRLIBS) $(F77LIBS) 
+include $(ANTELOPEMAKE)  	# This line must appear following the definitions above, 
+
+LIB	= 	-l4014 -lV77
+
+FPFITOBJ = 	fpfit.o
+FPPLOTOBJ = 	fpplot.o 
+DRAWPLANESOBJ = drawplanes.o\
+		strnetcmp.o\
+		plotplcmp.o
+DRWPLNOBJ = 	drwpln.o\
+		comppln.o
+FPPAGEOBJ = 	fppage.o
+HOUSEOBJ = 	house.o
+TESTOBJ = 	testx.o
+REEVNUMOBJ=	reevnum.o
+CKNUMBOBJ=	cknumb.o
+BESTFIT1OBJ=	bestfit1.o
+EXTRAYOBJ=	extray.o
+TESTDDD=        testdddr2pt.o dddr2pt.o tandp.o 
+TESTARB=	testarbrot.o arbrot.o
+TESTROTM=	testrotmech.o rotmech.o dddr2pt.o tandp.o \
+		arbrot.o getmech.o
+UNFOLDOBJ=	unfoldWBZ.o rotmech.o dddr2pt.o tandp.o \
+		arbrot.o getmech.o
+XYZFM2PTOBJ=	xyzfm2pt.o dddr2pt.o tandp.o
+
+OBJS	= arbsymb.o get3.o ptnear2.o shrflt1.o \
+	flippl.o getflt.o rdeq2.o strnet.o \
+	getpol.o rdeq3.o tandp.o \
+	compl.o fpinp.o gettab.o rdiff.o tmgen.o \
+	csort.o fpout.o pexcf1.o readeq.o \
+	ctop.o plotpl.o refrmt.o transp.o \
+	pltlin.o search2.o strnt1.o \
+	defsym.o fsearch2.o pltsym.o search3.o gensymb.o symb.o \
+	nfilok.o pltarr.o rdrsym.o pltt.o dashit.o plotvx.o \
+	gettab2.o tpplot2.o aintodp.o tpplot1.o
+#not used files  back1.o delaz.o cvrtop.o 
+
+OBJS1   = get3.o shrflt1.o \
+        flippl.o getflt.o rdeq2.o \
+        getpol.o rdeq3.o tandp.o \
+        compl.o fpinp.o gettab.o rdiff.o tmgen.o \
+        csort.o fpout.o pexcf1.o readeq.o \
+        ctop.o refrmt.o \
+        search2.o \
+        defsym.o fsearch2.o search3.o \
+        nfilok.o rdrsym.o  \
+        gettab2.o aintodp.o 
+
+
+#See info file for information on -lXpsc
+
+JUNKOBJS = junk.o tandp.o 
+
+xyzfm2pt:  $(XYZFM2PTOBJ) /usr/tools/vaxlib/libvaxlib.a
+	$(FC) $(XYZFM2PTOBJ) -lvaxlib -o $@
+
+unfoldWBZ:  $(UNFOLDOBJ) /usr/tools/vaxlib/libvaxlib.a
+	$(FC) $(UNFOLDOBJ) -lvaxlib -o $@
+
+junk:   $(JUNKOBJS)
+	$(FC) $(JUNKOBJS) -lvaxlib -o $@
+
+testrotmech:  $(TESTROTM)
+	$(FC) $(TESTROTM) -g -lvaxlib -o $@
+
+testarbrot:  $(TESTARB)
+	$(FC) $(TESTARB) -g -lvaxlib -o $@
+
+testdddr2pt:  $(TESTDDD)
+	$(FC) $(TESTDDD) -g -lvaxlib -o $@
+
+#all:	fpfit fpplot fppage reevnum cknumb bestfit1 extray drawplanes drawpln unfoldWBZ testrotmech testarbrot testdddr2pt junk
+
+fpfit: $(OBJS1) $(FPFITOBJ)
+	$(FC) $(OBJS1) $(FPFITOBJ) $(LDLIBS) -ltoolsf -lX11 -lvaxlib -o $@ 
+
+fpplot: $(OBJS) $(FPPLOTOBJ)
+	$(FC) $(OBJS) $(FPPLOTOBJ) /Seis/spu1/lib/pslib.a -ltoolsf -lX11 -lvaxlib $(LIB) -o $@
+fppage : $(OBJS) $(FPPAGEOBJ)
+	$(FC) $(OBJS) $(FPPAGEOBJ) /Seis/spu1/lib/pslib.a -ltoolsf -lX11 -lvaxlib $(LIB) -o $@
+reevnum: $(REEVNUMOBJ) 
+	$(FC) $(REEVNUMOBJ) -lvaxlib -o $@
+cknumb: $(CKNUMBOBJ) 
+	$(FC) $(CKNUMBOBJ) -lvaxlib -o $@
+bestfit1: $(BESTFIT1OBJ) 
+	$(FC) $(BESTFIT1OBJ) -lvaxlib -o $@
+extray: $(EXTRAYOBJ) 
+	$(FC) $(EXTRAYOBJ) -lvaxlib -o $@
+drawplanes:	$(DRAWPLANESOBJ) 
+		$(FC) $(DRAWPLANESOBJ) -lvaxlib -o $@
+drawpln:	$(DRWPLNOBJ) 
+		$(FC) $(DRWPLNOBJ) -lvaxlib -o $@
+
+
+house: $(HOUSEOBJ)
+	$(FC) $(HOUSEOBJ) -lXpsc -ltoolsf -o house

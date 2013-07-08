@@ -1,0 +1,2 @@
+#!/bin/csh -f
+$PSVDL -o "pid ppid pcpu time vsz args" | grep orb

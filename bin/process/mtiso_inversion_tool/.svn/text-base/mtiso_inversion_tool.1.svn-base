@@ -1,0 +1,185 @@
+.TH FM_TOOL "$Date: 2009-06-25 22:01:21 $"
+.SH NAME
+\fBmtiso_inversion_tool\fR \-  Graphical driver for moment tensor inversion using D.Dreger's TDMT inversion code (Time-Domain Moment Tensor INVerse Code). 
+.SH SYNOPSIS
+mtiso_inversion_tool [dbname] [orid]
+.LP
+.SH OPTIONS
+where:
+.LP
+dbname - database name with the origin parameters, origin and event tables are required. This argument is optional.
+.LP
+orid - origin number of event for which inversion is to be calculated. This argument is optional.
+.LP
+Alternatively, both arguments can be entered interactively throught mtiso_inversion_tool. If there is only one parameter in the command line, it is assumed to be the database name.
+.SH DESCRIPTION
+\fBmtiso_inversion_tool\fR is a graphical-user-interface driver for D.Dreger's TDMT inversion code.
+It is intended to assist AEIC analysts with moment tensor inversion.
+
+The graphical interface contains a number of dialog boxes and action buttons. 
+
+Top panel dialog boxes:
+
+database - allows user to enter database name with the event information;
+
+origin - allows user to enter origin number (orid) of an event for which inversion will be performed.
+
+Left column buttons:
+
+Button 1 - open db with earthquake info - \fBdbe\fR is called with the path provided in the \fBdatabase\fR entry field.
+
+Button 2 - extract waveforms - creates event directory and extracts waveforms using trexcerpt program. If event directory already exists, checks for old waveform files and prompts user whether to delete or save the old files. Next, db2sac is called to convert extracted waveforms into sac format. 
+
+Button 3 - check waveforms - calls dbe to open wfdisc table with the extcacted waveforms. 
+
+Button 4 - update origin parameters - creates or updates file with the event info for later use by the inversion program.
+
+Button 5 - run inversion for all depths (tdmt_redi_sched) - executes main script tdmt_redi_sched to run the moment tensor inversion. 
+
+Button 6 - run inversion for single depth (tdmtiso_invc) - executes tdmtiso_invc to run inversion for a single depth given in "depth for tdmt_invc" dialog box.  
+
+Button 7 - depth vs goodness of fit graph - creates plot to evaluate quality of the solution.
+
+Button 8 - make maps - creates map with beach ball and event location for the web update.
+
+Button 9 - update website - copies files for webpage display.
+
+Button 10 - update summary moment database.
+
+Button 11 - update moment table - updates moment table of the main input database.
+
+Button 12 - print waveforms - prints plot with the waveform fit and inversion results.
+
+Button 13 - print map - prints map.
+
+Button 14 - send a problem report - opens window for sending the problem report.
+
+Right column:
+
+waveforms - there are 3 options: op, bak, and mig. This is location of the waveform archive from which the waveform segments will be exctracted for the inversion;
+
+allow isotropic - 3 options: yes - inversion with isotropic component; no - inversion without isotropic component; old no - old version of tdmt package with no isotropic component.
+
+minimum distance - minimum distance for stations in the inversion;
+
+maximum distance - maximum distance for stations in the inversion;
+
+max # of stations - maximum number of stations in the inversion;
+
+velocity model - allows to choose velocity model for synthetics. Currently the options include: scak - recommended for deeper events and south-central Alaska; tactN - recommended for crustal events and/or events north of the Denali Fault; aleut - recommended for the Aleutians. "auto" option passes selection decision to the program.
+
+depth for tdmt_invc - value for the single depth inversion. It has to be executed after "run inversion for all depths (tdmt_redi_sched)" has been performed, otherwise this option will not work. If the depth is not one of those produced by tdmt_redi_sched, user will be given a list of available depths.
+
+filters: auto option uses default (acausal) filters 0.02-0.1 Hz for M<=3.9, 0.02-0.05 Hz for 5.0>M>3.9, 0.01-0.05 Hz for M>=5. Otherwise enter low and high corners and causal or acausal filter options.
+
+Bottom panel:
+
+Buttons 1, 2, 3 - minimize, maximize, or create output window. 
+
+Button 4 - Quit - quits mtiso_inversion_tool. 
+
+.SH FILES
+wfdisc table and seed and sac waveform files are created after "extract waveforms" option;
+the rest of the files are created by tdmt_redi_sched and are used for the plots, web site and database updates. Read TDMT documentation for detailed description.
+
+.SH ENVIRONMENT
+mtiso_inversion_tool expects the ANTELOPE environment variable to be set correctly.
+.SH PARAMETER FILE
+mtiso_inversion_tool expects parameter file mtiso_inversion_tool.pf.
+.ft CW
+.in 2c
+.nf
+
+# parameter file for mtiso_inversion_tool
+
+# parameter file for MT_inversion_tool.tcl
+
+Maintainer natasha<natasha@gi.alaska.edu>
+
+# list of paths used by the program
+Paths &Arr{
+ entry_db 	/iwrun/sum/db/dbsum/dbsum 	# path to database
+ website_path 	/usr/local/Mosaic/Seis/moment_tensors/current_year	# website path
+ data_path 	/Seis/processing/moment_tensors/current_year	# data path
+ data_path_iso 	/Seis/processing/moment_tensors/current_year
+ mt_summary_database /iwrun/sum/db/dbmoment/dbmoment
+}
+
+#helpers array
+Helpers &Arr{
+ psigl 		/usr/local/mt_code/tdmt/BIN/psigl	#scrpit to produce ps graphics file
+ plot_var_depth /usr/local/mt_code/gmt_plots/plot_var_depth_Sz.gmt	#gmt script to produce variance vs depth plot
+ map_nonDC	/usr/local/mt_code/gmt_plots/map_Sz.gmt	#gmt script to make map
+ bb_plot_nonDC	/usr/local/mt_code/gmt_plots/bb_plot_Sz.gmt	#gmt script to produce beach-ball plot for the website update
+ tdmt_invc 	/usr/local/mt_code/tdmt_iso_anna/BIN/tdmt_invc  # path to tdmt_invc - inversion program for single depthc
+ redi_path 	/usr/local/mt_code/tdmt_iso_anna/BIN/tdmt_redi_sched  # path to tdmt_redi_sched - main inversion program 
+ tdmtiso_invc	/usr/local/mt_code/tdmt_iso_anna/BIN/tdmtiso_invc   # path to tdmtiso_invc - inversion program with isotropic component
+}
+
+# values of environment variables that used to be in tdmt.config
+# these variables are set before calling tdmt_redi_sched_*
+tdmt.config &Arr{
+ RESP		/usr/local/mt_code/stations/bdsn.resp   #file with instrument responses 
+ STATLIST	/usr/local/mt_code/stations/bdsn.stat	#file with station coordinates 
+ BINDIR		/usr/local/mt_code/tdmt_iso_anna/BIN	#location of all executables for data and synthetics preparation  & tdmt_invc
+ SYNTHDIR	/iwrun/op/run/bin/moment_tensors/synalaska	#location of synthetics
+ EXTRACT_OPTIONS	-f # do not change the rest of options
+ DEBUG_OPTION	1
+ DATASTREAM	BH
+ PLOT		1
+
+ PROG1_PAGE      0
+ PROG1_GFLOC     /iwrun/op/run/bin/moment_tensors/synalaska  #used in prep_syn
+ PROG1_STATMAX   `awk '{}END{print NR}' $REDI_MT_STATLIST`	
+ PROG1_GETLIST 	`awk '{if(NR==1){printf("%s",$1)} else printf(",%s",$1)}' $REDI_MT_STATLIST`
+}
+
+# values of environment variables that used to be in tdmt.config, iso version
+# these variables are written on top of variables from tdmt.config array
+tdmt.config.iso &Arr{
+ SYNTHDIR	/iwrun/op/run/bin/moment_tensors/synalaska_iso	#location of synthetics
+ PROG1_GFLOC     /iwrun/op/run/bin/moment_tensors/synalaska_iso  #used in prep_syn
+}
+
+
+# templates for database files, used in 'extract waveforms'
+descr_templ &Arr{
+	dbextract_data	css3.0$dbpath{$dbname}:/Seis/databases/stations/{master_stations}:/iwrun/$waveforms/db/archive/{archive_$date}
+	dbout	css3.0/Seis/databases/stations/{master_stations} 
+}
+
+# a list of values used to fill entry fields at the right side of the program window
+# fields are set to these values from top to bottom
+default_entries	&Arr{
+	min_dist	30	# min distance
+	max_dist	700	# max distance
+	max_st		20	# max # of stations
+	iso		no	# isotropic (yes/no)
+	velocity_mod	auto	# velocity model
+	waveform	op	# waveforms are from
+	depth 		30
+	lcrn		
+	hcrn		
+	causal		2
+}
+
+.SH EXAMPLE
+asperity% mtiso_inversion_tool &
+.LP
+asperity% mtiso_inversion_tool dbtest 10 &
+.fi
+.ft CW
+.RS .2i
+.RE
+.ft R
+.SH RETURN VALUES
+.SH LIBRARY
+.SH DIAGNOSTICS
+.SH "SEE ALSO"
+Documentation for TDMT package: /usr/local/mt_code/MTPACKAGE2002 and MTPACKAGE2007
+.nf
+.fi
+.SH "BUGS AND CAVEATS"
+It assumes the waveforms are located in /iwrun/[op,bak,mig]/run/db/archive/archive_YEAR_MO_DA.wfdisc
+.SH AUTHOR
+Anna Bulanova and Natasha Ruppert, 06/2009.

@@ -1,0 +1,37 @@
+css3.0  &Arr{
+    aliases     &Arr{
+        orid    prefor
+        magid   mbid msid mlid
+    }
+}
+
+rt1.0   &Arr{
+    aliases     &Arr{
+        orid    prefor
+        magid   mbid msid mlid
+    }
+}
+
+SDAS1.0         &Arr{
+    aliases     &Arr{
+        orid    prefor
+        magid   mbid msid mlid
+    }
+}
+
+iceworm1.3 	&Arr{
+    aliases	&Arr{
+	orid	prefor
+	magid	mbid msid mlid
+    }
+}
+
+iceworm1.2 	&Arr{
+    aliases	&Arr{
+	orid	prefor
+	magid	mbid msid mlid
+    }
+}
+
+
+# $Id: dbfixids.pf,v 1.1.1.1 2000-05-23 23:28:17 kent Exp $ 

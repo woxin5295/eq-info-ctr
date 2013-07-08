@@ -1,0 +1,51 @@
+.\" $Name: not supported by cvs2svn $ $Date: 2002-02-07 01:56:28 $
+.TH DBMAPORIGINS 1 "$Date: 2002-02-07 01:56:28 $"
+.SH NAME
+dbmapstations \- Map stations with ak_dbmapevents
+.SH SYNOPSIS
+.nf
+\fBdbmapstations \fP\fIdbname.site\fP [\fIrecord\fP]
+.fi
+.SH DESCRIPTION
+\fBdbmapstations\fP takes a database table name (or - specifying stdin, reading
+a view that contains the site table) and plots the events in the
+database or view. \fBdbmapstations\fP will compute an appropriate center
+point and range for the map; write a parameter file for ak_dbmapevents;
+and launch ak_dbmapevents.
+
+If \fIrecord\fP is specified, \fBdbmapstations\fP shows only the specified row number of the
+site table.
+.SH PARAMETER FILE
+/tmp/dbmapevents.pf (created)
+.SH EXAMPLE
+.ft CW
+.in 2c
+.nf
+
+.ne 9
+
+%\fB dbmapstations /iwrun/op/params/Stations/master_stations.site\fP
+%\fB \fP
+
+Or place the following entry in the .dbe.pf file (these arrays
+may already be present in .dbe.pf, in which case only a one-line
+addition is necessary):
+
+.ne 6
+css3.0          &Arr{
+graphics        &Arr{
+    site      Stations dbmapstations -
+    }
+}
+
+.fi
+.in
+.ft R
+.SH "SEE ALSO"
+.nf
+ak_dbmapevents(1), dbe(1)
+.fi
+.SH "BUGS AND CAVEATS"
+Requires ak_dbmapevents to be accessible on the path.
+.SH AUTHOR
+Kent Lindquist

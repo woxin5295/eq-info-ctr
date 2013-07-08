@@ -1,0 +1,23 @@
+center 
+range  
+istaplt   0
+istnam   0
+ipdeplt   0
+ipdepth   0
+iporid   0
+icities   0
+ipipe   0
+ipumps   0
+iblue   0
+ipmag   0
+idcirc   0
+itran   0
+ilegnd  0
+icol   0
+ititl   0
+iflt   0
+title
+label_files  &Tbl{
+}
+boilerplate_files  &Tbl{
+}

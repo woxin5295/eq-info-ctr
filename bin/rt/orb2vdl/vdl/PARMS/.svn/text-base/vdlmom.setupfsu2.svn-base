@@ -1,0 +1,1 @@
+vdlidatap_intel if=localhost -v parms.vdl -n 18 -s 52 -f 20 -host nsn4.cr.usgs.gov -t 1 -i vpe -k 0

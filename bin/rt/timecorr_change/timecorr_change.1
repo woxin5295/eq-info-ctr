@@ -1,0 +1,43 @@
+.TH TITLE 1 "$Date: 2002-02-07 01:45:07 $"
+.SH TIMECORR_CHANGE
+timecorr_change \- Modify communications-delay database table
+.SH SYNOPSIS
+.nf
+\fBtimecorr_change \fP
+.fi
+.SH DESCRIPTION
+The \fBtimecorr_change\fP program creates a graphical user interface to
+change communication delays for the iceworm system. Timecorr_change
+modifies the timecorr table in the Iceworm database.
+ The timecorr_change can also
+entirely remove a row from the timecorr table.
+
+The databases affected by \fBtimecorr_change\fP are listed in the aeic_rtsys
+parameter file. If there is more than one database present, the databases
+may be linked, such that the window displays stations for the primary
+system's database, but attempts are made to apply the specified changes
+to all available databases. A set of buttons at lower left choose which
+database(s) are changed by \fBtimecorr_change\fP.
+
+At lower right the button "Revert to last saved" allows the database
+status to be restored to the condition at the time \fBtimecorr_change\fP
+was started. If "all systems" option is selected, this reversion
+applies to all the databases. Otherwise, it is applied only to the
+active database.
+.SH PARAMETER FILE
+aeic_rtsys.pf
+.SH "SEE ALSO"
+.nf
+dbe(1)
+.fi
+.SH "BUGS AND CAVEATS"
+New rows cannot be added to the databases with \fBtimecorr_change\fP. This
+must be done with dbe or another program.
+.SH AUTHOR
+.nf
+K. Lindquist
+Geophysical Institute
+University of Alaska, Fairbanks
+February, 1999
+.fi
+.\" $Id: timecorr_change.1,v 1.2 2002-02-07 01:45:07 kent Exp $

@@ -1,0 +1,13 @@
+# wormwatch
+# Kent Lindquist and Kevin Engle
+# Geophysical Institute
+# University of Alaska, Fairbanks
+# 10/97
+
+package require Orb
+package require Rtd
+package require Tclx
+
+lappend auto_path $env(AEIC)/data/tcl/library/wormwatch
+
+startup

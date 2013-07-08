@@ -1,0 +1,41 @@
+Attribute alarm_state
+        String (35)
+        Format ( "%-35s" )
+        Null ( "-" )
+        Description ( "alarm status" )
+        Detail {
+		This is a prescribed string which names the type of alarm
+		during the period between time and endtime. For example,
+		wfpeak_low, wfpeak_medium, or wfpeak_high could relate to 
+		different thresholds of peak waveform measurements and 
+		sta_maintenance, sta_down, or sta_temphigh could represent 
+		other criteria to take notice.
+        }
+        ;
+Attribute alarm_time
+        Time (17)
+        Format ( "%17.5f" )
+        Null ( "-9999999999.99900" )
+        Units ( "Seconds" )
+        Description ( "epoch time" )
+        Detail {
+		The actual time of the alarm. For detections, this is the actual
+		time of the detection. For waveform measurements, this is the 
+		sample time of the corresponding measurement.
+        }
+        ;
+
+Relation plalarm
+        Fields ( sta time alarm_time endtime alarm_state auth lddate )
+        Primary ( sta time alarm_time alarm_state )
+        Description ( "Station alarm status" )
+        Detail {
+                This relation provides a holder for the state of alarm for a 
+                particular station. These alarms can originate from a variety of
+		sources including waveform measurements, system diagnostics, etc.
+		The alarm_time field in this relation corresponds to the actual time
+	 	that the alarm occurred. time and alarm_time may be the same in
+		many instances. If endtime is the null value, then alarm_state 
+		likely represents the current station status.
+        }
+        ;

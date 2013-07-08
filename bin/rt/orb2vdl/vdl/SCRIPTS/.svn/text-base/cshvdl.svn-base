@@ -1,0 +1,7 @@
+#!/bin/csh -f
+cd $VDL_DIR
+cp $VDL_DIR/PARMS/vdlmom.setup$VDL_STATION vdlmom.setup
+vdlmom
+echo "((VDLMOM dead at $VDL_STATION.  ))" >! $VDL_DIR/SCRIPTS/vdl.mail
+Mail -s "page ketchum" pagemail@nsn4.cr.usgs.gov <$VDL_DIR/SCRIPTS/vdl.mail
+Mail -s "vdlmom down " ketchum@usgs.gov <$VDL_DIR/SCRIPTS/vdl.mail

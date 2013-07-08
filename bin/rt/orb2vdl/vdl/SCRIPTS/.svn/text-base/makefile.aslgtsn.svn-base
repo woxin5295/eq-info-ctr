@@ -1,0 +1,27 @@
+# Sample makefile for nrts_tap based client
+
+CC     = gcc 
+INCDIR = datasock/qlib
+INCDIR2 =  ../STEIM123
+BINDIR = ../bin/$(PLATFORM)
+QLIB = datasock/qlib/libqlib.a
+LIBDIR = ../vdl
+OPTMIZ = -O
+INCS   = -I$(INCDIR) -I$(INCDIR2)
+OSNAME = SOLARIS
+OSNAME2 = SOLARIS2
+#CFLAGS = $(OPTMIZ) $(INCS) -L$(LIBDIR) -D$(OSNAME) -DDEBUG_PRINT  -ansi
+CFLAGS = $(OPTMIZ) $(INCS) -L$(LIBDIR) -D$(OSNAME) -D$(OSNAME2) -ansi
+
+BINARIES = vdl.o vdltrg.o vdlput.o vdlqsub.o ifft512.o ifft256.o  ifft1024.o \
+fftlib.o cmprs.o vdltcp_nopass.o vdlfilt.o filt2.o filt10.o filt5.o filtheli.o \
+datetime.o \
+../STEIM123/steimlib.o feedme_gtsn.o safetcp.o feedme_test_null.o vdlmath.o 
+
+include SCRIPTS/makefile.modules
+
+#
+#	VDLASL - VDL from the LISS server at ASL
+# 
+vdlgtsn:	$(BINARIES) 
+	$(CC) $(CFLAGS)  $(BINARIES) -o vdlgtsn -lm -lnsl -lsocket

@@ -1,0 +1,1 @@
+vdl if=localhost -v parms.vdl -n 15 -s 66 -f 20 -i rpn -k 0

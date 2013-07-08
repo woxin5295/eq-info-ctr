@@ -1,0 +1,4 @@
+cd /dyna/data4/ketchum/vdl
+vdlmom
+Mail -s "Gldfs::vdlmom down" ketchum@gldfs.cr.usgs.gov </dyna/data4/ketchum/vdl/vdl.mail
+Mail -s "page ketchum" pagemail@nsn4.cr.usgs.gov </dyna/data4/ketchum/vdl/vdl.mail

@@ -1,0 +1,3 @@
+ELOG_MAXMSG 0  # max number of messages allowed in log; 
+		# more will cause the application to die.  
+		# Set to zero to allow a very large number.

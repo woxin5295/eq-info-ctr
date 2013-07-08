@@ -1,0 +1,604 @@
+: # use perl
+eval 'exec $ANTELOPE/bin/perl -S $0 "$@"'
+if 0;
+
+use lib "$ENV{ANTELOPE}/data/perl" ;
+##############################################################################
+# shake_watch V3.2 
+# Author: Glenn Thompson (GTHO), based on original version of code by Artak Martirosyan
+#         ALASKA EARTHQUAKE INFORMATION CENTER
+#	  University of Alaska Fairbanks
+#
+# Modifications:
+#       2008-05-23 GTHO: added this header, added comments throughout program, 
+#	reordered/restructured code for easier maintenance, clarity, added use of our/my,
+#	added usage. Makefile and man page added. Use of ANTELOPEMAKE / build added.
+#	2008-05-23 GTHO: added support for netmag table, so mw can be used instead of
+#	ml, mb, ms in origin table. To support this, the hash %netmag has been added, to replace
+#	the variables $mb and $ml. Significant code alteration has been necessary to implement
+#	this. 
+#	2008-11-07 GTHO: Modified program to watch netmag directly, rather than watch origin table.
+#	Whenever this table is updated, the netmag, event and origin tables are joined. Each new
+#	joined row ("new" depending on the value of last_magid) is examined, 
+#
+# Purpose:
+#       This program is designed to watch an event database for new origin rows,
+#	evaluate if a new preferred origin satifies eligibility criteria, and if so,
+#	calls the USGS 'shake' program. It can also cancel a ShakeMap if a new,
+#	preferred origin no longer satisfies those criteria and a ShakeMap has already
+#	been generated.
+#
+# To do:
+#	1. This program has yet to be tested under shakeD account. Replace shake_watch in rtexec.
+#	2. Need to track magnitude and magtype in status file.
+#	3. Only run shake if:
+#		i) new evid, orid==prefor, and origin is eligible
+#		ii) existing evid, orid==prefor, origin is eligible and
+#			a) it's a new orid
+#			b) it's an existing orid, but the magnitude is an improvement
+#	By "magnitude improvement", use a priority table like:
+#		Mw	4
+#		Ms	3
+#		Ml	2
+#		Mb	1
+#	Even if 3ii)b), only run shake if the magnitude has actually changed!
+#
+# 
+##############################################################################
+# GTHO 1
+use Datascope;
+
+#use orb;
+require "getopts.pl" ;
+
+use strict;
+use warnings;
+our $PROG_NAME;
+($PROG_NAME = $0) =~ s(.*/)();  # PROG_NAME becomes $0 minus any path
+
+our $pf; 
+
+# Usage - command line options and arguments
+our $opt_p; 
+if ( ! &Getopts('p:') || $#ARGV > -1 ) {
+    print STDERR <<"EOU" ;
+
+    Usage: $PROG_NAME [-p parameter_file]
+
+                -p      	parameter file path
+	
+	$PROG_NAME is designed to watch an event database for new origin rows,
+	evaluate if a new preferred origin satifies eligibility criteria, and if so,
+	calls the USGS 'shake' program. It can also cancel a ShakeMap if a new,
+	preferred origin no longer satisfies those criteria and a ShakeMap has already
+	been generated. 
+
+EOU
+    exit 1 ;
+}
+
+
+# Use parameter file from command line option
+if (defined($opt_p)) {
+	$pf = $opt_p;
+}
+else
+{
+	$pf = "pf/shake_watch.pf";
+}	
+die("$pf not found") unless (-e $pf);	
+
+sub run {               # run system cmds safely
+     	my ( $cmd, $ok ) = @_ ;
+
+     	print "$cmd\n";
+     	my $value = "";
+
+
+        $value = `$cmd` if $ok;
+        chomp($value);
+        $value =~ s/\s*//g;
+
+        if ($?) {
+            print STDERR "$cmd error $? \n" ;
+            exit(1);
+        }
+
+      	return $value;
+
+}
+sub call_rtmail {
+	my ($msg, $subject, @recipients) = @_;
+	&run("echo $msg | rtmail -s $subject @recipients", 1);
+}
+
+# End of header
+# GTHO 2
+#####################################################
+
+# GTHO: Not sure if this is needed, Artak had it 
+require "winding.pl";
+
+# GTHO: define variables - globals from parameter file, others local
+our ($run_home, $bin_home, $database, $state_file, $lastid_file);
+our ($second_polygon, %minmax, %author_list, @polygon, @polygon2, $minmag_polygon1, $minmag_polygon2); 
+our $mag_buffer; 	# Difference between magnitude threshold for creating a ShakeMap and cancelling it
+my (@db1, @db2, @db3, @db4);
+our @status=();
+my $last_time=0;
+our ($last_orid, $last_magid);
+my ($dblast_orid, $norids, $dblast_magid, $nmagids);
+my $total_rec;		# total number of records (origins) in the joined origin/event view
+my $tmpdb_file;	
+my ($evid, $orid, $lat, $lon, $depth, $time, $nass, $premag, $auth, $prefor, $ortime, $MMI, $magid, $magtype, $magnitude);
+my ($A, $C, $S, $E);
+	#$A - author from database (1:4) orbassoc:1,atwc:2,neic:3,UAF:4
+	#$S - status (0:6) none:0,orbassoc:1,atwc:2,neic:3,UAF:4,manual:5,manual cancellation:6
+	#$E - eligibility (0,1)
+	#$C - automatic cancellation 1=yes, 0=no 
+	#$MMI -estimated intensity at the epicenter
+our $shakemapStatusXML;
+my $cancelmsgdir;
+my $sleep_time;
+our %netmag;
+
+# GTHO: read parameters
+$run_home=pfget("$pf","run_home");
+$bin_home=pfget("$pf","bin_home");
+$database=pfget("$pf","database");
+$state_file="$run_home/state/shake_watch.state";
+$second_polygon=pfget("$pf","second_polygon");
+$lastid_file="$run_home/state/shake_watch.lastid";
+%minmax=%{pfget("$pf","minmax")};
+%author_list=%{pfget("$pf","author_list")};
+$minmag_polygon1=pfget("$pf","minmag_polygon1");
+$mag_buffer=pfget("$pf","mag_buffer");
+@polygon=@{pfget("$pf","polygon1")};
+@polygon=split(/,/,join(",",@polygon));
+if($second_polygon){
+	$minmag_polygon2=pfget("$pf","minmag_polygon2");
+	@polygon2=@{pfget("$pf","polygon2")};
+	@polygon2=split(/,/,join(",",@polygon2));
+}
+$cancelmsgdir = pfget($pf, "cancelmsgdir");
+$C=pfget("$pf","auto_cancel");
+
+# Set others
+$sleep_time = 60;
+
+# GTHO: Change STDOUT & STDERR to logfile
+open(STDOUT, ">> $run_home/logs/$PROG_NAME") || die "Can't redirect STDOUT";
+open(STDERR, ">> $run_home/logs/$PROG_NAME") || die "Can't redirect STDERR";
+select(STDERR); $| = 1;
+select(STDOUT); $| = 1;
+
+# GTHO: Check summary database exists
+if (! -e "$database") {die "$PROG_NAME ERROR: Database $database does not exist!\n";}
+
+# GTHO: Start message
+print "\nStarting $PROG_NAME at ".Datetime();
+
+# GTHO: Read State File
+print "\nReading State File...\nEntering Watch Loop...";
+ReadStateFile();
+
+
+### entering infinite watch loop
+################################################################################
+while (1) {
+
+	# GTHO: Process any new manual cancellation request messages. Cancelling a ShakeMap is then as
+	# simple as 'touch $cancelmsgdir/$evid.cancel'.
+	{
+		use File::Basename qw(basename);
+		my @allmsgfiles = glob("$cancelmsgdir/*.cancel");
+		print "*** Manual cancellations from dbevents_aeic ***\n" if ($#allmsgfiles > -1);
+		my ($msgfile, $basename, $thisevid, $newfile);
+		foreach $msgfile (@allmsgfiles) {
+			$basename = basename($msgfile);
+			$thisevid =~ s/.cancel//;
+			print "\nCalling CancelShake() for $basename\n";
+			CancelShake($thisevid); 
+			$newfile = "$cancelmsgdir/$thisevid.done";
+			system("mv $msgfile $newfile");
+			print "Moved $msgfile to $newfile\n";
+		}	
+	}		
+
+	# GTHO: Pause if database is being modified			
+	while(`orb2db_msg $database status 2>&1`=~/progress/) {
+		print "\nDatabase cleanup in progress at ".Datetime().", waiting 30 sec...";
+		sleep 30;
+	} 
+	
+	# GTHO: Open the database, and read the last magid used, and set this as $dblast_magid 
+	my @db1=dbopen($database,"r");
+	@db2=dblookup(@db1, "", "lastid", "keyname", "magid");
+	$dblast_magid=dbgetv(@db2,"keyvalue");
+
+	# GTHO: Now read the last_orid already processed by this program from a local file - should pass this value as a parameter!
+	ReadLastMagid();
+
+	# GTHO: Now calculate the number of orids (to be processed) as the difference between these
+	# assuming orids are sequential
+	$nmagids = $dblast_magid - $last_magid;
+	
+	# GTHO: Do we have any new origins to examine?
+	if ($nmagids > 0) {
+		
+		# Join netmag, origin & event tables, and get the total number of records		
+		@db3 = dbprocess(@db1,"dbopen netmag", "dbjoin event", "dbjoin origin"); 
+		$total_rec = dbquery(@db3,"dbRECORD_COUNT");
+
+		# GTHO: If we've got too many netmag rows to process, we're just going to skip a bunch
+		if($nmagids > $minmax{nmagids_max}) {
+			$last_magid = $dblast_magid - $minmax{nmagids_max};
+			print "\n$PROG_NAME: Too many new netmag rows - processing last $minmax{nmagids_max}";
+		}
+
+		# GTHO: If our database got crunched, the total number of records is less than the number we think we're going to process
+		# so again, assuming magids are sequential, we can figure out what the first magid is and subtract 1
+		$last_magid = ($dblast_magid - $total_rec) if $total_rec < ($dblast_magid - $last_magid);
+		# GTHO: OK, now we finally seem to be happy with whatever last_magid is.
+
+
+
+		# So lets loop from last_magid+1, which is the first new magid, up to dblast_magid, the last magid in the database when we read it
+		for ($magid = $last_magid + 1; $magid <= $dblast_magid; $magid+=($numMatches+1)) {
+
+			# We need to read some fields for this row, including orid
+			@db4 = dblookup(@db3, "", "", "magid", $magid);
+			$numMatches = dbquery(@db4, "dbRECORD_COUNT");
+
+			# GTHO: Now lookup rows in the joint netmag/origin/event table corresponding to this orid
+			@db4 = dblookup(@db3, "", "", "orid", $orid);
+
+			# We only want to process these netmag rows if orid==prefor for this evid
+			next if ( dbquery(dbsubset(@db4, "orid==prefor"), "dbRECORD_COUNT") == 0 );
+			# Note there here there may be several entries for this origin, since a single origin can have many netmag rows
+
+			# reset the netmag hash
+			%netmag = (
+				"mw" => -999.0,
+				"ms" => -999.0,
+				"mb" => -999.0,
+				"ml" => -999.0,
+			);
+
+			# Now loop over all the netmag rows for this particular origin
+			for ($matchNo=0; $matchNo<$numMatches; $matchNo++) {
+				$db4[3]=$matchNo;
+				($evid, $lat, $lon, $depth, $time, $nass, $orid, $magtype, $magnitude, $auth, $prefor)=
+					dbgetv(@db4, qw(evid lat lon depth time nass orid magtype magnitude auth prefor));
+				$netmag{$magtype}=$magnitude;
+			}
+			
+			# GTHO: Changed the following code to use %netmag, instead of mag/mb
+			# GTHO: Adding preferred magnitude - though later would be good to support user-defined list from parameter file
+			MAGTYPE: {
+				if ($netmag{"mw"} > 0) {
+					$premag = $netmag{"mw"};
+					last MAGTYPE;
+				}
+				if ($netmag{"ms"} > 0) {
+					$premag = $netmag{"ms"};
+					last MAGTYPE;
+				}
+				if ($netmag{"ml"} > 0) {
+					$premag = $netmag{"ml"};
+					last MAGTYPE;
+				}
+				if ($netmag{"mb"} > 0) {
+					$premag = $netmag{"mb"};
+					last MAGTYPE;
+				}
+			};
+
+			# GTHO: Summarise this origin
+			$depth = int($depth*10 + .5)/10;
+			$ortime=epoch2str( $time, "%m/%d/%Y %H:%M:%S" );
+			print "\n\nORIGIN $orid: Processing at ".Datetime().
+				  "\n    EVENT $evid, orig_time=$ortime, author=$auth".
+				  "\n    mag=$premag, depth=$depth km, nass=$nass, prefor=$prefor\n";
+
+			### GTHO: author check: Looks for $auth in $author_list and return index
+			undef $A;
+			foreach (keys %author_list) {if($auth=~/$_/) {$A = $author_list{$_};last;}}
+			if (!$A) {print("ORIGIN $orid: unknown author - $auth.\n"); next;};
+				
+			# GTHO 1: reordered checks: status then eligibility, rather than other way
+			# Eligibility now depends on status
+			# So if $S != 0, ShakeMap already exists, and so we want to use a lower magnitude for cancellation
+			# e.g. M>=4 to run a Shakemap, M<3.5 to cancel it
+				
+			### status check
+			$S = CheckStatus($evid); 
+	
+			### eligibility check
+			($E, $MMI) = CheckEligibility($lat,$lon,$depth,$premag,$S); 
+
+			print "Eligibility=$E, Status=$S, MMI=$MMI.\n";
+
+			### Action Switch
+			SWITCH: {
+				
+				### no action
+				if ($S==5) {
+					print "No action - manual status.\n";
+					last SWITCH;
+				}
+				if ($S==6) {
+					print "No action - manual cancellation.\n";
+					last SWITCH;
+				}
+				if ($E==0 && $S==0) { # Not eligible, no ShakeMap exists
+					print "No action - not eligible for ShakeMap.\n";
+					last SWITCH;
+				}		
+				if ($prefor != $orid) { # Not the preferred origin
+					print "No action - origin is not the preferred.\n";
+					last SWITCH;
+				} 
+
+				### GTHO: Automatic Cancellation: if automatic_cancellation TRUE, Status NON-ZERO, origin eligibility FALSE
+				if ($C==1 && $S!=0 && $E==0) {
+					sleep $sleep_time if (time - $last_time) < $sleep_time;
+					CancelShake($evid);
+					last SWITCH;
+				}
+
+				### Run ShakeMap
+				if ($E == 1) {
+					sleep $sleep_time if (time - $last_time) < $sleep_time;
+					$tmpdb_file = "$run_home/db/gmv$evid";
+					
+					while (`ls $tmpdb_file 2>&1` !~ /No/) { # GTHO: This seems to be a check for if db2sm_xml is running, and could be improved
+						print "dbwfmeas for event $evid still in progress, waiting $sleep_time sec...\n";
+						sleep $sleep_time;
+					} 
+					
+					if (`$bin_home/unlock -event $evid 2>&1` !~ /Nothing/) { # GTHO: A check for if shake is running?
+						print "ShakeMap for event $evid still in progress, waiting $sleep_time sec...\n";
+						sleep $sleep_time;
+					} 	
+					
+					# GTHO: 
+					RunShake($evid, $prefor, $A);
+					last SWITCH;
+				}
+
+				### GTHO: unknown status - if we got here, we got a combination we weren't expecting: send an email
+				print "No action - unknown status: E=$E, S=$S, A=$A.\n";
+				my $msg = "$PROG_NAME: Unknown status for orid $orid, event $evid : E=$E, S=$S, A=$A";
+				my $subject = "\"$PROG_NAME ERROR\"";
+				my @recipients = qw(glenn\@giseis.alaska.edu);
+				&call_rtmail($msg, $subject, @recipients);
+			}
+		}
+		
+		dbclose(@db);
+		$last_magid = $dblast_magid;
+		WriteStateFile();
+		WriteLastMagid($last_magid);
+		
+	} else {
+		dbclose(@db);
+		sleep $sleep_time;
+	}
+}
+
+close(STDOUT);
+close(STDERR);
+
+die "$PROG_NAME ERROR: Outside the main loop - exiting.\n";
+
+################################################################################
+# SUBROUTINES
+################################################################################
+
+################################################################################
+sub ReadStateFile{
+	unless (open FH,"$state_file") {print("$PROG_NAME: $state_file file does not exist.\n");return;}
+	while (<FH>) {
+		push @status,[ split ];
+	}
+	close FH;
+}
+
+################################################################################
+sub WriteStateFile{
+	open FH,">$state_file";
+	for (@status) {
+		print FH "@$_\n";
+	}
+	close FH;
+}
+
+################################################################################
+sub ReadLastMagid{
+	my $last_magid = $_[0];
+	unless (open FH,"$lastid_file") {
+		print "$PROG_NAME: Cannot open $lastid_file file.\n";
+		$last_magid=0;
+		return;
+	}
+	$last_magid=<FH>;
+	close FH;
+}
+
+################################################################################
+sub WriteLastMagid{
+	my $last_magid = $_[0];
+	open FH,">$lastid_file";
+	print FH $last_magid;
+	close FH;
+}
+
+################################################################################
+sub CheckEligibility_Artak {
+
+	my $dist=sqrt($depth*$depth+100);
+	$MMI =1.15+1.01*$mag-0.00054*$dist-1.72*log($dist)/log(10);
+	$MMI=int($MMI*100+.5)/100;
+	$E=0;
+
+	if (($nass>=$minmax{nass_min})&&($MMI>=$minmax{mmi_min})) {
+		if (is_geographically_inside($lat,$lon,@polygon)&&($mag>=$minmag_polygon1)) {
+			$E=1;
+			return ($E,$MMI);
+		}
+		else {
+			if ($second_polygon) {
+				$E=1 if (is_geographically_inside($lat,$lon,@polygon2)&&($mag>=$minmag_polygon2));
+			}
+		}
+	}
+return ($E,$MMI);		
+}
+################################################################################
+sub CheckEligibility { # New version by GTHO
+
+	my ($depth, $mag, $lon, $lat, $S) = @_;
+	my ($mag_buffer, $magthreshold_polygon1, $magthreshold_polygon2, $dist, $MMI);
+	my ($nass_test, $mmi_test, $in_polygon1, $in_polygon2, $mag_test, $E); 
+	my (@result);
+
+	# GTHO: Modified this routine to use a buffer - the difference in magnitude between
+        # the threshold for creating a ShakeMap for the first time, and cancelling an existing one
+	# If $S == 0, no ShakeMap exists yet for this event, $mag_buffer = 0, and thresholds for eligibility are 3.5 and 5.0 respectively.
+	# If $S == 1, ShakeMap exists, $mag_buffer = 0.5, and thresholds for eligibility are 3.0 and 4.5 respectively.
+	$mag_buffer = 0;
+	$mag_buffer = $mag_buffer if ($S > 0); 
+	$magthreshold_polygon1 = $minmag_polygon1 - $mag_buffer;
+	$magthreshold_polygon2 = $minmag_polygon2 - $mag_buffer;
+	printf "Check Eligibility: Mag thresholds: polygon 1 %3.1f, polygon2 %3.1f\n", $magthreshold_polygon1, $magthreshold_polygon2;
+
+	# GTHO: Compute MMI
+	$dist=sqrt($depth*$depth+100);
+	$MMI = 1.15 + 1.01*$mag - 0.00054*$dist - 1.72*log($dist)/log(10);
+	$MMI = int($MMI*100+.5)/100;
+
+	# Test each condition separately, for verboseness/troubleshooting
+	@result = qw(failed passed);
+
+	$nass_test = 0;
+	$nass_test = 1 if ($nass>=$minmax{nass_min});
+	printf "nass test %s\n", $result[$nass_test];	
+
+	$mmi_test = 0;
+	$mmi_test = 1 if ($MMI>=$minmax{mmi_min});
+	printf "mmi test %s\n", $result[$mmi_test];	
+
+	$in_polygon1 = 0;
+	$in_polygon1 = 1 if (is_geographically_inside($lat,$lon,@polygon));
+	printf "in polygon 1 test %s\n", $result[$in_polygon1];	
+
+	$mag_test = 0;
+	if ($in_polygon1) {
+		$mag_test = 1 if ( $mag >= ($minmag_polygon1 - $mag_buffer) );
+	}
+	elsif ($second_polygon) {
+		my $in_polygon2 = 0;
+		$in_polygon2 = 1 if (is_geographically_inside($lat,$lon,@polygon2));
+		printf "in polygon 2 test %s\n", $result[$in_polygon2];	
+		$mag_test = 1 if ( $mag >= ($minmag_polygon2 - $mag_buffer) && ($in_polygon2) ); 
+	}
+	printf "mag test %s\n", $result[$mag_test];
+
+	# Origin is eligible only if it passed all these tests
+	$E = 1 if ($nass_test && $mmi_test && $mag_test);
+
+	return ($E, $MMI);		
+}
+
+################################################################################
+sub CheckStatus {
+	my ($evid) = $_[0];
+	foreach (@status) {
+		if(@$_[0]==$evid) { 
+			$S=@$_[2];
+			last; 
+		}
+	}
+	return $S;
+}
+
+################################################################################
+sub RunShake {
+	my ($evid, $prefor, $A) = @_;
+	if (my $pid=fork) {
+		AddFlag($evid, $prefor, $A);
+		$last_time=time;
+		print "Initiating ShakeMap for EVENT $evid*******************************\n";
+	} elsif (defined $pid) {
+		open(SLOG, ">>$run_home/logs/shake") or print "Can't open report: $!";
+		print SLOG "\n\n$evid: STARTING ShakeMap ********************************\n\n";
+		close SLOG;
+		exec "$bin_home/shake -event $evid -once_only -default_fl >> $run_home/logs/shake 2>&1\n" or die "ERROR: cannot execute shake: $!\n";
+	} elsif ($! =~ /No more process/) {
+		sleep 2;
+		redo FORK;
+	} else {
+		chomp $!;
+		print "ERROR: fork error: $!";
+		return 1;
+	}
+}
+
+################################################################################
+sub CancelShake {
+	my $evid = $_[0];
+	if (my $pid=fork) {
+		RemoveFlag($evid);
+		$last_time=time;
+		print "Cancelling ShakeMap for EVENT $evid*******************************\n";
+	} elsif (defined $pid) {
+		open(SLOG, ">>$run_home/logs/shake") or print "Can't open report: $!";
+		print SLOG "\n\n$evid: CANCELLING ShakeMap ********************************\n\n";
+		close SLOG;
+		print "\n\n$evid: CANCELLING ShakeMap ********************************\n\n";
+		exec "$bin_home/cancel -v -event $evid>> $run_home/logs/shake 2>&1\n" or print "ERROR: couldn't exec cancel: $!\n";
+	} elsif ($! =~ /No more process/) {
+		sleep 2;
+		redo FORK;
+	} else {
+		chomp $!;
+		print "ERROR: fork error: $!";
+		return 1;
+	}						
+}
+
+################################################################################
+sub AddFlag {
+	my ($evid, $prefor, $A, $S) = @_;
+	if ($S==0) {
+		unshift(@status,[$evid,$prefor,$A]); # Puts $evid $prefor $A at start of status array (new inserted row 1)
+	} else {
+		foreach (@status) {
+			if($_[0]==$evid){
+				(@$_[1],@$_[2])=($prefor,$A); # Result should be a status row with $evid $prefor $A (A is author number)
+				last;
+			}
+		}
+	}
+	pop(@status) if @status>100;
+}
+
+################################################################################
+sub RemoveFlag {
+	my $evid = $_[0];
+	foreach my $i (0..$#status) {
+		if($status[$i][0]==$evid){
+			splice(@status,$i,1); # Removes the flag, like taking the last element from the row of the status file with 1st field == evid 
+			last;
+		}
+	}
+}
+
+################################################################################
+sub Datetime {
+	@_ = gmtime(shift || time);
+	return(sprintf("%02d:%02d:%02d %02d/%02d/%04d",@_[2,1,0], $_[4]+1, $_[3], $_[5]+1900)); 
+}
+	
+################################################################################

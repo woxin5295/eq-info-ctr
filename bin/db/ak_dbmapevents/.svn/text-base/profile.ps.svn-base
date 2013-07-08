@@ -1,0 +1,2208 @@
+%!PS-Adobe-3.0
+%%Creator: ugle:roger (roger)
+%%Title: profile.ps (dbmapevents)
+%%CreationDate: Wed Mar  4 11:15:24 1998
+%%EndComments
+initmatrix newpath initclip
+1 setlinewidth 0 setlinecap 0 setlinejoin
+[] 0 setdash 0 setgray 10 setmiterlimit
+%%BeginDocument: profile.ps
+%!PS-Adobe-3.0 EPSF-3.0
+%%BoundingBox: 0 0 540 720
+%%Creator: ugle:roger (roger)
+%%Title: profile.ps (dbmapevents)
+%%CreationDate: Wed Mar  4 11:15:24 1998
+%%EndComments
+%%BeginProlog
+% Start of niceplot.pro -- prolog for niceplot PostScript
+/npchsc 1.0 def
+/m {moveto} def
+/l {lineto} def
+/r {rlineto} def
+/x {0 rlineto} def
+/y {0 exch rlineto} def
+/A {-2 2 rlineto} def
+/B {-1 2 rlineto} def
+/C {0 2 rlineto} def
+/D {1 2 rlineto} def
+/E {2 2 rlineto} def
+/F {-2 1 rlineto} def
+/G {-1 1 rlineto} def
+/H {0 1 rlineto} def
+/I {1 1 rlineto} def
+/J {2 1 rlineto} def
+/K {-2 0 rlineto} def
+/L {-1 0 rlineto} def
+/M {1 0 rlineto} def
+/N {2 0 rlineto} def
+/O {-2 -1 rlineto} def
+/P {-1 -1 rlineto} def
+/Q {0 -1 rlineto} def
+/R {1 -1 rlineto} def
+/S {2 -1 rlineto} def
+/T {-2 -2 rlineto} def
+/U {-1 -2 rlineto} def
+/V {0 -2 rlineto} def
+/W {1 -2 rlineto} def
+/X {2 -2 rlineto} def
+/npfont112 {/font /Helvetica def} def
+/npfont113 {/font /Helvetica-BoldOblique def} def
+/npfont114 {/font /Helvetica-Bold def} def
+/npfont115 {/font /Times-Roman def} def
+/npfont116 {/font /Times-Italic def} def
+/npfont117 {/font /Times-Bold def} def
+/npfont130 {/font /Palatino-Roman def} def
+/npfont131 {/font /Palatino-Italic def} def
+/npfont132 {/font /Palatino-Bold def} def
+/nptext { %xp yp size szsc angle ref xl xr yb yt clp mytext nptext
+/mytext exch def
+/clp exch def
+/yt exch def
+/yb exch def
+/xr exch def
+/xl exch def
+/ref exch def
+/angle exch def
+/szsc exch def
+/size exch def
+/yp exch def
+/xp exch def
+ref 0 lt {/ref 0 def} if
+ref 8 gt {/ref 0 def} if
+size 1.5 mul szsc mul /size exch def
+ref cvi /ref exch def
+ref 0.5 add 3 div cvi /xjust exch def
+ref xjust 3 mul neg add /yjust exch def
+font findfont size scalefont setfont
+mytext stringwidth /wy exch def /wx exch def
+wx wx mul wy wy mul add sqrt /width exch def
+width 0.5 mul xjust mul /xj exch def
+size 0.333 mul yjust mul /yj exch def
+xj angle cos mul yj angle sin mul sub /xpp exch def
+xj angle sin mul yj angle cos mul add /ypp exch def
+xp xpp sub /xp exch def
+yp ypp sub /yp exch def
+angle rotate
+xp angle cos mul yp angle sin mul add /xpp exch def
+xp neg angle sin mul yp angle cos mul add /ypp exch def
+xpp ypp moveto
+mytext show
+angle neg rotate
+} def
+/rectcl {
+/ht exch def
+/wd exch def
+/yc exch def
+/xc exch def
+newpath xc yc moveto xc wd add yc lineto
+xc wd add yc ht add lineto xc yc ht add lineto
+closepath clip newpath
+} def
+%%EndProlog
+.236667 .236667 scale
+0 setlinewidth
+newpath
+0.000 setgray
+gsave
+newpath
+1.000 setgray
+150 150 moveto
+2254 0 rlineto
+0 3001 rlineto
+2254 neg 0 rlineto
+closepath
+fill
+0.000 setgray
+grestore
+5 setlinewidth
+385 2734 m
+40 1 r
+40 1 r
+40 1 r
+39 x
+40 1 r
+40 x
+40 1 r
+40 x
+40 1 r
+40 x
+40 x
+40 1 r
+40 x
+40 x
+40 x
+39 x
+40 x
+40 -1 r
+40 x
+40 x
+40 -1 r
+40 x
+40 -1 r
+40 x
+40 -1 r
+40 x
+39 -1 r
+40 -1 r
+39 -1 r
+-18 -792 r
+-37 1 r
+-39 1 r
+-39 x
+-38 1 r
+-39 1 r
+-39 x
+-38 1 r
+-39 x
+-39 x
+-38 1 r
+-39 x
+-39 x
+-38 x
+-39 x
+-39 x
+-38 x
+-39 x
+-39 x
+-38 x
+-39 -1 r
+-39 x
+-38 x
+-39 -1 r
+-39 x
+-38 -1 r
+-39 -1 r
+-39 x
+-38 -1 r
+-37 -1 r
+-19 794 r
+stroke
+newpath
+385 2737 m
+40 1 r
+40 1 r
+40 1 r
+39 1 r
+40 x
+40 1 r
+40 x
+40 1 r
+40 x
+40 x
+40 1 r
+40 x
+40 x
+40 x
+40 x
+39 x
+40 x
+40 x
+40 -1 r
+40 x
+40 x
+40 -1 r
+40 x
+40 -1 r
+40 x
+40 -1 r
+40 -1 r
+39 -1 r
+42 -1 r
+-18 -798 r
+-41 1 r
+-38 x
+-39 1 r
+-38 1 r
+-39 x
+-39 1 r
+-38 x
+-39 1 r
+-39 x
+-38 x
+-39 1 r
+-39 x
+-38 x
+-39 x
+-39 x
+-38 x
+-39 x
+-39 x
+-38 -1 r
+-39 x
+-39 x
+-38 -1 r
+-39 x
+-39 -1 r
+-38 x
+-39 -1 r
+-39 -1 r
+-38 x
+-41 -1 r
+-18 797 r
+stroke
+newpath
+0 setlinewidth
+2 setlinewidth
+%% text: x=0.500000 y=2.856017 angle=0.000000 iref=3
+%%       string='PDE Earthquakes for 1993' iclip=1
+npfont132
+965 2799 45 npchsc 0 3 391 1539 1950 2739 0 (PDE Earthquakes for 1993) nptext
+0 setlinewidth
+%% text: finished
+243 173 m
+-21 y
+stroke
+newpath
+243 173 m
+-21 y
+stroke
+newpath
+243 173 m
+-21 y
+stroke
+newpath
+243 173 m
+1 -21 r
+stroke
+newpath
+243 173 m
+1 -21 r
+stroke
+newpath
+243 173 m
+1 -21 r
+stroke
+newpath
+243 173 m
+1 -21 r
+stroke
+newpath
+243 173 m
+1 -21 r
+stroke
+newpath
+243 173 m
+1 -21 r
+stroke
+newpath
+243 173 m
+1 -21 r
+stroke
+newpath
+243 173 m
+1 -21 r
+stroke
+newpath
+243 173 m
+1 -21 r
+stroke
+newpath
+243 173 m
+1 -21 r
+stroke
+newpath
+243 173 m
+1 -21 r
+stroke
+newpath
+243 173 m
+1 -21 r
+stroke
+newpath
+243 173 m
+1 -21 r
+stroke
+newpath
+244 173 m
+-21 y
+stroke
+newpath
+244 173 m
+-21 y
+stroke
+newpath
+244 173 m
+-21 y
+stroke
+newpath
+244 173 m
+-21 y
+stroke
+newpath
+244 173 m
+-21 y
+stroke
+newpath
+244 173 m
+-21 y
+stroke
+newpath
+244 173 m
+-21 y
+stroke
+newpath
+244 173 m
+-21 y
+stroke
+newpath
+244 173 m
+-21 y
+stroke
+newpath
+244 173 m
+-21 y
+stroke
+newpath
+244 173 m
+1 -21 r
+stroke
+newpath
+244 173 m
+1 -21 r
+stroke
+newpath
+244 173 m
+1 -21 r
+stroke
+newpath
+244 173 m
+1 -21 r
+stroke
+newpath
+244 173 m
+1 -21 r
+stroke
+newpath
+244 173 m
+1 -21 r
+stroke
+newpath
+244 173 m
+1 -21 r
+stroke
+newpath
+244 173 m
+1 -21 r
+stroke
+newpath
+244 173 m
+1 -21 r
+stroke
+newpath
+244 173 m
+1 -21 r
+stroke
+newpath
+244 173 m
+1 -21 r
+stroke
+newpath
+244 173 m
+1 -21 r
+stroke
+newpath
+244 173 m
+1 -21 r
+stroke
+newpath
+244 173 m
+1 -21 r
+stroke
+newpath
+244 173 m
+1 -21 r
+stroke
+newpath
+244 173 m
+1 -21 r
+stroke
+newpath
+244 173 m
+1 -21 r
+stroke
+newpath
+244 173 m
+1 -21 r
+stroke
+newpath
+244 173 m
+1 -21 r
+stroke
+newpath
+244 173 m
+1 -21 r
+stroke
+newpath
+244 173 m
+1 -21 r
+stroke
+newpath
+244 173 m
+1 -21 r
+stroke
+newpath
+244 173 m
+1 -21 r
+stroke
+newpath
+244 173 m
+1 -21 r
+stroke
+newpath
+244 173 m
+1 -21 r
+stroke
+newpath
+244 173 m
+1 -21 r
+stroke
+newpath
+244 173 m
+1 -21 r
+stroke
+newpath
+244 173 m
+1 -21 r
+stroke
+newpath
+244 173 m
+1 -21 r
+stroke
+newpath
+244 173 m
+1 -21 r
+stroke
+newpath
+244 173 m
+1 -21 r
+stroke
+newpath
+244 173 m
+1 -21 r
+stroke
+newpath
+243 150 m
+C
+stroke
+newpath
+243 150 m
+C
+stroke
+newpath
+244 150 m
+B
+stroke
+newpath
+244 150 m
+C
+stroke
+newpath
+244 150 m
+C
+stroke
+newpath
+244 150 m
+C
+stroke
+newpath
+244 150 m
+C
+stroke
+newpath
+244 150 m
+C
+stroke
+newpath
+244 150 m
+C
+stroke
+newpath
+244 150 m
+C
+stroke
+newpath
+244 150 m
+C
+stroke
+newpath
+244 150 m
+C
+stroke
+newpath
+244 150 m
+C
+stroke
+newpath
+244 150 m
+C
+stroke
+newpath
+244 150 m
+C
+stroke
+newpath
+244 150 m
+C
+stroke
+newpath
+244 150 m
+C
+stroke
+newpath
+244 150 m
+C
+stroke
+newpath
+244 150 m
+C
+stroke
+newpath
+244 150 m
+C
+stroke
+newpath
+244 150 m
+C
+stroke
+newpath
+244 150 m
+C
+stroke
+newpath
+244 150 m
+C
+stroke
+newpath
+244 150 m
+C
+stroke
+newpath
+245 150 m
+B
+stroke
+newpath
+245 150 m
+B
+stroke
+newpath
+245 150 m
+C
+stroke
+newpath
+245 150 m
+C
+stroke
+newpath
+245 150 m
+C
+stroke
+newpath
+245 150 m
+C
+stroke
+newpath
+245 150 m
+C
+stroke
+newpath
+245 150 m
+C
+stroke
+newpath
+245 150 m
+C
+stroke
+newpath
+245 150 m
+C
+stroke
+newpath
+245 150 m
+C
+stroke
+newpath
+245 150 m
+C
+stroke
+newpath
+245 150 m
+C
+stroke
+newpath
+245 150 m
+C
+stroke
+newpath
+245 150 m
+C
+stroke
+newpath
+245 150 m
+C
+stroke
+newpath
+245 150 m
+C
+stroke
+newpath
+245 150 m
+C
+stroke
+newpath
+245 150 m
+C
+stroke
+newpath
+245 150 m
+C
+stroke
+newpath
+245 150 m
+C
+stroke
+newpath
+245 150 m
+C
+stroke
+newpath
+245 150 m
+C
+stroke
+newpath
+245 150 m
+C
+stroke
+newpath
+245 150 m
+C
+stroke
+newpath
+245 150 m
+C
+stroke
+newpath
+245 150 m
+C
+stroke
+newpath
+245 150 m
+C
+stroke
+newpath
+245 150 m
+C
+stroke
+newpath
+245 150 m
+C
+stroke
+newpath
+245 150 m
+C
+stroke
+newpath
+245 150 m
+C
+stroke
+newpath
+245 150 m
+C
+stroke
+newpath
+245 150 m
+C
+stroke
+newpath
+243 182 m
+1 -30 r
+stroke
+newpath
+243 182 m
+1 -30 r
+stroke
+newpath
+243 182 m
+1 -30 r
+stroke
+newpath
+243 182 m
+1 -30 r
+stroke
+newpath
+244 182 m
+-30 y
+stroke
+newpath
+244 182 m
+1 -30 r
+stroke
+newpath
+244 182 m
+1 -30 r
+stroke
+newpath
+244 182 m
+1 -30 r
+stroke
+newpath
+244 182 m
+1 -30 r
+stroke
+newpath
+244 182 m
+1 -30 r
+stroke
+newpath
+244 182 m
+1 -30 r
+stroke
+newpath
+244 150 m
+C
+stroke
+newpath
+244 150 m
+C
+stroke
+newpath
+244 150 m
+C
+stroke
+newpath
+244 150 m
+C
+stroke
+newpath
+245 150 m
+B
+stroke
+newpath
+245 150 m
+C
+stroke
+newpath
+245 150 m
+C
+stroke
+newpath
+245 150 m
+C
+stroke
+newpath
+245 150 m
+C
+stroke
+newpath
+245 150 m
+C
+stroke
+newpath
+245 150 m
+C
+stroke
+newpath
+2 setlinewidth
+%% text: x=4.677750 y=205.612305 angle=0.000000 iref=5
+%%       string='0' iclip=1
+npfont132
+410 1928 30 npchsc 0 5 391 1539 1950 2739 0 (0) nptext
+0 setlinewidth
+%% text: finished
+2 setlinewidth
+%% text: x=28.871918 y=205.106934 angle=0.000000 iref=5
+%%       string='25' iclip=1
+npfont132
+505 1930 30 npchsc 0 5 391 1539 1950 2739 0 (25) nptext
+0 setlinewidth
+%% text: finished
+2 setlinewidth
+%% text: x=53.067886 y=204.695801 angle=0.000000 iref=5
+%%       string='50' iclip=1
+npfont132
+600 1931 30 npchsc 0 5 391 1539 1950 2739 0 (50) nptext
+0 setlinewidth
+%% text: finished
+2 setlinewidth
+%% text: x=77.265282 y=204.379883 angle=0.000000 iref=5
+%%       string='75' iclip=1
+npfont132
+696 1933 30 npchsc 0 5 391 1539 1950 2739 0 (75) nptext
+0 setlinewidth
+%% text: finished
+2 setlinewidth
+%% text: x=101.463730 y=204.158691 angle=0.000000 iref=5
+%%       string='100' iclip=1
+npfont132
+791 1934 30 npchsc 0 5 391 1539 1950 2739 0 (100) nptext
+0 setlinewidth
+%% text: finished
+2 setlinewidth
+%% text: x=125.662857 y=204.032715 angle=0.000000 iref=5
+%%       string='125' iclip=1
+npfont132
+886 1934 30 npchsc 0 5 391 1539 1950 2739 0 (125) nptext
+0 setlinewidth
+%% text: finished
+2 setlinewidth
+%% text: x=149.862289 y=204.001465 angle=0.000000 iref=5
+%%       string='150' iclip=1
+npfont132
+982 1934 30 npchsc 0 5 391 1539 1950 2739 0 (150) nptext
+0 setlinewidth
+%% text: finished
+2 setlinewidth
+%% text: x=174.061661 y=204.064941 angle=0.000000 iref=5
+%%       string='175' iclip=1
+npfont132
+1077 1934 30 npchsc 0 5 391 1539 1950 2739 0 (175) nptext
+0 setlinewidth
+%% text: finished
+2 setlinewidth
+%% text: x=198.260590 y=204.223633 angle=0.000000 iref=5
+%%       string='200' iclip=1
+npfont132
+1172 1933 30 npchsc 0 5 391 1539 1950 2739 0 (200) nptext
+0 setlinewidth
+%% text: finished
+2 setlinewidth
+%% text: x=222.458725 y=204.478027 angle=0.000000 iref=5
+%%       string='225' iclip=1
+npfont132
+1268 1932 30 npchsc 0 5 391 1539 1950 2739 0 (225) nptext
+0 setlinewidth
+%% text: finished
+2 setlinewidth
+%% text: x=246.655670 y=204.826172 angle=0.000000 iref=5
+%%       string='250' iclip=1
+npfont132
+1363 1931 30 npchsc 0 5 391 1539 1950 2739 0 (250) nptext
+0 setlinewidth
+%% text: finished
+2 setlinewidth
+%% text: x=270.851074 y=205.270020 angle=0.000000 iref=5
+%%       string='275' iclip=1
+npfont132
+1458 1929 30 npchsc 0 5 391 1539 1950 2739 0 (275) nptext
+0 setlinewidth
+%% text: finished
+2 setlinewidth
+%% text: x=145.699463 y=-0.600000 angle=0.000000 iref=3
+%%       string='Distance Along Profile A - A' (km)' iclip=1
+npfont132
+965 1770 30 npchsc 0 3 391 1539 1950 2739 0 (Distance Along Profile A - A' (km)) nptext
+0 setlinewidth
+%% text: finished
+262 153 m
+-19 -1 r
+stroke
+newpath
+262 153 m
+-19 -1 r
+stroke
+newpath
+262 153 m
+-19 -1 r
+stroke
+newpath
+262 153 m
+-19 -1 r
+stroke
+newpath
+262 153 m
+-19 -1 r
+stroke
+newpath
+262 153 m
+-19 -1 r
+stroke
+newpath
+262 153 m
+-19 -1 r
+stroke
+newpath
+262 153 m
+-19 -1 r
+stroke
+newpath
+262 153 m
+-19 -1 r
+stroke
+newpath
+262 153 m
+-19 -1 r
+stroke
+newpath
+262 153 m
+-19 -1 r
+stroke
+newpath
+262 153 m
+-19 -1 r
+stroke
+newpath
+262 153 m
+-19 -1 r
+stroke
+newpath
+262 153 m
+-19 -1 r
+stroke
+newpath
+262 153 m
+-19 -1 r
+stroke
+newpath
+262 153 m
+-19 -1 r
+stroke
+newpath
+262 153 m
+-19 -1 r
+stroke
+newpath
+262 153 m
+-19 -1 r
+stroke
+newpath
+262 153 m
+-19 -1 r
+stroke
+newpath
+262 153 m
+-19 -1 r
+stroke
+newpath
+262 153 m
+-19 -1 r
+stroke
+newpath
+262 153 m
+-19 -1 r
+stroke
+newpath
+262 153 m
+-19 -1 r
+stroke
+newpath
+262 152 m
+-19 x
+stroke
+newpath
+262 152 m
+-19 x
+stroke
+newpath
+262 152 m
+-19 x
+stroke
+newpath
+262 152 m
+-19 x
+stroke
+newpath
+262 152 m
+-19 x
+stroke
+newpath
+262 152 m
+-19 x
+stroke
+newpath
+262 152 m
+-19 x
+stroke
+newpath
+262 152 m
+-19 x
+stroke
+newpath
+262 152 m
+-19 x
+stroke
+newpath
+262 152 m
+-19 x
+stroke
+newpath
+262 152 m
+-19 x
+stroke
+newpath
+262 152 m
+-19 x
+stroke
+newpath
+262 152 m
+-19 x
+stroke
+newpath
+262 152 m
+-19 x
+stroke
+newpath
+262 152 m
+-19 x
+stroke
+newpath
+262 152 m
+-19 x
+stroke
+newpath
+226 152 m
+19 x
+stroke
+newpath
+226 152 m
+19 x
+stroke
+newpath
+226 152 m
+19 x
+stroke
+newpath
+226 152 m
+19 x
+stroke
+newpath
+226 152 m
+19 x
+stroke
+newpath
+226 152 m
+19 x
+stroke
+newpath
+226 152 m
+19 x
+stroke
+newpath
+226 152 m
+19 x
+stroke
+newpath
+226 152 m
+19 x
+stroke
+newpath
+226 152 m
+19 x
+stroke
+newpath
+226 152 m
+19 x
+stroke
+newpath
+226 152 m
+19 x
+stroke
+newpath
+226 152 m
+19 x
+stroke
+newpath
+226 152 m
+19 x
+stroke
+newpath
+226 152 m
+19 x
+stroke
+newpath
+226 151 m
+19 1 r
+stroke
+newpath
+226 151 m
+19 1 r
+stroke
+newpath
+226 151 m
+19 1 r
+stroke
+newpath
+226 151 m
+19 1 r
+stroke
+newpath
+226 151 m
+19 1 r
+stroke
+newpath
+226 151 m
+19 1 r
+stroke
+newpath
+226 151 m
+19 1 r
+stroke
+newpath
+226 151 m
+19 1 r
+stroke
+newpath
+226 151 m
+19 1 r
+stroke
+newpath
+226 151 m
+19 1 r
+stroke
+newpath
+226 151 m
+19 1 r
+stroke
+newpath
+226 151 m
+19 1 r
+stroke
+newpath
+226 151 m
+19 1 r
+stroke
+newpath
+226 151 m
+19 1 r
+stroke
+newpath
+226 151 m
+19 1 r
+stroke
+newpath
+226 151 m
+19 1 r
+stroke
+newpath
+226 151 m
+19 1 r
+stroke
+newpath
+226 151 m
+19 1 r
+stroke
+newpath
+226 151 m
+19 1 r
+stroke
+newpath
+226 151 m
+19 1 r
+stroke
+newpath
+226 151 m
+19 1 r
+stroke
+newpath
+226 151 m
+19 1 r
+stroke
+newpath
+226 151 m
+19 1 r
+stroke
+newpath
+226 151 m
+19 1 r
+stroke
+newpath
+270 153 m
+-27 -1 r
+stroke
+newpath
+270 153 m
+-27 -1 r
+stroke
+newpath
+270 153 m
+-27 -1 r
+stroke
+newpath
+270 153 m
+-27 -1 r
+stroke
+newpath
+270 153 m
+-27 -1 r
+stroke
+newpath
+270 153 m
+-27 -1 r
+stroke
+newpath
+270 153 m
+-27 -1 r
+stroke
+newpath
+218 151 m
+27 1 r
+stroke
+newpath
+218 151 m
+27 1 r
+stroke
+newpath
+218 151 m
+27 1 r
+stroke
+newpath
+218 151 m
+27 1 r
+stroke
+newpath
+218 151 m
+27 1 r
+stroke
+newpath
+218 151 m
+27 1 r
+stroke
+newpath
+218 151 m
+27 1 r
+stroke
+newpath
+2 setlinewidth
+%% text: x=-5.813690 y=1.801758 angle=0.000000 iref=7
+%%       string='0' iclip=1
+npfont132
+368 2732 30 npchsc 0 7 391 1539 1950 2739 0 (0) nptext
+0 setlinewidth
+%% text: finished
+2 setlinewidth
+%% text: x=-5.219131 y=26.794922 angle=0.000000 iref=7
+%%       string='25' iclip=1
+npfont132
+371 2633 30 npchsc 0 7 391 1539 1950 2739 0 (25) nptext
+0 setlinewidth
+%% text: finished
+2 setlinewidth
+%% text: x=-4.624557 y=51.787598 angle=0.000000 iref=7
+%%       string='50' iclip=1
+npfont132
+373 2535 30 npchsc 0 7 391 1539 1950 2739 0 (50) nptext
+0 setlinewidth
+%% text: finished
+2 setlinewidth
+%% text: x=-4.029999 y=76.780762 angle=0.000000 iref=7
+%%       string='75' iclip=1
+npfont132
+375 2436 30 npchsc 0 7 391 1539 1950 2739 0 (75) nptext
+0 setlinewidth
+%% text: finished
+2 setlinewidth
+%% text: x=-3.435440 y=101.773438 angle=0.000000 iref=7
+%%       string='100' iclip=1
+npfont132
+378 2338 30 npchsc 0 7 391 1539 1950 2739 0 (100) nptext
+0 setlinewidth
+%% text: finished
+2 setlinewidth
+%% text: x=-2.840881 y=126.766602 angle=0.000000 iref=7
+%%       string='125' iclip=1
+npfont132
+380 2239 30 npchsc 0 7 391 1539 1950 2739 0 (125) nptext
+0 setlinewidth
+%% text: finished
+2 setlinewidth
+%% text: x=-2.246323 y=151.759277 angle=0.000000 iref=7
+%%       string='150' iclip=1
+npfont132
+382 2140 30 npchsc 0 7 391 1539 1950 2739 0 (150) nptext
+0 setlinewidth
+%% text: finished
+2 setlinewidth
+%% text: x=-1.651764 y=176.752441 angle=0.000000 iref=7
+%%       string='175' iclip=1
+npfont132
+385 2042 30 npchsc 0 7 391 1539 1950 2739 0 (175) nptext
+0 setlinewidth
+%% text: finished
+2 setlinewidth
+%% text: x=-1.057205 y=201.745117 angle=0.000000 iref=7
+%%       string='200' iclip=1
+npfont132
+387 1943 30 npchsc 0 7 391 1539 1950 2739 0 (200) nptext
+0 setlinewidth
+%% text: finished
+2 setlinewidth
+%% text: x=-0.600000 y=100.000000 angle=90.000000 iref=5
+%%       string='Depth (km)' iclip=1
+npfont132
+211 2345 30 npchsc 90 5 391 1539 1950 2739 0 (Depth (km)) nptext
+0 setlinewidth
+%% text: finished
+2 setlinewidth
+%% text: x=0.000000 y=0.000000 angle=0.000000 iref=3
+%%       string='A' iclip=1
+npfont132
+391 2739 30 npchsc 0 3 391 1539 1950 2739 0 (A) nptext
+0 setlinewidth
+%% text: finished
+2 setlinewidth
+%% text: x=291.398926 y=0.000000 angle=0.000000 iref=3
+%%       string='A'' iclip=1
+npfont132
+1539 2739 30 npchsc 0 3 391 1539 1950 2739 0 (A') nptext
+0 setlinewidth
+%% text: finished
+1004 2432 m
+17 x
+8 -15 r
+-8 -15 r
+-17 x
+-9 15 r
+9 15 r
+17 x
+stroke
+newpath
+834 2323 m
+15 x
+7 -13 r
+-7 -12 r
+-15 x
+-7 12 r
+7 13 r
+15 x
+stroke
+newpath
+701 2223 m
+15 x
+7 -13 r
+-7 -13 r
+-15 x
+-7 13 r
+7 13 r
+15 x
+stroke
+newpath
+983 2394 m
+17 x
+8 -14 r
+-8 -14 r
+-17 x
+-8 14 r
+8 14 r
+17 x
+stroke
+newpath
+803 2733 m
+7 x
+3 -6 r
+-3 -6 r
+-7 x
+-3 6 r
+3 6 r
+7 x
+stroke
+newpath
+860 2353 m
+13 x
+7 -11 r
+-7 -12 r
+-13 x
+-7 12 r
+7 11 r
+13 x
+stroke
+newpath
+816 2329 m
+16 x
+8 -13 r
+-8 -14 r
+-16 x
+-8 14 r
+8 13 r
+16 x
+stroke
+newpath
+926 2471 m
+22 x
+12 -19 r
+-12 -19 r
+-22 x
+-11 19 r
+11 19 r
+22 x
+stroke
+newpath
+821 2739 m
+2 -5 r
+-5 -9 r
+-11 x
+-5 9 r
+3 5 r
+stroke
+newpath
+1047 2401 m
+18 x
+9 -15 r
+-9 -16 r
+-18 x
+-9 16 r
+9 15 r
+18 x
+stroke
+newpath
+935 2709 m
+19 x
+9 -16 r
+-9 -16 r
+-19 x
+-9 16 r
+9 16 r
+19 x
+stroke
+newpath
+785 2287 m
+16 x
+8 -13 r
+-8 -14 r
+-16 x
+-8 14 r
+8 13 r
+16 x
+stroke
+newpath
+960 2434 m
+16 x
+7 -14 r
+-7 -13 r
+-16 x
+-7 13 r
+7 14 r
+16 x
+stroke
+newpath
+803 2342 m
+15 x
+8 -14 r
+-8 -14 r
+-15 x
+-8 14 r
+8 14 r
+15 x
+stroke
+newpath
+5 setlinewidth
+385 1373 m
+65 2 r
+65 3 r
+66 2 r
+65 1 r
+65 2 r
+65 2 r
+65 1 r
+66 1 r
+65 1 r
+65 1 r
+65 1 r
+65 x
+66 1 r
+65 x
+65 x
+65 x
+65 -1 r
+66 x
+65 -1 r
+65 -1 r
+65 -1 r
+66 -1 r
+65 -1 r
+65 -2 r
+65 -2 r
+65 -1 r
+65 -2 r
+66 -3 r
+63 -2 r
+-29 -792 r
+-62 2 r
+-63 3 r
+-63 2 r
+-63 1 r
+-63 2 r
+-64 1 r
+-63 2 r
+-63 1 r
+-63 1 r
+-63 1 r
+-63 x
+-64 1 r
+-63 x
+-63 x
+-63 x
+-63 x
+-63 x
+-64 -1 r
+-63 x
+-63 -1 r
+-63 -1 r
+-63 -1 r
+-64 -2 r
+-63 -1 r
+-63 -2 r
+-63 -1 r
+-63 -2 r
+-63 -3 r
+-62 -2 r
+-29 794 r
+stroke
+newpath
+385 1376 m
+65 3 r
+65 2 r
+65 2 r
+66 2 r
+65 1 r
+65 2 r
+65 1 r
+66 1 r
+65 1 r
+65 1 r
+65 1 r
+65 x
+66 1 r
+65 x
+65 x
+65 x
+65 -1 r
+66 x
+65 -1 r
+65 -1 r
+65 -1 r
+66 -1 r
+65 -1 r
+65 -2 r
+65 -1 r
+65 -2 r
+66 -2 r
+65 -2 r
+67 -3 r
+-30 -798 r
+-65 2 r
+-63 2 r
+-63 2 r
+-63 2 r
+-64 2 r
+-63 1 r
+-63 1 r
+-63 2 r
+-63 1 r
+-63 x
+-63 1 r
+-64 1 r
+-63 x
+-63 x
+-63 x
+-63 x
+-63 x
+-64 -1 r
+-63 -1 r
+-63 x
+-63 -1 r
+-63 -2 r
+-63 -1 r
+-64 -1 r
+-63 -2 r
+-63 -2 r
+-63 -2 r
+-63 -2 r
+-65 -2 r
+-30 796 r
+stroke
+newpath
+0 setlinewidth
+2 setlinewidth
+%% text: x=0.500000 y=2.856017 angle=0.000000 iref=3
+%%       string='PDE Earthquakes for 1993' iclip=1
+npfont132
+1332 1449 45 npchsc 0 3 391 2273 600 1389 0 (PDE Earthquakes for 1993) nptext
+0 setlinewidth
+%% text: finished
+218 156 m
+-6 y
+stroke
+newpath
+218 156 m
+-6 y
+stroke
+newpath
+218 156 m
+-6 y
+stroke
+newpath
+218 156 m
+-6 y
+stroke
+newpath
+218 156 m
+-6 y
+stroke
+newpath
+218 156 m
+-6 y
+stroke
+newpath
+218 156 m
+-6 y
+stroke
+newpath
+218 156 m
+1 -6 r
+stroke
+newpath
+218 156 m
+1 -6 r
+stroke
+newpath
+218 156 m
+1 -6 r
+stroke
+newpath
+218 156 m
+1 -6 r
+stroke
+newpath
+219 156 m
+-6 y
+stroke
+newpath
+219 156 m
+-6 y
+stroke
+newpath
+219 156 m
+-6 y
+stroke
+newpath
+219 156 m
+-6 y
+stroke
+newpath
+219 156 m
+-6 y
+stroke
+newpath
+219 156 m
+-6 y
+stroke
+newpath
+219 156 m
+-6 y
+stroke
+newpath
+219 156 m
+-6 y
+stroke
+newpath
+219 156 m
+-6 y
+stroke
+newpath
+219 156 m
+-6 y
+stroke
+newpath
+219 156 m
+-6 y
+stroke
+newpath
+219 156 m
+-6 y
+stroke
+newpath
+219 156 m
+-6 y
+stroke
+newpath
+219 156 m
+-6 y
+stroke
+newpath
+219 156 m
+-6 y
+stroke
+newpath
+219 156 m
+1 -6 r
+stroke
+newpath
+219 156 m
+1 -6 r
+stroke
+newpath
+219 156 m
+1 -6 r
+stroke
+newpath
+219 156 m
+1 -6 r
+stroke
+newpath
+219 156 m
+1 -6 r
+stroke
+newpath
+219 156 m
+1 -6 r
+stroke
+newpath
+219 156 m
+1 -6 r
+stroke
+newpath
+219 156 m
+1 -6 r
+stroke
+newpath
+220 156 m
+-6 y
+stroke
+newpath
+220 156 m
+-6 y
+stroke
+newpath
+220 156 m
+-6 y
+stroke
+newpath
+220 156 m
+-6 y
+stroke
+newpath
+220 156 m
+-6 y
+stroke
+newpath
+220 156 m
+-6 y
+stroke
+newpath
+220 156 m
+-6 y
+stroke
+newpath
+220 156 m
+-6 y
+stroke
+newpath
+220 156 m
+-6 y
+stroke
+newpath
+220 156 m
+-6 y
+stroke
+newpath
+220 156 m
+-6 y
+stroke
+newpath
+220 156 m
+-6 y
+stroke
+newpath
+220 156 m
+-6 y
+stroke
+newpath
+218 165 m
+1 -15 r
+stroke
+newpath
+219 165 m
+-15 y
+stroke
+newpath
+219 165 m
+1 -15 r
+stroke
+newpath
+219 165 m
+1 -15 r
+stroke
+newpath
+2 setlinewidth
+%% text: x=7.708603 y=208.340332 angle=0.000000 iref=5
+%%       string='0' iclip=1
+npfont132
+422 567 30 npchsc 0 5 391 2273 600 1389 0 (0) nptext
+0 setlinewidth
+%% text: finished
+2 setlinewidth
+%% text: x=104.462875 y=205.468262 angle=0.000000 iref=5
+%%       string='100' iclip=1
+npfont132
+802 578 30 npchsc 0 5 391 2273 600 1389 0 (100) nptext
+0 setlinewidth
+%% text: finished
+2 setlinewidth
+%% text: x=201.250320 y=204.115723 angle=0.000000 iref=5
+%%       string='200' iclip=1
+npfont132
+1183 584 30 npchsc 0 5 391 2273 600 1389 0 (200) nptext
+0 setlinewidth
+%% text: finished
+2 setlinewidth
+%% text: x=298.047058 y=204.282227 angle=0.000000 iref=5
+%%       string='300' iclip=1
+npfont132
+1564 583 30 npchsc 0 5 391 2273 600 1389 0 (300) nptext
+0 setlinewidth
+%% text: finished
+2 setlinewidth
+%% text: x=394.829285 y=205.967773 angle=0.000000 iref=5
+%%       string='400' iclip=1
+npfont132
+1945 576 30 npchsc 0 5 391 2273 600 1389 0 (400) nptext
+0 setlinewidth
+%% text: finished
+2 setlinewidth
+%% text: x=239.039413 y=-0.600000 angle=0.000000 iref=3
+%%       string='Distance Along Profile B - B' (km)' iclip=1
+npfont132
+1332 420 30 npchsc 0 3 391 2273 600 1389 0 (Distance Along Profile B - B' (km)) nptext
+0 setlinewidth
+%% text: finished
+2 setlinewidth
+%% text: x=-9.498489 y=4.850098 angle=0.000000 iref=7
+%%       string='0' iclip=1
+npfont132
+354 1370 30 npchsc 0 7 391 2273 600 1389 0 (0) nptext
+0 setlinewidth
+%% text: finished
+2 setlinewidth
+%% text: x=-8.523193 y=29.831055 angle=0.000000 iref=7
+%%       string='25' iclip=1
+npfont132
+358 1271 30 npchsc 0 7 391 2273 600 1389 0 (25) nptext
+0 setlinewidth
+%% text: finished
+2 setlinewidth
+%% text: x=-7.547882 y=54.812012 angle=0.000000 iref=7
+%%       string='50' iclip=1
+npfont132
+362 1173 30 npchsc 0 7 391 2273 600 1389 0 (50) nptext
+0 setlinewidth
+%% text: finished
+2 setlinewidth
+%% text: x=-6.572586 y=79.792969 angle=0.000000 iref=7
+%%       string='75' iclip=1
+npfont132
+365 1074 30 npchsc 0 7 391 2273 600 1389 0 (75) nptext
+0 setlinewidth
+%% text: finished
+2 setlinewidth
+%% text: x=-5.597290 y=104.773926 angle=0.000000 iref=7
+%%       string='100' iclip=1
+npfont132
+369 976 30 npchsc 0 7 391 2273 600 1389 0 (100) nptext
+0 setlinewidth
+%% text: finished
+2 setlinewidth
+%% text: x=-4.621979 y=129.754883 angle=0.000000 iref=7
+%%       string='125' iclip=1
+npfont132
+373 877 30 npchsc 0 7 391 2273 600 1389 0 (125) nptext
+0 setlinewidth
+%% text: finished
+2 setlinewidth
+%% text: x=-3.646683 y=154.735840 angle=0.000000 iref=7
+%%       string='150' iclip=1
+npfont132
+377 779 30 npchsc 0 7 391 2273 600 1389 0 (150) nptext
+0 setlinewidth
+%% text: finished
+2 setlinewidth
+%% text: x=-2.671387 y=179.716797 angle=0.000000 iref=7
+%%       string='175' iclip=1
+npfont132
+381 680 30 npchsc 0 7 391 2273 600 1389 0 (175) nptext
+0 setlinewidth
+%% text: finished
+2 setlinewidth
+%% text: x=-1.696075 y=204.697754 angle=0.000000 iref=7
+%%       string='200' iclip=1
+npfont132
+385 581 30 npchsc 0 7 391 2273 600 1389 0 (200) nptext
+0 setlinewidth
+%% text: finished
+2 setlinewidth
+%% text: x=-0.600000 y=100.000000 angle=90.000000 iref=5
+%%       string='Depth (km)' iclip=1
+npfont132
+211 995 30 npchsc 90 5 391 2273 600 1389 0 (Depth (km)) nptext
+0 setlinewidth
+%% text: finished
+2 setlinewidth
+%% text: x=0.000000 y=0.000000 angle=0.000000 iref=3
+%%       string='B' iclip=1
+npfont132
+391 1389 30 npchsc 0 3 391 2273 600 1389 0 (B) nptext
+0 setlinewidth
+%% text: finished
+2 setlinewidth
+%% text: x=478.078827 y=0.000000 angle=0.000000 iref=3
+%%       string='B'' iclip=1
+npfont132
+2273 1389 30 npchsc 0 3 391 2273 600 1389 0 (B') nptext
+0 setlinewidth
+%% text: finished
+921 993 m
+14 x
+8 -13 r
+-8 -12 r
+-14 x
+-8 12 r
+8 13 r
+14 x
+stroke
+newpath
+1741 1266 m
+12 x
+6 -10 r
+-6 -10 r
+-12 x
+-5 10 r
+5 10 r
+12 x
+stroke
+newpath
+969 1028 m
+15 x
+8 -13 r
+-8 -13 r
+-15 x
+-8 13 r
+8 13 r
+15 x
+stroke
+newpath
+1228 1148 m
+15 x
+7 -13 r
+-7 -13 r
+-15 x
+-8 13 r
+8 13 r
+15 x
+stroke
+newpath
+854 897 m
+14 x
+8 -13 r
+-8 -12 r
+-14 x
+-7 12 r
+7 13 r
+14 x
+stroke
+newpath
+1208 1160 m
+15 x
+7 -13 r
+-7 -12 r
+-15 x
+-7 12 r
+7 13 r
+15 x
+stroke
+newpath
+667 1240 m
+15 x
+7 -12 r
+-7 -12 r
+-15 x
+-7 12 r
+7 12 r
+15 x
+stroke
+newpath
+921 1020 m
+14 x
+7 -13 r
+-7 -12 r
+-14 x
+-8 12 r
+8 13 r
+14 x
+stroke
+newpath
+1003 1031 m
+16 x
+9 -15 r
+-9 -14 r
+-16 x
+-8 14 r
+8 15 r
+16 x
+stroke
+newpath
+1761 1201 m
+13 x
+6 -11 r
+-6 -11 r
+-13 x
+-6 11 r
+6 11 r
+13 x
+stroke
+newpath
+1483 1331 m
+17 x
+8 -14 r
+-8 -15 r
+-17 x
+-8 15 r
+8 14 r
+17 x
+stroke
+newpath
+2192 1308 m
+16 x
+8 -13 r
+-8 -14 r
+-16 x
+-8 14 r
+8 13 r
+16 x
+stroke
+newpath
+2001 1245 m
+13 x
+7 -11 r
+-7 -11 r
+-13 x
+-6 11 r
+6 11 r
+13 x
+stroke
+newpath
+1881 1319 m
+17 x
+9 -15 r
+-9 -14 r
+-17 x
+-8 14 r
+8 15 r
+17 x
+stroke
+newpath
+1949 1334 m
+13 x
+7 -12 r
+-7 -12 r
+-13 x
+-7 12 r
+7 12 r
+13 x
+stroke
+newpath
+1996 1275 m
+13 x
+7 -12 r
+-7 -12 r
+-13 x
+-7 12 r
+7 12 r
+13 x
+stroke
+newpath
+740 1354 m
+20 x
+9 -17 r
+-9 -16 r
+-20 x
+-9 16 r
+9 17 r
+20 x
+stroke
+newpath
+1452 1234 m
+10 x
+4 -8 r
+-4 -8 r
+-10 x
+-5 8 r
+5 8 r
+10 x
+stroke
+newpath
+867 928 m
+14 x
+7 -12 r
+-7 -13 r
+-14 x
+-7 13 r
+7 12 r
+14 x
+stroke
+newpath
+1967 1352 m
+10 x
+6 -9 r
+-6 -9 r
+-10 x
+-5 9 r
+5 9 r
+10 x
+stroke
+newpath
+1489 1260 m
+13 x
+7 -11 r
+-7 -11 r
+-13 x
+-6 11 r
+6 11 r
+13 x
+stroke
+newpath
+1669 1243 m
+13 x
+6 -11 r
+-6 -11 r
+-13 x
+-7 11 r
+7 11 r
+13 x
+stroke
+newpath
+929 1011 m
+15 x
+8 -13 r
+-8 -14 r
+-15 x
+-8 14 r
+8 13 r
+15 x
+stroke
+newpath
+1738 1270 m
+12 x
+7 -11 r
+-7 -11 r
+-12 x
+-7 11 r
+7 11 r
+12 x
+stroke
+newpath
+1931 1389 m
+-3 -5 r
+-12 x
+-3 5 r
+stroke
+newpath
+1654 1339 m
+13 x
+6 -11 r
+-6 -12 r
+-13 x
+-7 12 r
+7 11 r
+13 x
+stroke
+newpath
+%%EndDocument
+showpage
+%%EOF
